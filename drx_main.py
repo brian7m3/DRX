@@ -100,7 +100,7 @@ DTMF_LOG_FILE = os.path.join(DRX_DIRECTORY, "dtmf.log")
 DTMF_LOG_ARCHIVE_FMT = os.path.join(DRX_DIRECTORY, "dtmf-%Y-%m.log")
 dtmf_buffer = {}  # {port: [digits]}
 dtmf_lock = threading.Lock()
-STATE_FILE = os.path.join(DRX_DIRECTORY, "drx_state.json")
+STATE_FILE = os.path.join(DRX_DIRECTORY, "drx_state.json")  # NOTE: No longer written to - state kept in memory only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
 LOG_WEB_FILE = '/tmp/drx_webconsole.log'
 WX_DATA_FILE = "wx/wx_data"
@@ -229,20 +229,31 @@ def parse_message_timer(val):
         return "N"
 
 def load_state():
+    """
+    Load repeater activity state from the activity file (not drx_state.json).
+    State file writes are disabled - only activity data is persisted.
+    """
     global cos_today_seconds, cos_today_minutes, cos_today_date
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r") as f:
-            state = json.load(f)
-        cos_today_seconds = state.get("cos_today_seconds", 0)
-        cos_today_minutes = state.get("cos_today_minutes", 0)
-        cos_today_date = state.get("cos_today_date", datetime.now().strftime("%Y-%m-%d"))
-    else:
-        cos_today_seconds = 0
-        cos_today_minutes = 0
-        cos_today_date = datetime.now().strftime("%Y-%m-%d")
+    
+    # Initialize with current date
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    cos_today_date = today_str
+    
+    # Try to load today's activity from the activity file
+    cos_today_minutes = parse_minutes_from_activity_log(today_str)
+    cos_today_seconds = cos_today_minutes * 60  # Convert back to seconds
+    
+    debug_log(f"Loaded activity state: {cos_today_minutes} minutes for {cos_today_date}")
 
 def read_state():
+    """
+    Read state from drx_state.json if it exists.
+    Returns empty dict if file doesn't exist (normal behavior now).
+    State writes are disabled - this is only for backward compatibility.
+    """
     try:
+        if not os.path.exists(STATE_FILE):
+            return {}
         with open(STATE_FILE, 'r') as f:
             return json.load(f)
     except Exception:
@@ -1773,15 +1784,12 @@ def should_allow_message_timer_play(message_mode, timer_value, last_played):
     return True
 
 def update_message_timer_state(last_played, interval):
-    try:
-        with open(STATE_FILE, 'r') as f:
-            state = json.load(f)
-    except Exception:
-        state = {}
-    state['message_timer_last_played'] = last_played
-    state['message_timer_value'] = interval
-    with open(STATE_FILE, 'w') as f:
-        json.dump(state, f)
+    """
+    DISABLED: State writes to drx_state.json are no longer used.
+    Message timer state is kept in memory only.
+    """
+    # No longer write state to file - message timer state is in memory only
+    pass
         
 def set_message_rate_limited():
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
@@ -2122,29 +2130,33 @@ def process_command(command):
         log_exception("process_command")
 
 def write_state():
+    """
+    NOTE: State is now kept in memory only. No state is written to drx_state.json.
+    Only repeater activity data is persisted to the activity file.
+    """
     now = time.time()
 
-    # Read previous state from disk to get last_played and previous currently_playing
-    prev_state = {}
-    if os.path.exists(STATE_FILE):
-        try:
-            with open(STATE_FILE, 'r') as f:
-                prev_state = json.load(f)
-        except Exception:
-            prev_state = {}
-
-    prev_current = prev_state.get("currently_playing", "")
-    prev_last = prev_state.get("last_played", "")
+    # Keep track of last_played in memory only (no disk reads)
+    # Use global variables to maintain state across calls
+    global prev_currently_playing, last_played_memory
+    if 'prev_currently_playing' not in globals():
+        prev_currently_playing = ""
+    if 'last_played_memory' not in globals():
+        last_played_memory = ""
 
     # Decide what last_played should be for this write
     if (
-        prev_current
-        and prev_current.lower() != "idle"
-        and prev_current != currently_playing
+        prev_currently_playing
+        and prev_currently_playing.lower() != "idle"
+        and prev_currently_playing != currently_playing
     ):
-        last_played = prev_current
+        last_played = prev_currently_playing
+        last_played_memory = prev_currently_playing
     else:
-        last_played = prev_last
+        last_played = last_played_memory
+
+    # Update previous state for next call
+    prev_currently_playing = currently_playing
 
     # Random bases lines
     random_bases_lines = []
@@ -2265,12 +2277,27 @@ def write_state():
         "cos_today_minutes": cos_today_minutes,
         "cos_today_date": cos_today_date,
     }
-    try:
-        #debug_log(f"write_state() called with: {state}")
-        with open(STATE_FILE, 'w') as f:
-            json.dump(state, f)
-    except Exception as e:
-        debug_log(f"write_state() exception: {e}")
+    
+    # Store state in memory for web interface access
+    global current_state_memory
+    current_state_memory = state
+    
+    # STATE FILE WRITES DISABLED - All state is now kept in memory only
+    # Only repeater activity is persisted via the activity file
+    # No writes to drx_state.json anymore per requirements
+    
+    # The state dict is still built for in-memory use by other parts of the system
+    # but it's not written to disk
+
+def get_current_state():
+    """
+    Get the current state from memory instead of reading from disk.
+    Used by web interface and other components that need state access.
+    """
+    global current_state_memory
+    if 'current_state_memory' not in globals():
+        return {}
+    return current_state_memory
 
 def reload_config():
     global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE
@@ -2346,10 +2373,8 @@ def maybe_run_webcmd():
                     "src": "Web"
                 })
 
-                # Update state file
-                state['serial_history'] = serial_history
-                with open(STATE_FILE, 'w') as sf:
-                    json.dump(state, sf)
+                # History updated in memory only - no state file writes
+                # serial_history is maintained in memory for web interface
 
             elif cmd.get("type") == "play":
                 input_cmd = cmd.get("input", "").strip()
@@ -2367,10 +2392,8 @@ def maybe_run_webcmd():
                         "src": "Web"
                     })
                     serial_history = serial_history[:10]
-                    # Update state file
-                    state['serial_history'] = serial_history
-                    with open(STATE_FILE, 'w') as sf:
-                        json.dump(state, sf)
+                    # History updated in memory only - no state file writes
+                    # serial_history is maintained in memory for web interface
                 except Exception as e:
                     log_recent(f"Play requested: {input_cmd} ({source}) - failed -> {e}")
                 # --- REMOVED: DO NOT clear status or interrupt playback here! ---
@@ -3110,13 +3133,13 @@ def prepend_or_replace_today_entry(date_str, minutes_rounded):
     debug_log(f"ACTIVITY_FILE is {ACTIVITY_FILE}")    
     
 def save_state():
-    state = {
-        "cos_today_seconds": cos_today_seconds,
-        "cos_today_minutes": cos_today_minutes,
-        "cos_today_date": cos_today_date
-    }
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)    
+    """
+    DISABLED: State writes to drx_state.json are no longer used.
+    Activity data is persisted via the activity file only.
+    This function is kept for compatibility but does nothing.
+    """
+    # No longer write state to file - all state is in memory only
+    pass    
     
 def archive_dtmf_log_if_new_month():
     """Archive the DTMF log if the first line is for a different month than now."""

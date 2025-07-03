@@ -1422,11 +1422,31 @@ def reset_minutes():
 @app.route("/api/cos_minutes")
 @require_login
 def api_cos_minutes():
-    state = read_state()
-    return jsonify({
-        "cos_today_minutes": state.get("cos_today_minutes", 0),
-        "cos_today_date": state.get("cos_today_date", "")
-    })
+    """Fetch live cos_today_minutes data from drx_main.py API.
+    
+    This endpoint proxies requests to the drx_main.py Flask API running on port 5504
+    to get real-time in-memory values instead of reading from disk state file.
+    """
+    try:
+        import requests
+        # Fetch from drx_main.py API server running on port 5504
+        response = requests.get("http://localhost:5504/api/cos_minutes", timeout=2)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            # Fallback to disk state if API is unavailable
+            state = read_state()
+            return jsonify({
+                "cos_today_minutes": state.get("cos_today_minutes", 0),
+                "cos_today_date": state.get("cos_today_date", "")
+            })
+    except Exception:
+        # Fallback to disk state if API call fails
+        state = read_state()
+        return jsonify({
+            "cos_today_minutes": state.get("cos_today_minutes", 0),
+            "cos_today_date": state.get("cos_today_date", "")
+        })
 
 @app.route("/api/dtmf_log")
 def api_dtmf_log():

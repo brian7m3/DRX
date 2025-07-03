@@ -1,10 +1,10 @@
-observations: A Few Clouds
-temperature: 87 degrees
-humidity: 50 percent
-winddir: W
-wind_speed: 5
-wind_gust: 9
-pressure: 29.82
+observations: Fair
+temperature: 88 degrees
+humidity: 49 percent
+winddir: WNW
+wind_speed: 3
+wind_gust: 5
+pressure: 29.81
 pressure_status: falling
 visibility: 10.00 miles
 precipRate: 0.00

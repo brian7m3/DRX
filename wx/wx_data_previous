@@ -1,10 +1,10 @@
 observations: Fair
-temperature: 84 degrees
-humidity: 53 percent
-winddir: SW
-wind_speed: 2
-wind_gust: 5
-pressure: 29.84
+temperature: 86 degrees
+humidity: 54 percent
+winddir: N
+wind_speed: 3
+wind_gust: 9
+pressure: 29.82
 pressure_status: falling
 visibility: 10.00 miles
 precipRate: 0.00

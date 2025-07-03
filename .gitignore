@@ -4,4 +4,5 @@ drx_state.json
 service_logs/
 wx/wx_data
 wx/wx_data_previous
-wx/wx_data_previous_time
+wx/wx_data_previous_timedrx_state.json
+service_logs/drx_web_service.log

@@ -61,7 +61,7 @@ def debug_log(*args):
         print(f"Error in debug_log: {e}")
 
 SCRIPT_NAME = "DRX"
-VERSION = "2.00"
+VERSION = "2.01"
 
 serial_buffer = ""
 serial_history = []

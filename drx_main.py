@@ -25,6 +25,7 @@ import queue
 import uuid
 import traceback
 from datetime import datetime, timedelta
+from flask import Flask, jsonify  # Added for API endpoint
 
 
 # --- Global State Variables ---
@@ -93,6 +94,7 @@ EXTRA_SOUND_DIR = os.path.join(DRX_DIRECTORY, "sounds", "extra")
 ACTIVITY_FILE = os.path.join(DRX_DIRECTORY, "Repeater Activity", "activity")
 cos_today_seconds = 0
 cos_today_minutes = 0
+cos_today_date = datetime.now().strftime("%Y-%m-%d")  # Initialize with current date
 last_written_minutes = -1
 DTMF_LOG_FILE = os.path.join(DRX_DIRECTORY, "dtmf.log")
 DTMF_LOG_ARCHIVE_FMT = os.path.join(DRX_DIRECTORY, "dtmf-%Y-%m.log")
@@ -166,6 +168,35 @@ try:
 except Exception as e:
     config_ini_missing = True
     config_warnings.insert(0, f"Failed to read config.ini: {e}; using all default values.")
+
+
+# --- Flask API for serving live cos_today_minutes data ---
+# Minimal Flask app to serve live in-memory values to web dashboard
+api_app = Flask(__name__)
+
+@api_app.route("/api/cos_minutes")
+def api_cos_minutes():
+    """Serve live in-memory cos_today_minutes and cos_today_date values.
+    
+    This endpoint provides real-time activity data without reading from disk,
+    allowing the web dashboard to display current values immediately.
+    """
+    return jsonify({
+        "cos_today_minutes": cos_today_minutes,
+        "cos_today_date": cos_today_date if 'cos_today_date' in globals() else datetime.now().strftime("%Y-%m-%d")
+    })
+
+def run_api_server():
+    """Run the Flask API server in background thread.
+    
+    Serves on port 504 to avoid conflict with main web dashboard on port 505.
+    Suppresses Flask logging to avoid cluttering console output.
+    """
+    import logging
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
+    
+    api_app.run(host="0.0.0.0", port=504, debug=False, use_reloader=False)
 
 
 # --- Utility Functions ---
@@ -3545,6 +3576,8 @@ def main():
         threading.Thread(target=dtmf_cos_edge_monitor, daemon=True).start()
         # --- Start COS activity monitor thread to update last_cos_active_time ---
         threading.Thread(target=monitor_cos, daemon=True).start()
+        # --- Start Flask API server for serving live cos_today_minutes data ---
+        threading.Thread(target=run_api_server, daemon=True).start()
 
         if is_terminal():
             try:

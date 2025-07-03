@@ -1,0 +1,2676 @@
+#!/usr/bin/env python3
+
+# --- Imports ---
+from datetime import datetime
+import os
+import sys
+import time
+import threading
+import configparser
+import serial
+import curses
+import subprocess
+import random
+import re
+import RPi.GPIO as GPIO
+import traceback
+import wave
+import contextlib
+import shutil
+import itertools
+import json
+import string
+import inspect
+import queue
+import uuid
+from datetime import datetime, timedelta
+
+
+# --- Global State Variables ---
+# Get the directory where the script is located
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEBUG_LOG_PATH = os.path.join(SCRIPT_DIR, "debug.log")
+
+def debug_log(*args):
+    if not ENABLE_DEBUG_LOGGING:
+        return
+    try:
+        import os
+        from datetime import datetime
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Join all arguments into a single string, like print does
+        msg = " ".join(str(a) for a in args)
+        formatted_msg = f"[{timestamp}] {msg}"
+
+        if os.path.exists(DEBUG_LOG_PATH):
+            try:
+                with open(DEBUG_LOG_PATH, 'r') as f:
+                    existing_content = f.read()
+            except:
+                existing_content = ""
+        else:
+            existing_content = ""
+
+        with open(DEBUG_LOG_PATH, 'w') as f:
+            f.write(formatted_msg + '\n' + existing_content)
+
+        os.chmod(DEBUG_LOG_PATH, 0o777)
+    except Exception as e:
+        print(f"Error in debug_log: {e}")
+
+SCRIPT_NAME = "DRX"
+VERSION = "2.02"
+
+STATE_FILE = '/tmp/drx_state.json'
+WEBCMD_FILE = '/tmp/drx_webcmd.json'
+LOG_WEB_FILE = '/tmp/drx_webconsole.log'
+
+serial_buffer = ""
+serial_history = []
+currently_playing = ""
+currently_playing_info = ""
+currently_playing_info_timestamp = 0
+playing_end_time = 0
+playback_status = ""
+rotation_active = {}
+current_playback_thread = None
+serial_port_missing = False
+sound_card_missing = False
+playback_lock = threading.Lock()
+remote_device_active = False
+cos_active = False
+DRX_START_TIME = time.time()
+script_dir = os.path.dirname(os.path.realpath(__file__))
+config_file_path = os.path.join(script_dir, 'config.ini')
+log_file_path = os.path.join(script_dir, 'drx_error.log')
+alternate_series_pointers = {}         # key: tuple(bases), value: current pointer/index (which base to play next)
+alternate_series_track_pointers = {}   # key: tuple(bases), value: dict of base -> current track index (starts at 1)
+alternate_series_last_played = {}      # key: tuple(bases), value: dict of base -> last_played_time
+message_timer_last_played = 0   # timestamp of last play
+message_timer_value = None      # stores the config value
+last_message_timer_time = 0 
+command_queue = queue.Queue()
+DRX_DIRECTORY = "/home/brian/DRX"  # Set this to your actual path
+EXTRA_SOUND_DIR = os.path.join(DRX_DIRECTORY, "sounds", "extra")
+ACTIVITY_FILE = os.path.join(DRX_DIRECTORY, "Repeater Activity", "activity")
+cos_today_seconds = 0
+cos_today_minutes = 0
+last_written_minutes = -1
+
+# --- Config Loading & Validation ---
+DEFAULTS = {
+    "Sound": {
+        "directory": "/tmp/sounds",
+        "extension": ".wav",
+        "device": "default"
+    },
+    "GPIO": {
+        "cos_pin": 23,
+        "cos_activate_level": True,
+        "remote_busy_pin": 25,
+        "remote_busy_activate_level": True,
+        "cos_debounce_time": 0.5,
+        "max_cos_interruptions": 3
+    },
+    "Serial": {
+        "port": "/dev/ttyUSB0",
+        "baudrate": 9600,
+        "timeout": 0.5
+    },
+    "Random": {
+        "base": "3000",
+        "end": "3099",
+        "interval": "10"
+    },
+    "Rotation": {
+        "base": "4000",
+        "end": "4099",
+        "interval": "10"
+    },
+    "SudoRandom": {
+        "base": "5000",
+        "end": "5099",
+        "interval": "10"
+    },
+    "Direct": {
+        "enabled": "true",
+        "prefix": "P"
+    },
+    "General": {
+        "Message Timer": "N"
+    }
+}
+config_warnings = []
+
+config = configparser.ConfigParser()
+config_ini_missing = False
+try:
+    found_files = config.read(config_file_path)
+    if not found_files:
+        config_ini_missing = True
+        config_warnings.insert(0, f"config.ini missing at {config_file_path}; using all default values.")
+except Exception as e:
+    config_ini_missing = True
+    config_warnings.insert(0, f"Failed to read config.ini: {e}; using all default values.")
+
+
+# --- Utility Functions ---
+def get_config_value(section, key, fallback=None, cast_func=None, warn=None):
+    global config_warnings
+    if not config.has_section(section):
+        config_warnings.append(f"Section [{section}] missing; using defaults.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+    if not config.has_option(section, key):
+        config_warnings.append(f"Missing {key} in [{section}]; using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+    raw = config[section][key]
+    try:
+        return cast_func(raw) if cast_func else raw
+    except Exception as e:
+        config_warnings.append(f"Invalid value for {key} in [{section}]: '{raw}' ({e}); using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+
+# ---- Message Timer global initialization ----
+# After you load your config file with config.read(), add this:
+def parse_message_timer(val):
+    val = val.strip().upper()
+    if val == "N":
+        return "N"
+    try:
+        return int(val)
+    except Exception:
+        return "N"
+
+def read_state():
+    try:
+        with open(STATE_FILE, 'r') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+def parse_int_list(s, fallback=10, label="", section=""):
+    vals = []
+    for i, v in enumerate(s.split(',')):
+        try:
+            if float(v) != int(float(v)):
+                config_warnings.append(f"{label} in [{section}]: '{v}' not integer, using {fallback}.")
+                vals.append(int(fallback))
+            else:
+                vals.append(int(float(v)))
+        except Exception:
+            config_warnings.append(f"{label} in [{section}]: '{v}' invalid, using {fallback}.")
+            vals.append(int(fallback))
+    return vals
+
+def parse_float_list(s, fallback=10, label="", section=""):
+    vals = []
+    for i, v in enumerate(s.split(',')):
+        try:
+            f = float(v)
+            if f < 0:
+                config_warnings.append(f"{label} in [{section}]: '{v}' < 0, using {fallback}.")
+                f = float(fallback)
+            elif f != int(f):
+                config_warnings.append(f"{label} in [{section}]: '{v}' not integer, using {fallback}.")
+                f = float(fallback)
+            vals.append(int(f))
+        except Exception:
+            config_warnings.append(f"{label} in [{section}]: '{v}' invalid, using {fallback}.")
+            vals.append(int(fallback))
+    return vals
+
+def match_code_file(f, code_str, ext):
+    ext = ext.lower()
+    f_lower = f.lower()
+    original_code_str = code_str
+    if code_str.startswith('P'):
+        code_str = code_str[1:]
+    code_str = code_str.lstrip('0')
+    if f_lower.endswith(ext):
+        base = f_lower[:-len(ext)]
+        result = base == code_str or base.startswith(f"{code_str}-")
+        #debug_log(f"match_code_file: f={f}, code_str={original_code_str} (stripped={code_str}), ext={ext}, base={base}, result={result}")
+        return result
+    return False
+
+def validate_config_pairs():
+    for bases, ends, label, section in [
+        (random_bases, random_ends, "Random", "Random"),
+        (rotation_bases, rotation_ends, "Rotation", "Rotation"),
+        (sudo_bases, sudo_ends, "SudoRandom", "SudoRandom")
+    ]:
+        for i, (b, e) in enumerate(zip(bases, ends)):
+            if e < b:
+                config_warnings.append(f"{label} config: End {e} < Base {b} (index {i})")
+
+def log_error(msg):
+    try:
+        import os
+        from datetime import datetime
+        
+        # Generate local timestamp in requested format
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Create formatted message with timestamp
+        formatted_msg = f"[{timestamp}] {msg}"
+        
+        # Log newest entries to the top
+        if os.path.exists(log_file_path):
+            # Read existing content
+            try:
+                with open(log_file_path, 'r') as f:
+                    existing_content = f.read()
+            except:
+                existing_content = ""
+        else:
+            existing_content = ""
+            
+        # Write new entry at the top followed by existing content
+        with open(log_file_path, 'w') as f:
+            f.write(formatted_msg + '\n' + existing_content)
+        
+        # Set full permissions (777) on error log
+        os.chmod(log_file_path, 0o777)  # rwxrwxrwx permissions
+    except Exception as e:
+        error_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{error_time}] Logging failed: {msg}")
+        print(f"Error: {e}")
+
+def log_exception(context: str):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    exc = traceback.format_exc()
+    try:
+        with open(log_file_path, 'a') as f:
+            f.write(f"[{timestamp}] Exception in {context}:\n{exc}\n")
+    except Exception:
+        print(f"[{timestamp}] Logging failed: {exc}")
+
+def log_recent(entry):
+    from datetime import datetime  # Make sure this is at the top of your file
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    try:
+        with open(LOG_WEB_FILE, "a") as f:
+            f.write(f"{ts}: {entry}\n")
+        # --- TRIM LOG FILE IF OVER 500 KB ---
+        max_size = 500 * 1024  # 500 KB
+        try:
+            if os.path.getsize(LOG_WEB_FILE) > max_size:
+                with open(LOG_WEB_FILE, "rb") as f:
+                    f.seek(-max_size, os.SEEK_END)
+                    data = f.read()
+                # find first newline to avoid splitting a line
+                first_nl = data.find(b'\n')
+                if first_nl != -1:
+                    data = data[first_nl+1:]
+                with open(LOG_WEB_FILE, "wb") as f:
+                    f.write(data)
+        except Exception as e:
+            pass  # If trimming fails, just ignore
+    except Exception as e:
+        log_error(f"log_recent failed: {e}")
+
+if shutil.which("sox") is None:
+    log_error("sox is not installed! 'P' mode will not work.")
+    
+import uuid
+
+def command_processor_loop():
+    worker_id = str(uuid.uuid4())[:8]
+    debug_log(f"Worker {worker_id}: starting")
+    while True:
+        cmd = command_queue.get()
+        debug_log(f"Worker {worker_id}: Processing command: {cmd}")
+        process_command(cmd)
+        command_queue.task_done()   
+
+def is_cos_active():
+    override_enabled = config.getboolean('Debug', 'enable_cos_override', fallback=False) if config.has_section('Debug') else False
+    override_path = "/tmp/cos_force"
+    if override_enabled:
+        try:
+            with open(override_path, "r") as f:
+                val = f.read().strip()
+                if val == "1":
+                    return True
+                elif val == "0":
+                    return False
+        except FileNotFoundError:
+            pass
+        except Exception:
+            log_exception("is_cos_active (override)")
+    try:
+        level = GPIO.input(COS_PIN)
+        return (level == COS_ACTIVE_LEVEL)
+    except Exception:
+        log_exception("is_cos_active (GPIO.input)")
+        return False
+
+def handle_alternate_series(command):
+    bases, alt_suffix, is_alt = parse_alternate_series(command)
+    debug_log(f"ALTERNATE DEBUG: command={command}, bases={bases}, alt_suffix={alt_suffix}, is_alt={is_alt}")
+    if not is_alt or not bases:
+        return False  # Not an alternate command
+
+    # --- Parse suffixes ---
+    suffix = alt_suffix.upper() if alt_suffix else ""
+    repeat = 'R' in suffix
+    pausing = 'P' in suffix
+    interruptible = ('I' in suffix) or ('i' in suffix)  # case-insensitive I
+
+    debug_log(f"ALTERNATE DEBUG: suffix={suffix}, repeat={repeat}, pausing={pausing}, interruptible={interruptible}")
+
+    key = tuple(bases)
+    if key not in alternate_series_pointers:
+        alternate_series_pointers[key] = 0
+
+    if len(bases) > 1:
+        pointer = alternate_series_pointers[key]
+        base_to_play = bases[pointer]
+        debug_log(f"ALTERNATE DEBUG: pointer={pointer}, base_to_play={base_to_play}")
+        # advance pointer only if series has more than one track
+        alternate_series_pointers[key] = (pointer + 1) % len(bases)
+    else:
+        # single track: always play it, do not advance
+        base_to_play = bases[0]
+        debug_log(f"ALTERNATE DEBUG: single track, base_to_play={base_to_play}")
+
+    code_str = f"P{base_to_play:04d}"
+    debug_log(f"ALTERNATE DEBUG: code_str={code_str}")
+    play_direct_track(code_str, interruptible=interruptible, repeat=repeat, pausing=pausing)
+
+    return True  # Handled as alternate
+
+def play_sound(filename, interruptible=False, pausing=False, repeating=False, playback_token=None):
+    import os
+    import time
+    import subprocess
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time, playback_interrupt, playback_status, sound_card_missing, current_playback_token, MAX_COS_INTERRUPTIONS
+
+    debug_log(f"play_sound: filename={filename} interruptible={interruptible} pausing={pausing} repeating={repeating}")
+
+    currently_playing = os.path.splitext(os.path.basename(filename))[0]
+    currently_playing_info = f"Playing {filename}"
+    currently_playing_info_timestamp = time.time()
+    playback_status = "Playing"
+    write_state()
+
+    success = False
+    interrupted = False
+
+    try:
+        if repeating:
+            playback_status = "Playing (Repeat Mode)"
+            write_state()
+            debug_log("REPEAT MODE ACTIVE")
+            cos_interruptions = 0
+            ignore_cos = False
+            while True:
+                if not ignore_cos:
+                    while is_cos_active() and not playback_interrupt.is_set():
+                        playback_status = "Pending Restart (Repeat Mode)"
+                        write_state()
+                        debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
+                        GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+                        time.sleep(0.05)
+                        if playback_token is not None and playback_token != current_playback_token:
+                            interrupted = True
+                            return
+                    playback_status = "Playing (Repeat Mode)"
+                    write_state()
+                debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
+                GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+                try:
+                    proc = subprocess.Popen(
+                        ['aplay', '-D', SOUND_DEVICE, filename],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.PIPE
+                    )
+                except Exception as e:
+                    debug_log("Exception in REPEAT mode (Popen):", e)
+                    import traceback
+                    traceback.print_exc()
+                    break
+
+                was_interrupted = False
+                while proc.poll() is None:
+                    if playback_token is not None and playback_token != current_playback_token:
+                        proc.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    if not ignore_cos and is_cos_active():
+                        cos_interruptions += 1
+                        debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
+                        if cos_interruptions >= MAX_COS_INTERRUPTIONS:
+                            debug_log("Repeat mode: max_cos_interruptions reached, will ignore COS from now on. Letting current playback continue.")
+                            ignore_cos = True
+                            break
+                        debug_log("COS active: stopping and will repeat")
+                        proc.terminate()
+                        time.sleep(0.1)
+                        if proc.poll() is None:
+                            proc.kill()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    if playback_interrupt.is_set():
+                        proc.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    time.sleep(0.05)
+                if was_interrupted and proc.poll() is None:
+                    proc.kill()
+                try:
+                    proc.wait(timeout=2)
+                except Exception:
+                    proc.kill()
+                    try:
+                        proc.wait(timeout=2)
+                    except Exception:
+                        pass
+                if proc.stderr:
+                    err = proc.stderr.read()
+                    if err:
+                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                if ignore_cos:
+                    debug_log("WAV played all the way through (final allowed play), ending repeat mode.")
+                    success = True
+                    break
+                if not was_interrupted:
+                    debug_log("WAV played all the way through, ending repeat mode.")
+                    success = True
+                    break
+                if playback_interrupt.is_set() or (playback_token is not None and playback_token != current_playback_token):
+                    break
+
+        elif pausing:
+            playback_status = "Playing (Pause Mode)"
+            write_state()
+            total_duration = get_duration_wav(filename)
+            played_duration = 0
+            cos_interruptions = 0
+            while played_duration < total_duration:
+                while is_cos_active() and not playback_interrupt.is_set():
+                    playback_status = "Paused (Paused Mode)"
+                    write_state()
+                    debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pausing - paused)")
+                    GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+                    time.sleep(0.05)
+                    if playback_token is not None and playback_token != current_playback_token:
+                        interrupted = True
+                        return
+                playback_status = "Playing (Pause Mode)"
+                write_state()
+                debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pausing - play)")
+                GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+                sox_cmd = [
+                    'sox', filename, '-t', 'wav', '-', 'trim', f'{played_duration}'
+                ]
+                try:
+                    proc1 = subprocess.Popen(sox_cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+                    proc2 = subprocess.Popen(['aplay', '-D', SOUND_DEVICE], stdin=proc1.stdout, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                    proc1.stdout.close()
+                except Exception as e:
+                    debug_log("Exception in PAUSING mode (Popen):", e)
+                    import traceback
+                    traceback.print_exc()
+                    break
+
+                was_interrupted = False
+                start_time = time.time()
+                while proc2.poll() is None:
+                    if playback_token is not None and playback_token != current_playback_token:
+                        proc2.terminate()
+                        proc1.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    if is_cos_active():
+                        debug_log(f"COS active: pausing playback at {played_duration}")
+                        proc2.terminate()
+                        proc1.terminate()
+                        time.sleep(0.1)
+                        if proc2.poll() is None:
+                            proc2.kill()
+                        if proc1.poll() is None:
+                            proc1.kill()
+                        was_interrupted = True
+                        interrupted = True
+                        played_duration += time.time() - start_time
+                        cos_interruptions += 1
+                        debug_log(f"Pause mode: COS interruptions so far: {cos_interruptions}")
+                        if cos_interruptions >= MAX_COS_INTERRUPTIONS:
+                            debug_log("Pause mode: max_cos_interruptions reached, aborting pause mode.")
+                            played_duration = total_duration
+                        break
+                    if playback_interrupt.is_set():
+                        proc2.terminate()
+                        proc1.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    time.sleep(0.05)
+                if proc2.poll() is None:
+                    proc2.kill()
+                if proc1.poll() is None:
+                    proc1.kill()
+                try:
+                    proc2.wait(timeout=2)
+                except Exception:
+                    proc2.kill()
+                    try:
+                        proc2.wait(timeout=2)
+                    except Exception:
+                        pass
+                if proc2.stderr:
+                    err = proc2.stderr.read()
+                    if err:
+                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                if not was_interrupted or playback_interrupt.is_set():
+                    break
+            if not interrupted:
+                success = True
+
+        else:
+            playback_status = "Playing"
+            write_state()
+            debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (normal/interruptible)")
+            GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+            debug_log("NORMAL/INTERRUPTIBLE MODE")
+            proc = None
+            try:
+                proc = subprocess.Popen(
+                    ['aplay', '-D', SOUND_DEVICE, filename],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.PIPE
+                )
+                while proc.poll() is None:
+                    if playback_token is not None and playback_token != current_playback_token:
+                        proc.terminate()
+                        interrupted = True
+                        break
+                    if interruptible and is_cos_active():
+                        debug_log("COS became ACTIVE, interrupting playback")
+                        proc.terminate()
+                        time.sleep(0.2)
+                        if proc.poll() is None:
+                            proc.kill()
+                        interrupted = True
+                        break
+                    if playback_interrupt.is_set():
+                        proc.terminate()
+                        interrupted = True
+                        break
+                    time.sleep(0.05)
+                if not interrupted:
+                    success = True
+            except Exception as e:
+                debug_log("Exception starting aplay:", e)
+                interrupted = True
+            finally:
+                if proc:
+                    try:
+                        proc.wait(timeout=2)
+                    except Exception:
+                        proc.kill()
+                        try:
+                            proc.wait(timeout=2)
+                        except Exception:
+                            pass
+                    if proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            debug_log(f"aplay error: {err.decode(errors='replace')}")
+    finally:
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+        playback_status = "Idle"
+        write_state()
+        debug_log(f"Clearing REMOTE_BUSY to {not REMOTE_BUSY_ACTIVE_LEVEL} (finally block)")
+        GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+        if playback_interrupt.is_set():
+            playback_interrupt.clear()
+        play_mode = 'repeat' if repeating else 'pause' if pausing else 'normal'
+        if success:
+            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - successful")
+        elif interrupted:
+            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - interrupted")
+        else:
+            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - playback error")
+
+# Add the parse_echo_command function
+def parse_echo_command(command):
+    """
+    Parses an echo test command in the format Re9999
+    Returns the track number or None if not a valid echo command
+    """
+    import re
+    command = command.strip().upper()
+    match = re.match(r'^RE(\d{4})$', command)
+    if match:
+        track_num = int(match.group(1))
+        return track_num
+    return None
+
+
+def echo_test(track_num, playback_token=None):
+    """
+    Perform an Echo Test, recording audio when COS is active and playing it back afterward.
+    
+    Args:
+        track_num (int): The track number to create (e.g., 9999)
+        playback_token: Token for playback interruption tracking
+    """
+    import os
+    import time
+    import subprocess
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
+    global echo_test_active, echo_test_track
+    
+    try:
+        echo_test_active = True
+        echo_test_track = track_num
+        
+        # Format the target track number and filename
+        track_str = f"{track_num:04d}"
+        output_filename = os.path.join(SOUND_DIRECTORY, f"{track_str}.wav")
+        echo_start_filename = os.path.join(SOUND_DIRECTORY, "echo-start.wav")
+        echo_timeout_filename = os.path.join(SOUND_DIRECTORY, "echo-to.wav")
+        echo_end_filename = os.path.join(SOUND_DIRECTORY, "echo-end.wav")  # Added echo-end.wav file path
+        
+        debug_log(f"ECHO TEST FUNCTION STARTED with track_num={track_num}")
+        debug_log(f"ECHO TEST: output_filename={output_filename}")
+        debug_log(f"ECHO TEST: echo_start_filename={echo_start_filename}")
+        debug_log(f"ECHO TEST: echo_timeout_filename={echo_timeout_filename}")
+        debug_log(f"ECHO TEST: echo_end_filename={echo_end_filename}")  # Added logging for echo-end.wav
+        
+        # Set REMOTE_BUSY_PIN active for the entire Echo Test process
+        GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+        
+        try:
+            # Update status
+            playback_status = f"Echo Test: Waiting for COS to be inactive"
+            currently_playing = "Echo Test"
+            currently_playing_info = f"Echo Test: Preparing to record track {track_str}"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            
+            # 1. Wait until COS is inactive
+            debug_log("ECHO TEST: Waiting for COS to be inactive")
+            cos_state = is_cos_active()
+            debug_log(f"ECHO TEST: Current COS state: {cos_state}")
+            
+            while is_cos_active():
+                time.sleep(0.1)
+            
+            debug_log("ECHO TEST: COS is inactive, proceeding")
+            
+            # 2. Play the echo-start.wav file if it exists
+            if os.path.exists(echo_start_filename):
+                playback_status = f"Echo Test: Playing intro prompt"
+                currently_playing = "Echo-start"
+                currently_playing_info = f"Echo Test: Playing intro prompt for track {track_str}"
+                currently_playing_info_timestamp = time.time()
+                write_state()
+                
+                try:
+                    proc = subprocess.Popen(
+                        ['aplay', '-D', SOUND_DEVICE, echo_start_filename],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                    )
+                    proc.wait()
+                    debug_log("ECHO TEST: Played echo-start.wav")
+                except Exception as e:
+                    debug_log(f"Exception playing echo-start.wav: {e}")
+            
+            # 3. Wait for COS to become active and then record (with 5-second timeout)
+            playback_status = f"Echo Test: Waiting for COS to begin recording"
+            currently_playing = "Echo Test"
+            currently_playing_info = f"Echo Test: Waiting for COS to begin recording track {track_str}"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            
+            debug_log("ECHO TEST: Waiting for COS to become active (5s timeout)")
+            
+            # Wait for COS to become active with 5-second timeout
+            cos_wait_start = time.time()
+            cos_active = False
+            
+            while time.time() - cos_wait_start < 5:  # 5-second timeout
+                if is_cos_active():
+                    cos_active = True
+                    break
+                time.sleep(0.1)
+            
+            # If COS didn't become active within 5 seconds, play timeout message
+            if not cos_active:
+                debug_log("ECHO TEST: Timeout waiting for COS to become active")
+                log_recent(f"Echo Test: Timed out waiting for input for track {track_str}")
+                
+                # Play the timeout message if it exists
+                if os.path.exists(echo_timeout_filename):
+                    playback_status = f"Echo Test: Playing timeout message"
+                    currently_playing = "Echo-timeout"
+                    currently_playing_info = f"Echo Test: Input timeout for track {track_str}"
+                    currently_playing_info_timestamp = time.time()
+                    write_state()
+                    
+                    try:
+                        debug_log("ECHO TEST: Playing echo-to.wav timeout message")
+                        proc = subprocess.Popen(
+                            ['aplay', '-D', SOUND_DEVICE, echo_timeout_filename],
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL
+                        )
+                        proc.wait()
+                    except Exception as e:
+                        debug_log(f"Exception playing echo-to.wav: {e}")
+                
+                # Clean up and exit
+                echo_test_active = False
+                echo_test_track = None
+                return
+            
+            debug_log("ECHO TEST: COS is active, starting recording")
+            
+            # Start recording
+            playback_status = f"Echo Test: Recording audio"
+            currently_playing = "Echo Test Recording"
+            currently_playing_info = f"Echo Test: Recording track {track_str}"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            
+            record_proc = subprocess.Popen(
+                ['arecord', '-D', SOUND_DEVICE, '-f', 'S16_LE', '-r', '44100', '-c', '1', output_filename],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            
+            # 4. Monitor COS to determine when to stop recording (with 1-minute maximum)
+            cos_inactive_time = None
+            recording_start_time = time.time()
+            max_recording_time = 60  # 1 minute limit
+            
+            debug_log("ECHO TEST: Recording in progress, monitoring COS (max 1 minute)")
+            
+            while True:
+                # Check for maximum recording time
+                if time.time() - recording_start_time >= max_recording_time:
+                    debug_log("ECHO TEST: Maximum recording time reached (1 minute)")
+                    break
+                    
+                # Check COS state
+                if is_cos_active():
+                    cos_inactive_time = None
+                else:
+                    if cos_inactive_time is None:
+                        debug_log("ECHO TEST: COS became inactive, starting debounce timer")
+                        cos_inactive_time = time.time()
+                    elif time.time() - cos_inactive_time >= COS_DEBOUNCE_TIME:
+                        # COS has been inactive for the debounce period, stop recording
+                        debug_log(f"ECHO TEST: COS inactive for {COS_DEBOUNCE_TIME}s, stopping recording")
+                        break
+                
+                time.sleep(0.1)
+            
+            # Stop the recording
+            debug_log("ECHO TEST: Terminating recording process")
+            record_proc.terminate()
+            time.sleep(0.5)  # Give the process time to cleanly terminate
+            if record_proc.poll() is None:
+                debug_log("ECHO TEST: Killing recording process")
+                record_proc.kill()
+            
+            # Check if the file was created and is valid
+            if not os.path.exists(output_filename):
+                debug_log("ECHO TEST: Output file does not exist")
+                log_recent(f"Echo Test: Recording failed, no file created for track {track_str}")
+                echo_test_active = False
+                echo_test_track = None
+                return
+            
+            file_size = os.path.getsize(output_filename)
+            debug_log(f"ECHO TEST: Recording completed, file size: {file_size} bytes")
+            
+            if file_size < 1000:  # Minimum valid file size check
+                debug_log("ECHO TEST: File too small, likely invalid")
+                log_recent(f"Echo Test: Recording failed, file too small for track {track_str}")
+                echo_test_active = False
+                echo_test_track = None
+                return
+            
+            # Set full permissions (read, write, execute) for all users
+            try:
+                os.chmod(output_filename, 0o777)  # rwxrwxrwx permissions
+                debug_log(f"ECHO TEST: Set full permissions (777) on {output_filename}")
+            except Exception as e:
+                debug_log(f"ECHO TEST: Failed to set file permissions: {e}")
+            
+            # 5. Play back the recording
+            debug_log("ECHO TEST: Starting playback of recording")
+            playback_status = f"Echo Test: Playing back recording"
+            currently_playing = f"Echo Test Playback: {track_str}"
+            currently_playing_info = f"Echo Test: Playing back recorded track {track_str}"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            
+            playback_proc = subprocess.Popen(
+                ['aplay', '-D', SOUND_DEVICE, output_filename],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            playback_proc.wait()
+            
+            debug_log("ECHO TEST: Playback completed")
+            log_recent(f"Echo Test: Successfully recorded and played back track {track_str}")
+            
+            # 6. Play the echo-end.wav file if it exists
+            if os.path.exists(echo_end_filename):
+                playback_status = f"Echo Test: Playing end prompt"
+                currently_playing = "Echo-end"
+                currently_playing_info = f"Echo Test: Playing end prompt for track {track_str}"
+                currently_playing_info_timestamp = time.time()
+                write_state()
+                
+                try:
+                    debug_log("ECHO TEST: Playing echo-end.wav")
+                    proc = subprocess.Popen(
+                        ['aplay', '-D', SOUND_DEVICE, echo_end_filename],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                    )
+                    proc.wait()
+                    debug_log("ECHO TEST: Played echo-end.wav")
+                except Exception as e:
+                    debug_log(f"Exception playing echo-end.wav: {e}")
+            
+        except Exception as e:
+            debug_log(f"Exception in echo test: {e}")
+            log_exception("echo_test")
+        finally:
+            # Now release REMOTE_BUSY_PIN after everything is done
+            GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = ""
+            currently_playing_info_timestamp = 0
+            write_state()
+            echo_test_active = False
+            echo_test_track = None
+            debug_log("ECHO TEST: Function completed")
+    except Exception as e:
+        # Make sure we release the REMOTE_BUSY_PIN even on outer exception
+        GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+        echo_test_active = False
+        echo_test_track = None
+        debug_log(f"Exception in echo_test outer try: {e}")
+        log_exception("echo_test_outer")
+
+def is_remote_device_active():
+    try:
+        level = GPIO.input(REMOTE_BUSY_PIN)
+        return (level == REMOTE_BUSY_ACTIVE_LEVEL)
+    except Exception:
+        log_exception("is_remote_device_active (GPIO.input)")
+        return False
+
+def parse_suffixes(cmd):
+    valid_suffixes = {'I', 'R', 'P', 'M'}
+    idx = len(cmd)
+    suffixes = ""
+    # Walk backwards until no more valid suffixes
+    while idx > 0 and cmd[idx-1].upper() in valid_suffixes:
+        suffixes = cmd[idx-1].upper() + suffixes
+        idx -= 1
+    return cmd[:idx], suffixes if suffixes else None
+
+def parse_alternate_series(cmd):
+    """
+    Parse commands like:
+      'P5985A5299I'
+      'P5985A5299IM'
+      'P1234A5678RM'
+      'P1234A5678i5305'
+    Returns:
+      bases: list of int base codes (e.g., [5985, 5299])
+      alt_suffix: str (e.g., 'IM', 'i5305', etc) or None
+      is_alt: True if alternate syntax detected
+    """
+    import re
+    cmd = cmd.strip()
+    # Find all bases (PxxxxAyyyyAzzzz...)
+    base_match = re.match(r'^P(\d{4})(A\d{4})+', cmd, re.IGNORECASE)
+    if not base_match:
+        return [], None, False
+
+    # Extract all base codes
+    bases = [int(base_match.group(1))]
+    for match in re.finditer(r'A(\d{4})', cmd, re.IGNORECASE):
+        bases.append(int(match.group(1)))
+
+    # Remove all the bases from the command string to get the suffix part
+    base_cmd = re.match(r'^(P\d{4}(A\d{4})+)', cmd, re.IGNORECASE).group(1)
+    suffix_part = cmd[len(base_cmd):]
+    alt_suffix = suffix_part if suffix_part else None
+    return bases, alt_suffix, True
+
+def get_base_type_and_info(base):
+    for bases, ends, intervals, typ in [
+        (random_bases, random_ends, random_intervals, 'Random'),
+        (rotation_bases, rotation_ends, rotation_times, 'Rotation'),
+        (sudo_bases, sudo_ends, sudo_intervals, 'SudoRandom')
+    ]:
+        if base in bases:
+            idx = bases.index(base)
+            end = ends[idx]
+            interval = intervals[idx] * 60
+            return typ, end, interval
+    return None, None, None
+
+def play_any_section_by_type(base, end, interval, typ, interruptible, repeat, pausing):
+    if typ == "Random":
+        play_randomized_section(base, end, interval, random_last_played, random_current_track, interruptible)
+    elif typ == "Rotation":
+        play_rotating_section(base, end, interval, rotation_last_played, rotation_current_track, interruptible)
+    elif typ == "SudoRandom":
+        play_sudo_random_section(base, end, interval, sudo_random_last_interval, sudo_random_interval_track, sudo_random_played_in_cycle, interruptible, repeat, pausing)
+    else:
+        play_direct_track(f"{base:04d}", interruptible, repeat, pausing)
+
+def find_matching_files(base, end):
+    files = []
+    try:
+        for track_num in range(base, end + 1):
+            matching = [f for f in os.listdir(SOUND_DIRECTORY)
+                        if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION)]
+            files.extend([os.path.join(SOUND_DIRECTORY, f) for f in matching])
+    except Exception:
+        log_exception("find_matching_files")
+    return files
+
+def get_duration_wav(fname):
+    try:
+        with contextlib.closing(wave.open(fname, 'r')) as f:
+            frames = f.getnframes()
+            rate = f.getframerate()
+            duration = frames / float(rate)
+            return duration
+    except Exception:
+        log_exception("get_duration_wav")
+        return 0
+
+def play_single_wav(code, interrupt_on_cos=False, block_interrupt=False, playback_token=None):
+    """
+    Play the wav for code or full filename; optionally interrupt if COS becomes active.
+    Returns True if interrupted by COS, False if played to completion or interrupted by user.
+    """
+    import os
+
+    global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
+
+    # PATCH: If 'code' looks like a full path (endswith .wav and exists), use as filename directly
+    if isinstance(code, str) and code.lower().endswith('.wav') and os.path.isfile(code):
+        filename = code
+    else:
+        # Always match using match_code_file (handles dash-suffixes)
+        matches = [
+            f for f in os.listdir(SOUND_DIRECTORY)
+            if match_code_file(f, code, SOUND_FILE_EXTENSION)
+        ]
+        if not matches:
+            debug_log(f"File {code}{SOUND_FILE_EXTENSION} not found.")
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = ""
+            currently_playing_info_timestamp = 0
+            return False
+        filename = os.path.join(SOUND_DIRECTORY, matches[0])
+
+    debug_log(f"play_single_wav: filename={filename}, interrupt_on_cos={interrupt_on_cos}, block_interrupt={block_interrupt}")
+    try:
+        proc = subprocess.Popen(['aplay', '-D', SOUND_DEVICE, filename], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        debug_log("Exception starting aplay:", e)
+        playback_status = "Idle"
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+        return False
+    try:
+        while proc.poll() is None:
+            if playback_token is not None and playback_token != current_playback_token:
+                proc.terminate()
+                break
+            if not block_interrupt and playback_interrupt.is_set():
+                proc.terminate()
+                break
+            if interrupt_on_cos and is_cos_active():
+                debug_log("COS became ACTIVE, interrupting playback")
+                proc.terminate()
+                time.sleep(0.1)
+                if proc.poll() is None:
+                    proc.kill()
+                # Set Idle status after COS interrupt
+                playback_status = "Idle"
+                currently_playing = ""
+                currently_playing_info = ""
+                currently_playing_info_timestamp = 0
+                return True
+            time.sleep(0.05)
+    finally:
+        if proc.poll() is None:
+            proc.kill()
+        proc.wait()
+        # Set Idle status after natural end or user interrupt
+        playback_status = "Idle"
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+    return False
+
+def play_interrupt_to_another(base_filename, code2, playback_token=None):
+    import os
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp
+    global playback_status, playback_interrupt, current_playback_token
+    debug_log(f"play_interrupt_to_another: base_filename={base_filename}, code2={code2}")
+
+    base_name = os.path.splitext(os.path.basename(str(base_filename)))[0]
+    code2_name = os.path.splitext(os.path.basename(str(code2)))[0]
+
+    interrupted = False
+    try:
+        GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+        if is_cos_active():
+            # COS is already active: play code2 immediately
+            currently_playing = f"{code2_name}"
+            playback_status = f"Playing {code2_name} (COS active at start)"
+            currently_playing_info = f"Playing {code2_name} (COS active at start)"
+            currently_playing_info_timestamp = time.time()
+            play_single_wav(code2, block_interrupt=True, playback_token=playback_token)
+            log_recent(f"Interrupt: COS active at start, played {code2_name} directly")
+        else:
+            # Playing base_filename, with potential to interrupt to code2 if COS activates
+            currently_playing = base_name
+            playback_status = f"Playing {base_name}, will interrupt to {code2_name} on COS"
+            currently_playing_info = f"Playing {base_name} (will interrupt to {code2_name} if COS)"
+            currently_playing_info_timestamp = time.time()
+            interrupted = play_single_wav(base_filename, interrupt_on_cos=True, playback_token=playback_token)
+            if interrupted:
+                currently_playing = f"{code2_name}"
+                playback_status = f"Playing {code2_name} (interrupted from {base_name})"
+                currently_playing_info = f"Interrupted {base_name}, now playing {code2_name}"
+                currently_playing_info_timestamp = time.time()
+                play_single_wav(code2, block_interrupt=True, playback_token=playback_token)
+                log_recent(f"Interrupt: {base_name} interrupted by COS, switched to {code2_name}")
+            else:
+                log_recent(f"Interrupt: {base_name} played without COS, did not switch to {code2_name}")
+    finally:
+        GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+        playback_status = "Idle"
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+
+def play_randomized_section(base, end, interval, last_played_dict, current_track_dict, interruptible=False, pausing=False, repeating=False):
+    try:
+        current_time = time.time()
+        last_played = last_played_dict.get(base, 0)
+        current_track = current_track_dict.get(base, None)
+        matching_files = find_matching_files(base, end)
+        if not matching_files:
+            return
+        if current_time - last_played >= interval or current_track not in matching_files:
+            new_track = random.choice(matching_files)
+            current_track_dict[base] = new_track
+            last_played_dict[base] = current_time
+        else:
+            new_track = current_track
+        # Direct call, NO thread!
+        play_sound(new_track, interruptible, pausing, repeating)
+    except Exception:
+        log_exception("play_randomized_section")
+
+def play_rotating_section(base, end, interval, last_played_dict, current_track_dict, interruptible=False, pausing=False, repeat=False):
+    try:
+        current_time = time.time()
+        last_played = last_played_dict.get(base, 0)
+        # Build a list of (track_num, filename) for all present files in the range
+        available_tracks = []
+        for track_num in range(base + 1, end + 1):
+            for f in os.listdir(SOUND_DIRECTORY):
+                if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
+                    available_tracks.append((track_num, f))
+                    break  # Only take the first matching file for each number
+
+        if not available_tracks:
+            # Reset status if nothing to play!
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = ""
+            currently_playing_info_timestamp = 0
+            write_state()
+            return
+
+        # Get just the numbers for rotating
+        available_nums = [num for num, _ in available_tracks]
+
+        if base not in current_track_dict or current_track_dict[base] not in available_nums:
+            current_track_num = available_nums[0]
+        else:
+            current_track_num = current_track_dict[base]
+
+        if last_played == 0:
+            next_track_idx = available_nums.index(current_track_num)
+            last_played_dict[base] = current_time
+        elif current_time - last_played >= interval:
+            idx = available_nums.index(current_track_num)
+            next_track_idx = (idx + 1) % len(available_nums)
+            last_played_dict[base] = current_time
+        else:
+            next_track_idx = available_nums.index(current_track_num)
+
+        next_track_num, next_file = available_tracks[next_track_idx]
+        current_track_dict[base] = next_track_num
+        next_track = os.path.join(SOUND_DIRECTORY, next_file)
+        # NO threading here—call directly!
+        play_sound(next_track, interruptible, pausing, repeat)
+        rotation_active[base] = False
+    except Exception:
+        log_exception("play_rotating_section")
+        rotation_active[base] = False
+        # Reset status on exception, too!
+        playback_status = "Idle"
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+        write_state()
+
+def play_sudo_random_section(base, end, interval, last_interval_dict, interval_track_dict, played_in_cycle_dict, interruptible=False, pausing=False, repeat=False):
+    global sudo_random_last_file
+    current_time = time.time()
+    matching_files = find_matching_files(base, end)
+    if not matching_files:
+        return
+    last_interval = last_interval_dict.get(base, 0)
+    current_track = interval_track_dict.get(base)
+    played_in_cycle = played_in_cycle_dict.get(base, set())
+    if current_track is not None and (current_time - last_interval < interval) and current_track in matching_files:
+        file_to_play = current_track
+    else:
+        unused_tracks = [t for t in matching_files if t not in played_in_cycle]
+        if not unused_tracks:
+            played_in_cycle = set()
+            unused_tracks = matching_files[:]
+        new_track = random.choice(unused_tracks)
+        file_to_play = new_track
+        interval_track_dict[base] = file_to_play
+        last_interval_dict[base] = current_time
+        played_in_cycle.add(file_to_play)
+        played_in_cycle_dict[base] = played_in_cycle
+    sudo_random_last_file[base] = file_to_play
+    # Play the file directly (no thread!) - you are in the command queue worker
+    play_sound(file_to_play, interruptible, pausing, repeat)
+
+def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False):
+    debug_log(f"play_direct_track: code_str={code_str}")
+    files = os.listdir(SOUND_DIRECTORY)
+    debug_log(f"Directory listing: {files}")
+    matches = [f for f in files if match_code_file(f, code_str, SOUND_FILE_EXTENSION)]
+    debug_log(f"Matching files for code_str={code_str}: {matches}")
+    if matches:
+        filename = os.path.join(SOUND_DIRECTORY, matches[0])
+        debug_log(f"Playing file: {filename}")
+        # Play directly (NO thread)
+        play_sound(filename, interruptible, pausing, repeat)
+    else:
+        debug_log(f"Play (serial/auto): {code_str} - failed -> file not found")
+        log_recent(f"Play (serial/auto): {code_str} - failed -> file not found")
+
+def play_code(code_str, interruptible=False, pausing=False, repeating=False):
+    debug_log(f"play_code: code_str={code_str}")
+    files = os.listdir(SOUND_DIRECTORY)
+    debug_log(f"play_code: Directory listing: {files}")
+    matches = [f for f in files if match_code_file(f, code_str, SOUND_FILE_EXTENSION)]
+    debug_log(f"play_code: Matching files for code_str={code_str}: {matches}")
+    if matches:
+        filename = os.path.join(SOUND_DIRECTORY, matches[0])
+        debug_log(f"play_code: Starting playback for {filename}")
+        # Directly call play_sound, no new thread, no launch_playback_thread
+        play_sound(
+            filename=filename,
+            interruptible=interruptible,
+            pausing=pausing,
+            repeating=repeating
+        )
+    else:
+        debug_log(f"play_code: No sound file found for code_str={code_str}")
+
+def parse_serial_command(command):
+    """
+    Accepts:
+      - Pxxxx
+      - PxxxxI, PxxxxP, PxxxxR, PxxxxM, PxxxxIM, PxxxxRM, etc.
+      - PxxxxiYYYY (interrupt-to-another), ignoring any suffix after second code
+    Returns:
+      (base: str, suffix: str or None, interrupt_to: str or None)
+    """
+    command = command.strip().upper()
+    # Handle interrupt-to-another, e.g. P1234I5678 or P1234i5678
+    m = re.match(r'^P(\d{4})I(\d{4})', command)
+    if not m:
+        m = re.match(r'^P(\d{4})i(\d{4})', command)
+    if m:
+        return (m.group(1), "i", m.group(2))
+
+    # Handle all other suffix forms using parse_suffixes
+    m = re.match(r'^P(\d{4})(.*)$', command)
+    if m:
+        base = m.group(1)
+        suffix = m.group(2)
+        # Use your parse_suffixes to extract valid trailing suffixes (I, P, R, M)
+        base2, suffixes = parse_suffixes(f"{base}{suffix}")
+        # base2 should be base, suffixes is a string of valid suffix chars or None
+        return (base2, suffixes, None)
+
+    return (None, None, None)
+
+def auto_alternate_series(command, interval_per_base=60):
+    # interval_per_base should match your config for [Rotation] time in seconds
+    # If you want to read the real interval for each base from your config, you can do so.
+    bases, _, is_alt = parse_alternate_series(command)
+    if not is_alt or not bases:
+        debug_log("Not a valid alternate series command.")
+        return
+
+    key = tuple(sorted(bases))
+    pointer = 0
+
+    while True:
+        current_base = bases[pointer]
+        command_queue.put(command)
+        debug_log(f"Played base {current_base}, waiting {interval_per_base} seconds before next base...")
+        time.sleep(interval_per_base)
+        pointer = (pointer + 1) % len(bases)
+
+def get_next_base_file(base_code):
+    typ, end, interval = get_base_type_and_info(base_code)
+    if typ == "Rotation":
+        available_tracks = []
+        for track_num in range(base_code + 1, end + 1):
+            for f in os.listdir(SOUND_DIRECTORY):
+                if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
+                    available_tracks.append((track_num, f))
+                    break
+        if not available_tracks:
+            return None
+        available_nums = [num for num, _ in available_tracks]
+        current_num = rotation_current_track.get(base_code, available_nums[0])
+        if current_num not in available_nums:
+            current_num = available_nums[0]
+        idx = available_nums.index(current_num)
+        now = time.time()
+        last_played = rotation_last_played.get(base_code, 0)
+        if last_played == 0:
+            next_idx = idx
+            rotation_last_played[base_code] = now
+        elif now - last_played >= interval:
+            next_idx = (idx + 1) % len(available_nums)
+            rotation_last_played[base_code] = now
+        else:
+            next_idx = idx
+        rotation_current_track[base_code] = available_nums[next_idx]
+        return os.path.join(SOUND_DIRECTORY, available_tracks[next_idx][1])
+    elif typ == "Random":
+        matching_files = find_matching_files(base_code, end)
+        if not matching_files:
+            return None
+        last_played = random_last_played.get(base_code, 0)
+        current_track = random_current_track.get(base_code, None)
+        now = time.time()
+        if now - last_played >= interval or current_track not in matching_files:
+            chosen = random.choice(matching_files)
+            random_current_track[base_code] = chosen
+            random_last_played[base_code] = now
+            return chosen
+        else:
+            return current_track
+    elif typ == "SudoRandom":
+        matching_files = find_matching_files(base_code, end)
+        if not matching_files:
+            return None
+        played_in_cycle = sudo_random_played_in_cycle.get(base_code, set())
+        if not isinstance(played_in_cycle, set):
+            played_in_cycle = set(played_in_cycle)
+        unused_tracks = [t for t in matching_files if t not in played_in_cycle]
+        if not unused_tracks:
+            played_in_cycle = set()
+            unused_tracks = matching_files[:]
+        chosen = random.choice(unused_tracks)
+        sudo_random_interval_track[base_code] = chosen
+        sudo_random_last_interval[base_code] = time.time()
+        played_in_cycle.add(chosen)
+        sudo_random_played_in_cycle[base_code] = played_in_cycle
+        return chosen
+    else:
+        # PATCH: match dash-suffixed files for direct (non-section) case
+        files = os.listdir(SOUND_DIRECTORY)
+        matches = [f for f in files if match_code_file(f, f"P{base_code}", SOUND_FILE_EXTENSION)]
+        if matches:
+            return os.path.join(SOUND_DIRECTORY, matches[0])
+        return None
+
+def should_allow_message_timer_play(message_mode, timer_value, last_played):
+    """
+    Returns True if playback should be allowed for message-timer-locked playback.
+    - timer_value: in minutes (can be 0, 'N', or a number)
+    - last_played: timestamp of last allowed message playback
+    """
+    if not message_mode or timer_value is None:
+        return True
+    if timer_value == 'N':
+        return False
+    if timer_value == 0:
+        return True
+    now = time.time()
+    if last_played is not None and now - last_played < timer_value * 60:
+        return False
+    return True
+
+def update_message_timer_state(last_played, interval):
+    try:
+        with open(STATE_FILE, 'r') as f:
+            state = json.load(f)
+    except Exception:
+        state = {}
+    state['message_timer_last_played'] = last_played
+    state['message_timer_value'] = interval
+    with open(STATE_FILE, 'w') as f:
+        json.dump(state, f)
+
+def process_command(command):
+    global playback_interrupt, currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
+    global message_timer_last_played, message_timer_value
+    global cos_today_seconds, cos_today_date
+
+    debug_log("process_command reached")
+    debug_log(f"RAW process_command input: {repr(command)}")
+    try:
+        # --- Repeater Activity A1 Command: Speak previous day's activity minutes ---
+        if command.strip().upper() == "A1":
+            speak_activity_minutes_for_previous_day()
+            return
+
+        # --- Repeater Activity Reset Command: ARST (example) ---
+        if command.strip().upper() == "ARST":
+            cos_today_seconds = 0
+            write_state()
+            prepend_or_replace_today_entry(cos_today_date, 0)
+            log_recent("Repeater Activity minutes reset for current day by command.")
+            return
+
+        # NEW: Check for Echo Test command (RE9999 format)
+        if command.upper().startswith('RE') and len(command) >= 6:
+            try:
+                track_num = int(command[2:].strip())
+                debug_log(f"Echo Test command detected with track number: {track_num}")
+                echo_test(track_num)
+                
+                # Update playback status
+                playback_status = f"Echo Test: {track_num}"
+                currently_playing = f"Echo Test: {track_num}"
+                currently_playing_info = f"Echo Test recording for track {track_num}"
+                currently_playing_info_timestamp = time.time()
+                
+                # Add to history
+                serial_history.insert(0, {
+                    "cmd": f"Echo Test: {track_num:04d}",
+                    "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    "src": "Command"
+                })
+                log_recent(f"Echo Test started for track {track_num}")
+                write_state()
+                return
+            except ValueError:
+                debug_log(f"Invalid Echo Test command format: {command}")
+
+        # Check for Script command (S1001 format)
+        if command.upper().startswith('S') and len(command) > 1:
+            try:
+                script_num = command[1:].strip()
+                debug_log(f"Script command detected: {script_num}")
+                # Run script directly
+                run_script(script_num)
+                
+                # Update status
+                playback_status = f"Script: {script_num}"
+                currently_playing = f"Script: {script_num}"
+                currently_playing_info = f"Running script {script_num}"
+                currently_playing_info_timestamp = time.time()
+                
+                # Add to history
+                serial_history.insert(0, {
+                    "cmd": f"Script: {script_num}",
+                    "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    "src": "Command"
+                })
+                log_recent(f"Script execution started: {script_num}")
+                write_state()
+                return
+            except Exception as e:
+                debug_log(f"Invalid script command format or execution error: {e}")
+                log_exception("script_command")
+
+        # --- Play by filename if .wav ---
+        if command.lower().endswith('.wav'):
+            filename = os.path.join(SOUND_DIRECTORY, command)
+            if os.path.isfile(filename):
+                play_sound(filename=filename)
+            else:
+                playback_status = "Idle"
+                currently_playing = ""
+                currently_playing_info = ""
+                currently_playing_info_timestamp = 0
+            write_state()
+            return
+
+        # --- Alternate series logic ---
+        bases, alt_suffix, is_alt = parse_alternate_series(command.strip())
+        debug_log(f"parse_alternate_series: bases={bases}, alt_suffix={alt_suffix}, is_alt={is_alt}")
+        if is_alt and bases:
+            cosi_interrupt_code = None
+            if alt_suffix and alt_suffix.lower().startswith('i') and len(alt_suffix) > 1 and alt_suffix[1:].isdigit():
+                cosi_interrupt_code = alt_suffix[1:]
+            suffix = alt_suffix.upper() if alt_suffix else ""
+            interruptible = "I" in suffix
+            repeat = "R" in suffix
+            pausing = "P" in suffix
+            message_mode = "M" in suffix
+
+            should_play_message = should_allow_message_timer_play(message_mode, message_timer_value, message_timer_last_played)
+            if message_mode and not should_play_message:
+                playback_status = "Message is Rate-Limited"
+                currently_playing = ""
+                currently_playing_info = ""
+                currently_playing_info_timestamp = time.time()
+                write_state()
+                return
+
+            if message_mode and should_play_message:
+                message_timer_last_played = time.time()
+
+            key = tuple(sorted(bases))
+            if key not in alternate_series_pointers:
+                alternate_series_pointers[key] = 0
+            pointer = alternate_series_pointers[key]
+            start_pointer = pointer
+            played = False
+            for step in range(len(bases)):
+                base = bases[pointer]
+                base_filename = get_next_base_file(base)
+                if base_filename:
+                    now = time.time()
+                    if key not in alternate_series_last_played:
+                        alternate_series_last_played[key] = {b: 0 for b in bases}
+                    if key not in alternate_series_track_pointers:
+                        alternate_series_track_pointers[key] = {}
+                    alternate_series_last_played[key][base] = now
+                    alternate_series_track_pointers[key][base] = os.path.basename(base_filename)
+                    if cosi_interrupt_code:
+                        play_interrupt_to_another(base_filename, str(cosi_interrupt_code))
+                    else:
+                        play_sound(
+                            filename=base_filename,
+                            interruptible=interruptible,
+                            pausing=pausing,
+                            repeating=repeat
+                        )
+                    played = True
+                    alternate_series_pointers[key] = (pointer + 1) % len(bases)
+                    write_state()
+                    return
+                pointer = (pointer + 1) % len(bases)
+                if pointer == start_pointer:
+                    break
+            if not played:
+                alternate_series_pointers[key] = pointer
+            write_state()
+            return
+
+        # --- Serial (direct) and section logic ---
+        code_str, suffix, alt_code = parse_serial_command(command.strip())
+        if code_str is None:
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = ""
+            currently_playing_info_timestamp = 0
+            write_state()
+            return
+
+        suffix = suffix.upper() if suffix else ""
+        interruptible = "I" in suffix
+        repeat = "R" in suffix
+        pausing = "P" in suffix
+        message_mode = "M" in suffix
+        code = int(code_str)
+
+        should_play_message = should_allow_message_timer_play(message_mode, message_timer_value, message_timer_last_played)
+        if message_mode and not should_play_message:
+            playback_status = "Message is Rate-Limited"
+            currently_playing = ""
+            currently_playing_info = ""
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            return
+
+        if message_mode and should_play_message:
+            message_timer_last_played = time.time()
+
+        # COS-i logic (interrupt to another code)
+        if suffix == 'I' and alt_code is not None:
+            base_filename = get_next_base_file(code)
+            if not base_filename:
+                playback_status = "Idle"
+                currently_playing = ""
+                currently_playing_info = ""
+                currently_playing_info_timestamp = 0
+                write_state()
+                return
+            play_interrupt_to_another(base_filename, str(alt_code))
+            playback_status = f"Interrupt: {code} -> {alt_code}"
+            currently_playing = f"{code} -> {alt_code}"
+            currently_playing_info = f"Interrupt playback from {code} to {alt_code}"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            return
+
+        # Random Section
+        for b, e, t in zip(random_bases, random_ends, random_intervals):
+            if code == b:
+                play_randomized_section(
+                    b, e, t * 60, random_last_played, random_current_track,
+                    interruptible, pausing, repeat
+                )
+                write_state()
+                return
+            elif b < code <= e:
+                play_direct_track(code_str, interruptible, pausing, repeat)
+                write_state()
+                return
+
+        # Rotating Section
+        for b, e, t in zip(rotation_bases, rotation_ends, rotation_times):
+            if code == b:
+                if not rotation_active.get(b, False):
+                    rotation_active[b] = True
+                    play_rotating_section(
+                        b, e, t * 60, rotation_last_played, rotation_current_track,
+                        interruptible, pausing, repeat
+                    )
+                else:
+                    debug_log(f"Rotation for base {b} is already active, ignoring repeat trigger.")
+                write_state()
+                return
+            elif b < code <= e:
+                play_direct_track(code_str, interruptible, pausing, repeat)
+                write_state()
+                return
+
+        # SudoRandom Section
+        for b, e, t in zip(sudo_bases, sudo_ends, sudo_intervals):
+            if code == b:
+                play_sudo_random_section(
+                    b, e, t * 60,
+                    sudo_random_last_interval,
+                    sudo_random_interval_track,
+                    sudo_random_played_in_cycle,
+                    interruptible, pausing, repeat
+                )
+                write_state()
+                return
+            elif b < code <= e:
+                play_direct_track(code_str, interruptible, pausing, repeat)
+                write_state()
+                return
+
+        # Direct section (default)
+        if DIRECT_ENABLED:
+            play_direct_track(code_str, interruptible, pausing, repeat)
+        else:
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = ""
+            currently_playing_info_timestamp = 0
+        write_state()
+    except Exception:
+        log_exception("process_command")
+
+def write_state():
+    now = time.time()
+
+    # Read previous state from disk to get last_played and previous currently_playing
+    prev_state = {}
+    if os.path.exists(STATE_FILE):
+        try:
+            with open(STATE_FILE, 'r') as f:
+                prev_state = json.load(f)
+        except Exception:
+            prev_state = {}
+
+    prev_current = prev_state.get("currently_playing", "")
+    prev_last = prev_state.get("last_played", "")
+
+    # Decide what last_played should be for this write
+    if (
+        prev_current
+        and prev_current.lower() != "idle"
+        and prev_current != currently_playing
+    ):
+        last_played = prev_current
+    else:
+        last_played = prev_last
+
+    # Random bases lines
+    random_bases_lines = []
+    for b, e, t in zip(random_bases, random_ends, random_intervals):
+        last = random_last_played.get(b, 0)
+        current = random_current_track.get(b, 'N/A')
+        remaining = int(max(0, t*60 - (now - last)))
+        if not current or str(current).upper() == "N/A":
+            track_name = "N/A"
+        else:
+            track_name = os.path.splitext(os.path.basename(current))[0]
+        random_bases_lines.append(
+            f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining}s"
+        )
+
+    # Rotation bases lines
+    rotation_bases_lines = []
+    for b, e, t in zip(rotation_bases, rotation_ends, rotation_times):
+        last = rotation_last_played.get(b, 0)
+        current_num = rotation_current_track.get(b, b+1)
+        remaining = int(max(0, t*60 - (now - last)))
+        rotation_bases_lines.append(
+            f"Base {b} | End {e} Interval {t}: Track={current_num} Remaining={remaining}s"
+        )
+
+    # SudoRandom bases lines
+    sudo_bases_lines = []
+    for b, e, t in zip(sudo_bases, sudo_ends, sudo_intervals):
+        last = sudo_random_last_interval.get(b, 0)
+        current = sudo_random_interval_track.get(b, 'N/A')
+        played = sudo_random_played_in_cycle.get(b, set())
+        remaining = int(max(0, t*60 - (now - last)))
+        if not current or str(current).upper() == "N/A":
+            track_name = "N/A"
+        else:
+            track_name = os.path.splitext(os.path.basename(current))[0]
+        sudo_bases_lines.append(
+            f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining}s PlayedInCycle={len(played)}"
+        )
+
+    # --- ALT SERIES STATE (NEW) ---
+    alt_bases_lines = []
+    for key, last_played_dict in alternate_series_last_played.items():
+        bases = list(key)
+        pointer = alternate_series_pointers.get(key, 0)
+        track_pointers = alternate_series_track_pointers.get(key, {})
+        for base in bases:
+            typ, end, interval = get_base_type_and_info(base)
+            last = last_played_dict.get(base, 0)
+            remaining = int(max(0, interval - (now - last))) if interval else 0
+            track_val = track_pointers.get(base, 1)
+            if typ == 'Rotation':
+                current_num = base + (track_val if isinstance(track_val, int) else 1)
+                track_display = str(current_num)
+            else:
+                if track_val and isinstance(track_val, str) and track_val.upper() != "N/A":
+                    track_display = os.path.splitext(os.path.basename(track_val))[0]
+                else:
+                    track_display = str(current_num)
+            alt_bases_lines.append(
+                f"Series {key} Base {base} Type {typ} | End {end} Interval {interval//60 if interval else 0}m: Track={track_display} Remaining={remaining}s"
+            )
+
+    # --- MESSAGE TIMER REMAINING CALCULATION ---
+    if message_timer_last_played and message_timer_value:
+        message_timer_remaining = max(0, message_timer_value * 60 - (now - message_timer_last_played))
+    else:
+        message_timer_remaining = 0
+
+    # --- COS ACTIVITY/REPEATER ACTIVITY STATE ---
+    cos_today_minutes = int(round(cos_today_seconds / 60)) if 'cos_today_seconds' in globals() else 0
+
+    # --- Ensure cos_today_date is set before writing ---
+    from datetime import datetime
+    global cos_today_date
+    if not ('cos_today_date' in globals()) or not cos_today_date:
+        cos_today_date = datetime.now().strftime("%Y-%m-%d")
+
+    state = {
+        "currently_playing": currently_playing,
+        "currently_playing_info": currently_playing_info,
+        "currently_playing_info_timestamp": currently_playing_info_timestamp,
+        "playing_end_time": playing_end_time,
+        "playback_status": playback_status,
+        "serial_port_missing": serial_port_missing,
+        "sound_card_missing": sound_card_missing,
+        "serial_history": serial_history[-10:],
+        "cos_active": is_cos_active(),
+        "remote_device_active": is_remote_device_active(),
+        "uptime": get_drx_uptime(),
+
+        "random_last_played": {b: random_last_played.get(b, 0) for b in random_bases},
+        "random_current_track": {b: os.path.basename(random_current_track.get(b, "")) if random_current_track.get(b, "") else "N/A" for b in random_bases},
+
+        "rotation_last_played": {b: rotation_last_played.get(b, 0) for b in rotation_bases},
+        "rotation_current_track": {b: rotation_current_track.get(b, b+1) for b in rotation_bases},
+
+        "sudo_random_last_interval": {b: sudo_random_last_interval.get(b, 0) for b in sudo_bases},
+        "sudo_random_interval_track": {b: os.path.basename(sudo_random_interval_track.get(b, "")) if sudo_random_interval_track.get(b, "") else "N/A" for b in sudo_bases},
+        "sudo_random_played_in_cycle": {b: [os.path.basename(x) for x in sudo_random_played_in_cycle.get(b, set())] for b in sudo_bases},
+
+        "random_bases_lines": random_bases_lines,
+        "rotation_bases_lines": rotation_bases_lines,
+        "sudo_bases_lines": sudo_bases_lines,
+        "alt_bases_lines": alt_bases_lines,
+
+        "drx_start_time": DRX_START_TIME,
+        "updated_at": now,
+        "last_played": last_played,
+
+        # --- MESSAGE TIMER FIELDS ---
+        "message_timer_last_played": message_timer_last_played,
+        "message_timer_value": message_timer_value,
+        "message_timer_remaining": int(message_timer_remaining),
+
+        # --- COS/Repeater Activity fields ---
+        "cos_today_seconds": cos_today_seconds,
+        "cos_today_minutes": cos_today_minutes,
+        "cos_today_date": cos_today_date,
+    }
+    try:
+        #debug_log(f"write_state() called with: {state}")
+        with open(STATE_FILE, 'w') as f:
+            json.dump(state, f)
+    except Exception as e:
+        debug_log(f"write_state() exception: {e}")
+
+def reload_config():
+    global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE
+    global COS_PIN, COS_ACTIVE_LEVEL, REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL, COS_DEBOUNCE_TIME, MAX_COS_INTERRUPTIONS
+    global SERIAL_PORT, SERIAL_BAUDRATE, SERIAL_TIMEOUT
+    global RANDOM_BASE, RANDOM_END, RANDOM_INTERVAL, ROTATION_BASE, ROTATION_END, ROTATION_TIME
+    global SUDORANDOM_BASE, SUDORANDOM_END, SUDORANDOM_INTERVAL, DIRECT_ENABLED, DIRECT_PREFIX
+    global random_bases, random_ends, random_intervals, rotation_bases, rotation_ends, rotation_times
+    global sudo_bases, sudo_ends, sudo_intervals
+    global message_timer_value
+
+    config.read(config_file_path)
+    SOUND_DIRECTORY = get_config_value("Sound", "directory", DEFAULTS["Sound"]["directory"])
+    SOUND_FILE_EXTENSION = get_config_value("Sound", "extension", DEFAULTS["Sound"]["extension"])
+    SOUND_DEVICE = get_config_value("Sound", "device", DEFAULTS["Sound"]["device"])
+
+    COS_PIN = get_config_value("GPIO", "cos_pin", DEFAULTS["GPIO"]["cos_pin"], int)
+    COS_ACTIVE_LEVEL = get_config_value("GPIO", "cos_activate_level", DEFAULTS["GPIO"]["cos_activate_level"], lambda x: str(x).lower() in ('1', 'true', 'yes'))
+    REMOTE_BUSY_PIN = get_config_value("GPIO", "remote_busy_pin", DEFAULTS["GPIO"]["remote_busy_pin"], int)
+    REMOTE_BUSY_ACTIVE_LEVEL = get_config_value("GPIO", "remote_busy_activate_level", DEFAULTS["GPIO"]["remote_busy_activate_level"], lambda x: str(x).lower() in ('1', 'true', 'yes'))
+    COS_DEBOUNCE_TIME = get_config_value("GPIO", "cos_debounce_time", DEFAULTS["GPIO"]["cos_debounce_time"], float)
+    MAX_COS_INTERRUPTIONS = get_config_value("GPIO", "max_cos_interruptions", DEFAULTS["GPIO"]["max_cos_interruptions"], int)
+
+    SERIAL_PORT = get_config_value("Serial", "port", DEFAULTS["Serial"]["port"])
+    SERIAL_BAUDRATE = get_config_value("Serial", "baudrate", DEFAULTS["Serial"]["baudrate"], int)
+    SERIAL_TIMEOUT = get_config_value("Serial", "timeout", DEFAULTS["Serial"]["timeout"], float)
+
+    RANDOM_BASE = get_config_value("Random", "base", DEFAULTS["Random"]["base"])
+    RANDOM_END = get_config_value("Random", "end", DEFAULTS["Random"]["end"])
+    RANDOM_INTERVAL = get_config_value("Random", "interval", DEFAULTS["Random"]["interval"])
+    ROTATION_BASE = get_config_value("Rotation", "base", DEFAULTS["Rotation"]["base"])
+    ROTATION_END = get_config_value("Rotation", "end", DEFAULTS["Rotation"]["end"])
+    ROTATION_TIME = get_config_value("Rotation", "interval", DEFAULTS["Rotation"]["interval"])
+    SUDORANDOM_BASE = get_config_value("SudoRandom", "base", DEFAULTS["SudoRandom"]["base"])
+    SUDORANDOM_END = get_config_value("SudoRandom", "end", DEFAULTS["SudoRandom"]["end"])
+    SUDORANDOM_INTERVAL = get_config_value("SudoRandom", "interval", DEFAULTS["SudoRandom"]["interval"])
+    DIRECT_ENABLED = get_config_value("Direct", "enabled", DEFAULTS["Direct"]["enabled"], lambda x: str(x).lower() in ("1", "true", "yes"))
+    DIRECT_PREFIX = get_config_value("Direct", "prefix", DEFAULTS["Direct"]["prefix"])
+
+    random_bases[:] = parse_int_list(RANDOM_BASE, fallback=3000, label="Random base", section="Random")
+    random_ends[:] = parse_int_list(RANDOM_END, fallback=3099, label="Random end", section="Random")
+    random_intervals[:] = parse_float_list(RANDOM_INTERVAL, fallback=10, label="Random interval", section="Random")
+    rotation_bases[:] = parse_int_list(ROTATION_BASE, fallback=4000, label="Rotation base", section="Rotation")
+    rotation_ends[:] = parse_int_list(ROTATION_END, fallback=4099, label="Rotation end", section="Rotation")
+    rotation_times[:] = parse_float_list(ROTATION_TIME, fallback=10, label="Rotation time", section="Rotation")
+    sudo_bases[:] = parse_int_list(SUDORANDOM_BASE, fallback=5000, label="SudoRandom base", section="SudoRandom")
+    sudo_ends[:] = parse_int_list(SUDORANDOM_END, fallback=5099, label="SudoRandom end", section="SudoRandom")
+    sudo_intervals[:] = parse_float_list(SUDORANDOM_INTERVAL, fallback=10, label="SudoRandom interval", section="SudoRandom")
+
+    message_timer_value = parse_message_timer(get_config_value("General", "Message Timer", "N"))
+
+def maybe_run_webcmd():
+    global serial_history  # Move this to the top of the function
+    state = {}
+
+    if os.path.exists(WEBCMD_FILE):
+        try:
+            with open(WEBCMD_FILE, 'r') as f:
+                cmd = json.load(f)
+
+            # Add Echo Test command support
+            if cmd.get("type") == "echo_test" and "track" in cmd:
+                # Queue the echo test command as a string, example: "RE1234"
+                track_num = int(cmd["track"])
+                debug_log(f"Echo Test requested via web for track {track_num}")
+                command_queue.put(f"RE{track_num:04d}")
+                log_recent(f"Echo Test: Started for track {track_num} (web)")
+
+                # Update history
+                serial_history.insert(0, {
+                    "cmd": f"Echo Test: {track_num:04d}",
+                    "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    "src": "Web"
+                })
+
+                # Update state file
+                state['serial_history'] = serial_history
+                with open(STATE_FILE, 'w') as sf:
+                    json.dump(state, sf)
+
+            elif cmd.get("type") == "play":
+                input_cmd = cmd.get("input", "").strip()
+                if input_cmd.lower().endswith('.wav'):
+                    source = "web dropdown"
+                else:
+                    source = "web input box"
+                try:
+                    command_queue.put(input_cmd)
+                    log_recent(f"Play requested: {input_cmd} ({source})")
+                    # --- Update global and state serial_history ---
+                    serial_history.insert(0, {
+                        "cmd": f"> {input_cmd}",
+                        "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        "src": "Web"
+                    })
+                    serial_history = serial_history[:10]
+                    # Update state file
+                    state['serial_history'] = serial_history
+                    with open(STATE_FILE, 'w') as sf:
+                        json.dump(state, sf)
+                except Exception as e:
+                    log_recent(f"Play requested: {input_cmd} ({source}) - failed -> {e}")
+                # --- REMOVED: DO NOT clear status or interrupt playback here! ---
+                # playback_status = "Idle"
+                # currently_playing = ""
+                # log_recent("Playback stopped from web")
+
+            elif cmd.get("type") == "stop":
+                playback_interrupt.set()
+                log_recent("Playback stopped from web")
+
+            elif cmd.get("type") == "reload_config":
+                reload_config()
+                log_recent("Configuration reload requested from web")
+
+            elif cmd.get("type") == "restart":
+                log_recent("DRX script restart requested from web")
+                os.remove(WEBCMD_FILE)
+                os.execv(sys.executable, [sys.executable] + sys.argv)
+                return
+
+            elif cmd.get("type") == "reboot":
+                log_recent("System reboot requested from web")
+                os.remove(WEBCMD_FILE)
+                os.system("reboot")
+                return
+
+            os.remove(WEBCMD_FILE)
+        except Exception:
+            log_exception("maybe_run_webcmd")
+
+def serial_read_loop():
+    global serial_buffer, serial_history
+    serial_port = None
+    reconnect_delay = 5  # Start with 5 seconds delay for reconnection attempts
+    last_connection_attempt = 0
+    
+    while True:
+        current_time = time.time()
+        
+        # Try to connect if we don't have a valid connection
+        if serial_port is None and current_time - last_connection_attempt > reconnect_delay:
+            try:
+                debug_log(f"Attempting to connect to serial port {SERIAL_PORT}...")
+                serial_port = serial.Serial(
+                    port=SERIAL_PORT,
+                    baudrate=SERIAL_BAUDRATE,
+                    timeout=SERIAL_TIMEOUT
+                )
+                serial_port.reset_input_buffer()
+                debug_log("Serial connection established successfully")
+                reconnect_delay = 5  # Reset delay on successful connection
+            except Exception as e:
+                debug_log(f"Serial connection failed: {e}")
+                serial_port = None
+                debug_log(f"Will attempt reconnection in {reconnect_delay} seconds...")
+                # Exponential backoff up to 60 seconds
+                reconnect_delay = min(reconnect_delay * 1.5, 60)
+            
+            last_connection_attempt = current_time
+        
+        # Now we have a connection, try to read data
+        try:
+            if serial_port and serial_port.is_open and serial_port.in_waiting > 0:
+                data = serial_port.read(serial_port.in_waiting)
+                try:
+                    decoded = data.decode('ascii', errors='ignore')
+                    cleaned = ''.join(c for c in decoded if c.isprintable())
+                    serial_buffer += cleaned  # Only text for curses!
+                    
+                    # Special debug for RE commands 
+                    if "RE" in cleaned.upper():
+                        debug_log(f"!!! ECHO COMMAND DETECTED IN NEW DATA: {repr(cleaned)} !!!")
+                    
+                    debug_log(f"serial_buffer updated: {repr(serial_buffer[-100:])}")  # Show last 100 chars
+
+                    for line in cleaned.splitlines():
+                        if line.strip():
+                            serial_history.insert(0, {
+                                "cmd": line.strip(),
+                                "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                "src": "Serial"
+                            })
+                            if len(serial_history) > 10:
+                                serial_history.pop()
+                except UnicodeDecodeError as e:
+                    debug_log(f"Unicode error: {e}")
+            elif serial_port and serial_port.is_open:
+                # No data waiting but port is open - nothing to do
+                pass
+            
+        except serial.SerialException as e:
+            debug_log(f"Serial device error: {e}")
+            debug_log("Serial device disconnected, will attempt to reconnect")
+            # Close the port if it's open
+            try:
+                if serial_port is not None and serial_port.is_open:
+                    serial_port.close()
+            except:
+                pass
+            serial_port = None
+            
+        except Exception as e:
+            debug_log(f"Unexpected error in serial read loop: {e}")
+        
+        # Always sleep a bit to prevent CPU spinning
+        time.sleep(0.05)
+
+def process_serial_commands():
+    """
+    Continuously scan the serial_buffer for valid command patterns, including standalone A1 command.
+    """
+    global serial_buffer
+
+    while True:
+        try:
+            # Skip processing if buffer is empty
+            if not serial_buffer:
+                time.sleep(0.1)
+                continue
+                
+            # Special check just for RE commands with extra debugging
+            if "RE" in serial_buffer.upper():
+                debug_log(f"FOUND RE PATTERN IN BUFFER: '{serial_buffer}'")
+                
+                # Very simple pattern matching for RE commands
+                match = re.search(r'RE\d{4}', serial_buffer.upper())
+                if match:
+                    echo_cmd = match.group(0)
+                    debug_log(f"MATCHED ECHO COMMAND: '{echo_cmd}'")
+                    
+                    # Extract the track number
+                    track_str = echo_cmd[2:]  # Remove the "RE" prefix
+                    try:
+                        track_num = int(track_str)
+                        debug_log(f"EXTRACTED TRACK NUMBER: {track_num}")
+                        
+                        # Queue the echo test command as a string ("RE1234")
+                        debug_log("QUEUEING ECHO TEST COMMAND")
+                        command_queue.put(f"RE{track_num:04d}")
+                        
+                        # Update history
+                        serial_history.insert(0, {
+                            "cmd": f"Echo Test: {track_num:04d}",
+                            "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                            "src": "Serial"
+                        })
+                        log_recent(f"Echo Test initiated for track {track_num:04d}")
+                        
+                        # Remove the command from the buffer
+                        index = serial_buffer.upper().find(echo_cmd)
+                        if index != -1:
+                            serial_buffer = serial_buffer[:index] + serial_buffer[index+len(echo_cmd):]
+                            serial_buffer = serial_buffer.lstrip()
+                            debug_log(f"BUFFER AFTER ECHO COMMAND REMOVAL: '{serial_buffer}'")
+                    except ValueError:
+                        debug_log(f"Invalid track number format: {track_str}")
+                    continue
+
+            # Standalone A1 command (case-insensitive, surrounded by non-word chars or start/end)
+            match_a1 = re.search(r'\bA1\b', serial_buffer.upper())
+            if match_a1:
+                debug_log(f"Processing A1 command")
+                command_queue.put("A1")
+                # Remove A1 from buffer
+                index = serial_buffer.upper().find("A1")
+                if index != -1:
+                    serial_buffer = serial_buffer[:index] + serial_buffer[index+2:]
+                serial_buffer = serial_buffer.lstrip()
+                continue
+
+            # Regular command processing remains unchanged
+            pattern = r'P\d{4}(?:A\d{4})*(I\d{4}|i\d{4}|[IPRM]*)'
+            match = re.search(pattern, serial_buffer.upper())
+            if match:
+                command = match.group(0)
+                debug_log(f"Processing command: '{command}'")
+                command_queue.put(command)
+
+                index = serial_buffer.upper().find(command)
+                if index != -1:
+                    serial_buffer = serial_buffer[:index] + serial_buffer[index+len(command):]
+                serial_buffer = serial_buffer.lstrip()
+
+            # If we've processed everything but still have data in buffer
+            # and no matches were found, clear some old data to prevent buildup
+            if len(serial_buffer) > 1000:
+                debug_log(f"Trimming excess data from serial buffer (length: {len(serial_buffer)})")
+                serial_buffer = serial_buffer[-500:]  # Keep the last 500 chars
+            
+            time.sleep(0.1)
+        except Exception as e:
+            debug_log(f"Exception in process_serial_commands: {e}")
+            log_exception("process_serial_commands")
+            time.sleep(0.5)  # Longer sleep on error
+
+def run_script(script_num, playback_token=None):
+    """
+    Executes a script from the scripts directory based on the script number.
+    
+    Args:
+        script_num (str): The script number/name to execute
+        playback_token: Token for playback interruption tracking (not used but required)
+    """
+    import os
+    import subprocess
+    import time
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
+    
+    # Get the base DRX directory (one level up from SOUND_DIRECTORY)
+    drx_dir = os.path.abspath(os.path.join(os.path.dirname(SOUND_DIRECTORY), ".."))
+    scripts_dir = os.path.join(drx_dir, "scripts")
+    
+    # Log the paths for debugging
+    debug_log(f"SCRIPT: SOUND_DIRECTORY={SOUND_DIRECTORY}")
+    debug_log(f"SCRIPT: DRX directory calculated as={drx_dir}")
+    debug_log(f"SCRIPT: Scripts directory calculated as={scripts_dir}")
+    
+    script_path = os.path.join(scripts_dir, script_num)
+    debug_log(f"SCRIPT: Attempting to run script: {script_path}")
+    
+    try:
+        # Check if script exists
+        if not os.path.exists(script_path):
+            debug_log(f"SCRIPT: Script does not exist: {script_path}")
+            log_recent(f"Script execution failed: {script_num} - File not found")
+            
+            # Update status
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = f"Script {script_num} not found"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            return
+        
+        # Check if script is executable
+        if not os.access(script_path, os.X_OK):
+            debug_log(f"SCRIPT: Script is not executable: {script_path}")
+            log_recent(f"Script execution failed: {script_num} - Not executable")
+            
+            # Update status
+            playback_status = "Idle"
+            currently_playing = ""
+            currently_playing_info = f"Script {script_num} not executable"
+            currently_playing_info_timestamp = time.time()
+            write_state()
+            return
+            
+        # Execute the script
+        debug_log(f"SCRIPT: Executing script: {script_path}")
+        playback_status = f"Running Script: {script_num}"
+        currently_playing = f"Script: {script_num}"
+        currently_playing_info = f"Executing script {script_num}"
+        currently_playing_info_timestamp = time.time()
+        write_state()
+        
+        try:
+            # Run the script and wait for it to complete
+            proc = subprocess.Popen(
+                [script_path],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            
+            # Wait for process to complete
+            stdout, stderr = proc.communicate()
+            exit_code = proc.returncode
+            
+            # Log the results
+            debug_log(f"SCRIPT: Script {script_num} completed with exit code: {exit_code}")
+            if stdout:
+                debug_log(f"SCRIPT: Standard output: {stdout.decode('utf-8', errors='replace')}")
+            if stderr:
+                debug_log(f"SCRIPT: Standard error: {stderr.decode('utf-8', errors='replace')}")
+                
+            if exit_code == 0:
+                log_recent(f"Script {script_num} executed successfully")
+            else:
+                log_recent(f"Script {script_num} completed with errors (exit code {exit_code})")
+                
+        except Exception as e:
+            debug_log(f"SCRIPT: Error executing script {script_num}: {e}")
+            log_exception("run_script_execution")
+            log_recent(f"Script execution failed: {script_num} - Runtime error")
+            
+    except Exception as e:
+        debug_log(f"SCRIPT: Exception in script execution: {e}")
+        log_exception("run_script")
+    finally:
+        # Reset status after script completes
+        playback_status = "Idle"
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = time.time()
+        write_state()
+
+def status_screen(stdscr):
+    global serial_buffer, serial_history, currently_playing, currently_playing_info
+    global currently_playing_info_timestamp, playing_end_time, playback_status
+    global serial_port_missing, sound_card_missing
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(6, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK)  # For remote device active
+    curses.curs_set(0)
+    stdscr.nodelay(True)
+    flash_state = itertools.cycle([True, False])
+    while True:
+        try:
+            stdscr.erase()
+            y = 0
+            warning_msgs = []
+            if serial_port_missing:
+                warning_msgs.append("SERIAL PORT NOT FOUND")
+            if sound_card_missing:
+                warning_msgs.append("SOUND CARD/DEVICE NOT FOUND")
+            if config_warnings and next(flash_state):
+                warning_msgs.extend(config_warnings)
+            if warning_msgs:
+                for line in warning_msgs:
+                    stdscr.addstr(y, 0, line, curses.color_pair(6) | curses.A_BOLD)
+                    y += 1
+            stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+            y += 1
+            y += 1
+            stdscr.addstr(y, 0, "Rotation Bases State:", curses.color_pair(2))
+            y += 1
+            for b, e, t in zip(rotation_bases, rotation_ends, rotation_times):
+                last = rotation_last_played.get(b, 0)
+                current_num = rotation_current_track.get(b, b+1)
+                remaining = max(0, t*60 - (time.time() - last))
+                stdscr.addstr(y, 0, f"Base {b} | End {e} Interval {t}: Track={current_num} Remaining={remaining:.1f}s", curses.color_pair(3))
+                y += 1
+            y += 1
+            stdscr.addstr(y, 0, "Random Bases State:", curses.color_pair(2))
+            y += 1
+            for b, e, t in zip(random_bases, random_ends, random_intervals):
+                last = random_last_played.get(b, 0)
+                current = random_current_track.get(b, 'N/A')
+                remaining = max(0, t*60 - (time.time() - last))
+                track_name = os.path.basename(current) if current != 'N/A' and current else 'N/A'
+                stdscr.addstr(y, 0, f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining:.1f}s", curses.color_pair(3))
+                y += 1
+            y += 1
+            stdscr.addstr(y, 0, "SudoRandom Bases State:", curses.color_pair(2))
+            y += 1
+            for b, e, t in zip(sudo_bases, sudo_ends, sudo_intervals):
+                last = sudo_random_last_interval.get(b, 0)
+                current = sudo_random_interval_track.get(b, 'N/A')
+                played = sudo_random_played_in_cycle.get(b, set())
+                remaining = max(0, t*60 - (time.time() - last))
+                track_name = os.path.basename(current) if current != 'N/A' and current else 'N/A'
+                stdscr.addstr(y, 0, f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining:.1f}s PlayedInCycle={len(played)}", curses.color_pair(3))
+                y += 1
+            y += 1
+            stdscr.move(y, 0)
+            stdscr.clrtoeol()
+            # Show last 5 serial_history entries by extracting the "cmd" field:
+            serial_display = ' | '.join(
+                ''.join(c for c in (s["cmd"] if isinstance(s, dict) else str(s)) if c in string.printable and c not in '\x1b')
+                for s in serial_history[:5]
+            ) if serial_history else 'None'
+            stdscr.addstr(y, 0, f"Serial Buffer: {serial_display}", curses.color_pair(5))
+            y += 1
+            y += 1
+            stdscr.move(y, 0)
+            stdscr.clrtoeol()
+            if playback_status == "Pausing":
+                label = "Currently Pausing:"
+            elif playback_status == "Restarting":
+                label = "Currently Pending Restart:"
+            else:
+                label = "Currently Playing:"
+            info_clean = ''.join(c for c in currently_playing if c in string.printable and c not in '\x1b')
+            stdscr.addstr(y, 0, f"{label} {info_clean if info_clean else 'None'}", curses.color_pair(4))
+            y += 1
+            if currently_playing_info:
+                if time.time() - currently_playing_info_timestamp < 5:
+                    info2 = ''.join(c for c in currently_playing_info if c in string.printable and c not in '\x1b')
+                    stdscr.addstr(y, 0, info2, curses.color_pair(4))
+                else:
+                    currently_playing_info = ""
+                    currently_playing_info_timestamp = 0
+            y += 1
+            y += 1
+            # COS and Remote Device Active indicators, side by side
+            cos_state = is_cos_active()
+            cos_color = curses.color_pair(2) if cos_state else curses.color_pair(5)
+            remote_state = is_remote_device_active()  # you must define this function/variable in your backend
+            remote_color = curses.color_pair(2) if remote_state else curses.color_pair(5)
+            stdscr.addstr(y, 0, "COS Active: ", curses.color_pair(5))
+            stdscr.addstr(f"{'YES' if cos_state else 'NO'}   ", cos_color | curses.A_BOLD)
+            stdscr.addstr("Remote Device: ", curses.color_pair(5))
+            stdscr.addstr(f"{'YES' if remote_state else 'NO'}", remote_color | curses.A_BOLD)
+            y += 1
+            y += 1
+            stdscr.move(y, 0)
+            stdscr.clrtoeol()
+            max_y, _ = stdscr.getmaxyx()
+            stdscr.move(max_y - 1, 0)
+            stdscr.clrtoeol()
+            stdscr.addstr(max_y - 1, 0, "Press q to quit", curses.color_pair(1))
+            stdscr.refresh()
+            try:
+                if stdscr.getkey() == 'q':
+                    break
+            except curses.error:
+                pass
+            time.sleep(0.5)
+        except Exception:
+            log_exception("status_screen")
+
+def bg_write_state_and_webcmd_loop():
+    while True:
+        maybe_run_webcmd()
+        write_state()
+        time.sleep(0.25)
+
+def bg_cos_state_update_loop():
+    global cos_active, last_cos
+    last_cos = None
+    last_update = time.time()
+    while True:
+        try:
+            cos_now = is_cos_active()
+            if cos_now != last_cos:
+                cos_active = cos_now
+                last_cos = cos_now
+            # Only update if COS is active
+            if cos_active:
+                now = time.time()
+                # Only increment once per second
+                if now - last_update >= 1:
+                    debug_log("Increment block running")
+                    update_cos_minutes()         # <--- FIX: call this!
+                    last_update = now
+        except Exception as e:
+            print("Exception in bg_cos_state_update_loop:", e)
+        time.sleep(0.05)
+
+def fallback_command_prompt():
+    print(f"{SCRIPT_NAME} v{VERSION} - Fallback Command Prompt")
+    print("Enter DRX commands. Type 'exit' or 'quit' to exit.")
+    while True:
+        try:
+            cmd = input("> ")
+            if cmd.strip().lower() in ('exit', 'quit'):
+                print("Exiting DRX.")
+                sys.exit(0)
+            command_queue.put(cmd)
+        except KeyboardInterrupt:
+            print("\nExiting DRX by Ctrl+C.")
+            sys.exit(0)
+        except Exception as e:
+            print(f"Error: {e}")
+
+def get_drx_uptime():
+    now = time.time()
+    uptime_seconds = int(now - DRX_START_TIME)
+    days, remainder = divmod(uptime_seconds, 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    if days > 0:
+        return f"{days}d {hours}h {minutes}m {seconds}s"
+    elif hours > 0:
+        return f"{hours}h {minutes}m {seconds}s"
+    elif minutes > 0:
+        return f"{minutes}m {seconds}s"
+    else:
+        return f"{seconds}s"
+
+def launch_status_screen():
+    import curses
+    curses.wrapper(status_screen)
+
+def get_previous_day():
+    return (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
+def parse_minutes_from_activity_log(date_str):
+    if not os.path.exists(ACTIVITY_FILE):
+        return 0
+    with open(ACTIVITY_FILE, "r") as f:
+        for line in f:
+            if line.startswith(date_str + ","):
+                # e.g. line = "2025-06-25,505 minutes"
+                try:
+                    minutes_part = line.strip().split(",")[1]
+                    minutes_num = int(minutes_part.split()[0])
+                    return minutes_num
+                except Exception:
+                    continue
+    return 0
+
+def get_wav_sequence_for_number(n):
+    """Breaks a number into available wav files: 0-20, then by tens to 100, then by hundreds, etc."""
+    if n == 0:
+        return ["0.wav"]
+    files = []
+    remainder = n
+    # Big chunks (e.g. 1000, 900, ..., 100)
+    for big in [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]:
+        if remainder >= big:
+            count = remainder // big
+            files += [f"{big}.wav"] * count
+            remainder -= big * count
+    # Tens (90, 80, ..., 20)
+    for ten in [90, 80, 70, 60, 50, 40, 30, 20]:
+        if remainder >= ten:
+            files.append(f"{ten}.wav")
+            remainder -= ten
+    # 0-20
+    if remainder > 0:
+        files.append(f"{remainder}.wav")
+    return files
+
+def speak_activity_minutes_for_previous_day():
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
+    
+    try:
+        # Set REMOTE_BUSY_PIN active immediately
+        debug_log("A1 COMMAND: Setting REMOTE_BUSY to active immediately")
+        GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+        
+        # Update status
+        playback_status = "Activity Report: Waiting for channel to clear"
+        currently_playing = "Activity Report"
+        currently_playing_info = "Waiting for channel to clear"
+        currently_playing_info_timestamp = time.time()
+        write_state()
+        
+        # Keep looping until we get through a full debounce period without COS becoming active
+        while True:
+            # Step 1: Wait for COS to become inactive if it isn't already
+            if is_cos_active():
+                debug_log("A1 COMMAND: Waiting for COS to become inactive")
+                while is_cos_active():
+                    time.sleep(0.1)
+                debug_log("A1 COMMAND: COS has become inactive, starting debounce timer")
+            
+            # Step 2: Start the debounce timer
+            debounce_start = time.time()
+            debounce_complete = False
+            
+            # Step 3: Monitor COS during the debounce period
+            while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                if is_cos_active():
+                    debug_log(f"A1 COMMAND: COS became active again during debounce period, restarting wait process")
+                    break  # Break out of this loop and restart the outer loop
+                time.sleep(0.1)
+            
+            # Step 4: Check if we made it through the full debounce period
+            if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                debug_log(f"A1 COMMAND: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
+                break  # Exit the outer loop and proceed with playback
+        
+        # Debounce period completed successfully, now play the activity report
+        debug_log("A1 COMMAND: Starting activity report playback")
+        playback_status = "Activity Report: Playing"
+        currently_playing = "Activity Report"
+        currently_playing_info = "Speaking previous day's activity"
+        currently_playing_info_timestamp = time.time()
+        write_state()
+        
+        prev_date = get_previous_day()
+        minutes = parse_minutes_from_activity_log(prev_date)
+        wavs = []
+        
+        # Prepare the wav sequence
+        wavs.append("activity.wav")
+        wavs += get_wav_sequence_for_number(minutes)
+        if minutes == 1:
+            wavs.append("minute.wav")
+        else:
+            wavs.append("minutes.wav")
+            
+        log_recent(f"Activity Report: Previous day ({prev_date}) had {minutes} minutes of activity")
+        
+        # Play each wav file in order without interruption
+        for wav in wavs:
+            wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
+            if os.path.exists(wav_path):
+                debug_log(f"A1 COMMAND: Playing {wav_path}")
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True)
+            else:
+                debug_log(f"A1 COMMAND: WAV file not found: {wav_path}")
+        
+        debug_log("A1 COMMAND: Activity report completed")
+        
+    except Exception as e:
+        debug_log(f"A1 COMMAND: Exception in speak_activity_minutes: {e}")
+        log_exception("speak_activity_minutes")
+    finally:
+        # Clean up status and REMOTE_BUSY_PIN
+        playback_status = "Idle"
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+        write_state()
+        
+        debug_log("A1 COMMAND: Setting REMOTE_BUSY to inactive")
+        GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+
+# This should be global or in your state
+last_written_minutes = -1
+
+def update_cos_minutes():
+    global cos_today_seconds, cos_today_minutes, last_written_minutes, cos_today_date
+    cos_today_seconds += 1
+    cos_today_minutes = cos_today_seconds // 60
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    if cos_today_date != today_str:
+        cos_today_date = today_str
+        cos_today_seconds = 0
+        cos_today_minutes = 0
+        last_written_minutes = -1  # reset so the log entry is written for new day
+    debug_log(f"minutes_rounded: {cos_today_minutes}, last_written_minutes: {last_written_minutes}")
+    if cos_today_minutes != last_written_minutes:
+        debug_log("Minutes changed, will call prepend_or_replace_today_entry")
+        prepend_or_replace_today_entry(cos_today_date, cos_today_minutes)
+        last_written_minutes = cos_today_minutes
+    write_state()
+
+def prepend_or_replace_today_entry(date_str, minutes_rounded):
+    debug_log(f"prepend_or_replace_today_entry called with {date_str}, {minutes_rounded}")
+    global ACTIVITY_FILE
+    debug_log("Writing activity to:", ACTIVITY_FILE)
+    debug_log(f"Called prepend_or_replace_today_entry({date_str}, {minutes_rounded})")
+    debug_log(f"ACTIVITY_FILE={ACTIVITY_FILE}")
+    os.makedirs(os.path.dirname(ACTIVITY_FILE), exist_ok=True)
+    minute_str = "minute" if minutes_rounded == 1 else "minutes"
+    entry = f"{date_str},{minutes_rounded} {minute_str}\n"
+    lines = []
+    # Read current log if it exists
+    if os.path.exists(ACTIVITY_FILE):
+        with open(ACTIVITY_FILE, "r") as f:
+            lines = f.readlines()
+        os.chmod(ACTIVITY_FILE, 0o777)
+        # Remove any existing entry for this date
+        lines = [line for line in lines if not line.startswith(date_str + ",")]
+    # Prepend the (possibly updated) entry for today
+    lines.insert(0, entry)
+    with open(ACTIVITY_FILE, "w") as f:
+        f.writelines(lines)
+    debug_log(f"prepend_or_replace_today_entry CALLED with {date_str} and {minutes_rounded}")
+    debug_log(f"ACTIVITY_FILE is {ACTIVITY_FILE}")    
+    
+def load_state():
+    global cos_today_seconds, cos_today_minutes, cos_today_date
+    if os.path.exists(STATE_FILE):
+        with open(STATE_FILE, "r") as f:
+            state = json.load(f)
+        cos_today_seconds = state.get("cos_today_seconds", 0)
+        cos_today_minutes = state.get("cos_today_minutes", 0)
+        cos_today_date = state.get("cos_today_date", datetime.now().strftime("%Y-%m-%d"))
+    else:
+        cos_today_seconds = 0
+        cos_today_minutes = 0
+        cos_today_date = datetime.now().strftime("%Y-%m-%d")
+
+# --- Config Variable Assignments ---
+
+ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", "false", lambda x: str(x).lower() in ("1", "true", "yes"))
+
+SOUND_DIRECTORY = get_config_value("Sound", "directory", DEFAULTS["Sound"]["directory"])
+SOUND_FILE_EXTENSION = get_config_value("Sound", "extension", DEFAULTS["Sound"]["extension"])
+SOUND_DEVICE = get_config_value("Sound", "device", DEFAULTS["Sound"]["device"])
+
+COS_PIN = get_config_value("GPIO", "cos_pin", DEFAULTS["GPIO"]["cos_pin"], int)
+COS_ACTIVE_LEVEL = get_config_value("GPIO", "cos_activate_level", DEFAULTS["GPIO"]["cos_activate_level"], lambda x: str(x).lower() in ('1', 'true', 'yes'))
+REMOTE_BUSY_PIN = get_config_value("GPIO", "remote_busy_pin", DEFAULTS["GPIO"]["remote_busy_pin"], int)
+REMOTE_BUSY_ACTIVE_LEVEL = get_config_value("GPIO", "remote_busy_activate_level", DEFAULTS["GPIO"]["remote_busy_activate_level"], lambda x: str(x).lower() in ('1', 'true', 'yes'))
+COS_DEBOUNCE_TIME = get_config_value("GPIO", "cos_debounce_time", DEFAULTS["GPIO"]["cos_debounce_time"], float)
+MAX_COS_INTERRUPTIONS = get_config_value("GPIO", "max_cos_interruptions", DEFAULTS["GPIO"]["max_cos_interruptions"], int)
+
+SERIAL_PORT = get_config_value("Serial", "port", DEFAULTS["Serial"]["port"])
+SERIAL_BAUDRATE = get_config_value("Serial", "baudrate", DEFAULTS["Serial"]["baudrate"], int)
+SERIAL_TIMEOUT = get_config_value("Serial", "timeout", DEFAULTS["Serial"]["timeout"], float)
+
+RANDOM_BASE = get_config_value("Random", "base", DEFAULTS["Random"]["base"])
+RANDOM_END = get_config_value("Random", "end", DEFAULTS["Random"]["end"])
+RANDOM_INTERVAL = get_config_value("Random", "interval", DEFAULTS["Random"]["interval"])
+ROTATION_BASE = get_config_value("Rotation", "base", DEFAULTS["Rotation"]["base"])
+ROTATION_END = get_config_value("Rotation", "end", DEFAULTS["Rotation"]["end"])
+ROTATION_TIME = get_config_value("Rotation", "interval", DEFAULTS["Rotation"]["interval"])
+SUDORANDOM_BASE = get_config_value("SudoRandom", "base", DEFAULTS["SudoRandom"]["base"])
+SUDORANDOM_END = get_config_value("SudoRandom", "end", DEFAULTS["SudoRandom"]["end"])
+SUDORANDOM_INTERVAL = get_config_value("SudoRandom", "interval", DEFAULTS["SudoRandom"]["interval"])
+DIRECT_ENABLED = get_config_value("Direct", "enabled", DEFAULTS["Direct"]["enabled"], lambda x: str(x).lower() in ("1", "true", "yes"))
+DIRECT_PREFIX = get_config_value("Direct", "prefix", DEFAULTS["Direct"]["prefix"])
+message_timer_value = config.getint('General', 'Message Timer', fallback=1)
+
+random_bases = parse_int_list(RANDOM_BASE, fallback=3000, label="Random base", section="Random")
+random_ends = parse_int_list(RANDOM_END, fallback=3099, label="Random end", section="Random")
+random_intervals = parse_float_list(RANDOM_INTERVAL, fallback=10, label="Random interval", section="Random")
+rotation_bases = parse_int_list(ROTATION_BASE, fallback=4000, label="Rotation base", section="Rotation")
+rotation_ends = parse_int_list(ROTATION_END, fallback=4099, label="Rotation end", section="Rotation")
+rotation_times = parse_float_list(ROTATION_TIME, fallback=10, label="Rotation time", section="Rotation")
+sudo_bases = parse_int_list(SUDORANDOM_BASE, fallback=5000, label="SudoRandom base", section="SudoRandom")
+sudo_ends = parse_int_list(SUDORANDOM_END, fallback=5099, label="SudoRandom end", section="SudoRandom")
+sudo_intervals = parse_float_list(SUDORANDOM_INTERVAL, fallback=10, label="SudoRandom interval", section="SudoRandom")
+random_last_played = {}
+random_current_track = {}
+rotation_last_played = {}
+rotation_current_track = {}
+
+sudo_random_last_interval = {}
+sudo_random_interval_track = {}
+sudo_random_played_in_cycle = {}
+sudo_random_last_file = {}
+
+playback_interrupt = threading.Event()
+alternate_sequences = {}
+
+
+def main():
+    # --- GPIO Setup ---
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(REMOTE_BUSY_PIN, GPIO.OUT)
+    GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+    GPIO.setup(COS_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    
+    # --- Config Validation ---
+    validate_config_pairs()
+
+    # --- Serial Port Setup ---
+    global serial_port, serial_port_missing
+    try:
+        serial_port = serial.Serial(
+            port=SERIAL_PORT,
+            baudrate=SERIAL_BAUDRATE,
+            timeout=SERIAL_TIMEOUT
+        )
+        serial_port.reset_input_buffer()
+        serial_port_missing = False
+    except Exception as e:
+        serial_port = None
+        serial_port_missing = True
+
+    # --- Load persistent state before starting threads ---
+    load_state()
+
+    # --- Start Background Threads and UI ---
+    try:
+        threading.Thread(target=serial_read_loop, daemon=True).start()
+        threading.Thread(target=process_serial_commands, daemon=True).start()
+        threading.Thread(target=bg_write_state_and_webcmd_loop, daemon=True).start()
+        threading.Thread(target=bg_cos_state_update_loop, daemon=True).start()
+        threading.Thread(target=command_processor_loop, daemon=True).start()
+
+        try:
+            curses.wrapper(status_screen)
+        except Exception:
+            print("Curses UI failed to start. Falling back to command prompt mode.")
+            log_exception("main (curses fallback)")
+            fallback_command_prompt()
+            while True:
+                time.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    except Exception:
+        log_exception("main")
+    finally:
+        try:
+            GPIO.cleanup()
+        except Exception:
+            log_exception("main (GPIO cleanup)")
+
+if __name__ == "__main__":
+    main()

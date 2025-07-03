@@ -1,0 +1,14 @@
+[2025-07-02 21:22:30] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/brian/DRX/drx_main.py", line 1995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5300A'
+
+[2025-07-02 21:22:27] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/brian/DRX/drx_main.py", line 1995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5300A'
+

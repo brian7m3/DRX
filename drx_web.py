@@ -1424,13 +1424,13 @@ def reset_minutes():
 def api_cos_minutes():
     """Fetch live cos_today_minutes data from drx_main.py API.
     
-    This endpoint proxies requests to the drx_main.py Flask API running on port 504
+    This endpoint proxies requests to the drx_main.py Flask API running on port 5504
     to get real-time in-memory values instead of reading from disk state file.
     """
     try:
         import requests
-        # Fetch from drx_main.py API server running on port 504
-        response = requests.get("http://localhost:504/api/cos_minutes", timeout=2)
+        # Fetch from drx_main.py API server running on port 5504
+        response = requests.get("http://localhost:5504/api/cos_minutes", timeout=2)
         if response.status_code == 200:
             return response.json()
         else:

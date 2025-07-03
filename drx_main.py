@@ -189,14 +189,14 @@ def api_cos_minutes():
 def run_api_server():
     """Run the Flask API server in background thread.
     
-    Serves on port 504 to avoid conflict with main web dashboard on port 505.
+    Serves on port 5504 to avoid conflict with main web dashboard on port 505.
     Suppresses Flask logging to avoid cluttering console output.
     """
     import logging
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
     
-    api_app.run(host="0.0.0.0", port=504, debug=False, use_reloader=False)
+    api_app.run(host="0.0.0.0", port=5504, debug=False, use_reloader=False)
 
 
 # --- Utility Functions ---

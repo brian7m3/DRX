@@ -977,6 +977,11 @@ _state_cache_time = 0
 _state_cache_ttl = 1.0  # Cache valid for 1 second
 
 def read_state():
+    """
+    Read state for web interface. 
+    State file writes are now disabled - returns empty dict when file doesn't exist.
+    This is normal behavior since state is now kept in memory only.
+    """
     global _state_cache, _state_cache_time
     
     # Return cached state if it's recent enough
@@ -985,6 +990,8 @@ def read_state():
     
     try:
         if not os.path.exists(STATE_FILE):
+            # Normal case now - state file is not written anymore
+            # Return empty dict which web interface handles gracefully
             return {}
             
         with open(STATE_FILE, 'r') as f:

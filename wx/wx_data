@@ -1,8 +1,8 @@
 observations: A Few Clouds
-temperature: 86 degrees
-humidity: 47 percent
-winddir: NW
-wind_speed: 4
+temperature: 87 degrees
+humidity: 50 percent
+winddir: W
+wind_speed: 5
 wind_gust: 9
 pressure: 29.82
 pressure_status: falling

@@ -22,6 +22,7 @@ import inspect
 import queue
 import uuid
 from datetime import datetime, timedelta
+from flask import Flask, jsonify
 
 # --- Global State Variables ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -64,9 +65,19 @@ DTMF_LOG_FILE = os.path.join(DRX_DIRECTORY, "dtmf.log")
 DTMF_LOG_ARCHIVE_FMT = os.path.join(DRX_DIRECTORY, "dtmf-%Y-%m.log")
 dtmf_buffer = {}
 dtmf_lock = threading.Lock()
-STATE_FILE = os.path.join(DRX_DIRECTORY, "drx_state.json")
+STATE_FILE = os.path.join(DRX_DIRECTORY, "drx_state.json")  # NOTE: No longer used for writes - only for backward compatibility
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
 LOG_WEB_FILE = '/tmp/drx_webconsole.log'
+
+# --- In-Memory State for REST API ---
+current_state_memory = {}
+state_lock = threading.Lock()
+prev_currently_playing = ""
+last_played_memory = ""
+
+# --- Flask App for State API ---
+app = Flask(__name__)
+API_PORT = 5000  # Port for state API server
 WX_DATA_FILE = "wx/wx_data"
 last_cos_active_time = None
 Direct = {"enabled": True, "prefix": "P"}
@@ -214,11 +225,27 @@ def load_state():
         cos_today_date = datetime.now().strftime("%Y-%m-%d")
 
 def read_state():
+    """
+    Read state from drx_state.json if it exists.
+    Returns empty dict if file doesn't exist (normal behavior now).
+    State writes are disabled - this is only for backward compatibility.
+    """
     try:
+        if not os.path.exists(STATE_FILE):
+            return {}
         with open(STATE_FILE, 'r') as f:
             return json.load(f)
     except Exception:
         return {}
+
+def get_current_state():
+    """
+    Get the current state from memory instead of reading from disk.
+    Used by web interface and other components that need state access.
+    """
+    global current_state_memory
+    with state_lock:
+        return current_state_memory.copy()
 
 def parse_int_list(s, fallback=10, label="", section=""):
     vals = []
@@ -2295,15 +2322,15 @@ def should_allow_message_timer_play(message_mode, timer_value, last_played):
     return True
 
 def update_message_timer_state(last_played, interval):
-    try:
-        with open(STATE_FILE, 'r') as f:
-            state = json.load(f)
-    except Exception:
-        state = {}
-    state['message_timer_last_played'] = last_played
-    state['message_timer_value'] = interval
-    with open(STATE_FILE, 'w') as f:
-        json.dump(state, f)
+    """
+    DISABLED: Message timer state is now stored in memory only.
+    This function is kept for compatibility but does nothing.
+    Message timer values are updated through write_state().
+    """
+    # No longer write state to file - all state is in memory only
+    global message_timer_last_played, message_timer_value
+    message_timer_last_played = last_played
+    message_timer_value = interval
         
 def set_message_rate_limited():
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
@@ -2490,29 +2517,34 @@ def dtmf_cos_edge_monitor():
         time.sleep(0.02)
 
 def write_state():
+    """
+    Store state in memory instead of writing to file.
+    State is now accessible via /api/state endpoint.
+    """
+    global current_state_memory, cos_today_date
     now = time.time()
 
-    # Read previous state from disk to get last_played and previous currently_playing
-    prev_state = {}
-    if os.path.exists(STATE_FILE):
-        try:
-            with open(STATE_FILE, 'r') as f:
-                prev_state = json.load(f)
-        except Exception:
-            prev_state = {}
-
-    prev_current = prev_state.get("currently_playing", "")
-    prev_last = prev_state.get("last_played", "")
+    # Keep track of last_played in memory only (no disk reads)
+    # Use global variables to maintain state across calls
+    global prev_currently_playing, last_played_memory
+    if 'prev_currently_playing' not in globals():
+        prev_currently_playing = ""
+    if 'last_played_memory' not in globals():
+        last_played_memory = ""
 
     # Decide what last_played should be for this write
     if (
-        prev_current
-        and prev_current.lower() != "idle"
-        and prev_current != currently_playing
+        prev_currently_playing
+        and prev_currently_playing.lower() != "idle"
+        and prev_currently_playing != currently_playing
     ):
-        last_played = prev_current
+        last_played = prev_currently_playing
+        last_played_memory = prev_currently_playing
     else:
-        last_played = prev_last
+        last_played = last_played_memory
+
+    # Update previous state for next call
+    prev_currently_playing = currently_playing
 
     # Random bases lines
     random_bases_lines = []
@@ -2633,12 +2665,14 @@ def write_state():
         "cos_today_minutes": cos_today_minutes,
         "cos_today_date": cos_today_date,
     }
-    try:
-        #debug_log(f"write_state() called with: {state}")
-        with open(STATE_FILE, 'w') as f:
-            json.dump(state, f)
-    except Exception as e:
-        debug_log(f"write_state() exception: {e}")
+    
+    # Store state in memory for API access
+    with state_lock:
+        current_state_memory = state
+    
+    # NOTE: State writes to disk are disabled - all state is now kept in memory only
+    # Activity data is still persisted via the activity file
+    # No writes to drx_state.json anymore per requirements
 
 def maybe_run_webcmd():
     global serial_history
@@ -2664,10 +2698,7 @@ def maybe_run_webcmd():
                     "src": "Web"
                 })
 
-                # Update state file
-                state['serial_history'] = serial_history
-                with open(STATE_FILE, 'w') as sf:
-                    json.dump(state, sf)
+                # NOTE: State file updates disabled - serial_history is updated in memory via write_state()
 
             elif cmd.get("type") == "play":
                 input_cmd = cmd.get("input", "").strip()
@@ -2685,10 +2716,7 @@ def maybe_run_webcmd():
                         "src": "Web"
                     })
                     serial_history = serial_history[:10]
-                    # Update state file
-                    state['serial_history'] = serial_history
-                    with open(STATE_FILE, 'w') as sf:
-                        json.dump(state, sf)
+                    # NOTE: State file updates disabled - serial_history is updated in memory via write_state()
                 except Exception as e:
                     log_recent(f"Play requested: {input_cmd} ({source}) - failed -> {e}")
                 # --- REMOVED: DO NOT clear status or interrupt playback here! ---
@@ -3128,13 +3156,13 @@ def prepend_or_replace_today_entry(date_str, minutes_rounded):
     debug_log(f"ACTIVITY_FILE is {ACTIVITY_FILE}")   
 
 def save_state():
-    state = {
-        "cos_today_seconds": cos_today_seconds,
-        "cos_today_minutes": cos_today_minutes,
-        "cos_today_date": cos_today_date
-    }
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)    
+    """
+    DISABLED: State writes to drx_state.json are no longer used.
+    Activity data is persisted via the activity file only.
+    This function is kept for compatibility but does nothing.
+    """
+    # No longer write state to file - all state is in memory only
+    pass
 
 def parse_temperature_from_wx_data():
     """Reads wx/wx_data and extracts the temperature after 'temperature:'."""
@@ -3151,6 +3179,25 @@ def parse_temperature_from_wx_data():
                 except Exception:
                     continue
     return None
+
+# --- Flask API Routes ---
+@app.route('/api/state')
+def get_state():
+    """Return current state from memory as JSON."""
+    global current_state_memory
+    with state_lock:
+        # Return copy to avoid modification issues
+        return jsonify(current_state_memory.copy())
+
+def run_flask_server():
+    """Run Flask server in a separate thread."""
+    try:
+        # Disable Flask's debug output
+        import logging
+        logging.getLogger('werkzeug').setLevel(logging.WARNING)
+        app.run(host='127.0.0.1', port=API_PORT, debug=False, use_reloader=False)
+    except Exception as e:
+        debug_log(f"Flask server error: {e}")
 
 def speak_temperature():
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
@@ -3540,6 +3587,7 @@ def main():
             threading.Thread(target=command_processor_loop, daemon=True).start()
             threading.Thread(target=dtmf_cos_edge_monitor, daemon=True).start()
             threading.Thread(target=monitor_cos, daemon=True).start()
+            threading.Thread(target=run_flask_server, daemon=True).start()
 
             if is_terminal():
                 try:

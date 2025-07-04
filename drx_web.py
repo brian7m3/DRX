@@ -2,6 +2,7 @@ import os
 import json
 import time
 import configparser
+import requests
 from flask import Flask, render_template_string, redirect, url_for, request, session, send_from_directory, jsonify, flash
 
 DRX_START_TIME = time.time()
@@ -17,11 +18,15 @@ WEB_USER = config.get("WebAuth", "username", fallback="admin")
 WEB_PASS = config.get("WebAuth", "password", fallback="drxpass")
 DTMF_LOG_FILE = os.path.join(script_dir, "dtmf.log")
 
-STATE_FILE = os.path.join(script_dir, 'drx_state.json')
+STATE_FILE = os.path.join(script_dir, 'drx_state.json')  # NOTE: No longer used - kept for debug endpoint only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
 SOUND_DIRECTORY = config['Sound']['directory']
 SOUND_FILE_EXTENSION = config['Sound']['extension']
 LOG_FILE = '/tmp/drx_webconsole.log'
+
+# --- State API Configuration ---
+DRX_MAIN_API_URL = "http://127.0.0.1:5000/api/state"
+HTTP_TIMEOUT = 2.0  # Timeout for HTTP requests to drx_main.py
 
 app = Flask(__name__)
 app.secret_key = "change_this_to_a_random_secret"
@@ -977,6 +982,10 @@ _state_cache_time = 0
 _state_cache_ttl = 1.0  # Cache valid for 1 second
 
 def read_state():
+    """
+    Fetch current state from drx_main.py via HTTP API instead of reading from file.
+    Falls back to cached state if HTTP request fails.
+    """
     global _state_cache, _state_cache_time
     
     # Return cached state if it's recent enough
@@ -984,19 +993,23 @@ def read_state():
         return _state_cache
     
     try:
-        if not os.path.exists(STATE_FILE):
-            return {}
-            
-        with open(STATE_FILE, 'r') as f:
-            state = json.load(f)
+        # Fetch state from drx_main.py HTTP API
+        response = requests.get(DRX_MAIN_API_URL, timeout=HTTP_TIMEOUT)
+        if response.status_code == 200:
+            state = response.json()
             # Update cache
             _state_cache = state
             _state_cache_time = time.time()
             return state
-    except json.JSONDecodeError:
-        # Return last valid state instead of empty dict
+        else:
+            # HTTP error - return cached state if available
+            return _state_cache if _state_cache else {}
+    except requests.exceptions.RequestException:
+        # Connection failed - drx_main.py might not be running
+        # Return cached state if available, otherwise empty dict
         return _state_cache if _state_cache else {}
     except Exception:
+        # Other error - return cached state if available
         return _state_cache if _state_cache else {}
 
 def write_webcmd(cmd_dict):
@@ -1472,24 +1485,52 @@ def get_weather_system_status():
         return ("Inactive", "status-bad", "#d32f2f")
     return ("Active", "status-good", "#388e3c")
 
-@app.route("/debug/state_file")
+@app.route("/debug/state_source")
 @require_login
-def debug_state_file():
+def debug_state_source():
+    """Debug endpoint to show how state is being fetched."""
     try:
-        if os.path.exists(STATE_FILE):
+        # Test HTTP API connection
+        try:
+            import requests
+            response = requests.get(DRX_MAIN_API_URL, timeout=HTTP_TIMEOUT)
+            api_status = {
+                "reachable": True,
+                "status_code": response.status_code,
+                "response_size": len(response.content) if response.content else 0
+            }
+            if response.status_code == 200:
+                api_data = response.json()
+                api_status["data_keys"] = list(api_data.keys()) if isinstance(api_data, dict) else "not_dict"
+        except Exception as e:
+            api_status = {
+                "reachable": False,
+                "error": str(e)
+            }
+        
+        # Check if old state file exists (for reference)
+        file_status = {
+            "exists": os.path.exists(STATE_FILE),
+            "note": "File-based state is no longer used - state comes from HTTP API"
+        }
+        if file_status["exists"]:
             file_stats = os.stat(STATE_FILE)
-            with open(STATE_FILE, 'r') as f:
-                state_content = f.read()
-            
-            return jsonify({
-                "exists": True,
+            file_status.update({
                 "size": file_stats.st_size,
-                "modified": time.ctime(file_stats.st_mtime),
-                "content_length": len(state_content),
-                "parse_test": json.loads(state_content) is not None
+                "modified": time.ctime(file_stats.st_mtime)
             })
-        else:
-            return jsonify({"exists": False})
+        
+        return jsonify({
+            "state_source": "HTTP API from drx_main.py",
+            "api_url": DRX_MAIN_API_URL,
+            "api_status": api_status,
+            "old_state_file": file_status,
+            "cache_info": {
+                "cache_ttl": _state_cache_ttl,
+                "cache_size": len(str(_state_cache)) if _state_cache else 0,
+                "cache_age": time.time() - _state_cache_time
+            }
+        })
     except Exception as e:
         return jsonify({"error": str(e)})
 

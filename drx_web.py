@@ -1485,24 +1485,52 @@ def get_weather_system_status():
         return ("Inactive", "status-bad", "#d32f2f")
     return ("Active", "status-good", "#388e3c")
 
-@app.route("/debug/state_file")
+@app.route("/debug/state_source")
 @require_login
-def debug_state_file():
+def debug_state_source():
+    """Debug endpoint to show how state is being fetched."""
     try:
-        if os.path.exists(STATE_FILE):
+        # Test HTTP API connection
+        try:
+            import requests
+            response = requests.get(DRX_MAIN_API_URL, timeout=HTTP_TIMEOUT)
+            api_status = {
+                "reachable": True,
+                "status_code": response.status_code,
+                "response_size": len(response.content) if response.content else 0
+            }
+            if response.status_code == 200:
+                api_data = response.json()
+                api_status["data_keys"] = list(api_data.keys()) if isinstance(api_data, dict) else "not_dict"
+        except Exception as e:
+            api_status = {
+                "reachable": False,
+                "error": str(e)
+            }
+        
+        # Check if old state file exists (for reference)
+        file_status = {
+            "exists": os.path.exists(STATE_FILE),
+            "note": "File-based state is no longer used - state comes from HTTP API"
+        }
+        if file_status["exists"]:
             file_stats = os.stat(STATE_FILE)
-            with open(STATE_FILE, 'r') as f:
-                state_content = f.read()
-            
-            return jsonify({
-                "exists": True,
+            file_status.update({
                 "size": file_stats.st_size,
-                "modified": time.ctime(file_stats.st_mtime),
-                "content_length": len(state_content),
-                "parse_test": json.loads(state_content) is not None
+                "modified": time.ctime(file_stats.st_mtime)
             })
-        else:
-            return jsonify({"exists": False})
+        
+        return jsonify({
+            "state_source": "HTTP API from drx_main.py",
+            "api_url": DRX_MAIN_API_URL,
+            "api_status": api_status,
+            "old_state_file": file_status,
+            "cache_info": {
+                "cache_ttl": _state_cache_ttl,
+                "cache_size": len(str(_state_cache)) if _state_cache else 0,
+                "cache_age": time.time() - _state_cache_time
+            }
+        })
     except Exception as e:
         return jsonify({"error": str(e)})
 

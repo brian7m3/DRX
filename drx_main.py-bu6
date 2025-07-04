@@ -77,7 +77,6 @@ rate_limited_set_time = None
 rate_limited_timer = None
 
 # --- Config Loading & Validation ---
-config_warnings = []
 DEFAULTS = {
     "Sound": {
         "directory": "/tmp/sounds",
@@ -114,20 +113,10 @@ DEFAULTS = {
         "interval": "10"
     },
     "General": {
-        "message timer": "N"
-    },
-    "Debug": {
-        "enable_cos_override": False,
-        "enable_debug_logging": False
-    },
-    "Web": {
-        "port": 505
-    },
-    "WebAuth": {
-        "username": "",
-        "password": ""
+        "Message Timer": "N"
     }
 }
+config_warnings = []
 
 config = configparser.ConfigParser()
 config_ini_missing = False
@@ -144,29 +133,6 @@ except Exception as e:
 def str_to_bool(x):
     return str(x).lower() in ('1', 'true', 'yes')
     
-def get_config_value(section, key, fallback=None, cast_func=None, warn=None):
-    global config_warnings
-    # Check if the section exists in the config file
-    if not config.has_section(section):
-        config_warnings.append(f"Section [{section}] missing; using defaults.")
-        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
-        return cast_func(val) if cast_func else val
-    # Check if the key exists in the section
-    if not config.has_option(section, key):
-        config_warnings.append(f"Missing {key} in [{section}]; using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
-        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
-        return cast_func(val) if cast_func else val
-    # Try to get and cast the value
-    raw = config[section][key]
-    try:
-        return cast_func(raw) if cast_func else raw
-    except Exception as e:
-        config_warnings.append(f"Invalid value for {key} in [{section}]: '{raw}' ({e}); using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
-        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
-        return cast_func(val) if cast_func else val
-
-ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
-
 def debug_log(*args):
     if not ENABLE_DEBUG_LOGGING:
         return
@@ -190,6 +156,27 @@ def debug_log(*args):
         os.chmod(DEBUG_LOG_PATH, 0o777)
     except Exception as e:
         print(f"Error in debug_log: {e}")
+
+def get_config_value(section, key, fallback=None, cast_func=None, warn=None):
+    global config_warnings
+    # Check if the section exists in the config file
+    if not config.has_section(section):
+        config_warnings.append(f"Section [{section}] missing; using defaults.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+    # Check if the key exists in the section
+    if not config.has_option(section, key):
+        config_warnings.append(f"Missing {key} in [{section}]; using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+    # Try to get and cast the value
+    raw = config[section][key]
+    try:
+        return cast_func(raw) if cast_func else raw
+    except Exception as e:
+        config_warnings.append(f"Invalid value for {key} in [{section}]: '{raw}' ({e}); using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
 
 def parse_message_timer(val):
     val = val.strip().upper()
@@ -415,7 +402,7 @@ def is_remote_busy_active():
     global h
     level = lgpio.gpio_read(h, REMOTE_BUSY_PIN)
     # No inversion needed: always return True when pin == REMOTE_BUSY_ACTIVE_LEVEL
-    return level != REMOTE_BUSY_ACTIVE_LEVEL  
+    return level == REMOTE_BUSY_ACTIVE_LEVEL  
 
 def monitor_cos():
     global last_cos_active_time
@@ -2912,6 +2899,7 @@ COS_PIN = get_config_value("GPIO", "cos_pin", fallback=23, cast_func=int)
 COS_ACTIVE_LEVEL = get_config_value("GPIO", "cos_activate_level", fallback=True, cast_func=bool)
 SOUND_DEVICE = get_config_value("Sound", "device", fallback="default")
 MAX_COS_INTERRUPTIONS = get_config_value("GPIO", "max_cos_interruptions", fallback=3, cast_func=int)
+ENABLE_DEBUG_LOGGING = True  # Or set from config
 
 SOUND_DIRECTORY = get_config_value("Sound", "directory", DEFAULTS["Sound"]["directory"])
 SOUND_FILE_EXTENSION = get_config_value("Sound", "extension", DEFAULTS["Sound"]["extension"])
@@ -3457,7 +3445,6 @@ def reload_config():
     global random_bases, random_ends, random_intervals, rotation_bases, rotation_ends, rotation_times
     global sudo_bases, sudo_ends, sudo_intervals
     global message_timer_value
-    global ENABLE_DEBUG_LOGGING
 
     config.read(config_file_path)
     SOUND_DIRECTORY = get_config_value("Sound", "directory", DEFAULTS["Sound"]["directory"])
@@ -3509,7 +3496,6 @@ def reload_config():
     sudo_intervals[:] = parse_float_list(SUDORANDOM_INTERVAL, fallback=10, label="SudoRandom interval", section="SudoRandom")
 
     message_timer_value = parse_message_timer(get_config_value("General", "Message Timer", "N"))
-    ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
 
 def is_terminal():
     return sys.stdin.isatty() and "TERM" in os.environ and os.environ["TERM"] != "unknown"

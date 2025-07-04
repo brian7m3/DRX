@@ -2,6 +2,7 @@ import os
 import json
 import time
 import configparser
+import requests
 from flask import Flask, render_template_string, redirect, url_for, request, session, send_from_directory, jsonify, flash
 
 DRX_START_TIME = time.time()
@@ -17,11 +18,15 @@ WEB_USER = config.get("WebAuth", "username", fallback="admin")
 WEB_PASS = config.get("WebAuth", "password", fallback="drxpass")
 DTMF_LOG_FILE = os.path.join(script_dir, "dtmf.log")
 
-STATE_FILE = os.path.join(script_dir, 'drx_state.json')
+STATE_FILE = os.path.join(script_dir, 'drx_state.json')  # NOTE: No longer used - kept for debug endpoint only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
 SOUND_DIRECTORY = config['Sound']['directory']
 SOUND_FILE_EXTENSION = config['Sound']['extension']
 LOG_FILE = '/tmp/drx_webconsole.log'
+
+# --- State API Configuration ---
+DRX_MAIN_API_URL = "http://127.0.0.1:5000/api/state"
+HTTP_TIMEOUT = 2.0  # Timeout for HTTP requests to drx_main.py
 
 app = Flask(__name__)
 app.secret_key = "change_this_to_a_random_secret"
@@ -977,6 +982,10 @@ _state_cache_time = 0
 _state_cache_ttl = 1.0  # Cache valid for 1 second
 
 def read_state():
+    """
+    Fetch current state from drx_main.py via HTTP API instead of reading from file.
+    Falls back to cached state if HTTP request fails.
+    """
     global _state_cache, _state_cache_time
     
     # Return cached state if it's recent enough
@@ -984,19 +993,23 @@ def read_state():
         return _state_cache
     
     try:
-        if not os.path.exists(STATE_FILE):
-            return {}
-            
-        with open(STATE_FILE, 'r') as f:
-            state = json.load(f)
+        # Fetch state from drx_main.py HTTP API
+        response = requests.get(DRX_MAIN_API_URL, timeout=HTTP_TIMEOUT)
+        if response.status_code == 200:
+            state = response.json()
             # Update cache
             _state_cache = state
             _state_cache_time = time.time()
             return state
-    except json.JSONDecodeError:
-        # Return last valid state instead of empty dict
+        else:
+            # HTTP error - return cached state if available
+            return _state_cache if _state_cache else {}
+    except requests.exceptions.RequestException:
+        # Connection failed - drx_main.py might not be running
+        # Return cached state if available, otherwise empty dict
         return _state_cache if _state_cache else {}
     except Exception:
+        # Other error - return cached state if available
         return _state_cache if _state_cache else {}
 
 def write_webcmd(cmd_dict):

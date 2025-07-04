@@ -212,17 +212,21 @@ def parse_message_timer(val):
         return "N"
 
 def load_state():
+    """
+    Load repeater activity state from the activity file (not drx_state.json).
+    State file writes are disabled - only activity data is persisted.
+    """
     global cos_today_seconds, cos_today_minutes, cos_today_date
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r") as f:
-            state = json.load(f)
-        cos_today_seconds = state.get("cos_today_seconds", 0)
-        cos_today_minutes = state.get("cos_today_minutes", 0)
-        cos_today_date = state.get("cos_today_date", datetime.now().strftime("%Y-%m-%d"))
-    else:
-        cos_today_seconds = 0
-        cos_today_minutes = 0
-        cos_today_date = datetime.now().strftime("%Y-%m-%d")
+    
+    # Initialize with current date
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    cos_today_date = today_str
+    
+    # Try to load today's activity from the activity file
+    cos_today_minutes = parse_minutes_from_activity_log(today_str)
+    cos_today_seconds = cos_today_minutes * 60  # Convert back to seconds
+    
+    debug_log(f"Loaded activity state: {cos_today_minutes} minutes for {cos_today_date}")
 
 def read_state():
     """

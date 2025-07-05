@@ -576,10 +576,15 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </head>
 <body>
+</head>
+<body>
 <div id="main-card">
-    <form method="POST" action="{{ url_for('logout') }}" id="logout-btn">
-        <button type="submit">Logout</button>
-    </form>
+    <div style="display: flex; justify-content: flex-end; gap: 10px; align-items: center; margin-bottom: 10px;">
+        <button id="help-btn" type="button">Help</button>
+        <form method="POST" action="{{ url_for('logout') }}" id="logout-btn" style="margin: 0;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
     <h1>DRX Status Dashboard</h1>
     <b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span>
 <div class="your-card">

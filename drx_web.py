@@ -593,7 +593,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
     <div class="card-section">
         <h2 style="display:inline;">Play Specific Track</h2>
-        <button id="help-btn" type="button" style="float:right;margin-left:1em;">Help</button>
+        <br>
+        <br>
         <form method="POST" action="{{ url_for('play_track') }}" id="play-dropdown-form">
             <label>Track (dropdown):</label>
             <select name="track_dropdown">

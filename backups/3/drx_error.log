@@ -1,0 +1,316 @@
+[2025-06-16 00:06:06] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:06] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:07] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:07] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:08] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:08] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:09] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:09] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:10] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:10] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:11] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:11] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:12] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:12] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:13] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:13] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:14] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:14] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:15] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:15] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:16] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:16] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:17] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:17] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:18] UnicodeDecodeError in serial_read_loop
+[2025-06-16 00:06:18] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:18] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:19] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:19] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:20] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:20] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:21] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:21] UnicodeDecodeError in serial_read_loop
+[2025-06-16 00:06:21] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:22] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:22] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:23] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:23] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:24] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:24] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:25] UnicodeDecodeError in serial_read_loop
+[2025-06-16 00:06:25] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:25] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:26] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:26] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:27] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:27] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:28] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:28] UnicodeDecodeError in serial_read_loop
+[2025-06-16 00:06:28] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:29] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:29] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:30] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:30] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:31] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+
+[2025-06-16 00:06:31] Exception in status_screen:
+Traceback (most recent call last):
+  File "/home/brian/DRX/backups/3/drx_main.py", line 995, in status_screen
+    stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+_curses.error: addwstr() returned ERR
+

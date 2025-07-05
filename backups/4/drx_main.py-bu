@@ -1,0 +1,1135 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import time
+import threading
+import configparser
+import serial
+import curses
+import subprocess
+import random
+import re
+import RPi.GPIO as GPIO
+import datetime
+import traceback
+import wave
+import contextlib
+import shutil
+import itertools
+import json
+import string
+import os
+
+# Get the directory where the script is located
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEBUG_LOG_PATH = os.path.join(SCRIPT_DIR, "debug.log")
+
+def debug_log(msg):
+    with open(DEBUG_LOG_PATH, 'a') as f:
+        f.write(msg + '\n')
+
+SCRIPT_NAME = "DRX"
+VERSION = "2.02"
+
+STATE_FILE = '/tmp/drx_state.json'
+WEBCMD_FILE = '/tmp/drx_webcmd.json'
+LOG_WEB_FILE = '/tmp/drx_webconsole.log'
+
+serial_buffer = ""
+serial_history = []
+currently_playing = ""
+currently_playing_info = ""
+currently_playing_info_timestamp = 0
+playing_end_time = 0
+playback_status = ""
+rotation_active = {}
+
+serial_port_missing = False
+sound_card_missing = False
+
+cos_active = False
+
+script_dir = os.path.dirname(os.path.realpath(__file__))
+config_file_path = os.path.join(script_dir, 'config.ini')
+log_file_path = os.path.join(script_dir, 'drx_error.log')
+
+# --- Config Loading & Validation ---
+DEFAULTS = {
+    "Sound": {
+        "directory": "/tmp/sounds",
+        "extension": ".wav",
+        "device": "default"
+    },
+    "GPIO": {
+        "cos_pin": 23,
+        "cos_activate_level": True,
+        "remote_busy_pin": 25,
+        "remote_busy_activate_level": True,
+        "cos_debounce_time": 0.5,
+        "max_cos_interruptions": 3
+    },
+    "Serial": {
+        "port": "/dev/ttyUSB0",
+        "baudrate": 9600,
+        "timeout": 0.5
+    },
+    "Random": {
+        "base": "3000",
+        "end": "3099",
+        "interval": "10"
+    },
+    "Rotation": {
+        "base": "4000",
+        "end": "4099",
+        "time": "10"
+    },
+    "SudoRandom": {
+        "base": "5000",
+        "end": "5099",
+        "interval": "10"
+    },
+    "Direct": {
+        "enabled": "true",
+        "prefix": "P"
+    }
+}
+config_warnings = []
+
+def get_config_value(section, key, fallback=None, cast_func=None, warn=None):
+    global config_warnings
+    if not config.has_section(section):
+        config_warnings.append(f"Section [{section}] missing; using defaults.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+    if not config.has_option(section, key):
+        config_warnings.append(f"Missing {key} in [{section}]; using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+    raw = config[section][key]
+    try:
+        return cast_func(raw) if cast_func else raw
+    except Exception as e:
+        config_warnings.append(f"Invalid value for {key} in [{section}]: '{raw}' ({e}); using default '{DEFAULTS.get(section, {}).get(key, fallback)}'.")
+        val = DEFAULTS[section][key] if section in DEFAULTS and key in DEFAULTS[section] else fallback
+        return cast_func(val) if cast_func else val
+
+def parse_int_list(s, fallback=10, label="", section=""):
+    vals = []
+    for i, v in enumerate(s.split(',')):
+        try:
+            if float(v) != int(float(v)):
+                config_warnings.append(f"{label} in [{section}]: '{v}' not integer, using {fallback}.")
+                vals.append(int(fallback))
+            else:
+                vals.append(int(float(v)))
+        except Exception:
+            config_warnings.append(f"{label} in [{section}]: '{v}' invalid, using {fallback}.")
+            vals.append(int(fallback))
+    return vals
+
+def parse_float_list(s, fallback=10, label="", section=""):
+    vals = []
+    for i, v in enumerate(s.split(',')):
+        try:
+            f = float(v)
+            if f < 1:
+                config_warnings.append(f"{label} in [{section}]: '{v}' < 1, using {fallback}.")
+                f = float(fallback)
+            elif f != int(f):
+                config_warnings.append(f"{label} in [{section}]: '{v}' not integer, using {fallback}.")
+                f = float(fallback)
+            vals.append(int(f))
+        except Exception:
+            config_warnings.append(f"{label} in [{section}]: '{v}' invalid, using {fallback}.")
+            vals.append(int(fallback))
+    return vals
+
+config = configparser.ConfigParser()
+config_ini_missing = False
+try:
+    found_files = config.read(config_file_path)
+    if not found_files:
+        config_ini_missing = True
+        config_warnings.insert(0, f"config.ini missing at {config_file_path}; using all default values.")
+except Exception as e:
+    config_ini_missing = True
+    config_warnings.insert(0, f"Failed to read config.ini: {e}; using all default values.")
+
+SOUND_DIRECTORY = get_config_value("Sound", "directory", DEFAULTS["Sound"]["directory"])
+SOUND_FILE_EXTENSION = get_config_value("Sound", "extension", DEFAULTS["Sound"]["extension"])
+SOUND_DEVICE = get_config_value("Sound", "device", DEFAULTS["Sound"]["device"])
+
+COS_PIN = get_config_value("GPIO", "cos_pin", DEFAULTS["GPIO"]["cos_pin"], int)
+COS_ACTIVE_LEVEL = get_config_value("GPIO", "cos_activate_level", DEFAULTS["GPIO"]["cos_activate_level"], lambda x: str(x).lower() in ('1', 'true', 'yes'))
+REMOTE_BUSY_PIN = get_config_value("GPIO", "remote_busy_pin", DEFAULTS["GPIO"]["remote_busy_pin"], int)
+REMOTE_BUSY_ACTIVE_LEVEL = get_config_value("GPIO", "remote_busy_activate_level", DEFAULTS["GPIO"]["remote_busy_activate_level"], lambda x: str(x).lower() in ('1', 'true', 'yes'))
+COS_DEBOUNCE_TIME = get_config_value("GPIO", "cos_debounce_time", DEFAULTS["GPIO"]["cos_debounce_time"], float)
+MAX_COS_INTERRUPTIONS = get_config_value("GPIO", "max_cos_interruptions", DEFAULTS["GPIO"]["max_cos_interruptions"], int)
+
+SERIAL_PORT = get_config_value("Serial", "port", DEFAULTS["Serial"]["port"])
+SERIAL_BAUDRATE = get_config_value("Serial", "baudrate", DEFAULTS["Serial"]["baudrate"], int)
+SERIAL_TIMEOUT = get_config_value("Serial", "timeout", DEFAULTS["Serial"]["timeout"], float)
+
+RANDOM_BASE = get_config_value("Random", "base", DEFAULTS["Random"]["base"])
+RANDOM_END = get_config_value("Random", "end", DEFAULTS["Random"]["end"])
+RANDOM_INTERVAL = get_config_value("Random", "interval", DEFAULTS["Random"]["interval"])
+ROTATION_BASE = get_config_value("Rotation", "base", DEFAULTS["Rotation"]["base"])
+ROTATION_END = get_config_value("Rotation", "end", DEFAULTS["Rotation"]["end"])
+ROTATION_TIME = get_config_value("Rotation", "time", DEFAULTS["Rotation"]["time"])
+SUDORANDOM_BASE = get_config_value("SudoRandom", "base", DEFAULTS["SudoRandom"]["base"])
+SUDORANDOM_END = get_config_value("SudoRandom", "end", DEFAULTS["SudoRandom"]["end"])
+SUDORANDOM_INTERVAL = get_config_value("SudoRandom", "interval", DEFAULTS["SudoRandom"]["interval"])
+DIRECT_ENABLED = get_config_value("Direct", "enabled", DEFAULTS["Direct"]["enabled"], lambda x: str(x).lower() in ("1", "true", "yes"))
+DIRECT_PREFIX = get_config_value("Direct", "prefix", DEFAULTS["Direct"]["prefix"])
+
+random_bases = parse_int_list(RANDOM_BASE, fallback=3000, label="Random base", section="Random")
+random_ends = parse_int_list(RANDOM_END, fallback=3099, label="Random end", section="Random")
+random_intervals = parse_float_list(RANDOM_INTERVAL, fallback=10, label="Random interval", section="Random")
+rotation_bases = parse_int_list(ROTATION_BASE, fallback=4000, label="Rotation base", section="Rotation")
+rotation_ends = parse_int_list(ROTATION_END, fallback=4099, label="Rotation end", section="Rotation")
+rotation_times = parse_float_list(ROTATION_TIME, fallback=10, label="Rotation time", section="Rotation")
+sudo_bases = parse_int_list(SUDORANDOM_BASE, fallback=5000, label="SudoRandom base", section="SudoRandom")
+sudo_ends = parse_int_list(SUDORANDOM_END, fallback=5099, label="SudoRandom end", section="SudoRandom")
+sudo_intervals = parse_float_list(SUDORANDOM_INTERVAL, fallback=10, label="SudoRandom interval", section="SudoRandom")
+
+def validate_config_pairs():
+    for bases, ends, label, section in [
+        (random_bases, random_ends, "Random", "Random"),
+        (rotation_bases, rotation_ends, "Rotation", "Rotation"),
+        (sudo_bases, sudo_ends, "SudoRandom", "SudoRandom")
+    ]:
+        for i, (b, e) in enumerate(zip(bases, ends)):
+            if e < b:
+                config_warnings.append(f"{label} config: End {e} < Base {b} (index {i})")
+validate_config_pairs()
+# --------------------------------------------------
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(REMOTE_BUSY_PIN, GPIO.OUT)
+GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+GPIO.setup(COS_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+try:
+    serial_port = serial.Serial(
+        port=SERIAL_PORT,
+        baudrate=SERIAL_BAUDRATE,
+        timeout=SERIAL_TIMEOUT
+    )
+except Exception as e:
+    serial_port = None
+    serial_port_missing = True
+
+random_last_played = {}
+random_current_track = {}
+rotation_last_played = {}
+rotation_current_track = {}
+
+sudo_random_last_interval = {}
+sudo_random_interval_track = {}
+sudo_random_played_in_cycle = {}
+sudo_random_last_file = {}
+
+playback_interrupt = threading.Event()
+alternate_sequences = {}
+
+def log_error(msg):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        with open(log_file_path, 'a') as f:
+            f.write(f"[{timestamp}] {msg}\n")
+    except Exception:
+        print(f"[{timestamp}] Logging failed: {msg}")
+
+def log_exception(context: str):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    exc = traceback.format_exc()
+    try:
+        with open(log_file_path, 'a') as f:
+            f.write(f"[{timestamp}] Exception in {context}:\n{exc}\n")
+    except Exception:
+        print(f"[{timestamp}] Logging failed: {exc}")
+
+def log_recent(entry):
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    try:
+        with open(LOG_WEB_FILE, "a") as f:
+            f.write(f"{ts}: {entry}\n")
+    except Exception as e:
+        log_error(f"log_recent failed: {e}")
+
+if shutil.which("sox") is None:
+    log_error("sox is not installed! 'P' mode will not work.")
+
+def is_cos_active():
+    override_enabled = config.getboolean('Debug', 'enable_cos_override', fallback=False) if config.has_section('Debug') else False
+    override_path = "/tmp/cos_force"
+    if override_enabled:
+        try:
+            with open(override_path, "r") as f:
+                val = f.read().strip()
+                if val == "1":
+                    return True
+                elif val == "0":
+                    return False
+        except FileNotFoundError:
+            pass
+        except Exception:
+            log_exception("is_cos_active (override)")
+    try:
+        level = GPIO.input(COS_PIN)
+        return (level == COS_ACTIVE_LEVEL)
+    except Exception:
+        log_exception("is_cos_active (GPIO.input)")
+        return False
+
+def parse_suffix_first(cmd):
+    valid_suffixes = {'I', 'R', 'P'}
+    for idx, c in enumerate(cmd):
+        if c in valid_suffixes:
+            return cmd[:idx], c
+    return cmd, None
+
+def parse_alternate_series(command):
+    if not command.startswith("P"):
+        return [], None, False
+    tail = command[1:]
+    tail, suffix = parse_suffix_first(tail)
+    base_parts = tail.split("A")
+    try:
+        bases = []
+        for s in base_parts:
+            s = s.strip()
+            if s.isdigit():
+                bases.append(int(s))
+        if len(bases) > 1:
+            return bases, suffix, True
+    except Exception:
+        pass
+    return [], None, False
+
+def get_base_type_and_info(base):
+    for bases, ends, intervals, typ in [
+        (random_bases, random_ends, random_intervals, 'Random'),
+        (rotation_bases, rotation_ends, rotation_times, 'Rotation'),
+        (sudo_bases, sudo_ends, sudo_intervals, 'SudoRandom')
+    ]:
+        if base in bases:
+            idx = bases.index(base)
+            end = ends[idx]
+            interval = intervals[idx] * 60
+            return typ, end, interval
+    return None, None, None
+
+def play_any_section_by_type(base, end, interval, typ, interruptible, repeat, pausing):
+    if typ == "Random":
+        play_randomized_section(base, end, interval, random_last_played, random_current_track, interruptible)
+    elif typ == "Rotation":
+        play_rotating_section(base, end, interval, rotation_last_played, rotation_current_track, interruptible)
+    elif typ == "SudoRandom":
+        play_sudo_random_section(base, end, interval, sudo_random_last_interval, sudo_random_interval_track, sudo_random_played_in_cycle, interruptible, repeat, pausing)
+    else:
+        play_direct_track(f"{base:04d}", interruptible, repeat, pausing)
+
+def find_matching_files(base, end):
+    files = []
+    try:
+        for track_num in range(base + 1, end + 1):
+            pattern1 = f"{track_num:04d}-"
+            pattern2 = f"{track_num:04d}."
+            matching = [f for f in os.listdir(SOUND_DIRECTORY)
+                        if (f.startswith(pattern1) or f.startswith(pattern2) or f.startswith(f"{track_num:04d}")) and f.endswith(SOUND_FILE_EXTENSION)]
+            files.extend([os.path.join(SOUND_DIRECTORY, f) for f in matching])
+    except Exception:
+        log_exception("find_matching_files")
+    return files
+
+def get_duration_wav(fname):
+    try:
+        with contextlib.closing(wave.open(fname, 'r')) as f:
+            frames = f.getnframes()
+            rate = f.getframerate()
+            duration = frames / float(rate)
+            return duration
+    except Exception:
+        log_exception("get_duration_wav")
+        return 0
+
+def play_sound(filename, interruptible=False, repeat=False, pausing=False, source="serial/auto"):
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time, playback_interrupt, playback_status, sound_card_missing
+    max_interrupts = MAX_COS_INTERRUPTIONS
+    cos_interrupts = 0
+    playback_interrupt.clear()
+    currently_playing = os.path.basename(filename)
+    currently_playing_info = f"Playing sound on device: {SOUND_DEVICE} - file: {filename} (Interruptible={interruptible}, Repeat={repeat}, Pausing={pausing})"
+    currently_playing_info_timestamp = time.time()
+    playing_end_time = currently_playing_info_timestamp + 5
+    ret = None
+    try:
+        GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+        if repeat:
+            while True:
+                interrupted = False
+                allow_interrupt = cos_interrupts < max_interrupts
+                playback_status = "Playing"
+                try:
+                    proc = subprocess.Popen(
+                        ['aplay', '-D', SOUND_DEVICE, filename],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                    )
+                except FileNotFoundError:
+                    sound_card_missing = True
+                    currently_playing_info = "Sound card/device missing or aplay not found!"
+                    ret = False
+                    break
+                except Exception as exc:
+                    sound_card_missing = True
+                    currently_playing_info = f"Sound card/device error: {exc}"
+                    ret = False
+                    break
+                try:
+                    while proc.poll() is None:
+                        if allow_interrupt and is_cos_active():
+                            playback_status = "Restarting"
+                            proc.terminate()
+                            time.sleep(0.2)
+                            if proc.poll() is None:
+                                proc.kill()
+                            cos_interrupts += 1
+                            interrupted = True
+                            while is_cos_active() and not playback_interrupt.is_set():
+                                time.sleep(0.05)
+                            break
+                        if playback_interrupt.is_set():
+                            proc.terminate()
+                            break
+                        time.sleep(0.05)
+                finally:
+                    if proc.poll() is None:
+                        proc.kill()
+                    proc.wait()
+                if interrupted and cos_interrupts < max_interrupts and not playback_interrupt.is_set():
+                    continue
+                if cos_interrupts >= max_interrupts and not playback_interrupt.is_set():
+                    playback_status = "Playing"
+                    try:
+                        proc = subprocess.Popen(
+                            ['aplay', '-D', SOUND_DEVICE, filename],
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL
+                        )
+                    except FileNotFoundError:
+                        sound_card_missing = True
+                        currently_playing_info = "Sound card/device missing or aplay not found!"
+                        ret = False
+                        break
+                    except Exception as exc:
+                        sound_card_missing = True
+                        currently_playing_info = f"Sound card/device error: {exc}"
+                        ret = False
+                        break
+                    try:
+                        while proc.poll() is None:
+                            if playback_interrupt.is_set():
+                                proc.terminate()
+                                break
+                            time.sleep(0.05)
+                    finally:
+                        if proc.poll() is None:
+                            proc.kill()
+                        proc.wait()
+                    ret = proc.returncode == 0
+                    break
+                ret = proc.returncode == 0
+                break
+        elif pausing:
+            total_duration = get_duration_wav(filename)
+            played_duration = 0
+            while played_duration < total_duration:
+                sox_cmd = [
+                    'sox', filename, '-t', 'wav', '-', 'trim', f'{played_duration}'
+                ]
+                try:
+                    proc1 = subprocess.Popen(sox_cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+                    proc2 = subprocess.Popen(['aplay', '-D', SOUND_DEVICE], stdin=proc1.stdout, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    proc1.stdout.close()
+                except FileNotFoundError:
+                    sound_card_missing = True
+                    currently_playing_info = "Sound card/device missing or aplay/sox not found!"
+                    ret = False
+                    break
+                except Exception as exc:
+                    sound_card_missing = True
+                    currently_playing_info = f"Sound card/device error: {exc}"
+                    ret = False
+                    break
+                interrupted = False
+                start_time = time.time()
+                playback_status = "Playing"
+                while proc2.poll() is None:
+                    if is_cos_active():
+                        if cos_interrupts < max_interrupts:
+                            playback_status = "Pausing"
+                            proc2.terminate()
+                            proc1.terminate()
+                            time.sleep(0.1)
+                            if proc2.poll() is None:
+                                proc2.kill()
+                            if proc1.poll() is None:
+                                proc1.kill()
+                            cos_interrupts += 1
+                            interrupted = True
+                            played_duration += time.time() - start_time
+                            while is_cos_active() and not playback_interrupt.is_set():
+                                time.sleep(0.05)
+                            break
+                        else:
+                            proc2.terminate()
+                            proc1.terminate()
+                            if proc2.poll() is None:
+                                proc2.kill()
+                            if proc1.poll() is None:
+                                proc1.kill()
+                            played_duration = total_duration
+                            ret = False
+                            break
+                    if playback_interrupt.is_set():
+                        proc2.terminate()
+                        proc1.terminate()
+                        ret = False
+                        break
+                    time.sleep(0.05)
+                if proc2.poll() is None:
+                    proc2.kill()
+                if proc1.poll() is None:
+                    proc1.kill()
+                if not interrupted or cos_interrupts >= max_interrupts or playback_interrupt.is_set():
+                    break
+            ret = True if not sound_card_missing else False
+        else:
+            playback_status = "Playing"
+            try:
+                proc = subprocess.Popen(
+                    ['aplay', '-D', SOUND_DEVICE, filename],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+            except FileNotFoundError:
+                sound_card_missing = True
+                currently_playing_info = "Sound card/device missing or aplay not found!"
+                ret = False
+            except Exception as exc:
+                sound_card_missing = True
+                currently_playing_info = f"Sound card/device error: {exc}"
+                ret = False
+            else:
+                try:
+                    while proc.poll() is None:
+                        if interruptible and is_cos_active():
+                            proc.terminate()
+                            time.sleep(0.2)
+                            if proc.poll() is None:
+                                proc.kill()
+                            break
+                        if playback_interrupt.is_set():
+                            proc.terminate()
+                            break
+                        time.sleep(0.05)
+                finally:
+                    if proc.poll() is None:
+                        proc.kill()
+                    proc.wait()
+                ret = proc.returncode == 0
+    except Exception:
+        log_exception("play_sound")
+        ret = False
+    finally:
+        playback_status = ""
+        try:
+            GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+        except Exception:
+            log_exception("play_sound (GPIO cleanup)")
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+        playing_end_time = 0
+
+    # --- LOGGING FOR ALL PLAY ATTEMPTS ---
+    if filename:
+        if ret:
+            log_recent(f"Play ({source}): {os.path.basename(filename)} - successful")
+        else:
+            log_recent(f"Play ({source}): {os.path.basename(filename)} - failed -> playback error")
+
+def play_randomized_section(base, end, interval, last_played_dict, current_track_dict, interruptible=False):
+    try:
+        current_time = time.time()
+        last_played = last_played_dict.get(base, 0)
+        current_track = current_track_dict.get(base, None)
+        matching_files = find_matching_files(base, end)
+        if not matching_files:
+            return
+        if current_time - last_played >= interval or current_track not in matching_files:
+            new_track = random.choice(matching_files)
+            current_track_dict[base] = new_track
+            last_played_dict[base] = current_time
+        else:
+            new_track = current_track
+        threading.Thread(target=play_sound, args=(new_track, interruptible), kwargs={'source': "serial/auto"}).start()
+    except Exception:
+        log_exception("play_randomized_section")
+
+def play_rotating_section(base, end, interval, last_played_dict, current_track_dict, interruptible=False):
+    try:
+        current_time = time.time()
+        last_played = last_played_dict.get(base, 0)
+        available_tracks = []
+        for track_num in range(base + 1, end + 1):
+            base_filename_prefix = f"{track_num:04d}"
+            matching_files = [f for f in os.listdir(SOUND_DIRECTORY)
+                              if (f.startswith(f"{base_filename_prefix}-") or f.startswith(f"{base_filename_prefix}.") or f.startswith(base_filename_prefix)) and f.endswith(SOUND_FILE_EXTENSION)]
+            if matching_files:
+                available_tracks.append(track_num)
+        if not available_tracks:
+            return
+        if base not in current_track_dict or current_track_dict[base] not in available_tracks:
+            current_track_num = available_tracks[0]
+        else:
+            current_track_num = current_track_dict[base]
+        if last_played == 0:
+            next_track_num = current_track_num
+        elif current_time - last_played >= interval:
+            idx = available_tracks.index(current_track_num) if current_track_num in available_tracks else 0
+            next_idx = (idx + 1) % len(available_tracks)
+            next_track_num = available_tracks[next_idx]
+        else:
+            next_track_num = current_track_num
+        base_filename_prefix = f"{next_track_num:04d}"
+        matching_files = [f for f in os.listdir(SOUND_DIRECTORY)
+                          if (f.startswith(f"{base_filename_prefix}-") or f.startswith(f"{base_filename_prefix}.") or f.startswith(base_filename_prefix)) and f.endswith(SOUND_FILE_EXTENSION)]
+        if not matching_files:
+            return
+        next_track = os.path.join(SOUND_DIRECTORY, matching_files[0])
+        current_track_dict[base] = next_track_num
+        last_played_dict[base] = current_time
+        threading.Thread(target=play_sound, args=(next_track, interruptible), kwargs={'source': "serial/auto"}).start()
+    except Exception:
+        log_exception("play_rotating_section")
+
+def play_sudo_random_section(base, end, interval, last_interval_dict, interval_track_dict, played_in_cycle_dict, interruptible=False, repeat=False, pausing=False):
+    global sudo_random_last_file
+    current_time = time.time()
+    matching_files = find_matching_files(base, end)
+    if not matching_files:
+        return
+    last_interval = last_interval_dict.get(base, 0)
+    current_track = interval_track_dict.get(base)
+    played_in_cycle = played_in_cycle_dict.get(base, set())
+    if current_track is not None and (current_time - last_interval < interval) and current_track in matching_files:
+        file_to_play = current_track
+    else:
+        unused_tracks = [t for t in matching_files if t not in played_in_cycle]
+        if not unused_tracks:
+            played_in_cycle = set()
+            unused_tracks = matching_files[:]
+        new_track = random.choice(unused_tracks)
+        file_to_play = new_track
+        interval_track_dict[base] = file_to_play
+        last_interval_dict[base] = current_time
+        played_in_cycle.add(file_to_play)
+        played_in_cycle_dict[base] = played_in_cycle
+    sudo_random_last_file[base] = file_to_play
+    threading.Thread(target=play_sound, args=(file_to_play, interruptible, repeat, pausing), kwargs={'source': "serial/auto"}).start()
+
+def play_direct_track(code_str, interruptible=False, repeat=False, pausing=False):
+    filename = os.path.join(SOUND_DIRECTORY, f"{code_str}{SOUND_FILE_EXTENSION}")
+    if os.path.exists(filename):
+        threading.Thread(target=play_sound, args=(filename, interruptible, repeat, pausing), kwargs={'source': "serial/auto"}).start()
+    else:
+        log_recent(f"Play (serial/auto): {os.path.basename(filename)} - failed -> file not found")
+
+def parse_serial_command(command):
+    try:
+        # Support PxxxxiYYYY for COS-i
+        m = re.match(r'^P(\d{4})i(\d{4})$', command)
+        if m:
+            return (m.group(1), 'i', m.group(2))
+        # Support alternate series
+        bases, suffix, is_alt = parse_alternate_series(command)
+        if is_alt:
+            return (None, None, None)
+        # Support Pxxxx, PxxxxI, etc.
+        m = re.match(r'^P(\d{4})([IRP]?)$', command)
+        if not m:
+            m2 = re.match(r'^P(\d{4})([IRP])', command)
+            if m2:
+                return (m2.group(1), m2.group(2), None)
+            return (None, None, None)
+        return (m.group(1), m.group(2), None)
+    except Exception:
+        log_exception("parse_serial_command")
+        return (None, None, None)
+
+def process_command(command):
+    debug_log("process_command reached")
+    debug_log(f"RAW process_command input: {repr(command)}")
+    ...
+    debug_log(f"process_command called with: {command}")
+    try:
+        playback_interrupt.set()
+        time.sleep(0.1)
+        code_str, suffix, alt_code = parse_serial_command(command.strip())
+        # print(f"parse_serial_command returned: code_str={code_str}, suffix={suffix}, alt_code={alt_code}")
+        if code_str is None:
+            return
+
+        debug_log(f"rotation_bases: {rotation_bases}, types: {[type(x) for x in rotation_bases]}")
+        debug_log(f"code: {code_str}, type: {type(code_str)}")
+        code = int(code_str)
+        debug_log(f"code (int): {code}, type: {type(code)}")
+
+        # Robust COS-i logic!
+        if suffix == 'i' and alt_code is not None:
+            # print("COS-i logic triggered!")
+            log_recent(f"[COS-i] Handling P{code_str}i{alt_code}")
+            filename1 = os.path.join(SOUND_DIRECTORY, f"{code_str}{SOUND_FILE_EXTENSION}")
+            filename2 = os.path.join(SOUND_DIRECTORY, f"{alt_code}{SOUND_FILE_EXTENSION}")
+
+            def cos_i_sequence():
+                # print("[COS-i] Thread started")
+                global currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time, playback_status
+                try:
+                    currently_playing = os.path.basename(filename1)
+                    currently_playing_info = f"[COS-i] Step 1: Playing {filename1} (COS interruptible)"
+                    currently_playing_info_timestamp = time.time()
+                    playing_end_time = currently_playing_info_timestamp + 5
+                    GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+                    import subprocess
+
+                    proc = subprocess.Popen(
+                        ['aplay', '-D', SOUND_DEVICE, filename1],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL
+                    )
+                    cos_triggered = False
+                    while proc.poll() is None:
+                        if is_cos_active():
+                            # print("[COS-i] COS ACTIVE! Stopping 1st file.")
+                            log_recent("[COS-i] COS went ACTIVE, stopping 1st file.")
+                            proc.terminate()
+                            cos_triggered = True
+                            break
+                        time.sleep(0.05)
+                    if proc.poll() is None:
+                        proc.kill()
+                    proc.wait()
+                    GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+                    if not cos_triggered:
+                        # ... 1st file ended before COS, done
+                        return
+                    log_recent("[COS-i] Interrupt triggered, playing 2nd file immediately")
+                    # (No while loop, don't wait for COS to go inactive)
+                    log_recent(f"[COS-i] Step 2: Playing {filename2} (UNinterruptible)")
+                    currently_playing = os.path.basename(filename2)
+                    currently_playing_info = f"[COS-i] Step 2: Playing {filename2} (UNinterruptible)"
+                    currently_playing_info_timestamp = time.time()
+                    playing_end_time = currently_playing_info_timestamp + 5
+                    GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+                    proc2 = subprocess.Popen(['aplay', '-D', SOUND_DEVICE, filename2])
+                    proc2.wait()
+                    GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+                    log_recent("[COS-i] Sequence complete.")
+                except Exception:
+                    log_exception("cos_i_sequence")
+                finally:
+                    GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+                    currently_playing = ""
+                    currently_playing_info = ""
+                    currently_playing_info_timestamp = 0
+                    playing_end_time = 0
+
+            threading.Thread(target=cos_i_sequence, daemon=True).start()
+            return
+
+        # --- Everything else is your original logic below ---
+        bases, alt_suffix, is_alt = parse_alternate_series(command.strip())
+        if is_alt:
+            # ... (rest unchanged) ...
+            return
+        interruptible = (suffix == "I")
+        repeat = (suffix == "R")
+        pausing = (suffix == "P")
+        code = int(code_str)
+        for b, e, t in zip(random_bases, random_ends, random_intervals):
+            if code == b:
+                play_randomized_section(b, e, t * 60, random_last_played, random_current_track, interruptible)
+                return
+            elif b < code <= e:
+                play_direct_track(code_str, interruptible, repeat, pausing)
+                return
+        for b, e, t in zip(rotation_bases, rotation_ends, rotation_times):
+            if code == b:
+                play_rotating_section(b, e, t * 60, rotation_last_played, rotation_current_track, interruptible)
+                return
+            elif b < code <= e:
+                play_direct_track(code_str, interruptible, repeat, pausing)
+                return
+        for b, e, t in zip(sudo_bases, sudo_ends, sudo_intervals):
+            if code == b:
+                play_sudo_random_section(
+                    b, e, t * 60,
+                    sudo_random_last_interval,
+                    sudo_random_interval_track,
+                    sudo_random_played_in_cycle,
+                    interruptible, repeat, pausing
+                )
+                return
+            elif b < code <= e:
+                play_direct_track(code_str, interruptible, repeat, pausing)
+                return
+        if DIRECT_ENABLED:
+            play_direct_track(code_str, interruptible, repeat, pausing)
+    except Exception:
+        log_exception("process_command")
+
+def write_state():
+    global cos_active
+    now = time.time()
+    random_bases_lines = []
+    for b, e, t in zip(random_bases, random_ends, random_intervals):
+        last = random_last_played.get(b, 0)
+        current = random_current_track.get(b, 'N/A')
+        remaining = max(0, t*60 - (now - last))
+        track_name = os.path.basename(current) if current != 'N/A' and current else 'N/A'
+        random_bases_lines.append(f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining:.1f}s")
+    rotation_bases_lines = []
+    for b, e, t in zip(rotation_bases, rotation_ends, rotation_times):
+        last = rotation_last_played.get(b, 0)
+        current_num = rotation_current_track.get(b, b+1)
+        remaining = max(0, t*60 - (now - last))
+        rotation_bases_lines.append(f"Base {b} | End {e} Interval {t}: Track={current_num} Remaining={remaining:.1f}s")
+    sudorandom_bases_lines = []
+    for b, e, t in zip(sudo_bases, sudo_ends, sudo_intervals):
+        last = sudo_random_last_interval.get(b, 0)
+        current = sudo_random_interval_track.get(b, 'N/A')
+        played = sudo_random_played_in_cycle.get(b, set())
+        remaining = max(0, t*60 - (now - last))
+        track_name = os.path.basename(current) if current != 'N/A' and current else 'N/A'
+        sudorandom_bases_lines.append(
+            f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining:.1f}s PlayedInCycle={len(played)}"
+        )
+    state = {
+        'currently_playing': currently_playing,
+        'playback_status': playback_status,
+        'serial_history': serial_history[-10:],
+        'sound_card_missing': sound_card_missing,
+        'serial_port_missing': serial_port_missing,
+        'random_last_played': random_last_played,
+        'random_current_track': {k: os.path.basename(v) if v else v for k, v in random_current_track.items()},
+        'rotation_last_played': rotation_last_played,
+        'rotation_current_track': rotation_current_track,
+        'sudo_random_last_interval': sudo_random_last_interval,
+        'sudo_random_interval_track': {k: os.path.basename(v) if v else v for k, v in sudo_random_interval_track.items()},
+        'sudo_random_played_in_cycle': {k: [os.path.basename(x) for x in v] for k, v in sudo_random_played_in_cycle.items()},
+        'random_bases_lines': random_bases_lines,
+        'rotation_bases_lines': rotation_bases_lines,
+        'sudorandom_bases_lines': sudorandom_bases_lines,
+        'cos_active': cos_active,
+    }
+    try:
+        with open(STATE_FILE, 'w') as f:
+            json.dump(state, f)
+    except Exception:
+        pass
+
+def reload_config():
+    pass
+
+def play_sound_sync(filename, interruptible=False, repeat=False, pausing=False):
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time, playback_interrupt, playback_status, sound_card_missing
+    playback_interrupt.clear()
+    currently_playing = os.path.basename(filename)
+    currently_playing_info = f"Playing (sync): {filename}"
+    currently_playing_info_timestamp = time.time()
+    playing_end_time = currently_playing_info_timestamp + 5
+    try:
+        GPIO.output(REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL)
+        proc = subprocess.Popen(
+            ['aplay', '-D', SOUND_DEVICE, filename],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        while proc.poll() is None:
+            time.sleep(0.05)
+        ret = proc.returncode == 0
+    except Exception:
+        log_exception("play_sound_sync")
+        ret = False
+    finally:
+        playback_status = ""
+        try:
+            GPIO.output(REMOTE_BUSY_PIN, not REMOTE_BUSY_ACTIVE_LEVEL)
+        except Exception:
+            log_exception("play_sound_sync (GPIO cleanup)")
+        currently_playing = ""
+        currently_playing_info = ""
+        currently_playing_info_timestamp = 0
+        playing_end_time = 0
+    if filename:
+        if ret:
+            log_recent(f"Play (web): {os.path.basename(filename)} - successful")
+        else:
+            log_recent(f"Play (web): {os.path.basename(filename)} - failed -> playback error")
+    return ret
+
+def maybe_run_webcmd():
+    if os.path.exists(WEBCMD_FILE):
+        try:
+            with open(WEBCMD_FILE, 'r') as f:
+                cmd = json.load(f)
+            if cmd.get("type") == "play":
+                input_cmd = cmd.get("input", "")
+                if input_cmd.lower().endswith('.wav'):
+                    path = os.path.join(SOUND_DIRECTORY, input_cmd)
+                    if os.path.exists(path):
+                        ok = play_sound_sync(path)
+                        if ok:
+                            log_recent(f"Play requested: {input_cmd} (dropdown, exact file) - successful")
+                        else:
+                            log_recent(f"Play requested: {input_cmd} (dropdown, exact file) - failed -> playback error")
+                    else:
+                        log_recent(f"Play requested: {input_cmd} (dropdown, exact file) - failed -> file not found")
+                else:
+                    try:
+                        process_command(input_cmd)
+                        log_recent(f"Play requested: {input_cmd} (input) - processed by process_command")
+                    except Exception as e:
+                        log_recent(f"Play requested: {input_cmd} (input) - failed -> {e}")
+            elif cmd.get("type") == "stop":
+                playback_interrupt.set()
+                log_recent("Playback stopped from web")
+            elif cmd.get("type") == "reload_config":
+                reload_config()
+                log_recent("Configuration reload requested from web")
+            elif cmd.get("type") == "restart":
+                log_recent("DRX script restart requested from web")
+            elif cmd.get("type") == "reboot":
+                log_recent("System reboot requested from web")
+            os.remove(WEBCMD_FILE)
+        except Exception:
+            log_exception("maybe_run_webcmd")
+
+def serial_read_loop():
+    debug_log("serial_read_loop running")
+    global serial_buffer, serial_port_missing
+    while True:
+        try:
+            if serial_port and serial_port.in_waiting:
+                data = serial_port.read(serial_port.in_waiting)
+                try:
+                    decoded = data.decode('ascii')
+                    cleaned = ''.join(c for c in decoded if c in string.printable and c not in '\x1b')
+                    serial_buffer += cleaned
+                    debug_log(f"serial_read_loop read data: {repr(cleaned)}")
+                    for line in cleaned.splitlines():
+                        if line.strip():
+                            serial_history.insert(0, line.strip())
+                            if len(serial_history) > 10:
+                                serial_history.pop()
+                except UnicodeDecodeError:
+                    log_error("UnicodeDecodeError in serial_read_loop")
+        except Exception:
+            serial_port_missing = True
+            log_exception("serial_read_loop")
+        time.sleep(0.05)
+
+def process_serial_commands():
+    debug_log("process_serial_commands running")
+    global serial_buffer
+    pattern = r'P\d{4}i\d{4}|P\d{4}[IRP]?'
+    while True:
+        try:
+            if serial_buffer.strip():
+                debug_log(f"SERIAL BUFFER: {repr(serial_buffer)}")
+            match = re.search(pattern, serial_buffer)
+            if match:
+                command = match.group(0)
+                debug_log(f"COMMAND MATCH FOUND: {repr(command)}")
+                debug_log(f"process_serial_commands calling process_command with: {repr(command)}")
+                process_command(command)
+                serial_buffer = serial_buffer.replace(command, '', 1)
+            time.sleep(0.1)
+        except Exception:
+            log_exception("process_serial_commands")
+
+def status_screen(stdscr):
+    global serial_buffer, currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time, playback_status, serial_port_missing, sound_card_missing
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(6, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.curs_set(0)
+    stdscr.nodelay(True)
+    flash_state = itertools.cycle([True, False])
+    while True:
+        try:
+            stdscr.erase()
+            y = 0
+            warning_msgs = []
+            if serial_port_missing:
+                warning_msgs.append("SERIAL PORT NOT FOUND")
+            if sound_card_missing:
+                warning_msgs.append("SOUND CARD/DEVICE NOT FOUND")
+            if config_warnings and next(flash_state):
+                warning_msgs.extend(config_warnings)
+            if warning_msgs:
+                for line in warning_msgs:
+                    stdscr.addstr(y, 0, line, curses.color_pair(6) | curses.A_BOLD)
+                    y += 1
+            stdscr.addstr(y, 0, f"{SCRIPT_NAME} v{VERSION} - Status Screen", curses.color_pair(1))
+            y += 1
+            y += 1
+            stdscr.addstr(y, 0, "Random Bases State:", curses.color_pair(2))
+            y += 1
+            for b, e, t in zip(random_bases, random_ends, random_intervals):
+                last = random_last_played.get(b, 0)
+                current = random_current_track.get(b, 'N/A')
+                remaining = max(0, t*60 - (time.time() - last))
+                track_name = os.path.basename(current) if current != 'N/A' and current else 'N/A'
+                stdscr.addstr(y, 0, f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining:.1f}s", curses.color_pair(3))
+                y += 1
+            y += 1
+            stdscr.addstr(y, 0, "Rotation Bases State:", curses.color_pair(2))
+            y += 1
+            for b, e, t in zip(rotation_bases, rotation_ends, rotation_times):
+                last = rotation_last_played.get(b, 0)
+                current_num = rotation_current_track.get(b, b+1)
+                remaining = max(0, t*60 - (time.time() - last))
+                stdscr.addstr(y, 0, f"Base {b} | End {e} Interval {t}: Track={current_num} Remaining={remaining:.1f}s", curses.color_pair(3))
+                y += 1
+            y += 1
+            stdscr.addstr(y, 0, "SudoRandom Bases State:", curses.color_pair(2))
+            y += 1
+            for b, e, t in zip(sudo_bases, sudo_ends, sudo_intervals):
+                last = sudo_random_last_interval.get(b, 0)
+                current = sudo_random_interval_track.get(b, 'N/A')
+                played = sudo_random_played_in_cycle.get(b, set())
+                remaining = max(0, t*60 - (time.time() - last))
+                track_name = os.path.basename(current) if current != 'N/A' and current else 'N/A'
+                stdscr.addstr(y, 0, f"Base {b} | End {e} Interval {t}: Track={track_name} Remaining={remaining:.1f}s PlayedInCycle={len(played)}", curses.color_pair(3))
+                y += 1
+            y += 1
+            stdscr.move(y, 0)
+            stdscr.clrtoeol()
+            serial_display = ' | '.join(
+                ''.join(c for c in s if c in string.printable and c not in '\x1b') for s in serial_history[:5]
+            ) if serial_history else 'None'
+            stdscr.addstr(y, 0, f"Serial Buffer: {serial_display}", curses.color_pair(5))
+            y += 1
+            y += 1
+            stdscr.move(y, 0)
+            stdscr.clrtoeol()
+            if playback_status == "Pausing":
+                label = "Currently Pausing:"
+            elif playback_status == "Restarting":
+                label = "Currently Restarting:"
+            else:
+                label = "Currently Playing:"
+            info_clean = ''.join(c for c in currently_playing if c in string.printable and c not in '\x1b')
+            stdscr.addstr(y, 0, f"{label} {info_clean if info_clean else 'None'}", curses.color_pair(4))
+            y += 1
+            if currently_playing_info:
+                if time.time() - currently_playing_info_timestamp < 5:
+                    info2 = ''.join(c for c in currently_playing_info if c in string.printable and c not in '\x1b')
+                    stdscr.addstr(y, 0, info2, curses.color_pair(4))
+                else:
+                    currently_playing_info = ""
+                    currently_playing_info_timestamp = 0
+            y += 1
+            y += 1
+            cos_state = is_cos_active()
+            cos_color = curses.color_pair(2) if cos_state else curses.color_pair(5)
+            stdscr.addstr(y, 0, f"COS Active: {'YES' if cos_state else 'NO'}", cos_color)
+            y += 1
+            y += 1
+            stdscr.move(y, 0)
+            stdscr.clrtoeol()
+            max_y, _ = stdscr.getmaxyx()
+            stdscr.move(max_y - 1, 0)
+            stdscr.clrtoeol()
+            stdscr.addstr(max_y - 1, 0, "Press q to quit", curses.color_pair(1))
+            stdscr.refresh()
+            try:
+                if stdscr.getkey() == 'q':
+                    break
+            except curses.error:
+                pass
+            time.sleep(0.5)
+        except Exception:
+            log_exception("status_screen")
+
+def bg_write_state_and_webcmd_loop():
+    while True:
+        maybe_run_webcmd()
+        write_state()
+        time.sleep(0.25)
+
+import json
+
+def bg_cos_state_update_loop():
+    global cos_active
+    last_cos = None
+    while True:
+        try:
+            cos_now = is_cos_active()
+            if cos_now != last_cos:
+                cos_active = cos_now
+                last_cos = cos_now
+        except Exception:
+            pass
+        time.sleep(0.05)
+
+def fallback_command_prompt():
+    print(f"{SCRIPT_NAME} v{VERSION} - Fallback Command Prompt")
+    print("Enter DRX commands. Type 'exit' or 'quit' to exit.")
+    while True:
+        try:
+            cmd = input("> ")
+            if cmd.strip().lower() in ('exit', 'quit'):
+                break
+            process_command(cmd)
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+
+def main():
+    try:
+        threading.Thread(target=serial_read_loop, daemon=True).start()
+        threading.Thread(target=process_serial_commands, daemon=True).start()
+        threading.Thread(target=bg_write_state_and_webcmd_loop, daemon=True).start()
+        threading.Thread(target=bg_cos_state_update_loop, daemon=True).start()
+        try:
+            curses.wrapper(status_screen)
+        except Exception as e:
+            print("Curses UI failed to start. Falling back to command prompt mode.")
+            log_exception("main (curses fallback)")
+            fallback_command_prompt()
+            while True:
+                time.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    except Exception:
+        log_exception("main")
+    finally:
+        try:
+            GPIO.cleanup()
+        except Exception:
+            log_exception("main (GPIO cleanup)")
+
+if __name__ == "__main__":
+    main()

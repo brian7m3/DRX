@@ -1,0 +1,13 @@
+.rotate_state/last_rotate_main.stamp
+.rotate_state/last_rotate_web.stamp
+drx_state.json
+service_logs/
+wx/wx_data
+wx/wx_data_previous
+wx/wx_data_previous_timedrx_state.json
+service_logs/drx_web_service.log
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class

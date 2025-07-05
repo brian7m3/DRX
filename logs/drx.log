@@ -1,0 +1,111 @@
+2025-07-05 14:51:34.901: Play: 5663-CT.wav [normal] - successful
+2025-07-05 14:51:46.399: Play: 5189.wav [repeat] - successful
+2025-07-05 14:51:48.110: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-05 14:54:28.936: Play: 5663-CT.wav [normal] - successful
+2025-07-05 14:55:18.532: Play: 5431.wav [normal] - successful
+2025-07-05 14:58:36.697: Play: 5663-CT.wav [normal] - successful
+2025-07-05 14:59:58.784: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-05 14:59:59.585: WX Report: {'observations': 'Fair', 'temperature': '81 degrees', 'humidity': '49 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.16', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-05 15:04:41.797: Play: 5404-PID Do It With Frequency.wav [normal] - successful
+2025-07-05 15:17:03.153: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-05 15:17:05.061: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:17:08.424: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:17:11.704: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:17:14.444: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:17:17.465: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:17:27.839: Play: 5189.wav [repeat] - successful
+2025-07-05 15:17:29.549: Play: 5172.wav [normal] - successful
+2025-07-05 15:17:39.090: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:17:41.662: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:18:21.283: Play requested: P5308I (web input box)
+2025-07-05 15:18:30.752: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-05 15:18:32.692: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:18:32.795: Play requested: P5308R (web input box)
+2025-07-05 15:18:38.302: Playback stopped from web
+2025-07-05 15:18:38.348: Play: 5308-IID We Have the Technology.wav [repeat] - interrupted
+2025-07-05 15:18:40.252: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:22:02.722: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:22:14.966: Play requested: P5308i6000 (web input box)
+2025-07-05 15:22:21.578: Interrupt: 5308-IID We Have the Technology interrupted by COS, switched to 6000
+2025-07-05 15:22:23.516: Play: 5649-CT.wav [normal] - successful
+2025-07-05 15:26:27.903: Play: 5416.wav [normal] - successful
+2025-07-05 15:35:15.087: Play requested: P5308I (web input box)
+2025-07-05 15:35:24.562: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-05 15:35:25.557: Play: 5614-CT.wav [normal] - successful
+2025-07-05 15:35:29.100: Play requested: P5308i6000 (web input box)
+2025-07-05 15:35:38.569: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-05 15:35:41.464: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-05 15:35:42.343: Play: 5614-CT.wav [normal] - successful
+2025-07-05 15:35:50.837: Play: 5189.wav [repeat] - successful
+2025-07-05 15:35:52.547: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-05 15:39:26.031: Play requested: P5308i6000 (web input box)
+2025-07-05 15:39:32.896: Interrupt: 5308-IID We Have the Technology interrupted by COS, switched to 6000
+2025-07-05 15:39:34.601: Play: 5615-CT.wav [normal] - successful
+2025-07-05 15:39:35.289: Play requested: P5308I (web input box)
+2025-07-05 15:39:44.758: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-05 15:39:46.421: Play: 5615-CT.wav [normal] - successful
+2025-07-05 15:39:57.011: Play: 5189.wav [repeat] - successful
+2025-07-05 15:39:58.722: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-05 15:41:08.361: Configuration reload requested from web
+2025-07-05 15:41:22.591: Play: 5615-CT.wav [normal] - successful
+2025-07-05 15:41:23.125: Play requested: P5308I (web input box)
+2025-07-05 15:41:32.614: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-05 15:41:34.283: Play: 5615-CT.wav [normal] - successful
+2025-07-05 15:42:08.366: Play: 5615-CT.wav [normal] - successful
+2025-07-05 15:45:16.094: Play: 5424.wav [normal] - successful
+2025-07-05 15:45:29.106: Play requested: P5308I (web input box)
+2025-07-05 15:45:30.044: Play: 5308-IID We Have the Technology.wav [normal] - interrupted
+2025-07-05 15:45:32.888: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:45:42.119: Play requested: P5308i6000 (web input box)
+2025-07-05 15:45:46.546: Play: 5189.wav [repeat] - successful
+2025-07-05 15:45:47.417: Play: 5171-TM PL 77.wav [normal] - interrupted
+2025-07-05 15:45:53.247: Interrupt: COS active at start, played 6000 directly
+2025-07-05 15:45:54.209: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:45:55.138: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:45:56.882: Play requested: P5308i6000 (web input box)
+2025-07-05 15:46:03.459: Interrupt: 5308-IID We Have the Technology interrupted by COS, switched to 6000
+2025-07-05 15:46:04.515: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:46:07.892: Play requested: P5308I (web input box)
+2025-07-05 15:46:08.634: Play: 5308-IID We Have the Technology.wav [normal] - interrupted
+2025-07-05 15:46:11.100: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:46:17.900: Play requested: P5400 (web input box)
+2025-07-05 15:46:24.425: Play: 5409.wav [normal] - successful
+2025-07-05 15:46:25.434: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:46:26.157: Play requested: P5400I (web input box)
+2025-07-05 15:46:27.065: Play: 5409.wav [normal] - interrupted
+2025-07-05 15:46:29.450: Play: 5604-CT.wav [normal] - successful
+2025-07-05 15:47:18.952: Configuration reload requested from web
+2025-07-05 15:48:04.263: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:06.966: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:09.376: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:11.348: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:13.101: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:14.877: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:17.039: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:19.512: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:21.114: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:24.501: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:26.255: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:27.976: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:29.978: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:32.163: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:34.184: Play: 5669-CT.wav [normal] - interrupted
+2025-07-05 15:48:37.540: Play: 5669-CT.wav [normal] - successful
+2025-07-05 15:48:48.411: Play: 5189.wav [repeat] - successful
+2025-07-05 15:48:49.120: Play: 5171-TM PL 77.wav [normal] - interrupted
+2025-07-05 15:48:51.838: Play: 5669-CT.wav [normal] - successful
+2025-07-05 15:54:38.401: Play: 5405.wav [normal] - successful
+2025-07-05 15:59:58.776: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-05 15:59:59.577: WX Report: {'observations': 'Fair', 'temperature': '81 degrees', 'humidity': '49 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.16', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-05 16:10:02.879: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-05 16:10:03.641: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:10:15.129: Play: 5189.wav [repeat] - successful
+2025-07-05 16:10:16.840: Play: 5172.wav [normal] - successful
+2025-07-05 16:10:23.019: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:10:27.093: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:10:33.878: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:11:03.928: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:11:16.505: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:11:41.138: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:11:46.545: Play: 5630-CT.wav [normal] - successful
+2025-07-05 16:19:30.420: Play: 5405.wav [normal] - successful

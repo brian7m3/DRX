@@ -1,0 +1,21 @@
+[Unit]
+Description=DRX Main Script
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/brian/DRX
+ExecStart=/bin/bash -c '/usr/bin/python3 -u /home/brian/DRX/drx_main.py 2>&1 | tee -a /home/brian/DRX/drx_main_service.log'
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+Environment=DISPLAY=:0
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=200
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

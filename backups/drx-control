@@ -16,17 +16,22 @@ NC='\033[0m' # No Color
 BOLD='\033[1m'
 
 # Log/config paths and variables
-DRX_HOME="/home/brian/DRX"
-LOGS_DIR="$DRX_HOME/service_logs"
+DRX_HOME="/home/drx/DRX"
+LOGS_DIR="$DRX_HOME/logs"
 CONFIG_FILE="$DRX_HOME/drx-control.conf"
 ROTATE_STATE_DIR="$DRX_HOME/.rotate_state"
 mkdir -p "$ROTATE_STATE_DIR"
 mkdir -p "$LOGS_DIR"
 
-# Defaults
-LOG_RETENTION_DAYS=7 # Default retention period in days
-DELETE_OLD_LOGS=true # Set to 'false' to disable deletion
-LOG_ROTATE_INTERVAL_HOURS=24 # Default: rotate every 24 hours
+# Defaults for main/web logs
+LOG_RETENTION_DAYS=7
+DELETE_OLD_LOGS=true
+LOG_ROTATE_INTERVAL_HOURS=24
+
+# Defaults for drx.log
+DRX_RETENTION_DAYS=7
+DRX_DELETE_OLD_LOGS=true
+DRX_ROTATE_INTERVAL_HOURS=24
 
 # Load config from file if it exists
 if [ -f "$CONFIG_FILE" ]; then
@@ -53,12 +58,14 @@ show_usage() {
     echo -e "${YELLOW}Services:${NC}"
     echo "  main    - DRX Main Script"
     echo "  web     - DRX Web Interface"
+    echo "  drx     - drx.log (special log)"
     echo "  all     - Both services (not valid with 'view' command)"
     echo ""
     echo -e "${YELLOW}Examples:${NC}"
     echo "  sudo $0 start all     # Start both services"
     echo "  sudo $0 view main     # View main status screen"
-    echo "  sudo $0 rotate main   # Backup and clear log for main service"
+    echo "  sudo $0 rotate main   # Backup and clear logs for main service and drx.log"
+    echo "  sudo $0 rotate drx    # Only backup and clear drx.log"
     echo "  sudo $0 config        # Configure log cleanup and rotate interval"
 }
 
@@ -118,96 +125,129 @@ view_in_tmux() {
 
 # Function to delete old rotated logs
 delete_old_logs() {
-    local script_type=$1
-    local dir="$LOGS_DIR"
-    local pattern="drx_${script_type}_service.log.*"
+    local logtype=$1
     local now=$(date +%s)
     local deleted=0
+    local pattern retention
 
-    for file in $dir/$pattern; do
-        if [[ -f "$file" ]]; then
-            # Get file modification time in seconds
-            local mtime=$(stat -c %Y "$file")
-            local age_days=$(( (now - mtime) / 86400 ))
-            if [ "$age_days" -gt "$LOG_RETENTION_DAYS" ]; then
-                rm -f "$file"
-                ((deleted++))
-            fi
+    if [ "$logtype" = "main" ] || [ "$logtype" = "web" ]; then
+        pattern="${LOGS_DIR}/drx_${logtype}_service.log.*"
+        retention=$LOG_RETENTION_DAYS
+        [ "$DELETE_OLD_LOGS" = true ] || return 0
+    elif [ "$logtype" = "drx" ]; then
+        pattern="${LOGS_DIR}/????-??-??_drx.log"
+        retention=$DRX_RETENTION_DAYS
+        [ "$DRX_DELETE_OLD_LOGS" = true ] || return 0
+    else
+        return 0
+    fi
+
+    for file in $pattern; do
+        [ -f "$file" ] || continue
+        local mtime=$(stat -c %Y "$file")
+        local age_days=$(( (now - mtime) / 86400 ))
+        if [ "$age_days" -gt "$retention" ]; then
+            rm -f "$file"
+            ((deleted++))
         fi
     done
 
     if [ "$deleted" -gt 0 ]; then
-        echo -e "${GREEN}Deleted $deleted log(s) older than $LOG_RETENTION_DAYS days.${NC}"
+        echo -e "${GREEN}Deleted $deleted $logtype log(s) older than $retention days.${NC}"
     fi
 }
 
-# Function to rotate logs
+# Function to rotate logs (main/web/drx)
 rotate_logs() {
-    local script_type=$1
-    local log_file="$LOGS_DIR/drx_${script_type}_service.log"
+    local logtype=$1
 
-    # Check if log file exists
-    if [ ! -f "$log_file" ]; then
-        echo -e "${RED}Log file not found: ${log_file}${NC}"
-        return 1
+    # Main/web logs as before
+    if [ "$logtype" = "main" ] || [ "$logtype" = "web" ]; then
+        local log_file="$LOGS_DIR/drx_${logtype}_service.log"
+        if [ -f "$log_file" ]; then
+            local file_size=$(du -h "$log_file" | cut -f1)
+            echo -e "${YELLOW}Current log file size: ${file_size}${NC}"
+
+            local timestamp=$(date +"%Y-%m-%d")
+            local backup_file="${LOGS_DIR}/${timestamp}_drx_${logtype}.log"
+
+            echo -e "${YELLOW}Creating backup: ${backup_file}${NC}"
+            cp "$log_file" "$backup_file"
+
+            echo -e "${YELLOW}Clearing current log file...${NC}"
+            echo "# Log rotated on $(date)" > "$log_file"
+
+            echo -e "${GREEN}${log_file} rotation complete. Backup saved as ${backup_file}${NC}"
+        else
+            echo -e "${RED}Log file not found: ${log_file}${NC}"
+        fi
+        # Also rotate drx.log if main is rotated
+        if [ "$logtype" = "main" ]; then
+            rotate_logs drx
+        fi
+    elif [ "$logtype" = "drx" ]; then
+        local drxlog="$LOGS_DIR/drx.log"
+        if [ -f "$drxlog" ]; then
+            local drxlog_backup="${LOGS_DIR}/$(date +"%Y-%m-%d")_drx.log"
+            echo -e "${YELLOW}Rotating ${drxlog} to ${drxlog_backup}${NC}"
+            cp "$drxlog" "$drxlog_backup"
+            echo "# Log rotated on $(date)" > "$drxlog"
+            echo -e "${GREEN}drx.log rotation complete. Backup saved as ${drxlog_backup}${NC}"
+        else
+            echo -e "${RED}drx.log not found at ${drxlog}${NC}"
+        fi
     fi
 
-    # Get file size before rotation
-    local file_size=$(du -h "$log_file" | cut -f1)
-    echo -e "${YELLOW}Current log file size: ${file_size}${NC}"
-
-    # Create backup with timestamp
-    local timestamp=$(date +"%Y%m%d-%H%M%S")
-    local backup_file="${log_file}.${timestamp}"
-
-    echo -e "${YELLOW}Creating backup: ${backup_file}${NC}"
-    cp "$log_file" "$backup_file"
-
-    # Clear the current log file
-    echo -e "${YELLOW}Clearing current log file...${NC}"
-    echo "# Log rotated on $(date)" > "$log_file"
-
-    echo -e "${GREEN}Log rotation complete. Backup saved as ${backup_file}${NC}"
-
-    # Automatically delete old logs if enabled
-    if [ "$DELETE_OLD_LOGS" = true ]; then
-        delete_old_logs "$script_type"
-    fi
+    # Delete old logs
+    delete_old_logs "$logtype"
 }
 
 # Function to check and auto-rotate logs based on interval
 auto_rotate_logs() {
-    local script_type=$1
-    local state_file="${ROTATE_STATE_DIR}/last_rotate_${script_type}.stamp"
+    local logtype=$1
+    local state_file="${ROTATE_STATE_DIR}/last_rotate_${logtype}.stamp"
     local now=$(date +%s)
-    local interval_sec=$((LOG_ROTATE_INTERVAL_HOURS * 3600))
-    local last_rotate=0
+    local interval_sec last_rotate=0
 
-    if [ -f "$state_file" ]; then
-        last_rotate=$(cat "$state_file")
+    if [ "$logtype" = "main" ] || [ "$logtype" = "web" ]; then
+        interval_sec=$((LOG_ROTATE_INTERVAL_HOURS * 3600))
+    elif [ "$logtype" = "drx" ]; then
+        interval_sec=$((DRX_ROTATE_INTERVAL_HOURS * 3600))
+    else
+        return 0
     fi
+
+    [ -f "$state_file" ] && last_rotate=$(cat "$state_file")
 
     if [ $((now - last_rotate)) -ge $interval_sec ]; then
         echo "$now" > "$state_file"
-        echo -e "${YELLOW}Auto-rotating logs for $script_type (interval reached)...${NC}"
-        rotate_logs "$script_type"
+        echo -e "${YELLOW}Auto-rotating logs for $logtype (interval reached)...${NC}"
+        rotate_logs "$logtype"
     fi
 }
 
-# Function to show recent logs
+# Function to show recent logs (add drx.log support)
 show_logs() {
     local svc=$1
-    local log_file="$LOGS_DIR/drx_${svc}_service.log"
-
-    echo -e "${YELLOW}Recent logs for drx_${svc}:${NC}"
-
-    if [ -f "$log_file" ]; then
-        echo -e "${BLUE}=== File Log (${log_file}) ===${NC}"
-        tail -n 50 "$log_file"
+    if [ "$svc" = "drx" ]; then
+        local log_file="$LOGS_DIR/drx.log"
+        echo -e "${YELLOW}Recent logs for drx.log:${NC}"
+        if [ -f "$log_file" ]; then
+            echo -e "${BLUE}=== File Log (${log_file}) ===${NC}"
+            tail -n 50 "$log_file"
+        else
+            echo -e "${RED}drx.log not found.${NC}"
+        fi
+    else
+        local log_file="$LOGS_DIR/drx_${svc}_service.log"
+        echo -e "${YELLOW}Recent logs for drx_${svc}:${NC}"
+        if [ -f "$log_file" ]; then
+            echo -e "${BLUE}=== File Log (${log_file}) ===${NC}"
+            tail -n 50 "$log_file"
+        fi
+        echo -e "\n${BLUE}=== System Journal ===${NC}"
+        sudo journalctl -u drx_${svc} -n 50 --no-pager
     fi
-
-    echo -e "\n${BLUE}=== System Journal ===${NC}"
-    sudo journalctl -u drx_${svc} -n 50 --no-pager
 }
 
 # Function to handle service control and auto-rotation
@@ -270,11 +310,18 @@ service_control() {
 # Function for interactive log cleanup/config menu
 log_cleanup_menu() {
     echo -e "${BLUE}Current log cleanup and rotation settings:${NC}"
-    echo "  Delete old logs after rotation: $DELETE_OLD_LOGS"
-    echo "  Log retention days: $LOG_RETENTION_DAYS"
-    echo "  Log auto-rotation interval (hours): $LOG_ROTATE_INTERVAL_HOURS"
+    echo "  Main/Web logs:"
+    echo "    Delete old logs after rotation: $DELETE_OLD_LOGS"
+    echo "    Log retention days: $LOG_RETENTION_DAYS"
+    echo "    Log auto-rotation interval (hours): $LOG_ROTATE_INTERVAL_HOURS"
     echo
-    read -p "Change log deletion setting? (y/n): " change
+    echo "  drx.log:"
+    echo "    Delete old logs after rotation: $DRX_DELETE_OLD_LOGS"
+    echo "    Log retention days: $DRX_RETENTION_DAYS"
+    echo "    Log auto-rotation interval (hours): $DRX_ROTATE_INTERVAL_HOURS"
+    echo
+
+    read -p "Change main/web log deletion setting? (y/n): " change
     if [[ "$change" =~ ^[Yy]$ ]]; then
         read -p "Enable log deletion after rotation (true/false)? " new_delete
         read -p "How many days to keep logs? " new_days
@@ -289,7 +336,7 @@ log_cleanup_menu() {
         DELETE_OLD_LOGS="$new_delete"
         LOG_RETENTION_DAYS="$new_days"
     fi
-    read -p "Change rotation interval (hours)? (y/n): " change_interval
+    read -p "Change main/web rotation interval (hours)? (y/n): " change_interval
     if [[ "$change_interval" =~ ^[Yy]$ ]]; then
         read -p "How many hours between auto-rotations? " new_interval
         if ! [[ "$new_interval" =~ ^[0-9]+$ ]]; then
@@ -298,10 +345,42 @@ log_cleanup_menu() {
         fi
         LOG_ROTATE_INTERVAL_HOURS="$new_interval"
     fi
+
+    echo
+    read -p "Change drx.log deletion setting? (y/n): " drx_change
+    if [[ "$drx_change" =~ ^[Yy]$ ]]; then
+        read -p "Enable drx.log deletion after rotation (true/false)? " drx_delete
+        read -p "How many days to keep drx.log backups? " drx_days
+        if [[ ! "$drx_delete" =~ ^(true|false)$ ]]; then
+            echo -e "${RED}Invalid value for drx.log delete setting. Must be 'true' or 'false'.${NC}"
+            return 1
+        fi
+        if ! [[ "$drx_days" =~ ^[0-9]+$ ]]; then
+            echo -e "${RED}Invalid value for drx.log retention days. Must be a positive integer.${NC}"
+            return 1
+        fi
+        DRX_DELETE_OLD_LOGS="$drx_delete"
+        DRX_RETENTION_DAYS="$drx_days"
+    fi
+    read -p "Change drx.log rotation interval (hours)? (y/n): " drx_interval
+    if [[ "$drx_interval" =~ ^[Yy]$ ]]; then
+        read -p "How many hours between drx.log auto-rotations? " drx_rot_interval
+        if ! [[ "$drx_rot_interval" =~ ^[0-9]+$ ]]; then
+            echo -e "${RED}Invalid value for drx.log interval. Must be a positive integer.${NC}"
+            return 1
+        fi
+        DRX_ROTATE_INTERVAL_HOURS="$drx_rot_interval"
+    fi
+
     # Save all settings to config file
-    echo "DELETE_OLD_LOGS=$DELETE_OLD_LOGS" > "$CONFIG_FILE"
-    echo "LOG_RETENTION_DAYS=$LOG_RETENTION_DAYS" >> "$CONFIG_FILE"
-    echo "LOG_ROTATE_INTERVAL_HOURS=$LOG_ROTATE_INTERVAL_HOURS" >> "$CONFIG_FILE"
+    cat > "$CONFIG_FILE" <<EOF
+DELETE_OLD_LOGS=$DELETE_OLD_LOGS
+LOG_RETENTION_DAYS=$LOG_RETENTION_DAYS
+LOG_ROTATE_INTERVAL_HOURS=$LOG_ROTATE_INTERVAL_HOURS
+DRX_DELETE_OLD_LOGS=$DRX_DELETE_OLD_LOGS
+DRX_RETENTION_DAYS=$DRX_RETENTION_DAYS
+DRX_ROTATE_INTERVAL_HOURS=$DRX_ROTATE_INTERVAL_HOURS
+EOF
     echo -e "${GREEN}Settings saved to $CONFIG_FILE${NC}"
 }
 
@@ -312,7 +391,7 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Main logic
+# Main logic - update to allow drx as a log type
 if [ "$command" = "config" ]; then
     log_cleanup_menu
     exit 0
@@ -329,6 +408,23 @@ case $service in
         ;;
     web)
         service_control $command "web"
+        ;;
+    drx)
+        # Allow: sudo drx-control rotate drx, sudo drx-control log drx, etc.
+        case $command in
+            rotate)
+                rotate_logs drx
+                echo "$(date +%s)" > "${ROTATE_STATE_DIR}/last_rotate_drx.stamp"
+                ;;
+            log)
+                show_logs drx
+                ;;
+            *)
+                echo -e "${RED}Invalid command for drx.log: ${command}${NC}"
+                show_usage
+                exit 1
+                ;;
+        esac
         ;;
     all)
         if [[ "$command" = "view" ]]; then

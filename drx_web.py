@@ -64,7 +64,7 @@ body {
   margin: 40px auto;
   border-radius: 18px;
   box-shadow: 0 8px 32px 0 rgba(31,38,135,0.14);
-  padding: 2.5em 3em;
+  padding: 1em 3em;
   position: relative;
 }
 h1, h2 {
@@ -86,7 +86,7 @@ h2 {
 .card-section {
   background: var(--primary-light);
   border-radius: 14px;
-  padding: 1.1em 1.5em 1.2em 1.5em;
+  padding: 0.01em 1.5em 1.2em 1.5em;
   margin-bottom: 2.1em;
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
 }
@@ -375,7 +375,34 @@ pre.stateblock {
     background: #272b38;
     color: #eee;
   }
-  /* Add more overrides if needed */
+  #message-timer {
+    background: #23272b;         /* or var(--card) or a dark color */
+    color: var(--primary);       /* or #90a4ff for blue accent */
+    border: 2px solid var(--primary);
+  }
+  #message-timer.ready {
+    color: var(--success);       /* you can keep this or lighten it */
+    border-color: var(--success);
+    background: #163021;         /* a dark green shade, or use var(--card) */
+  }
+  #message-timer.running {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: #3a2121;         /* a dark red shade, or var(--card) */
+  }
+}
+.your-card { margin-bottom: 0.8em; }
+.card-section.center-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 0;    /* ensures enough space for vertical centering */
+  /* or use height: 100px; if you want a fixed height */
+  /* or use padding for flexible height */
+}
+select[name="track_dropdown"] {
+    min-width: 100px;
+    max-width: 100%;
 }
 </style>
 <script>
@@ -576,83 +603,174 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </head>
 <body>
+</head>
+<body>
 <div id="main-card">
-    <form method="POST" action="{{ url_for('logout') }}" id="logout-btn">
-        <button type="submit">Logout</button>
-    </form>
-    <h1>DRX Status Dashboard</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h1 style="margin: 0; font-size: 2.1em;">DRX Status Dashboard</h1>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button id="help-btn" type="button">Help</button>
+            <form method="POST" action="{{ url_for('logout') }}" id="logout-btn" style="margin: 0;">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
     <b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span>
 <div class="your-card">
     <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
-                {{ state.get('cos_today_minutes', 0) }}
+        {{ state.get('cos_today_minutes', 0) }}
 </div>
-    <div class="card-section">
-        <h2 style="display:inline;">Play Specific Track</h2>
-        <button id="help-btn" type="button" style="float:right;margin-left:1em;">Help</button>
-        <form method="POST" action="{{ url_for('play_track') }}" id="play-dropdown-form">
-            <label>Track (dropdown):</label>
-            <select name="track_dropdown">
+<!-- ... previous HTML ... -->
+<div class="card-section">
+    <h2>Play Specific Track</h2>
+    <!-- Single Play Method selector for both forms -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+        <label style="white-space: nowrap;">Play Method:</label>
+        <select id="play_method_selector" name="play_method" style="width: 150px; min-width: 80px;">
+            <option value="normal" selected>Normal (DRX)</option>
+            <option value="local">Local (Web Page)</option>
+        </select>
+    </div>
+    <form method="POST" action="{{ url_for('play_track') }}" id="play-dropdown-form">
+        <input type="hidden" name="play_method" id="play_method_dropdown">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+            <label for="track_dropdown" style="white-space: nowrap;">Track:</label>
+            <select name="track_dropdown" id="track_dropdown">
                 <option value="">--Select--</option>
                 {% for file in all_files %}
                     <option value="{{ file }}">{{ file }}</option>
                 {% endfor %}
             </select>
-            <label>Play Method:</label>
-            <select name="play_method">
-              <option value="normal" selected>Normal (DRX)</option>
-              <option value="local">Local (Web Page)</option>
-            </select>
-            <button type="submit">Play Selected</button>
-        </form>
-        <form method="POST" action="{{ url_for('play_track') }}" id="play-input-form">
-            <label>Track (input):</label>
-            <input name="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
-            <label>Play Method:</label>
-            <select name="play_method">
-              <option value="normal" selected>Normal (DRX)</option>
-              <option value="local">Local (Web Page)</option>
-            </select>
-            <button type="submit">Play Input</button>
-        </form>
-        <br>
-        <b>Currently Playing:</b>
-        <span class="status-good status-currently-playing">{{ currently_playing or "None" }}</span>
-        <form method="POST" action="{{ url_for('stop_playback') }}" style="display:inline; margin-left:1em;">
-            <button type="submit" style="font-size:0.95em;padding:0.25em 0.8em;">Stop Playback</button>
-        </form>
-        <br>
-        <b>Message Timer</b><br>
-        <span id="message-timer" class="ready">Ready</span><br>
-        <b>Last Played:</b>
-        <span class="status-good status-last-played">{{ last_played or "None" }}</span>
-        <br>
-        <b>Status:</b> <span id="playback-status">{{ playback_status or "Idle" }}</span>
-        <br>
-        <b>COS Active:</b>
-        <span id="cos-state" class="{% if cos_state == 'YES' %}status-good{% else %}status-warn{% endif %}">{{ cos_state }}</span>
-        <br>
-        <b>Remote Device Active:</b>
-        <span id="remote-device-state" class="status-warn">NO</span>
-        <br>
-        <b>Serial Port:</b>
-        {% if not serial_port_missing %}
-            <span class="status-good">OK</span>
-        {% else %}
-            <span class="status-bad">Missing</span>
-        {% endif %}
-        <br>
-        <b>Sound Card:</b>
-        {% if not sound_card_missing %}
-            <span class="status-good">OK</span>
-        {% else %}
-            <span class="status-bad">Missing</span>
-        {% endif %}
-        <br>
-        <!-- Weather System Label -->
-        <b>Weather System:</b>
-        <span class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
-        <br>
-        <!-- End Weather System Label -->
+            <button type="submit" style="margin: 0;">&#9654;</button>
+        </div>
+    </form>
+    <form method="POST" action="{{ url_for('play_track') }}" id="play-input-form" style="margin-top: 28px;">
+        <input type="hidden" name="play_method" id="play_method_input">
+        <div style="display: flex; flex-direction: column; gap: 0;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="track_input" style="white-space: nowrap;">Track:</label>
+                <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
+                <button type="submit" style="margin: 0;">&#9654;</button>
+                <small class="help-text">Enter serial data to test (e.g., P5308i6000) or EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Initialize hidden fields to match selector on page load
+    var method = document.getElementById('play_method_selector').value;
+    document.getElementById('play_method_dropdown').value = method;
+    document.getElementById('play_method_input').value = method;
+
+    // 2. Update hidden fields whenever selector changes
+    document.getElementById('play_method_selector').addEventListener('change', function() {
+        var method = this.value;
+        document.getElementById('play_method_dropdown').value = method;
+        document.getElementById('play_method_input').value = method;
+    });
+
+    // 3. Always sync hidden field before AJAX submit
+    function syncPlayMethodHidden(hiddenId) {
+        var method = document.getElementById('play_method_selector').value;
+        document.getElementById(hiddenId).value = method;
+    }
+
+    const dropdownForm = document.getElementById('play-dropdown-form');
+    if (dropdownForm) {
+        dropdownForm.addEventListener('submit', function(event) {
+            syncPlayMethodHidden('play_method_dropdown');
+            event.preventDefault();
+            const formData = new FormData(dropdownForm);
+            fetch(dropdownForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url) {
+                    window.location = data.local_url;
+                }
+                if (typeof updateStatus === "function") updateStatus();
+                if (typeof updateSerialSection === "function") updateSerialSection();
+                if (typeof updateLogsSection === "function") updateLogsSection();
+                if (typeof updateStateSection === "function") updateStateSection();
+            });
+        });
+    }
+
+    const inputForm = document.getElementById('play-input-form');
+    if (inputForm) {
+        inputForm.addEventListener('submit', function(event) {
+            syncPlayMethodHidden('play_method_input');
+            event.preventDefault();
+            const formData = new FormData(inputForm);
+            fetch(inputForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url) {
+                    window.location = data.local_url;
+                }
+                if (typeof updateStatus === "function") updateStatus();
+                if (typeof updateSerialSection === "function") updateSerialSection();
+                if (typeof updateLogsSection === "function") updateLogsSection();
+                if (typeof updateStateSection === "function") updateStateSection();
+            });
+        });
+    }
+});
+</script>
+    <br>
+    <b>Currently Playing:</b>
+    <span class="status-good status-currently-playing">{{ currently_playing or "None" }}</span>
+    <form method="POST" action="{{ url_for('stop_playback') }}" style="display:inline; margin-left:1em;">
+        <button type="submit" style="margin: 0;">&#9632;</button>
+    </form>
+    <br>
+    <br>
+<div style="display: flex; justify-content: center;">
+  <button style="margin: 0; pointer-events: none; cursor: default;">
+    <div style="text-align: left;">
+      <b>Message Timer:</b>
+      <span id="message-timer" class="ready">Ready</span><br>
+      <b>Last Played:</b>
+      <span class="status-good status-last-played">{{ last_played or "None" }}</span>
+      <br>
+      <b>Status:</b> <span id="playback-status">{{ playback_status or "Idle" }}</span>
+      <br>
+      <b>COS Active:</b>
+      <span id="cos-state" class="{% if cos_state == 'YES' %}status-good{% else %}status-warn{% endif %}">{{ cos_state }}</span>
+      <br>
+      <b>Remote Device Active:</b>
+      <span id="remote-device-state" class="status-warn">NO</span>
+      <br>
+      <b>Serial Port:</b>
+      {% if not serial_port_missing %}
+          <span class="status-good">OK</span>
+      {% else %}
+          <span class="status-bad">Missing</span>
+      {% endif %}
+      <br>
+      <b>Sound Card:</b>
+      {% if not sound_card_missing %}
+          <span class="status-good">OK</span>
+      {% else %}
+          <span class="status-bad">Missing</span>
+      {% endif %}
+      <br>
+      <b>Weather System:</b>
+      <span class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
+      <br>
+    </div>
+  </button>
+</div>
         <!-- Help Modal HTML -->
         <div id="help-modal" class="modal">
           <div class="modal-content">
@@ -712,12 +830,13 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
     <div class="card-section">
-        <h2>Recent Log Entries</h2>
-        <div class="logs" id="logs-section">
-        {% for entry in web_log %}
-            <div>{{ entry }}</div>
-        {% endfor %}
-        </div>
+    <h2>Recent Log Entries</h2>
+    <div class="logs" id="logs-section">
+    {% for entry in web_log %}
+        <div>{{ entry }}</div>
+    {% endfor %}
+    </div>
+    <a href="{{ url_for('download_drx_log') }}">Download Full DRX Log</a>
     </div>
     <div class="card-section">
         <h2>Recent Serial Commands</h2>
@@ -738,7 +857,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="card-section" id="state-section">
         {{ state_blocks_html|safe }}
     </div>
-    <div class="card-section">
+    <div class="card-section center-buttons">
         <div class="button-row">
             <form method="POST" action="{{ url_for('restart_script_web') }}">
                 <button type="submit" onclick="return confirm('Restart the DRX?')">Restart DRX</button>
@@ -761,6 +880,15 @@ function updateDtmfLog() {
 }
 setInterval(updateDtmfLog, 2000);
 window.addEventListener('DOMContentLoaded', updateDtmfLog);
+document.addEventListener("DOMContentLoaded", function() {
+    function syncPlayMethod(event) {
+        var method = document.getElementById('play_method_selector').value;
+        document.getElementById('play_method_dropdown').value = method;
+        document.getElementById('play_method_input').value = method;
+    }
+    document.getElementById('play-dropdown-form').addEventListener('submit', syncPlayMethod);
+    document.getElementById('play-input-form').addEventListener('submit', syncPlayMethod);
+});
 </script>
 <div class="card-section">
     <h2>Configuration Settings</h2>
@@ -941,6 +1069,28 @@ window.addEventListener('DOMContentLoaded', updateDtmfLog);
         <button type="submit" onclick="return confirm('Save configuration changes?')">Save Configuration</button>
     </form>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.querySelector('select[name="track_dropdown"]');
+    if (select) {
+        var longest = 0;
+        for (var i = 0; i < select.options.length; i++) {
+            var option = select.options[i];
+            // Create a temporary span to measure text width
+            var span = document.createElement('span');
+            span.style.visibility = 'hidden';
+            span.style.position = 'absolute';
+            span.style.font = window.getComputedStyle(select).font;
+            span.textContent = option.text;
+            document.body.appendChild(span);
+            if (span.offsetWidth > longest) longest = span.offsetWidth;
+            document.body.removeChild(span);
+        }
+        // Add some padding for the dropdown arrow
+        select.style.width = (longest + 24) + 'px';
+    }
+});
+</script>
 </body>
 </html>
 '''
@@ -1528,6 +1678,18 @@ def get_weather_system_status():
     if time.time() - mtime > 7200:
         return ("Inactive", "status-bad", "#d32f2f")
     return ("Active", "status-good", "#388e3c")
+
+@app.route("/download_drx_log")
+@require_login
+def download_drx_log():
+    # DRX log is stored in the LOG_FILE location
+    if not os.path.exists(LOG_FILE):
+        return "No DRX log file.", 404
+    return send_from_directory(
+        os.path.dirname(LOG_FILE),
+        os.path.basename(LOG_FILE),
+        as_attachment=True
+    )
 
 @app.route("/debug/state_source")
 @require_login

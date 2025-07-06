@@ -6,8 +6,8 @@ After=network.target
 Type=simple
 User=root
 Group=root
-WorkingDirectory=/home/brian/DRX
-ExecStart=/bin/bash -c '/usr/bin/python3 -u /home/brian/DRX/drx_web.py 2>&1 | tee -a /home/brian/DRX/service_logs/drx_web_service.log'
+WorkingDirectory=/home/drx/DRX
+ExecStart=/bin/bash -c '/usr/bin/python3 -u /home/drx/DRX/drx_web.py 2>&1 | tee -a /home/drx/DRX/logs/drx_web_service.log'
 StandardOutput=journal
 StandardError=journal
 Environment=PYTHONUNBUFFERED=1

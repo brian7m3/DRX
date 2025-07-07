@@ -23,6 +23,7 @@ import queue
 import uuid
 from datetime import datetime, timedelta
 from flask import Flask, jsonify
+from status_manager import PlaybackStatusManager
 
 # --- Global State Variables ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -86,6 +87,21 @@ DIRECT_ENABLED = True
 currently_playing_info_timestamp = 0
 rate_limited_set_time = None
 rate_limited_timer = None
+
+# --- Status Manager ---
+status_manager = None  # Will be initialized in main()
+
+def sync_legacy_status_variables(status, playing, info, info_timestamp):
+    """
+    Callback function to sync legacy global variables with status manager.
+    This maintains backward compatibility with existing code that reads 
+    the global variables directly.
+    """
+    global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
+    playback_status = status
+    currently_playing = playing
+    currently_playing_info = info
+    currently_playing_info_timestamp = info_timestamp
 
 # --- Config Loading & Validation ---
 config_warnings = []
@@ -600,11 +616,7 @@ def handle_join_series(bases, suffixes, overall_m):
     try:
         cancel_rate_limited_timer()
         set_remote_busy(True)
-        playback_status = "Join Series: Playing sequence"
-        currently_playing = f"Join: {'-'.join(str(b) for b in bases)}"
-        currently_playing_info = "Playing join sequence"
-        currently_playing_info_timestamp = time.time()
-        write_state()
+        status_manager.set_join_series(bases)
 
         for i, base in enumerate(bases):
             suf = suffixes[i].upper()
@@ -634,11 +646,7 @@ def handle_join_series(bases, suffixes, overall_m):
                     wait_for_cos=wait_for_cos
                 )
 
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
-        write_state()
+        status_manager.set_idle()
     finally:
         set_remote_busy(False)
 
@@ -712,10 +720,7 @@ def process_command(command):
                 echo_test(track_num)
 
                 # Update playback status
-                playback_status = f"Echo Test: {track_num}"
-                currently_playing = f"Echo Test: {track_num}"
-                currently_playing_info = f"Echo Test recording for track {track_num}"
-                currently_playing_info_timestamp = time.time()
+                status_manager.set_echo_test(track_num)
 
                 # Add to history
                 serial_history.insert(0, {
@@ -724,7 +729,6 @@ def process_command(command):
                     "src": "Command"
                 })
                 log_recent(f"Echo Test started for track {track_num}")
-                write_state()
                 return
             except ValueError:
                 debug_log(f"Invalid Echo Test command format: {command}")
@@ -739,10 +743,7 @@ def process_command(command):
                 run_script(script_num)
 
                 # Update status
-                playback_status = f"Script: {script_num}"
-                currently_playing = f"Script: {script_num}"
-                currently_playing_info = f"Running script {script_num}"
-                currently_playing_info_timestamp = time.time()
+                status_manager.set_script_execution(script_num)
 
                 # Add to history
                 serial_history.insert(0, {
@@ -751,7 +752,6 @@ def process_command(command):
                     "src": "Command"
                 })
                 log_recent(f"Script execution started: {script_num}")
-                write_state()
                 return
             except Exception as e:
                 debug_log(f"Invalid script command format or execution error: {e}")
@@ -764,11 +764,7 @@ def process_command(command):
             if os.path.isfile(filename):
                 play_sound(filename=filename)
             else:
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
-            write_state()
+                status_manager.set_idle()
             return
 
         # --- Join series logic ---
@@ -776,7 +772,6 @@ def process_command(command):
         if is_join and bases:
             cancel_rate_limited_timer()
             handle_join_series(bases, suffixes, overall_m)
-            write_state()
             return
 
         # --- Alternate series logic (PER-BASE SUFFIXES SUPPORTED, original logic preserved) ---
@@ -844,11 +839,7 @@ def process_command(command):
         code_str, suffix, alt_code = parse_serial_command(command.strip())
         if code_str is None:
             cancel_rate_limited_timer()
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = ""
-            currently_playing_info_timestamp = 0
-            write_state()
+            status_manager.set_idle()
             return
 
         # DO NOT uppercase the suffix here!
@@ -872,18 +863,10 @@ def process_command(command):
             base_filename = get_next_base_file(code)
             if not base_filename:
                 cancel_rate_limited_timer()
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
-                write_state()
+                status_manager.set_idle()
                 return
             play_interrupt_to_another(base_filename, str(alt_code))
-            playback_status = f"Interrupt: {code} -> {alt_code}"
-            currently_playing = f"{code} -> {alt_code}"
-            currently_playing_info = f"Interrupt playback from {code} to {alt_code}"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_interrupt_sequence(str(code), str(alt_code))
             return
 
         # Random Section
@@ -894,12 +877,10 @@ def process_command(command):
                     b, e, t * 60, random_last_played, random_current_track,
                     interruptible, pausing, repeat, wait_for_cos=wait_for_cos
                 )
-                write_state()
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
                 play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
-                write_state()
                 return
 
         # Rotating Section
@@ -914,12 +895,10 @@ def process_command(command):
                     )
                 else:
                     debug_log(f"Rotation for base {b} is already active, ignoring repeat trigger.")
-                write_state()
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
                 play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
-                write_state()
                 return
 
         # SudoRandom Section
@@ -933,12 +912,10 @@ def process_command(command):
                     sudo_random_played_in_cycle,
                     interruptible, pausing, repeat, wait_for_cos=wait_for_cos
                 )
-                write_state()
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
                 play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
-                write_state()
                 return
 
         # Direct section (default)
@@ -947,11 +924,7 @@ def process_command(command):
             play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
         else:
             cancel_rate_limited_timer()
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = ""
-            currently_playing_info_timestamp = 0
-        write_state()
+            status_manager.set_idle()
     except Exception:
         log_exception("process_command")
 
@@ -974,21 +947,14 @@ def play_sound(
 
     debug_log(f"play_sound: filename={filename} interruptible={interruptible} pausing={pausing} repeating={repeating} wait_for_cos={wait_for_cos}")
 
-    currently_playing = os.path.splitext(os.path.basename(filename))[0]
-    currently_playing_info = f"Playing {filename}"
-    currently_playing_info_timestamp = time.time()
-    playback_status = "Playing"
-    write_state()
+    status_manager.set_playing(filename)
 
     success = False
     interrupted = False
 
     try:
         if wait_for_cos:
-            playback_status = "Waiting for COS to clear"
-            currently_playing_info = "Waiting for channel to clear"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_waiting_for_cos()
             debug_log("WAIT FOR COS MODE ACTIVE (W suffix)")
 
             COS_DEBOUNCE_TIME = get_config_value("GPIO", "cos_debounce_time", fallback=0.5, cast_func=float)
@@ -1023,8 +989,7 @@ def play_sound(
 
             debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (wait_for_cos mode - play)")
             set_remote_busy(True)
-            playback_status = "Playing (WaitForCOS Mode)"
-            write_state()
+            status_manager.set_status("Playing (WaitForCOS Mode)", None, None)
 
             proc = None
             try:
@@ -1071,23 +1036,21 @@ def play_sound(
                     if err:
                         debug_log(f"aplay error: {err.decode(errors='replace')}")
         elif repeating:
-            playback_status = "Playing (Repeat Mode)"
-            write_state()
+            status_manager.set_status("Playing (Repeat Mode)", None, None)
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
             ignore_cos = False
             while True:
                 if not ignore_cos:
                     while is_cos_active() and not playback_interrupt.is_set():
-                        playback_status = "Pending Restart (Repeat Mode)"
-                        write_state()
+                        status_manager.set_status("Pending Restart (Repeat Mode)", None, None)
                         debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
                         set_remote_busy(True)
                         time.sleep(0.05)
                         if playback_token is not None and playback_token != current_playback_token:
                             interrupted = True
                             return
-                    playback_status = "Playing (Repeat Mode)"
+                    status_manager.set_status("Playing (Repeat Mode)", None, None)
                     write_state()
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
                 set_remote_busy(True)
@@ -1810,11 +1773,7 @@ def echo_test(track_num, playback_token=None):
             
             # 2. Play the echo-start.wav file if it exists
             if os.path.exists(echo_start_filename):
-                playback_status = f"Echo Test: Playing intro prompt"
-                currently_playing = "Echo-start"
-                currently_playing_info = f"Echo Test: Playing intro prompt for track {track_str}"
-                currently_playing_info_timestamp = time.time()
-                write_state()
+                status_manager.set_echo_test(track_num, "Playing intro prompt")
                 
                 try:
                     proc = subprocess.Popen(
@@ -1853,11 +1812,7 @@ def echo_test(track_num, playback_token=None):
                 
                 # Play the timeout message if it exists
                 if os.path.exists(echo_timeout_filename):
-                    playback_status = f"Echo Test: Playing timeout message"
-                    currently_playing = "Echo-timeout"
-                    currently_playing_info = f"Echo Test: Input timeout for track {track_str}"
-                    currently_playing_info_timestamp = time.time()
-                    write_state()
+                    status_manager.set_echo_test(track_num, "Playing timeout message")
                     
                     try:
                         debug_log("ECHO TEST: Playing echo-to.wav timeout message")
@@ -1878,11 +1833,7 @@ def echo_test(track_num, playback_token=None):
             debug_log("ECHO TEST: COS is active, starting recording")
             
             # Start recording
-            playback_status = f"Echo Test: Recording audio"
-            currently_playing = "Echo Test Recording"
-            currently_playing_info = f"Echo Test: Recording track {track_str}"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_echo_test(track_num, "Recording audio")
             
             record_proc = subprocess.Popen(
                 ['arecord', '-D', SOUND_DEVICE, '-f', 'S16_LE', '-r', '44100', '-c', '1', output_filename],
@@ -1952,11 +1903,7 @@ def echo_test(track_num, playback_token=None):
             
             # 5. Play back the recording
             debug_log("ECHO TEST: Starting playback of recording")
-            playback_status = f"Echo Test: Playing back recording"
-            currently_playing = f"Echo Test Playback: {track_str}"
-            currently_playing_info = f"Echo Test: Playing back recorded track {track_str}"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_echo_test(track_num, "Playing back recording")
             
             playback_proc = subprocess.Popen(
                 ['aplay', '-D', SOUND_DEVICE, output_filename],
@@ -1970,11 +1917,7 @@ def echo_test(track_num, playback_token=None):
             
             # 6. Play the echo-end.wav file if it exists
             if os.path.exists(echo_end_filename):
-                playback_status = f"Echo Test: Playing end prompt"
-                currently_playing = "Echo-end"
-                currently_playing_info = f"Echo Test: Playing end prompt for track {track_str}"
-                currently_playing_info_timestamp = time.time()
-                write_state()
+                status_manager.set_echo_test(track_num, "Playing end prompt")
                 
                 try:
                     debug_log("ECHO TEST: Playing echo-end.wav")
@@ -2412,11 +2355,7 @@ def run_script(script_num, playback_token=None):
             log_recent(f"Script execution failed: {script_num} - File not found")
             
             # Update status
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = f"Script {script_num} not found"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_status("Idle", "", f"Script {script_num} not found")
             return
         
         # Check if script is executable
@@ -2425,20 +2364,12 @@ def run_script(script_num, playback_token=None):
             log_recent(f"Script execution failed: {script_num} - Not executable")
             
             # Update status
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = f"Script {script_num} not executable"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_status("Idle", "", f"Script {script_num} not executable")
             return
             
         # Execute the script
         debug_log(f"SCRIPT: Executing script: {script_path}")
-        playback_status = f"Running Script: {script_num}"
-        currently_playing = f"Script: {script_num}"
-        currently_playing_info = f"Executing script {script_num}"
-        currently_playing_info_timestamp = time.time()
-        write_state()
+        status_manager.set_script_execution(script_num, "Executing")
         
         try:
             # Run the script and wait for it to complete
@@ -2474,11 +2405,7 @@ def run_script(script_num, playback_token=None):
         log_exception("run_script")
     finally:
         # Reset status after script completes
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = time.time()
-        write_state()
+        status_manager.set_idle()
 
 def archive_dtmf_log_if_new_month():
     """Archive the DTMF log if the first line is for a different month than now."""
@@ -3055,11 +2982,7 @@ def speak_activity_minutes_for_previous_day():
         set_remote_busy(True)
 
         # Update status
-        playback_status = "Activity Report: Waiting for channel to clear"
-        currently_playing = "Activity Report"
-        currently_playing_info = "Waiting for channel to clear"
-        currently_playing_info_timestamp = time.time()
-        write_state()
+        status_manager.set_activity_report()
 
         # Wait for channel to clear (debounce, as before)
         while True:
@@ -3118,11 +3041,7 @@ def speak_activity_minutes_for_previous_day():
         log_exception("speak_activity_minutes")
     finally:
         # Clean up status and REMOTE_BUSY_PIN
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
-        write_state()
+        status_manager.set_idle()
 
         debug_log("A1 COMMAND: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
@@ -3224,11 +3143,7 @@ def speak_temperature():
         debug_log("W2 TEMPERATURE: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
-        playback_status = "Temperature Report: Waiting for channel to clear"
-        currently_playing = "Temperature Report"
-        currently_playing_info = "Waiting for channel to clear"
-        currently_playing_info_timestamp = time.time()
-        write_state()
+        status_manager.set_weather_report("Temperature Report")
 
         # Wait for channel to clear (debounce)
         while True:
@@ -3277,11 +3192,7 @@ def speak_temperature():
         debug_log(f"W2 TEMPERATURE: Exception in speak_temperature: {e}")
         log_exception("speak_temperature")
     finally:
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
-        write_state()
+        status_manager.set_idle()
         debug_log("W2 TEMPERATURE: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 
@@ -3320,11 +3231,7 @@ def speak_wx_conditions():
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
-        playback_status = "WX Conditions Report: Waiting for channel to clear"
-        currently_playing = "WX Conditions Report"
-        currently_playing_info = "Waiting for channel to clear"
-        currently_playing_info_timestamp = time.time()
-        write_state()
+        status_manager.set_weather_report("WX Conditions Report")
 
         # Wait for channel to clear (debounce)
         while True:
@@ -3505,13 +3412,9 @@ def speak_wx_conditions():
         debug_log(f"W1 CONDITIONS: Exception in speak_wx_conditions: {e}")
         log_exception("speak_wx_conditions")
     finally:
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
-        write_state()
+        status_manager.set_idle()
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to inactive")
-        set_remote_busy(False)    
+        set_remote_busy(False)
 
 def reload_config():
     global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE
@@ -3597,6 +3500,12 @@ def main():
             serial_port_missing = True
 
         load_state()
+        
+        # Initialize status manager with callback
+        global status_manager
+        status_manager = PlaybackStatusManager(write_state)
+        status_manager.register_status_callback(sync_legacy_status_variables)
+        
         try:
             threading.Thread(target=serial_read_loop, daemon=True).start()
             threading.Thread(target=process_serial_commands, daemon=True).start()

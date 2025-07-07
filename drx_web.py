@@ -36,6 +36,14 @@ DASHBOARD_TEMPLATE = '''
 <!doctype html>
 <html>
 <head>
+<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: baseline; margin: 32px 0 10px 0; justify-content: flex-start;">
+  <div style="font-size: 1.2em; font-weight: 600; color: var(--primary);">
+    DRX Uptime: <span id="drx-uptime">{{ drx_uptime }}</span>
+  </div>
+  <div style="font-size: 1.2em; font-weight: 600; color: var(--accent); margin-left: 36px;">
+    Activity Minutes: <span id="cos-today-minutes">{{ state.cos_today_minutes or 0 }}</span> min today
+  </div>
+</div>
 <title>DRX Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

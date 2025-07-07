@@ -1249,8 +1249,7 @@ def play_sound(
     pausing=False,
     repeating=False,
     wait_for_cos=False,
-    playback_token=None,
-    display_name=None
+    playback_token=None
 ):
     import os
     import time
@@ -1259,20 +1258,13 @@ def play_sound(
     global playback_interrupt, playback_status, sound_card_missing, current_playback_token, MAX_COS_INTERRUPTIONS
     global h
 
-    # --- DEBUG: Show what file is about to play and if it exists ---
-    debug_log(f"play_sound: absolute filename to play: {os.path.abspath(filename)}")
-    debug_log(f"play_sound: exists? {os.path.exists(filename)}")
-    # -------------------------------------------------------------
-
     subprocess.run(['alsactl', 'restore'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     debug_log(f"play_sound: filename={filename} interruptible={interruptible} pausing={pausing} repeating={repeating} wait_for_cos={wait_for_cos}")
 
     # Detect section context for base tracks
     section_context = detect_section_context(filename)
-    # Use display_name if provided, otherwise fallback to old logic
-    playing_name = display_name if display_name else os.path.splitext(os.path.basename(filename))[0]
-    status_manager.set_status("Playing", playing_name, None, section_context)
+    status_manager.set_playing(filename, section_context=section_context)
 
     success = False
     interrupted = False
@@ -1314,6 +1306,8 @@ def play_sound(
 
             debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (wait_for_cos mode - play)")
             set_remote_busy(True)
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
             status_manager.set_status("Playing (WaitForCOS Mode)", playing_name, None, section_context)
 
             proc = None
@@ -1361,6 +1355,8 @@ def play_sound(
                     if err:
                         debug_log(f"aplay error: {err.decode(errors='replace')}")
         elif repeating:
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
             status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
@@ -1444,6 +1440,8 @@ def play_sound(
                     break
 
         elif pausing:
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
             status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
             debug_log("PAUSE MODE ACTIVE")
             while True:
@@ -1514,6 +1512,8 @@ def play_sound(
                     break
 
         else:
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
             status_manager.set_status("Playing (Normal Mode)", playing_name, None, section_context)
             debug_log("NORMAL MODE ACTIVE")
             debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (normal - play)")
@@ -1529,6 +1529,7 @@ def play_sound(
                         proc.terminate()
                         interrupted = True
                         break
+                    # --- ADDED CHECK FOR COS INTERRUPT ---
                     if interruptible and is_cos_active():
                         debug_log("NORMAL MODE: COS became ACTIVE, interrupting playback")
                         proc.terminate()
@@ -1537,6 +1538,7 @@ def play_sound(
                             proc.kill()
                         interrupted = True
                         break
+                    # -------------------------------------
                     if playback_interrupt.is_set():
                         proc.terminate()
                         interrupted = True
@@ -1787,91 +1789,6 @@ def play_any_section_by_type(base, end, interval, typ, interruptible, repeat, pa
     else:
         play_direct_track(f"{base:04d}", interruptible, repeat, pausing, wait_for_cos=wait_for_cos)
 
-def format_currently_playing(track_num, title, base_type, base_num):
-    if title:
-        return f"{track_num}-{title} from {base_type} {base_num}"
-    else:
-        return f"{track_num} from {base_type} {base_num}"
-
-def play_rotating_section(
-    base,
-    end,
-    interval,
-    last_played_dict,
-    current_track_dict,
-    interruptible=False,
-    pausing=False,
-    repeat=False,
-    wait_for_cos=False
-):
-    try:
-        import os
-        current_time = time.time()
-        last_played = last_played_dict.get(base, 0)
-        # Build a list of (track_num, filename) for all present files in the range
-        available_tracks = []
-        for track_num in range(base + 1, end + 1):
-            for f in os.listdir(SOUND_DIRECTORY):
-                if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
-                    available_tracks.append((track_num, f))
-                    break  # Only take the first matching file for each number
-
-        if not available_tracks:
-            # Reset status if nothing to play!
-            status_manager.set_idle()
-            return
-
-        # Use filenames for rotating logic, not just track numbers
-        available_files = [f for _, f in available_tracks]
-
-        # Determine current file
-        current_file = current_track_dict.get(base)
-        if current_file not in available_files:
-            current_file = available_files[0]
-
-        # Rotation logic
-        if last_played == 0:
-            next_file = current_file
-            last_played_dict[base] = current_time
-        elif current_time - last_played >= interval:
-            idx = available_files.index(current_file)
-            next_file = available_files[(idx + 1) % len(available_files)]
-            last_played_dict[base] = current_time
-        else:
-            next_file = current_file
-
-        current_track_dict[base] = next_file
-        next_track = os.path.join(SOUND_DIRECTORY, next_file)
-
-        # Format currently_playing string with context
-        track_filename = os.path.basename(next_file)
-        track_num = track_filename.split("-")[0].split(".")[0]
-        title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
-
-        def format_currently_playing(track_num, title, base_type, base_num):
-            if title:
-                return f"{track_num}-{title} from {base_type} {base_num}"
-            else:
-                return f"{track_num} from {base_type} {base_num}"
-
-        currently_playing_str = format_currently_playing(track_num, title, "Rotating Base", base)
-
-        # Call play_sound with correct keyword argument 'repeating'
-        play_sound(
-            next_track,
-            interruptible=interruptible,
-            pausing=pausing,
-            repeating=repeat,  # <-- IMPORTANT: use repeating, not repeat
-            wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
-        )
-        rotation_active[base] = False
-    except Exception:
-        log_exception("play_rotating_section")
-        rotation_active[base] = False
-        # Reset status on exception, too!
-        status_manager.set_idle()
-
 def play_randomized_section(
     base,
     end,
@@ -1896,33 +1813,67 @@ def play_randomized_section(
             last_played_dict[base] = current_time
         else:
             new_track = current_track
-
-        import os
-        # Parse the track number and title from filename (e.g. 5308-something.wav)
-        track_filename = os.path.basename(new_track)
-        track_num = track_filename.split("-")[0].split(".")[0]
-        title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
-        
-        # Helper for display string
-        def format_currently_playing(track_num, title, base_type, base_num):
-            if title:
-                return f"{track_num}-{title} from {base_type} {base_num}"
-            else:
-                return f"{track_num} from {base_type} {base_num}"
-
-        currently_playing_str = format_currently_playing(track_num, title, "Random Base", base)
-
-        # Pass display_name to play_sound so that web UI gets the full context
-        play_sound(
-            new_track,
-            interruptible=interruptible,
-            pausing=pausing,
-            repeating=repeating,
-            wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
-        )
+        # Direct call, NO thread!
+        play_sound(new_track, interruptible, pausing, repeating, wait_for_cos=wait_for_cos)
     except Exception:
         log_exception("play_randomized_section")
+
+def play_rotating_section(
+    base,
+    end,
+    interval,
+    last_played_dict,
+    current_track_dict,
+    interruptible=False,
+    pausing=False,
+    repeat=False,
+    wait_for_cos=False
+):
+    try:
+        current_time = time.time()
+        last_played = last_played_dict.get(base, 0)
+        # Build a list of (track_num, filename) for all present files in the range
+        available_tracks = []
+        for track_num in range(base + 1, end + 1):
+            for f in os.listdir(SOUND_DIRECTORY):
+                if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
+                    available_tracks.append((track_num, f))
+                    break  # Only take the first matching file for each number
+
+        if not available_tracks:
+            # Reset status if nothing to play!
+            status_manager.set_idle()
+            return
+
+        # Get just the numbers for rotating
+        available_nums = [num for num, _ in available_tracks]
+
+        if base not in current_track_dict or current_track_dict[base] not in available_nums:
+            current_track_num = available_nums[0]
+        else:
+            current_track_num = current_track_dict[base]
+
+        if last_played == 0:
+            next_track_idx = available_nums.index(current_track_num)
+            last_played_dict[base] = current_time
+        elif current_time - last_played >= interval:
+            idx = available_nums.index(current_track_num)
+            next_track_idx = (idx + 1) % len(available_nums)
+            last_played_dict[base] = current_time
+        else:
+            next_track_idx = available_nums.index(current_track_num)
+
+        next_track_num, next_file = available_tracks[next_track_idx]
+        current_track_dict[base] = next_track_num
+        next_track = os.path.join(SOUND_DIRECTORY, next_file)
+        # NO threading here—call directly!
+        play_sound(next_track, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+        rotation_active[base] = False
+    except Exception:
+        log_exception("play_rotating_section")
+        rotation_active[base] = False
+        # Reset status on exception, too!
+        status_manager.set_idle()
         
 def play_sudo_random_section(
     base,
@@ -1962,31 +1913,7 @@ def play_sudo_random_section(
     # Always store the updated set back
     played_in_cycle_dict[base] = played_in_cycle
     sudo_random_last_file[base] = file_to_play
-
-    # --------- NEW: Set currently_playing with context ---------
-    import os
-    # Parse the track number and title from filename (e.g. 5308-something.wav)
-    track_filename = os.path.basename(file_to_play)
-    track_num = track_filename.split("-")[0].split(".")[0]
-    title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
-
-    def format_currently_playing(track_num, title, base_type, base_num):
-        if title:
-            return f"{track_num}-{title} from {base_type} {base_num}"
-        else:
-            return f"{track_num} from {base_type} {base_num}"
-
-    currently_playing_str = format_currently_playing(track_num, title, "SudoRandom Base", base)
-    # ----------------------------------------------------------
-
-    play_sound(
-        file_to_play,
-        interruptible=interruptible,
-        pausing=pausing,
-        repeating=repeat,  # <-- FIXED: use repeating, not repeat
-        wait_for_cos=wait_for_cos,
-        display_name=currently_playing_str
-    )
+    play_sound(file_to_play, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
 
 def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False, wait_for_cos=False):
     debug_log(f"play_direct_track: code_str={code_str}")

@@ -36,13 +36,21 @@ DASHBOARD_TEMPLATE = '''
 <!doctype html>
 <html>
 <head>
-<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: baseline; margin: 32px 0 10px 0; justify-content: flex-start;">
-  <div style="font-size: 1.2em; font-weight: 600; color: var(--primary);">
-    DRX Uptime: <span id="drx-uptime">{{ drx_uptime }}</span>
-  </div>
-  <div style="font-size: 1.2em; font-weight: 600; color: var(--accent); margin-left: 36px;">
-    Activity Minutes: <span id="cos-today-minutes">{{ state.cos_today_minutes or 0 }}</span> min today
-  </div>
+<div id="main-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h1 style="margin: 0; font-size: 2.1em;">DRX Status Dashboard</h1>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button id="help-btn" type="button">Help</button>
+            <form method="POST" action="{{ url_for('logout') }}" id="logout-btn" style="margin: 0;">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+    <b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span>
+<div class="your-card">
+    <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
+        {{ state.get('cos_today_minutes', 0) }}
+</div>
 </div>
 <title>DRX Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">

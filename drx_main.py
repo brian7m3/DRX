@@ -217,10 +217,7 @@ class PlaybackStatusManager:
         """Convenience method for weather report status."""
         self.set_status(f"{report_type}: {phase}" if phase else report_type, 
                        report_type, phase)
-        
-    def set_weather_report_sequence(self, summary: str = "Playing weather conditions full sequence"):
-        self.set_status("WX Conditions Report", "Weather Report", summary)    
-    
+     
     def set_activity_report(self, phase: str = "Waiting for channel to clear"):
         """Convenience method for activity report status."""
         self.set_status(f"Activity Report: {phase}" if phase else "Activity Report",
@@ -319,11 +316,6 @@ rate_limited_timer = None
 # --- Status Manager ---
 status_manager = None  # Will be initialized in main()
 
-# --- Weather Report Status Refresh ---
-weather_report_active = False
-weather_report_refresh_thread = None
-weather_report_refresh_stop_event = threading.Event()
-
 def sync_legacy_status_variables(status, playing, info, info_timestamp):
     """
     Callback function to sync legacy global variables with status manager.
@@ -335,57 +327,6 @@ def sync_legacy_status_variables(status, playing, info, info_timestamp):
     currently_playing = playing
     currently_playing_info = info
     currently_playing_info_timestamp = info_timestamp
-
-def weather_report_status_refresh_loop():
-    """
-    Background thread function that refreshes weather report status every 1 second.
-    This ensures that status dashboard, API, or UI polling these fields will see them 
-    as active and correct for the full duration of the weather report playback.
-    """
-    global weather_report_active
-    
-    while not weather_report_refresh_stop_event.is_set():
-        if weather_report_active:
-            # Refresh the weather report status with current timestamp
-            # This keeps the "Currently Playing" and "Status" fields active
-            status_manager.set_weather_report("WX Conditions Report", "Playing weather conditions")
-            debug_log("Weather report status refreshed")
-        
-        # Wait for 1 second or until stop event is set
-        if weather_report_refresh_stop_event.wait(0.005):
-            break
-
-def start_weather_report_status_refresh():
-    """
-    Start the periodic status refresh for weather report playback.
-    """
-    global weather_report_active, weather_report_refresh_thread
-    
-    weather_report_active = True
-    weather_report_refresh_stop_event.clear()
-    
-    if weather_report_refresh_thread is None or not weather_report_refresh_thread.is_alive():
-        weather_report_refresh_thread = threading.Thread(
-            target=weather_report_status_refresh_loop, 
-            daemon=True,
-            name="WeatherReportStatusRefresh"
-        )
-        weather_report_refresh_thread.start()
-        debug_log("Weather report status refresh thread started")
-
-def stop_weather_report_status_refresh():
-    """
-    Stop the periodic status refresh for weather report playback.
-    """
-    global weather_report_active
-    
-    weather_report_active = False
-    weather_report_refresh_stop_event.set()
-    
-    # Wait briefly for thread to finish
-    if weather_report_refresh_thread and weather_report_refresh_thread.is_alive():
-        weather_report_refresh_thread.join(timeout=2.0)
-        debug_log("Weather report status refresh thread stopped")
 
 # --- Config Loading & Validation ---
 config_warnings = []
@@ -3312,30 +3253,32 @@ def speak_activity_minutes_for_previous_day():
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
 
     try:
-        # Set REMOTE_BUSY_PIN active immediately
         debug_log("A1 COMMAND: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
-        # Update status
-        status_manager.set_activity_report()
-
-        # Wait for channel to clear (debounce, as before)
-        while True:
-            if is_cos_active():
-                debug_log("A1 COMMAND: Waiting for COS to become inactive")
-                while is_cos_active():
-                    time.sleep(0.1)
-                debug_log("A1 COMMAND: COS has become inactive, starting debounce timer")
-
-            debounce_start = time.time()
-            while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+        # Only show 'waiting for channel to clear' if COS is active
+        if is_cos_active():
+            status_manager.set_activity_report("Waiting for channel to clear")
+            # Wait for channel to clear (debounce, as before)
+            while True:
                 if is_cos_active():
-                    debug_log("A1 COMMAND: COS became active again during debounce period, restarting wait process")
+                    debug_log("A1 COMMAND: Waiting for COS to become inactive")
+                    while is_cos_active():
+                        time.sleep(0.1)
+                    debug_log("A1 COMMAND: COS has become inactive, starting debounce timer")
+
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        debug_log("A1 COMMAND: COS became active again during debounce period, restarting wait process")
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    debug_log(f"A1 COMMAND: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
                     break
-                time.sleep(0.1)
-            if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
-                debug_log(f"A1 COMMAND: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
-                break
+        else:
+            # No need to wait, set status to "Playing Activity Report"
+            status_manager.set_activity_report("Playing Activity Report")
 
         # Decide which minutes to announce
         now = datetime.now()
@@ -3360,12 +3303,15 @@ def speak_activity_minutes_for_previous_day():
         else:
             wavs.append("minutes.wav")
 
-        # Play each wav file in order
+        # Set status to "Playing Activity Report" if not already set
+        status_manager.set_activity_report("Playing Activity Report")
+
+        # Play each wav file in order, keep status until end
         for wav in wavs:
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
                 debug_log(f"A1 COMMAND: Playing {wav_path}")
-                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True)
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
             else:
                 debug_log(f"A1 COMMAND: WAV file not found: {wav_path}")
 
@@ -3375,9 +3321,7 @@ def speak_activity_minutes_for_previous_day():
         debug_log(f"A1 COMMAND: Exception in speak_activity_minutes: {e}")
         log_exception("speak_activity_minutes")
     finally:
-        # Clean up status and REMOTE_BUSY_PIN
         status_manager.set_idle()
-
         debug_log("A1 COMMAND: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 

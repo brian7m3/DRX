@@ -2771,8 +2771,8 @@ def status_screen(stdscr):
                     info2 = ''.join(c for c in currently_playing_info if c in string.printable and c not in '\x1b')
                     stdscr.addstr(y, 0, info2[:max_x - 1], curses.color_pair(4))
                 else:
-                    currently_playing_info = ""
-                    currently_playing_info_timestamp = 0
+                    # Use status manager to clear expired info
+                    status_manager.clear_info_if_expired(5.0)
                 y += 1
             if y < max_y - 2:
                 y += 1

@@ -17,7 +17,7 @@ config.read(config_file_path)
 WEB_PORT = int(config.get("Web", "port", fallback="8080"))
 WEB_USER = config.get("WebAuth", "username", fallback="admin")
 WEB_PASS = config.get("WebAuth", "password", fallback="drxpass")
-DTMF_LOG_FILE = os.path.join(script_dir, "dtmf.log")
+DTMF_LOG_FILE = os.path.join(script_dir, "logs", "dtmf.log")
 
 STATE_FILE = os.path.join(script_dir, 'drx_state.json')  # NOTE: No longer used - kept for debug endpoint only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
@@ -654,7 +654,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <label for="track_input" style="white-space: nowrap;">Track:</label>
                     <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
                     <button type="submit" style="margin: 0;">&#9654;</button>
-                    <small class="help-text">Enter serial data to test (e.g., P5308i6000) or EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
+                    <small class="help-text">For Normal (DRX) Play, enter serial data to test (e.g., P5308i6000).  For Local (Web Page) play, enter EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
                 </div>
             </div>
         </form>

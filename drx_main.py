@@ -283,11 +283,11 @@ last_message_timer_time = 0
 command_queue = queue.Queue()
 DRX_DIRECTORY = "/home/drx/DRX"
 EXTRA_SOUND_DIR = os.path.join(DRX_DIRECTORY, "sounds", "extra")
-ACTIVITY_FILE = os.path.join(DRX_DIRECTORY, "Repeater Activity", "activity")
+ACTIVITY_FILE = os.path.join(DRX_DIRECTORY, "logs", "activity.log")
 cos_today_seconds = 0
 cos_today_minutes = 0
 last_written_minutes = -1
-DTMF_LOG_FILE = os.path.join(DRX_DIRECTORY, "dtmf.log")
+DTMF_LOG_FILE = os.path.join(DRX_DIRECTORY, "logs", "dtmf.log")
 DTMF_LOG_ARCHIVE_FMT = os.path.join(DRX_DIRECTORY, "dtmf-%Y-%m.log")
 dtmf_buffer = {}
 dtmf_lock = threading.Lock()
@@ -3456,12 +3456,12 @@ def speak_temperature():
         wavs += get_wav_sequence_for_number(temp)
         wavs.append("degrees.wav")
 
-        # Play wav files
+        # Play wav files, but do NOT update status during playback, only at start and end.
         for wav in wavs:
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
                 debug_log(f"W2 TEMPERATURE: Playing {wav_path}")
-                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True)
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
             else:
                 debug_log(f"W2 TEMPERATURE: WAV file not found: {wav_path}")
 

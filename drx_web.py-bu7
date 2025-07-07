@@ -758,8 +758,8 @@ document.addEventListener('DOMContentLoaded', function() {
   min-width: 80px;
   width: 80px;
   text-align: center;
-  font-size: 0.75em;
-  font-weight: 500;
+  font-size: 1.25em;
+  font-weight: 700;
   background: #fff;
   border: 2px solid var(--primary);
   color: var(--primary);

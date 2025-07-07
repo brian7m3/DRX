@@ -719,9 +719,6 @@ def process_command(command):
                 debug_log(f"Echo Test command detected with track number: {track_num}")
                 echo_test(track_num)
 
-                # Update playback status
-                status_manager.set_echo_test(track_num)
-
                 # Add to history
                 serial_history.insert(0, {
                     "cmd": f"Echo Test: {track_num:04d}",
@@ -741,9 +738,6 @@ def process_command(command):
                 debug_log(f"Script command detected: {script_num}")
                 # Run script directly
                 run_script(script_num)
-
-                # Update status
-                status_manager.set_script_execution(script_num)
 
                 # Add to history
                 serial_history.insert(0, {
@@ -1085,7 +1079,7 @@ def play_sound(
             while True:
                 if not ignore_cos:
                     while is_cos_active() and not playback_interrupt.is_set():
-                        status_manager.set_status("Pending Restart (Repeat Mode)", None, None)
+                        status_manager.set_restarting("Repeat Mode")
                         debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
                         set_remote_busy(True)
                         time.sleep(0.05)
@@ -1093,7 +1087,6 @@ def play_sound(
                             interrupted = True
                             return
                     status_manager.set_status("Playing (Repeat Mode)", None, None)
-                    write_state()
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
                 set_remote_busy(True)
                 try:
@@ -1166,7 +1159,7 @@ def play_sound(
             debug_log("PAUSE MODE ACTIVE")
             while True:
                 while is_cos_active() and not playback_interrupt.is_set():
-                    status_manager.set_status("Paused (Pause Mode)", None, None)
+                    status_manager.set_pausing("Pause Mode")
                     debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - paused)")
                     set_remote_busy(True)
                     time.sleep(0.05)
@@ -2630,10 +2623,6 @@ def maybe_run_webcmd():
                     # NOTE: State file updates disabled - serial_history is updated in memory via write_state()
                 except Exception as e:
                     log_recent(f"Play requested: {input_cmd} ({source}) - failed -> {e}")
-                # --- REMOVED: DO NOT clear status or interrupt playback here! ---
-                # playback_status = "Idle"
-                # currently_playing = ""
-                # log_recent("Playback stopped from web")
 
             elif cmd.get("type") == "stop":
                 playback_interrupt.set()

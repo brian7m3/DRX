@@ -217,10 +217,7 @@ class PlaybackStatusManager:
         """Convenience method for weather report status."""
         self.set_status(f"{report_type}: {phase}" if phase else report_type, 
                        report_type, phase)
-        
-    def set_weather_report_sequence(self, summary: str = "Playing weather conditions full sequence"):
-        self.set_status("WX Conditions Report", "Weather Report", summary)    
-    
+     
     def set_activity_report(self, phase: str = "Waiting for channel to clear"):
         """Convenience method for activity report status."""
         self.set_status(f"Activity Report: {phase}" if phase else "Activity Report",
@@ -319,11 +316,6 @@ rate_limited_timer = None
 # --- Status Manager ---
 status_manager = None  # Will be initialized in main()
 
-# --- Weather Report Status Refresh ---
-weather_report_active = False
-weather_report_refresh_thread = None
-weather_report_refresh_stop_event = threading.Event()
-
 def sync_legacy_status_variables(status, playing, info, info_timestamp):
     """
     Callback function to sync legacy global variables with status manager.
@@ -335,57 +327,6 @@ def sync_legacy_status_variables(status, playing, info, info_timestamp):
     currently_playing = playing
     currently_playing_info = info
     currently_playing_info_timestamp = info_timestamp
-
-def weather_report_status_refresh_loop():
-    """
-    Background thread function that refreshes weather report status every 1 second.
-    This ensures that status dashboard, API, or UI polling these fields will see them 
-    as active and correct for the full duration of the weather report playback.
-    """
-    global weather_report_active
-    
-    while not weather_report_refresh_stop_event.is_set():
-        if weather_report_active:
-            # Refresh the weather report status with current timestamp
-            # This keeps the "Currently Playing" and "Status" fields active
-            status_manager.set_weather_report("WX Conditions Report", "Playing weather conditions")
-            debug_log("Weather report status refreshed")
-        
-        # Wait for 1 second or until stop event is set
-        if weather_report_refresh_stop_event.wait(0.005):
-            break
-
-def start_weather_report_status_refresh():
-    """
-    Start the periodic status refresh for weather report playback.
-    """
-    global weather_report_active, weather_report_refresh_thread
-    
-    weather_report_active = True
-    weather_report_refresh_stop_event.clear()
-    
-    if weather_report_refresh_thread is None or not weather_report_refresh_thread.is_alive():
-        weather_report_refresh_thread = threading.Thread(
-            target=weather_report_status_refresh_loop, 
-            daemon=True,
-            name="WeatherReportStatusRefresh"
-        )
-        weather_report_refresh_thread.start()
-        debug_log("Weather report status refresh thread started")
-
-def stop_weather_report_status_refresh():
-    """
-    Stop the periodic status refresh for weather report playback.
-    """
-    global weather_report_active
-    
-    weather_report_active = False
-    weather_report_refresh_stop_event.set()
-    
-    # Wait briefly for thread to finish
-    if weather_report_refresh_thread and weather_report_refresh_thread.is_alive():
-        weather_report_refresh_thread.join(timeout=2.0)
-        debug_log("Weather report status refresh thread stopped")
 
 # --- Config Loading & Validation ---
 config_warnings = []

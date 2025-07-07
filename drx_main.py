@@ -84,7 +84,7 @@ class PlaybackStatusManager:
         """
         with self._lock:
             self._playback_status = status
-            self._currently_playing = playing if playing is not None else status
+            self._currently_playing = playing if playing is not None else ""
             
             # Build info string with section context if provided
             if info is not None:
@@ -1250,7 +1250,9 @@ def play_sound(
 
             debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (wait_for_cos mode - play)")
             set_remote_busy(True)
-            status_manager.set_status("Playing (WaitForCOS Mode)", None, None)
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
+            status_manager.set_status("Playing (WaitForCOS Mode)", playing_name, None, section_context)
 
             proc = None
             try:
@@ -1297,21 +1299,23 @@ def play_sound(
                     if err:
                         debug_log(f"aplay error: {err.decode(errors='replace')}")
         elif repeating:
-            status_manager.set_status("Playing (Repeat Mode)", None, None)
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
+            status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
             ignore_cos = False
             while True:
                 if not ignore_cos:
                     while is_cos_active() and not playback_interrupt.is_set():
-                        status_manager.set_restarting("Repeat Mode")
+                        status_manager.set_restarting(playing_name)
                         debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
                         set_remote_busy(True)
                         time.sleep(0.05)
                         if playback_token is not None and playback_token != current_playback_token:
                             interrupted = True
                             return
-                    status_manager.set_status("Playing (Repeat Mode)", None, None)
+                    status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
                 set_remote_busy(True)
                 try:
@@ -1380,18 +1384,20 @@ def play_sound(
                     break
 
         elif pausing:
-            status_manager.set_status("Playing (Pause Mode)", None, None)
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
+            status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
             debug_log("PAUSE MODE ACTIVE")
             while True:
                 while is_cos_active() and not playback_interrupt.is_set():
-                    status_manager.set_pausing("Pause Mode")
+                    status_manager.set_pausing(playing_name)
                     debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - paused)")
                     set_remote_busy(True)
                     time.sleep(0.05)
                     if playback_token is not None and playback_token != current_playback_token:
                         interrupted = True
                         return
-                status_manager.set_status("Playing (Pause Mode)", None, None)
+                status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - play)")
                 set_remote_busy(True)
                 try:
@@ -1450,7 +1456,9 @@ def play_sound(
                     break
 
         else:
-            status_manager.set_status("Playing (Normal Mode)", None, None)
+            # Extract track name for Currently Playing display
+            playing_name = os.path.splitext(os.path.basename(filename))[0]
+            status_manager.set_status("Playing (Normal Mode)", playing_name, None, section_context)
             debug_log("NORMAL MODE ACTIVE")
             debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (normal - play)")
             set_remote_busy(True)

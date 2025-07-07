@@ -928,6 +928,46 @@ def process_command(command):
     except Exception:
         log_exception("process_command")
 
+def detect_section_context(filename):
+    """
+    Detect if a filename belongs to a configured section and return appropriate context.
+    Returns a string like "from Rotating Base 5300" or None if not a base track.
+    """
+    import os
+    
+    # Extract base track number from filename
+    basename = os.path.basename(filename)
+    # Remove extension and any suffixes
+    track_name = os.path.splitext(basename)[0]
+    
+    # Try to extract numeric base code
+    try:
+        # Handle both simple numbers (e.g., "5300") and prefixed (e.g., "P5300")
+        if track_name.startswith('P'):
+            track_num = int(track_name[1:])
+        else:
+            track_num = int(track_name)
+    except (ValueError, IndexError):
+        return None
+    
+    # Check if this track belongs to any configured section
+    # Random sections
+    for i, (base, end, interval) in enumerate(zip(random_bases, random_ends, random_intervals)):
+        if base <= track_num <= end:
+            return f"from Random Base {base}"
+    
+    # Rotation sections  
+    for i, (base, end, time_val) in enumerate(zip(rotation_bases, rotation_ends, rotation_times)):
+        if base <= track_num <= end:
+            return f"from Rotating Base {base}"
+    
+    # SudoRandom sections
+    for i, (base, end, interval) in enumerate(zip(sudo_bases, sudo_ends, sudo_intervals)):
+        if base <= track_num <= end:
+            return f"from SudoRandom Base {base}"
+    
+    return None
+
 def play_sound(
     filename,
     interruptible=False,
@@ -947,7 +987,9 @@ def play_sound(
 
     debug_log(f"play_sound: filename={filename} interruptible={interruptible} pausing={pausing} repeating={repeating} wait_for_cos={wait_for_cos}")
 
-    status_manager.set_playing(filename)
+    # Detect section context for base tracks
+    section_context = detect_section_context(filename)
+    status_manager.set_playing(filename, section_context=section_context)
 
     success = False
     interrupted = False
@@ -1120,21 +1162,18 @@ def play_sound(
                     break
 
         elif pausing:
-            playback_status = "Playing (Pause Mode)"
-            write_state()
+            status_manager.set_status("Playing (Pause Mode)", None, None)
             debug_log("PAUSE MODE ACTIVE")
             while True:
                 while is_cos_active() and not playback_interrupt.is_set():
-                    playback_status = "Paused (Pause Mode)"
-                    write_state()
+                    status_manager.set_status("Paused (Pause Mode)", None, None)
                     debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - paused)")
                     set_remote_busy(True)
                     time.sleep(0.05)
                     if playback_token is not None and playback_token != current_playback_token:
                         interrupted = True
                         return
-                playback_status = "Playing (Pause Mode)"
-                write_state()
+                status_manager.set_status("Playing (Pause Mode)", None, None)
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - play)")
                 set_remote_busy(True)
                 try:
@@ -1193,8 +1232,7 @@ def play_sound(
                     break
 
         else:
-            playback_status = "Playing (Normal Mode)"
-            write_state()
+            status_manager.set_status("Playing (Normal Mode)", None, None)
             debug_log("NORMAL MODE ACTIVE")
             debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (normal - play)")
             set_remote_busy(True)
@@ -1244,11 +1282,7 @@ def play_sound(
                     if err:
                         debug_log(f"aplay error: {err.decode(errors='replace')}")
     finally:
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
-        playback_status = "Idle"
-        write_state()
+        status_manager.set_idle()
         debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
         set_remote_busy(False)
         if playback_interrupt.is_set():
@@ -1288,10 +1322,7 @@ def play_single_wav(
         ]
         if not matches:
             debug_log(f"File {code}{SOUND_FILE_EXTENSION} not found.")
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = ""
-            currently_playing_info_timestamp = 0
+            status_manager.set_idle()
             return False
         filename = os.path.join(SOUND_DIRECTORY, matches[0])
 
@@ -1304,16 +1335,10 @@ def play_single_wav(
         debug_log("wait_for_cos: Waiting for COS to become inactive")
         while is_cos_active():
             if playback_token is not None and playback_token != current_playback_token:
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
+                status_manager.set_idle()
                 return False
             if not block_interrupt and playback_interrupt.is_set():
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
+                status_manager.set_idle()
                 return False
             time.sleep(0.1)
         debug_log("wait_for_cos: COS inactive, starting debounce")
@@ -1323,30 +1348,18 @@ def play_single_wav(
                 debug_log("wait_for_cos: COS became active during debounce, restarting wait")
                 while is_cos_active():
                     if playback_token is not None and playback_token != current_playback_token:
-                        playback_status = "Idle"
-                        currently_playing = ""
-                        currently_playing_info = ""
-                        currently_playing_info_timestamp = 0
+                        status_manager.set_idle()
                         return False
                     if not block_interrupt and playback_interrupt.is_set():
-                        playback_status = "Idle"
-                        currently_playing = ""
-                        currently_playing_info = ""
-                        currently_playing_info_timestamp = 0
+                        status_manager.set_idle()
                         return False
                     time.sleep(0.1)
                 debounce_start = time.time()
             if playback_token is not None and playback_token != current_playback_token:
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
+                status_manager.set_idle()
                 return False
             if not block_interrupt and playback_interrupt.is_set():
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
+                status_manager.set_idle()
                 return False
             time.sleep(0.1)
         debug_log("wait_for_cos: Debounce successful, proceeding to play")
@@ -1359,10 +1372,7 @@ def play_single_wav(
         )
     except Exception as e:
         debug_log("Exception starting aplay:", e)
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
+        status_manager.set_idle()
         return False
     try:
         while proc.poll() is None:
@@ -1379,10 +1389,7 @@ def play_single_wav(
                 if proc.poll() is None:
                     proc.kill()
                 # Set Idle status after COS interrupt
-                playback_status = "Idle"
-                currently_playing = ""
-                currently_playing_info = ""
-                currently_playing_info_timestamp = 0
+                status_manager.set_idle()
                 return True
             time.sleep(0.05)
     finally:
@@ -1390,10 +1397,7 @@ def play_single_wav(
             proc.kill()
         proc.wait()
         # Set Idle status after natural end or user interrupt
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
+        status_manager.set_idle()
     return False
 
 def get_base_type_and_info(base):
@@ -1556,11 +1560,7 @@ def play_rotating_section(
 
         if not available_tracks:
             # Reset status if nothing to play!
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = ""
-            currently_playing_info_timestamp = 0
-            write_state()
+            status_manager.set_idle()
             return
 
         # Get just the numbers for rotating
@@ -1591,11 +1591,7 @@ def play_rotating_section(
         log_exception("play_rotating_section")
         rotation_active[base] = False
         # Reset status on exception, too!
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
-        write_state()
+        status_manager.set_idle()
         
 def play_sudo_random_section(
     base,
@@ -1666,34 +1662,25 @@ def play_interrupt_to_another(base_filename, code2, playback_token=None):
         set_remote_busy(True)
         if is_cos_active():
             # COS is already active: play code2 immediately
-            currently_playing = f"{code2_name}"
-            playback_status = f"Playing {code2_name} (COS active at start)"
-            currently_playing_info = f"Playing {code2_name} (COS active at start)"
-            currently_playing_info_timestamp = time.time()
+            status_manager.set_status(f"Playing {code2_name} (COS active at start)", 
+                                     code2_name, f"Playing {code2_name} (COS active at start)")
             play_single_wav(code2, block_interrupt=True, playback_token=playback_token)
             log_recent(f"Interrupt: COS active at start, played {code2_name} directly")
         else:
             # Playing base_filename, with potential to interrupt to code2 if COS activates
-            currently_playing = base_name
-            playback_status = f"Playing {base_name}, will interrupt to {code2_name} on COS"
-            currently_playing_info = f"Playing {base_name} (will interrupt to {code2_name} if COS)"
-            currently_playing_info_timestamp = time.time()
+            status_manager.set_status(f"Playing {base_name}, will interrupt to {code2_name} on COS",
+                                     base_name, f"Playing {base_name} (will interrupt to {code2_name} if COS)")
             interrupted = play_single_wav(base_filename, interrupt_on_cos=True, playback_token=playback_token)
             if interrupted:
-                currently_playing = f"{code2_name}"
-                playback_status = f"Playing {code2_name} (interrupted from {base_name})"
-                currently_playing_info = f"Interrupted {base_name}, now playing {code2_name}"
-                currently_playing_info_timestamp = time.time()
+                status_manager.set_status(f"Playing {code2_name} (interrupted from {base_name})",
+                                         code2_name, f"Interrupted {base_name}, now playing {code2_name}")
                 play_single_wav(code2, block_interrupt=True, playback_token=playback_token)
                 log_recent(f"Interrupt: {base_name} interrupted by COS, switched to {code2_name}")
             else:
                 log_recent(f"Interrupt: {base_name} played without COS, did not switch to {code2_name}")
     finally:
         set_remote_busy(False)
-        playback_status = "Idle"
-        currently_playing = ""
-        currently_playing_info = ""
-        currently_playing_info_timestamp = 0
+        status_manager.set_idle()
 
 def find_matching_files(base, end):
     files = []
@@ -1755,11 +1742,7 @@ def echo_test(track_num, playback_token=None):
         
         try:
             # Update status
-            playback_status = f"Echo Test: Waiting for COS to be inactive"
-            currently_playing = "Echo Test"
-            currently_playing_info = f"Echo Test: Preparing to record track {track_str}"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_echo_test(track_num, "Waiting for COS to be inactive")
             
             # 1. Wait until COS is inactive
             debug_log("ECHO TEST: Waiting for COS to be inactive")
@@ -1787,11 +1770,7 @@ def echo_test(track_num, playback_token=None):
                     debug_log(f"Exception playing echo-start.wav: {e}")
             
             # 3. Wait for COS to become active and then record (with 5-second timeout)
-            playback_status = f"Echo Test: Waiting for COS to begin recording"
-            currently_playing = "Echo Test"
-            currently_playing_info = f"Echo Test: Waiting for COS to begin recording track {track_str}"
-            currently_playing_info_timestamp = time.time()
-            write_state()
+            status_manager.set_echo_test(track_num, "Waiting for COS to begin recording")
             
             debug_log("ECHO TEST: Waiting for COS to become active (5s timeout)")
             
@@ -1937,11 +1916,7 @@ def echo_test(track_num, playback_token=None):
         finally:
             # Now release REMOTE_BUSY_PIN after everything is done
             set_remote_busy(False)
-            playback_status = "Idle"
-            currently_playing = ""
-            currently_playing_info = ""
-            currently_playing_info_timestamp = 0
-            write_state()
+            status_manager.set_idle()
             echo_test_active = False
             echo_test_track = None
             debug_log("ECHO TEST: Function completed")
@@ -2290,15 +2265,10 @@ def update_message_timer_state(last_played, interval):
     message_timer_value = interval
         
 def set_message_rate_limited():
-    global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
     global rate_limited_set_time, rate_limited_timer
 
-    playback_status = "Message is Rate-Limited"
-    currently_playing = ""
-    currently_playing_info = ""
-    currently_playing_info_timestamp = time.time()
+    status_manager.set_status("Message is Rate-Limited", "", "")
     rate_limited_set_time = time.time()
-    write_state()
 
     # Cancel any previous timer
     if rate_limited_timer is not None:
@@ -2309,12 +2279,12 @@ def set_message_rate_limited():
     rate_limited_timer.start()
 
 def clear_rate_limited_status():
-    global playback_status, rate_limited_set_time, rate_limited_timer
+    global rate_limited_set_time, rate_limited_timer
 
-    if playback_status == "Message is Rate-Limited":
-        playback_status = "Idle"
+    status_info = status_manager.get_status_info()
+    if status_info['playback_status'] == "Message is Rate-Limited":
+        status_manager.set_idle()
         rate_limited_set_time = None
-        write_state()
     rate_limited_timer = None
 
 def cancel_rate_limited_timer():

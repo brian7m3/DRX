@@ -1583,7 +1583,8 @@ def play_single_wav(
     interrupt_on_cos=False,
     block_interrupt=False,
     playback_token=None,
-    wait_for_cos=False
+    wait_for_cos=False,
+    reset_status_on_end=True      # <--- NEW PARAM (default True)
 ):
     """
     Play the wav for code or full filename; optionally interrupt if COS becomes active.
@@ -1605,7 +1606,8 @@ def play_single_wav(
         ]
         if not matches:
             debug_log(f"File {code}{SOUND_FILE_EXTENSION} not found.")
-            status_manager.set_idle()
+            if reset_status_on_end:
+                status_manager.set_idle()
             return False
         filename = os.path.join(SOUND_DIRECTORY, matches[0])
 
@@ -1618,10 +1620,12 @@ def play_single_wav(
         debug_log("wait_for_cos: Waiting for COS to become inactive")
         while is_cos_active():
             if playback_token is not None and playback_token != current_playback_token:
-                status_manager.set_idle()
+                if reset_status_on_end:
+                    status_manager.set_idle()
                 return False
             if not block_interrupt and playback_interrupt.is_set():
-                status_manager.set_idle()
+                if reset_status_on_end:
+                    status_manager.set_idle()
                 return False
             time.sleep(0.1)
         debug_log("wait_for_cos: COS inactive, starting debounce")
@@ -1631,18 +1635,22 @@ def play_single_wav(
                 debug_log("wait_for_cos: COS became active during debounce, restarting wait")
                 while is_cos_active():
                     if playback_token is not None and playback_token != current_playback_token:
-                        status_manager.set_idle()
+                        if reset_status_on_end:
+                            status_manager.set_idle()
                         return False
                     if not block_interrupt and playback_interrupt.is_set():
-                        status_manager.set_idle()
+                        if reset_status_on_end:
+                            status_manager.set_idle()
                         return False
                     time.sleep(0.1)
                 debounce_start = time.time()
             if playback_token is not None and playback_token != current_playback_token:
-                status_manager.set_idle()
+                if reset_status_on_end:
+                    status_manager.set_idle()
                 return False
             if not block_interrupt and playback_interrupt.is_set():
-                status_manager.set_idle()
+                if reset_status_on_end:
+                    status_manager.set_idle()
                 return False
             time.sleep(0.1)
         debug_log("wait_for_cos: Debounce successful, proceeding to play")
@@ -1655,7 +1663,8 @@ def play_single_wav(
         )
     except Exception as e:
         debug_log("Exception starting aplay:", e)
-        status_manager.set_idle()
+        if reset_status_on_end:
+            status_manager.set_idle()
         return False
     try:
         while proc.poll() is None:
@@ -1672,7 +1681,8 @@ def play_single_wav(
                 if proc.poll() is None:
                     proc.kill()
                 # Set Idle status after COS interrupt
-                status_manager.set_idle()
+                if reset_status_on_end:
+                    status_manager.set_idle()
                 return True
             time.sleep(0.05)
     finally:
@@ -1680,7 +1690,8 @@ def play_single_wav(
             proc.kill()
         proc.wait()
         # Set Idle status after natural end or user interrupt
-        status_manager.set_idle()
+        if reset_status_on_end:
+            status_manager.set_idle()
     return False
 
 def get_base_type_and_info(base):
@@ -3713,7 +3724,7 @@ def speak_wx_conditions():
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
                 debug_log(f"W1 CONDITIONS: Playing {wav_path}")
-                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True)
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
             else:
                 debug_log(f"W1 CONDITIONS: WAV file not found: {wav_path}")
 

@@ -3253,30 +3253,32 @@ def speak_activity_minutes_for_previous_day():
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
 
     try:
-        # Set REMOTE_BUSY_PIN active immediately
         debug_log("A1 COMMAND: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
-        # Update status
-        status_manager.set_activity_report()
-
-        # Wait for channel to clear (debounce, as before)
-        while True:
-            if is_cos_active():
-                debug_log("A1 COMMAND: Waiting for COS to become inactive")
-                while is_cos_active():
-                    time.sleep(0.1)
-                debug_log("A1 COMMAND: COS has become inactive, starting debounce timer")
-
-            debounce_start = time.time()
-            while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+        # Only show 'waiting for channel to clear' if COS is active
+        if is_cos_active():
+            status_manager.set_activity_report("Waiting for channel to clear")
+            # Wait for channel to clear (debounce, as before)
+            while True:
                 if is_cos_active():
-                    debug_log("A1 COMMAND: COS became active again during debounce period, restarting wait process")
+                    debug_log("A1 COMMAND: Waiting for COS to become inactive")
+                    while is_cos_active():
+                        time.sleep(0.1)
+                    debug_log("A1 COMMAND: COS has become inactive, starting debounce timer")
+
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        debug_log("A1 COMMAND: COS became active again during debounce period, restarting wait process")
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    debug_log(f"A1 COMMAND: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
                     break
-                time.sleep(0.1)
-            if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
-                debug_log(f"A1 COMMAND: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
-                break
+        else:
+            # No need to wait, set status to "Playing Activity Report"
+            status_manager.set_activity_report("Playing Activity Report")
 
         # Decide which minutes to announce
         now = datetime.now()
@@ -3301,12 +3303,15 @@ def speak_activity_minutes_for_previous_day():
         else:
             wavs.append("minutes.wav")
 
-        # Play each wav file in order
+        # Set status to "Playing Activity Report" if not already set
+        status_manager.set_activity_report("Playing Activity Report")
+
+        # Play each wav file in order, keep status until end
         for wav in wavs:
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
                 debug_log(f"A1 COMMAND: Playing {wav_path}")
-                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True)
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
             else:
                 debug_log(f"A1 COMMAND: WAV file not found: {wav_path}")
 
@@ -3316,9 +3321,7 @@ def speak_activity_minutes_for_previous_day():
         debug_log(f"A1 COMMAND: Exception in speak_activity_minutes: {e}")
         log_exception("speak_activity_minutes")
     finally:
-        # Clean up status and REMOTE_BUSY_PIN
         status_manager.set_idle()
-
         debug_log("A1 COMMAND: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 

@@ -219,7 +219,7 @@ class PlaybackStatusManager:
                        report_type, phase)
         
     def set_weather_report_sequence(self, summary: str = "Playing weather conditions full sequence"):
-    self.set_status("WX Conditions Report", "Weather Report", summary)    
+        self.set_status("WX Conditions Report", "Weather Report", summary)    
     
     def set_activity_report(self, phase: str = "Waiting for channel to clear"):
         """Convenience method for activity report status."""

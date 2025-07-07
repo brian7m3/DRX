@@ -99,3 +99,11 @@ IndentationError: expected an indented block after function definition on line 2
     self.set_status("WX Conditions Report", "Weather Report", summary)    
     ^
 IndentationError: expected an indented block after function definition on line 221
+  File "/home/drx/DRX/drx_main.py", line 222
+    self.set_status("WX Conditions Report", "Weather Report", summary)    
+    ^
+IndentationError: expected an indented block after function definition on line 221
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.

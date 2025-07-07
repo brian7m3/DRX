@@ -401,3 +401,8 @@
 2025-07-07 10:36:24.016: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
 2025-07-07 10:38:34.335: Play requested: W1 (web input box)
 2025-07-07 10:38:35.136: WX Report: {'observations': 'Overcast', 'temperature': '78 degrees', 'humidity': '89 percent', 'winddir': 'SSE', 'wind_speed': '4', 'wind_gust': '8', 'pressure': '30.02', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-07 10:56:58.269: Play requested: P5300 (web input box)
+2025-07-07 10:57:16.410: Play requested: W1 (web input box)
+2025-07-07 10:57:16.411: WX Report: {'observations': 'Overcast', 'temperature': '80 degrees', 'humidity': '86 percent', 'winddir': 'SW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '30.01', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-07 10:59:58.899: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-07 10:59:58.899: WX Report: {'observations': 'Overcast', 'temperature': '80 degrees', 'humidity': '86 percent', 'winddir': 'SW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '30.01', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}

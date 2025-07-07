@@ -150,3 +150,5 @@
 2025-07-06 19:10:59.356: Play requested: W1 (web input box)
 2025-07-06 19:11:00.158: WX Report: {'observations': 'Fair', 'temperature': '81 degrees', 'humidity': '61 percent', 'winddir': 'SSW', 'wind_speed': '5', 'wind_gust': '10', 'pressure': '30.01', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
 2025-07-06 19:11:14.871: Playback stopped from web
+2025-07-07 00:59:58.868: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-07 00:59:59.669: WX Report: {'observations': 'Fair', 'temperature': '71 degrees', 'humidity': '96 percent', 'winddir': 'SE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.03', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}

@@ -217,6 +217,9 @@ class PlaybackStatusManager:
         """Convenience method for weather report status."""
         self.set_status(f"{report_type}: {phase}" if phase else report_type, 
                        report_type, phase)
+        
+    def set_weather_report_sequence(self, summary: str = "Playing weather conditions full sequence"):
+    self.set_status("WX Conditions Report", "Weather Report", summary)    
     
     def set_activity_report(self, phase: str = "Waiting for channel to clear"):
         """Convenience method for activity report status."""
@@ -3552,27 +3555,14 @@ def speak_wx_conditions():
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
-        status_manager.set_weather_report("WX Conditions Report")
-
-        # Wait for channel to clear (debounce)
-        while True:
-            if is_cos_active():
-                debug_log("W1 CONDITIONS: Waiting for COS to become inactive")
-                while is_cos_active():
-                    time.sleep(0.1)
-                debug_log("W1 CONDITIONS: COS has become inactive, starting debounce timer")
-            debounce_start = time.time()
-            while time.time() - debounce_start < COS_DEBOUNCE_TIME:
-                if is_cos_active():
-                    debug_log("W1 CONDITIONS: COS became active again during debounce period, restarting wait process")
-                    break
-                time.sleep(0.1)
-            if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
-                debug_log(f"W1 CONDITIONS: Waited through debounce period of {COS_DEBOUNCE_TIME} seconds")
-                break
-
         wx_data = parse_wx_conditions_from_wx_data()
         log_recent(f"WX Report: {wx_data}")
+
+        # Build a summary for the status if you want (optional)
+        summary = "Playing weather conditions"
+
+        # Set status ONCE at start of sequence
+        status_manager.set_weather_report("WX Conditions Report", summary)
 
         wavs = []
 
@@ -3718,10 +3708,7 @@ def speak_wx_conditions():
             except Exception:
                 pass
 
-        # Play wav files
-        # Start periodic status refresh during playback (every 1 second)
-        start_weather_report_status_refresh()
-        
+        # Play wav files, but do NOT update status during playback, only at start and end.
         for wav in wavs:
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
@@ -3736,9 +3723,7 @@ def speak_wx_conditions():
         debug_log(f"W1 CONDITIONS: Exception in speak_wx_conditions: {e}")
         log_exception("speak_wx_conditions")
     finally:
-        # Stop periodic status refresh
-        stop_weather_report_status_refresh()
-        
+        # Set status to idle at the end of the sequence
         status_manager.set_idle()
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)

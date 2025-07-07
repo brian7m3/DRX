@@ -84,11 +84,16 @@ h2 {
   font-size: 1.3em;
 }
 .card-section {
-  background: var(--primary-light);
-  border-radius: 14px;
-  padding: 0.01em 1.5em 1.2em 1.5em;
-  margin-bottom: 2.1em;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
+  margin: 24px auto;
+  padding: 1.3em 1.6em;
+  max-width: 950px;   /* Or whatever width you like */
+  min-width: 280px;
+  width: 100%;
+  box-sizing: border-box;
 }
 form {
   margin-bottom: 1.3em;
@@ -602,60 +607,190 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </head>
-<body>
-</head>
-<body>
-<div id="main-card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h1 style="margin: 0; font-size: 2.1em;">DRX Status Dashboard</h1>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <button id="help-btn" type="button">Help</button>
-            <form method="POST" action="{{ url_for('logout') }}" id="logout-btn" style="margin: 0;">
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </div>
-    <b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span>
-<div class="your-card">
-    <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
-        {{ state.get('cos_today_minutes', 0) }}
-</div>
-<!-- ... previous HTML ... -->
-<div class="card-section">
-    <h2>Play Specific Track</h2>
-    <!-- Single Play Method selector for both forms -->
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
-        <label style="white-space: nowrap;">Play Method:</label>
-        <select id="play_method_selector" name="play_method" style="width: 150px; min-width: 80px;">
-            <option value="normal" selected>Normal (DRX)</option>
-            <option value="local">Local (Web Page)</option>
-        </select>
-    </div>
-    <form method="POST" action="{{ url_for('play_track') }}" id="play-dropdown-form">
-        <input type="hidden" name="play_method" id="play_method_dropdown">
+<div class="card-section play-track-flex">
+    <div class="play-track-main">
+        <h2>Play Specific Track</h2>
+        <!-- Single Play Method selector for both forms -->
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
-            <label for="track_dropdown" style="white-space: nowrap;">Track:</label>
-            <select name="track_dropdown" id="track_dropdown">
-                <option value="">--Select--</option>
-                {% for file in all_files %}
-                    <option value="{{ file }}">{{ file }}</option>
-                {% endfor %}
+            <label style="white-space: nowrap;">Play Method:</label>
+            <select id="play_method_selector" name="play_method" style="width: 150px; min-width: 80px;">
+                <option value="normal" selected>Normal (DRX)</option>
+                <option value="local">Local (Web Page)</option>
             </select>
-            <button type="submit" style="margin: 0;">&#9654;</button>
         </div>
-    </form>
-    <form method="POST" action="{{ url_for('play_track') }}" id="play-input-form" style="margin-top: 28px;">
-        <input type="hidden" name="play_method" id="play_method_input">
-        <div style="display: flex; flex-direction: column; gap: 0;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <label for="track_input" style="white-space: nowrap;">Track:</label>
-                <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
+        <form method="POST" action="{{ url_for('play_track') }}" id="play-dropdown-form">
+            <input type="hidden" name="play_method" id="play_method_dropdown">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+                <label for="track_dropdown" style="white-space: nowrap;">Track:</label>
+                <select name="track_dropdown" id="track_dropdown">
+                    <option value="">--Select--</option>
+                    {% for file in all_files %}
+                        <option value="{{ file }}">{{ file }}</option>
+                    {% endfor %}
+                </select>
                 <button type="submit" style="margin: 0;">&#9654;</button>
-                <small class="help-text">Enter serial data to test (e.g., P5308i6000) or EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
+            </div>
+        </form>
+        <form method="POST" action="{{ url_for('play_track') }}" id="play-input-form" style="margin-top: 28px;">
+            <input type="hidden" name="play_method" id="play_method_input">
+            <div style="display: flex; flex-direction: column; gap: 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label for="track_input" style="white-space: nowrap;">Track:</label>
+                    <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
+                    <button type="submit" style="margin: 0;">&#9654;</button>
+                    <small class="help-text">Enter serial data to test (e.g., P5308i6000) or EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
+                </div>
+            </div>
+        </form>
+        <br>
+        <b>Currently Playing:</b>
+        <span class="status-good status-currently-playing">{{ currently_playing or "None" }}</span>
+        <form method="POST" action="{{ url_for('stop_playback') }}" style="display:inline; margin-left:1em;">
+            <button type="submit" style="margin: 0;">&#9632;</button>
+        </form>
+    </div>
+    <div class="play-track-subcard">
+        <div class="subcard-title">Message Timer</div>
+        <div class="subcard-timer">
+            <span id="message-timer" class="ready">Ready</span>
+        </div>
+        <div class="subcard-row">
+            <div class="subcard-label">Last Played:</div>
+            <div class="subcard-value status-good status-last-played">{{ last_played or "None" }}</div>
+        </div>
+        <div class="subcard-row">
+            <div class="subcard-label">Status:</div>
+            <div class="subcard-value" id="playback-status">{{ playback_status or "Idle" }}</div>
+        </div>
+        <div class="subcard-row">
+            <div class="subcard-label">COS Active:</div>
+            <div class="subcard-value" id="cos-state" {% if cos_state == 'YES' %}class="status-good"{% else %}class="status-warn"{% endif %}>{{ cos_state }}</div>
+        </div>
+        <div class="subcard-row">
+            <div class="subcard-label">Remote Device Active:</div>
+            <div class="subcard-value" id="remote-device-state" class="status-warn">NO</div>
+        </div>
+        <div class="subcard-row">
+            <div class="subcard-label">Serial Port:</div>
+            <div class="subcard-value">
+            {% if not serial_port_missing %}
+                <span class="status-good">OK</span>
+            {% else %}
+                <span class="status-bad">Missing</span>
+            {% endif %}
             </div>
         </div>
-    </form>
+        <div class="subcard-row">
+            <div class="subcard-label">Sound Card:</div>
+            <div class="subcard-value">
+            {% if not sound_card_missing %}
+                <span class="status-good">OK</span>
+            {% else %}
+                <span class="status-bad">Missing</span>
+            {% endif %}
+            </div>
+        </div>
+        <div class="subcard-row">
+            <div class="subcard-label">Weather System:</div>
+            <div class="subcard-value">
+                <span class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
+            </div>
+        </div>
+    </div>
 </div>
+<style>
+.play-track-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+.play-track-main {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.play-track-subcard {
+  flex: 0 0 220px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  background: var(--primary-light);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
+  padding: 1em 1.4em;
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.subcard-title {
+  font-size: 1.13em;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.7em;
+  letter-spacing: 1px;
+}
+.subcard-timer {
+  font-size: 1.6em;
+  font-weight: 700;
+  margin-bottom: 0.8em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#message-timer {
+  display: inline-block;
+  min-width: 80px;
+  width: 80px;
+  text-align: center;
+  font-size: 1.25em;
+  font-weight: 700;
+  background: #fff;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  border-radius: 7px;
+  padding: 0.1em 0.6em;
+  transition: color 0.2s, border 0.2s, background 0.2s;
+}
+.subcard-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.9em;
+  flex-wrap: nowrap;
+}
+.subcard-label, .subcard-value {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.subcard-label {
+  font-size: 1em;
+  color: var(--primary);
+  font-weight: 500;
+  min-width: 110px;
+  max-width: 110px;
+}
+.subcard-value {
+  font-size: 1.1em;
+}
+@media (max-width: 900px) {
+  .play-track-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+  .play-track-subcard {
+    margin-top: 22px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
+    align-self: center;
+  }
+}
+</style>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     // 1. Initialize hidden fields to match selector on page load
@@ -727,50 +862,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-    <br>
-    <b>Currently Playing:</b>
-    <span class="status-good status-currently-playing">{{ currently_playing or "None" }}</span>
-    <form method="POST" action="{{ url_for('stop_playback') }}" style="display:inline; margin-left:1em;">
-        <button type="submit" style="margin: 0;">&#9632;</button>
-    </form>
-    <br>
-    <br>
-<div style="display: flex; justify-content: center;">
-  <button style="margin: 0; pointer-events: none; cursor: default;">
-    <div style="text-align: left;">
-      <b>Message Timer:</b>
-      <span id="message-timer" class="ready">Ready</span><br>
-      <b>Last Played:</b>
-      <span class="status-good status-last-played">{{ last_played or "None" }}</span>
-      <br>
-      <b>Status:</b> <span id="playback-status">{{ playback_status or "Idle" }}</span>
-      <br>
-      <b>COS Active:</b>
-      <span id="cos-state" class="{% if cos_state == 'YES' %}status-good{% else %}status-warn{% endif %}">{{ cos_state }}</span>
-      <br>
-      <b>Remote Device Active:</b>
-      <span id="remote-device-state" class="status-warn">NO</span>
-      <br>
-      <b>Serial Port:</b>
-      {% if not serial_port_missing %}
-          <span class="status-good">OK</span>
-      {% else %}
-          <span class="status-bad">Missing</span>
-      {% endif %}
-      <br>
-      <b>Sound Card:</b>
-      {% if not sound_card_missing %}
-          <span class="status-good">OK</span>
-      {% else %}
-          <span class="status-bad">Missing</span>
-      {% endif %}
-      <br>
-      <b>Weather System:</b>
-      <span class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
-      <br>
-    </div>
-  </button>
-</div>
         <!-- Help Modal HTML -->
         <div id="help-modal" class="modal">
           <div class="modal-content">

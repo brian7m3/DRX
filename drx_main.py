@@ -277,6 +277,8 @@ log_file_path = os.path.join(script_dir, 'drx_error.log')
 alternate_series_pointers = {}
 alternate_series_track_pointers = {}
 alternate_series_last_played = {}
+# --- New Alternate Series State (in-memory only) ---
+alternate_series_state = {}  # key: command string, value: {"pointer": int, "need_to_increment": bool}
 message_timer_last_played = 0
 message_timer_value = None
 last_message_timer_time = 0
@@ -710,66 +712,56 @@ def parse_suffixes(cmd):
         idx -= 1
     return cmd[:idx], suffixes if suffixes else None
 
-def parse_alternate_series(cmd):
+def parse_alternate_series_segments(cmd):
     """
-    Parse alternate-series commands with per-base suffixes.
-    Examples:
-      'P5308RA5307'   -> bases:[5308,5307], suffixes:['R','']
-      'P5308A5307R'   -> bases:[5308,5307], suffixes:['','R']
-      'P5308RA5307R'  -> bases:[5308,5307], suffixes:['R','R']
-      'P5308A5307'    -> bases:[5308,5307], suffixes:['','']
-    Returns:
-      bases:    list of int
-      suffixes: list of str (per base)
-      is_alt:   True if alternate syntax detected
+    Splits an alternate series command of the form P5300RA5400i6000A2801PA9300I into
+    segments: ['P5300R', 'P5400i6000', 'P2801P', 'P9300I']
     """
     cmd = cmd.strip()
-    if cmd.startswith('P'):
-        cmd = cmd[1:]
-    # Only treat as alternate if there's at least one "A" in the command
-    if 'A' not in cmd:
-        return [], [], False
-    parts = re.split(r'A', cmd)
-    bases = []
-    suffixes = []
-    for part in parts:
-        m = re.match(r'^(\d{4})([A-Z]*)$', part, re.IGNORECASE)
-        if m:
-            bases.append(int(m.group(1)))
-            suffixes.append(m.group(2).upper() if m.group(2) else "")
+    if not cmd.startswith('P'):
+        return []
+    segments = []
+    curr = ''
+    for i, c in enumerate(cmd):
+        if i == 0:   # First char (should be P)
+            curr += c
+        elif c == 'A':
+            segments.append(curr)
+            curr = 'P'
         else:
-            return [], [], False
-    return bases, suffixes, True
+            curr += c
+    if curr:
+        segments.append(curr)
+    return segments
 
-def handle_alternate_series(command):
-    bases, suffixes, is_alt = parse_alternate_series(command)
-    debug_log(f"ALTERNATE DEBUG: command={command}, bases={bases}, suffixes={suffixes}, is_alt={is_alt}")
-    if not is_alt or not bases:
-        debug_log("ALTERNATE DEBUG: Not an alternate command or no bases")
+def handle_alternate_series_new(command):
+    """
+    In-memory alternate series logic: each call only evaluates one segment as a standalone command.
+    """
+    series_key = command.strip().upper()
+    segments = parse_alternate_series_segments(series_key)
+    if not segments or len(segments) < 2:
+        # Not a valid alternate series
         return False
 
-    key = tuple(bases)
-    if key not in alternate_series_pointers:
-        alternate_series_pointers[key] = 0
+    state = alternate_series_state.setdefault(series_key, {"pointer": 0, "need_to_increment": False})
+    pointer = state["pointer"]
+    n_segments = len(segments)
 
-    pointer = alternate_series_pointers[key]
-    base_to_play = bases[pointer]
-    base_suffix = suffixes[pointer] if pointer < len(suffixes) else ""
-    debug_log(f"ALTERNATE DEBUG: pointer={pointer}, base_to_play={base_to_play}, base_suffix={base_suffix}")
+    # Advance pointer if "need_to_increment" is True
+    if state["need_to_increment"]:
+        pointer = (pointer + 1) % n_segments
+        state["pointer"] = pointer
 
-    repeat = 'R' in base_suffix
-    pausing = 'P' in base_suffix
-    interruptible = 'I' in base_suffix
-    wait_for_cos = 'W' in base_suffix
+    # Play only the current segment, as a standalone command
+    current_segment = segments[pointer]
+    debug_log(f"[ALT SERIES] Evaluating segment {pointer+1}/{n_segments}: {current_segment}")
+    process_command(current_segment)
 
-    code_str = f"{base_to_play:04d}"
-    debug_log(f"ALTERNATE DEBUG: code_str={code_str}, repeat={repeat}, pausing={pausing}, interruptible={interruptible}, wait_for_cos={wait_for_cos}")
+    # After playback, set to increment next time
+    state["pointer"] = pointer
+    state["need_to_increment"] = True
 
-    debug_log("About to call play_direct_track")
-    play_direct_track(code_str, interruptible=interruptible, repeat=repeat, pausing=pausing, wait_for_cos=wait_for_cos)
-    debug_log("Returned from play_direct_track")
-    alternate_series_pointers[key] = (pointer + 1) % len(bases)
-    debug_log(f"ALTERNATE DEBUG: next pointer will be {alternate_series_pointers[key]}")
     return True
 
 def parse_join_series(cmd):
@@ -993,66 +985,11 @@ def process_command(command):
             handle_join_series(bases, suffixes, overall_m)
             return
 
-        # --- Alternate series logic (PER-BASE SUFFIXES SUPPORTED, original logic preserved) ---
-        bases, suffixes, is_alt = parse_alternate_series(command.strip())
-        debug_log(f"parse_alternate_series: bases={bases}, suffixes={suffixes}, is_alt={is_alt}")
-        if is_alt and bases:
+        # --- Alternate series logic (NEW) ---
+        if 'A' in command.strip().upper():
             cancel_rate_limited_timer()
-            key = tuple(sorted(bases))
-            if key not in alternate_series_pointers:
-                alternate_series_pointers[key] = 0
-            pointer = alternate_series_pointers[key]
-            start_pointer = pointer
-            played = False
-
-            for step in range(len(bases)):
-                base = bases[pointer]
-                # Use per-base suffix!
-                base_suffix = suffixes[pointer] if pointer < len(suffixes) else ""
-                debug_log(f"ALTERNATE DEBUG: pointer={pointer}, base={base}, base_suffix={base_suffix}")
-
-                interruptible = base_suffix == "I"
-                repeat = "R" in base_suffix
-                pausing = "P" in base_suffix
-                message_mode = "M" in base_suffix
-                wait_for_cos = "W" in base_suffix
-
-                should_play_message = should_allow_message_timer_play(message_mode, message_timer_value, message_timer_last_played)
-                if message_mode and not should_play_message:
-                    set_message_rate_limited()
-                    return
-
-                if message_mode and should_play_message:
-                    message_timer_last_played = time.time()
-
-                base_filename = get_next_base_file(base)
-                if base_filename:
-                    now = time.time()
-                    if key not in alternate_series_last_played:
-                        alternate_series_last_played[key] = {b: 0 for b in bases}
-                    if key not in alternate_series_track_pointers:
-                        alternate_series_track_pointers[key] = {}
-                    alternate_series_last_played[key][base] = now
-                    alternate_series_track_pointers[key][base] = os.path.basename(base_filename)
-
-                    play_sound(
-                        filename=base_filename,
-                        interruptible=interruptible,
-                        pausing=pausing,
-                        repeating=repeat,
-                        wait_for_cos=wait_for_cos
-                    )
-                    played = True
-                    alternate_series_pointers[key] = (pointer + 1) % len(bases)
-                    write_state()
-                    return
-                pointer = (pointer + 1) % len(bases)
-                if pointer == start_pointer:
-                    break
-            if not played:
-                alternate_series_pointers[key] = pointer
-            write_state()
-            return
+            if handle_alternate_series_new(command.strip()):
+                return
 
         # --- Serial (direct) and section logic ---
         code_str, suffix, alt_code = parse_serial_command(command.strip())
@@ -1067,6 +1004,12 @@ def process_command(command):
         pausing = "P" in suffix if suffix else False
         message_mode = "M" in suffix if suffix else False
         wait_for_cos = "W" in suffix if suffix else False
+
+        # --- Fix: Pause and Repeat cannot both be True, pause takes precedence ---
+        if repeat and pausing:
+            debug_log("Both repeat and pausing True! Forcing pause to take precedence.")
+            repeat = False
+
         code = int(code_str)
 
         should_play_message = should_allow_message_timer_play(message_mode, message_timer_value, message_timer_last_played)
@@ -1153,39 +1096,110 @@ def detect_section_context(filename):
     Returns a string like "from Rotating Base 5300" or None if not a base track.
     """
     import os
-    
-    # Extract base track number from filename
+    import re
+
+    # Extract base track number from filename (handles e.g. "5308-Title.wav", "P5300A5400-Title.wav")
     basename = os.path.basename(filename)
-    # Remove extension and any suffixes
     track_name = os.path.splitext(basename)[0]
-    
-    # Try to extract numeric base code
-    try:
-        # Handle both simple numbers (e.g., "5300") and prefixed (e.g., "P5300")
-        if track_name.startswith('P'):
-            track_num = int(track_name[1:])
-        else:
-            track_num = int(track_name)
-    except (ValueError, IndexError):
+
+    # Extract numeric prefix (handles 5308-Title, P5300A5400-Title, P5300J5400-Title, etc.)
+    m = re.match(r'P?(\d+)', track_name)
+    if not m:
         return None
-    
+    track_num = int(m.group(1))
+
     # Check if this track belongs to any configured section
     # Random sections
     for i, (base, end, interval) in enumerate(zip(random_bases, random_ends, random_intervals)):
         if base <= track_num <= end:
             return f"from Random Base {base}"
-    
+
     # Rotation sections  
     for i, (base, end, time_val) in enumerate(zip(rotation_bases, rotation_ends, rotation_times)):
         if base <= track_num <= end:
             return f"from Rotating Base {base}"
-    
+
     # SudoRandom sections
     for i, (base, end, interval) in enumerate(zip(sudo_bases, sudo_ends, sudo_intervals)):
         if base <= track_num <= end:
             return f"from SudoRandom Base {base}"
-    
+
     return None
+
+def handle_alternate_series(command):
+    bases, suffixes, is_alt = parse_alternate_series(command)
+    debug_log(f"ALTERNATE DEBUG: command={command}, bases={bases}, suffixes={suffixes}, is_alt={is_alt}")
+    if not is_alt or not bases:
+        debug_log("ALTERNATE DEBUG: Not an alternate command or no bases")
+        return False
+
+    key = tuple(bases)
+    if key not in alternate_series_pointers:
+        alternate_series_pointers[key] = 0
+
+    pointer = alternate_series_pointers[key]
+    base_to_play = bases[pointer]
+    base_suffix = suffixes[pointer] if pointer < len(suffixes) else ""
+    debug_log(f"ALTERNATE DEBUG: pointer={pointer}, base_to_play={base_to_play}, base_suffix={base_suffix}")
+
+    repeat = 'R' in base_suffix
+    pausing = 'P' in base_suffix
+    interruptible = 'I' in base_suffix
+    wait_for_cos = 'W' in base_suffix
+
+    code_str = f"{base_to_play:04d}"
+    debug_log(f"ALTERNATE DEBUG: code_str={code_str}, repeat={repeat}, pausing={pausing}, interruptible={interruptible}, wait_for_cos={wait_for_cos}")
+
+    debug_log("About to call play_direct_track")
+    # PATCH: Always pass a display_name with context for alternating series!
+    # Find the file we will play, extract track_num and title for formatting.
+    base_filename = get_next_base_file(base_to_play)
+    if base_filename:
+        import os
+        track_filename = os.path.basename(base_filename)
+        # Extract track_num and title
+        # Handles "5308-Title.wav" or "P5300A5400-Title.wav"
+        m = re.match(r'P?(\d+)', track_filename)
+        track_num = m.group(1) if m else ""
+        title = ""
+        if "-" in track_filename:
+            title = track_filename.split("-", 1)[1].rsplit(".", 1)[0]
+        # Detect section type for more accurate context
+        section_context = detect_section_context(base_filename)
+        # Guess base_type for display
+        base_type = ""
+        if section_context:
+            if "Rotating" in section_context:
+                base_type = "Rotating Base"
+            elif "Random" in section_context:
+                base_type = "Random Base"
+            elif "SudoRandom" in section_context:
+                base_type = "SudoRandom Base"
+            else:
+                base_type = section_context
+        else:
+            base_type = "Base"
+        base_num = base_to_play
+        def format_currently_playing(track_num, title, base_type, base_num):
+            if title:
+                return f"{track_num}-{title} from {base_type} {base_num}"
+            else:
+                return f"{track_num} from {base_type} {base_num}"
+        currently_playing_str = format_currently_playing(track_num, title, base_type, base_num)
+        play_sound(
+            filename=base_filename,
+            interruptible=interruptible,
+            pausing=pausing,
+            repeating=repeat,
+            wait_for_cos=wait_for_cos,
+            display_name=currently_playing_str
+        )
+        alternate_series_pointers[key] = (pointer + 1) % len(bases)
+        debug_log(f"ALTERNATE DEBUG: next pointer will be {alternate_series_pointers[key]}")
+        return True
+    else:
+        debug_log(f"ALTERNATE DEBUG: No base file found for {base_to_play}")
+        return False
 
 def play_sound(
     filename,
@@ -1196,6 +1210,11 @@ def play_sound(
     playback_token=None,
     display_name=None
 ):
+    """
+    Enhanced play_sound with true pause/resume for pausing mode using sox+aplay.
+    All status_manager, debug_log, and modern DRX features retained.
+    """
+    debug_log(f"[PLAY_SOUND DEBUG] filename={filename}, display_name={display_name}")
     import os
     import time
     import subprocess
@@ -1206,15 +1225,12 @@ def play_sound(
     # --- DEBUG: Show what file is about to play and if it exists ---
     debug_log(f"play_sound: absolute filename to play: {os.path.abspath(filename)}")
     debug_log(f"play_sound: exists? {os.path.exists(filename)}")
-    # -------------------------------------------------------------
 
     subprocess.run(['alsactl', 'restore'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     debug_log(f"play_sound: filename={filename} interruptible={interruptible} pausing={pausing} repeating={repeating} wait_for_cos={wait_for_cos}")
 
-    # Detect section context for base tracks
     section_context = detect_section_context(filename)
-    # Use display_name if provided, otherwise fallback to old logic
     playing_name = display_name if display_name else os.path.splitext(os.path.basename(filename))[0]
     status_manager.set_status("Playing", playing_name, None, section_context)
 
@@ -1390,73 +1406,146 @@ def play_sound(
         elif pausing:
             status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
             debug_log("PAUSE MODE ACTIVE")
-            while True:
-                while is_cos_active() and not playback_interrupt.is_set():
-                    status_manager.set_pausing(playing_name)
-                    debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - paused)")
-                    set_remote_busy(True)
-                    time.sleep(0.05)
-                    if playback_token is not None and playback_token != current_playback_token:
-                        interrupted = True
-                        return
-                status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
-                debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (pause - play)")
-                set_remote_busy(True)
+            from contextlib import closing
+            import wave
+            # True pause/resume: keep track of how much played, restart at correct offset
+            try:
+                # Get total duration of file
+                with closing(wave.open(filename, 'r')) as f:
+                    frames = f.getnframes()
+                    rate = f.getframerate()
+                    total_duration = frames / float(rate)
+            except Exception:
+                total_duration = 0
+            played_duration = 0
+            cos_interruptions = 0
+            max_interrupts = MAX_COS_INTERRUPTIONS if 'MAX_COS_INTERRUPTIONS' in globals() else 3
+            while played_duration < total_duration:
+                # Build sox command to trim from played_duration
+                sox_cmd = [
+                    'sox', filename, '-t', 'wav', '-', 'trim', f'{played_duration}'
+                ]
+                debug_log(f"PAUSE MODE: sox_cmd={' '.join(str(x) for x in sox_cmd)} (played_duration={played_duration:.2f}/{total_duration:.2f})")
                 try:
-                    proc = subprocess.Popen(
-                        ['aplay', '-D', SOUND_DEVICE, filename],
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.PIPE
-                    )
-                except Exception as e:
-                    debug_log("Exception in PAUSE mode (Popen):", e)
-                    import traceback
-                    traceback.print_exc()
-                    break
-
-                was_interrupted = False
-                while proc.poll() is None:
+                    proc1 = subprocess.Popen(sox_cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+                    proc2 = subprocess.Popen(['aplay', '-D', SOUND_DEVICE], stdin=proc1.stdout, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    proc1.stdout.close()
+                except FileNotFoundError:
+                    sound_card_missing = True
+                    currently_playing_info = "Sound card/device missing or aplay/sox not found!"
+                    status_manager.set_idle()
+                    return
+                except Exception as exc:
+                    sound_card_missing = True
+                    currently_playing_info = f"Sound card/device error: {exc}"
+                    status_manager.set_idle()
+                    return
+                interrupted = False
+                start_time = time.time()
+                status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
+                set_remote_busy(True)
+                while proc2.poll() is None:
                     if playback_token is not None and playback_token != current_playback_token:
-                        proc.terminate()
-                        was_interrupted = True
+                        proc2.terminate()
+                        proc1.terminate()
                         interrupted = True
                         break
                     if is_cos_active():
-                        debug_log("Pause mode: COS became active, pausing playback")
+                        if cos_interruptions < max_interrupts:
+                            status_manager.set_pausing(playing_name)
+                            debug_log("Pause mode: COS became ACTIVE, pausing playback")
+                            proc2.terminate()
+                            proc1.terminate()
+                            time.sleep(0.1)
+                            if proc2.poll() is None:
+                                proc2.kill()
+                            if proc1.poll() is None:
+                                proc1.kill()
+                            cos_interruptions += 1
+                            interrupted = True
+                            # Add how much played this segment
+                            played_duration += time.time() - start_time
+                            debug_log(f"PAUSE MODE: interrupted, new played_duration={played_duration:.2f}")
+                            while is_cos_active() and not playback_interrupt.is_set():
+                                time.sleep(0.05)
+                            break
+                        else:
+                            proc2.terminate()
+                            proc1.terminate()
+                            if proc2.poll() is None:
+                                proc2.kill()
+                            if proc1.poll() is None:
+                                proc1.kill()
+                            played_duration = total_duration  # Stop playback
+                            status_manager.set_idle()
+                            return
+                    if playback_interrupt.is_set():
+                        proc2.terminate()
+                        proc1.terminate()
+                        interrupted = True
+                        break
+                    time.sleep(0.05)
+                # Clean up after interruption or finish
+                if proc2.poll() is None:
+                    proc2.kill()
+                if proc1.poll() is None:
+                    proc1.kill()
+                if not interrupted or cos_interruptions >= max_interrupts or playback_interrupt.is_set():
+                    debug_log("PAUSE MODE: ending playback (not interrupted or max interrupts reached)")
+                    break
+            # If we reach here, playback completed
+            if played_duration >= total_duration:
+                debug_log("PAUSE MODE: played entire file, ending pause mode.")
+                success = True
+
+        elif interruptible:
+            status_manager.set_status("Playing (Interruptible Mode)", playing_name, None, section_context)
+            debug_log("INTERRUPTIBLE MODE ACTIVE")
+            debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (interruptible - play)")
+            set_remote_busy(True)
+            try:
+                proc = subprocess.Popen(
+                    ['aplay', '-D', SOUND_DEVICE, filename],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.PIPE
+                )
+                while proc.poll() is None:
+                    if playback_token is not None and playback_token != current_playback_token:
                         proc.terminate()
-                        time.sleep(0.1)
+                        interrupted = True
+                        break
+                    if is_cos_active():
+                        debug_log("INTERRUPTIBLE MODE: COS became ACTIVE, interrupting playback")
+                        proc.terminate()
+                        time.sleep(0.2)
                         if proc.poll() is None:
                             proc.kill()
-                        was_interrupted = True
                         interrupted = True
                         break
                     if playback_interrupt.is_set():
                         proc.terminate()
-                        was_interrupted = True
                         interrupted = True
                         break
                     time.sleep(0.05)
-                if was_interrupted and proc.poll() is None:
-                    proc.kill()
-                try:
-                    proc.wait(timeout=2)
-                except Exception:
-                    proc.kill()
+                if not interrupted:
+                    success = True
+            except Exception as e:
+                debug_log("Exception starting aplay (Interruptible Mode):", e)
+                interrupted = True
+            finally:
+                if proc:
                     try:
                         proc.wait(timeout=2)
                     except Exception:
-                        pass
-                if proc.stderr:
+                        proc.kill()
+                        try:
+                            proc.wait(timeout=2)
+                        except Exception:
+                            pass
+                if proc and proc.stderr:
                     err = proc.stderr.read()
                     if err:
                         debug_log(f"aplay error: {err.decode(errors='replace')}")
-                if not was_interrupted:
-                    debug_log("WAV played all the way through, ending pause mode.")
-                    success = True
-                    break
-                if playback_interrupt.is_set() or (playback_token is not None and playback_token != current_playback_token):
-                    break
-
         else:
             status_manager.set_status("Playing (Normal Mode)", playing_name, None, section_context)
             debug_log("NORMAL MODE ACTIVE")
@@ -1511,7 +1600,7 @@ def play_sound(
         set_remote_busy(False)
         if playback_interrupt.is_set():
             playback_interrupt.clear()
-        play_mode = 'repeat' if repeating else 'pause' if pausing else 'wait_for_cos' if wait_for_cos else 'normal'
+        play_mode = 'repeat' if repeating else 'pause' if pausing else 'wait_for_cos' if wait_for_cos else 'interruptible' if interruptible else 'normal'
         if success:
             log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - successful")
         elif interrupted:
@@ -1525,7 +1614,8 @@ def play_single_wav(
     block_interrupt=False,
     playback_token=None,
     wait_for_cos=False,
-    reset_status_on_end=True      # <--- NEW PARAM (default True)
+    reset_status_on_end=True,
+    set_status_on_play=True  # <-- new parameter, default True to preserve current behavior
 ):
     """
     Play the wav for code or full filename; optionally interrupt if COS becomes active.
@@ -1536,11 +1626,9 @@ def play_single_wav(
 
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
 
-    # PATCH: If 'code' looks like a full path (endswith .wav and exists), use as filename directly
     if isinstance(code, str) and code.lower().endswith('.wav') and os.path.isfile(code):
         filename = code
     else:
-        # Always match using match_code_file (handles dash-suffixes)
         matches = [
             f for f in os.listdir(SOUND_DIRECTORY)
             if match_code_file(f, code, SOUND_FILE_EXTENSION)
@@ -1555,7 +1643,6 @@ def play_single_wav(
     debug_log(
         f"play_single_wav: filename={filename}, interrupt_on_cos={interrupt_on_cos}, block_interrupt={block_interrupt}, wait_for_cos={wait_for_cos}"
     )
-    # wait_for_cos logic: wait until COS is inactive, then debounce
     if wait_for_cos:
         COS_DEBOUNCE_TIME = get_config_value("GPIO", "cos_debounce_time", fallback=0.5, cast_func=float)
         debug_log("wait_for_cos: Waiting for COS to become inactive")
@@ -1597,6 +1684,9 @@ def play_single_wav(
         debug_log("wait_for_cos: Debounce successful, proceeding to play")
 
     try:
+        playing_name = os.path.splitext(os.path.basename(filename))[0]
+        if set_status_on_play and reset_status_on_end:
+            status_manager.set_status("Playing", playing_name)
         proc = subprocess.Popen(
             ['aplay', '-D', SOUND_DEVICE, filename],
             stdout=subprocess.DEVNULL,
@@ -1621,7 +1711,6 @@ def play_single_wav(
                 time.sleep(0.1)
                 if proc.poll() is None:
                     proc.kill()
-                # Set Idle status after COS interrupt
                 if reset_status_on_end:
                     status_manager.set_idle()
                 return True
@@ -1630,7 +1719,6 @@ def play_single_wav(
         if proc.poll() is None:
             proc.kill()
         proc.wait()
-        # Set Idle status after natural end or user interrupt
         if reset_status_on_end:
             status_manager.set_idle()
     return False
@@ -1964,30 +2052,41 @@ def play_interrupt_to_another(base_filename, code2, playback_token=None):
     global playback_status, playback_interrupt, current_playback_token
     debug_log(f"play_interrupt_to_another: base_filename={base_filename}, code2={code2}")
 
-    base_name = os.path.splitext(os.path.basename(str(base_filename)))[0]
+    base_file = os.path.basename(base_filename)
+    base_file_noext = os.path.splitext(base_file)[0]
     code2_name = os.path.splitext(os.path.basename(str(code2)))[0]
+
+    section_context = detect_section_context(base_filename)
+    if section_context:
+        playing_with_context = f"{base_file_noext} {section_context}"
+    else:
+        playing_with_context = base_file_noext
 
     interrupted = False
     try:
         set_remote_busy(True)
         if is_cos_active():
-            # COS is already active: play code2 immediately
-            status_manager.set_status(f"Playing {code2_name} (COS active at start)", 
+            status_manager.set_status(f"Playing {code2_name} (COS active at start)",
                                      code2_name, f"Playing {code2_name} (COS active at start)")
             play_single_wav(code2, block_interrupt=True, playback_token=playback_token)
             log_recent(f"Interrupt: COS active at start, played {code2_name} directly")
         else:
-            # Playing base_filename, with potential to interrupt to code2 if COS activates
-            status_manager.set_status(f"Playing {base_name}, will interrupt to {code2_name} on COS",
-                                     base_name, f"Playing {base_name} (will interrupt to {code2_name} if COS)")
-            interrupted = play_single_wav(base_filename, interrupt_on_cos=True, playback_token=playback_token)
+            status_manager.set_status(f"Playing {base_file_noext}, will interrupt to {code2_name} on COS",
+                                     playing_with_context,
+                                     f"Playing {base_file_noext} (will interrupt to {code2_name} if COS)")
+            interrupted = play_single_wav(
+                base_filename,
+                interrupt_on_cos=True,
+                playback_token=playback_token,
+                set_status_on_play=False  # <--- Prevent overwrite!
+            )
             if interrupted:
-                status_manager.set_status(f"Playing {code2_name} (interrupted from {base_name})",
-                                         code2_name, f"Interrupted {base_name}, now playing {code2_name}")
+                status_manager.set_status(f"Playing {code2_name} (interrupted from {base_file_noext})",
+                                         code2_name, f"Interrupted {base_file_noext}, now playing {code2_name}")
                 play_single_wav(code2, block_interrupt=True, playback_token=playback_token)
-                log_recent(f"Interrupt: {base_name} interrupted by COS, switched to {code2_name}")
+                log_recent(f"Interrupt: {base_file_noext} interrupted by COS, switched to {code2_name}")
             else:
-                log_recent(f"Interrupt: {base_name} played without COS, did not switch to {code2_name}")
+                log_recent(f"Interrupt: {base_file_noext} played without COS, did not switch to {code2_name}")
     finally:
         set_remote_busy(False)
         status_manager.set_idle()

@@ -522,27 +522,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 document.getElementById('playback-status').textContent = statusLabel;
             }
-            // COS LED
-            const cosLed = document.getElementById('cos-led');
-            if (cosLed) {
-                if (data.cos_state) {
-                    cosLed.className = 'led-indicator led-cos-active';
-                    cosLed.title = 'COS Active';
-                } else {
-                    cosLed.className = 'led-indicator led-inactive';
-                    cosLed.title = 'COS Inactive';
-                }
+            if (document.getElementById('cos-state')) {
+                document.getElementById('cos-state').textContent = data.cos_state ? "YES" : "NO";
+                document.getElementById('cos-state').className = data.cos_state ? "status-good" : "status-warn";
             }
-            // Remote Device LED
-            const rdbLed = document.getElementById('remote-device-led');
-            if (rdbLed) {
-                if (data.remote_device_active) {
-                    rdbLed.className = 'led-indicator led-remote-active';
-                    rdbLed.title = 'Remote Device Active';
-                } else {
-                    rdbLed.className = 'led-indicator led-inactive';
-                    rdbLed.title = 'Remote Device Inactive';
-                }
+            if (document.getElementById('remote-device-state')) {
+                let remote = data.remote_device_active ? "YES" : "NO";
+                let remoteClass = data.remote_device_active ? "status-good" : "status-warn";
+                let el = document.getElementById('remote-device-state');
+                el.textContent = remote;
+                el.className = remoteClass;
             }
         });
     };
@@ -691,15 +680,11 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="subcard-row">
             <div class="subcard-label">COS Active:</div>
-            <div class="subcard-value">
-                <span id="cos-led" class="led-indicator led-inactive"></span>
-            </div>
+            <div class="subcard-value" id="cos-state" {% if cos_state == 'YES' %}class="status-good"{% else %}class="status-warn"{% endif %}>{{ cos_state }}</div>
         </div>
         <div class="subcard-row">
             <div class="subcard-label">Remote Device Active:</div>
-            <div class="subcard-value">
-                <span id="remote-device-led" class="led-indicator led-inactive"></span>
-            </div>
+            <div class="subcard-value" id="remote-device-state" class="status-warn">NO</div>
         </div>
         <div class="subcard-row">
             <div class="subcard-label">Serial Port:</div>
@@ -821,34 +806,6 @@ document.addEventListener('DOMContentLoaded', function() {
     align-self: center;
   }
 }
-.led-indicator {
-  display: inline-block;
-  width: 19px;
-  height: 19px;
-  border-radius: 6px;
-  margin-right: 6px;
-  background: #bbb;
-  border: 2.5px solid #666;
-  box-shadow: 0 2px 8px 0 rgba(30,30,70,0.13) inset;
-  vertical-align: middle;
-  transition: background 0.2s, box-shadow 0.2s, border 0.2s;
-}
-.led-cos-active {
-  background: #29aaff;
-  border-color: #2266ff;
-  box-shadow: 0 0 6px 2px #29aaffcc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
-}
-.led-remote-active {
-  background: #ff4343;
-  border-color: #c40000;
-  box-shadow: 0 0 6px 2px #ff4343cc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
-}
-.led-inactive {
-  background: #bbb;
-  border-color: #888;
-  box-shadow: none;
-}
-
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", function() {

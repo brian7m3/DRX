@@ -47,10 +47,23 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
-/* Make GPIO Settings card span all 4 columns and give it 2 rows */
+.status-last-played {
+  font-size: .75em !important;
+  /* Optional extras: */
+  font-weight: bold;
+  /* color: #1976d2 !important; /* optional blue color for visibility */ 
+}
+#playback-status {
+  font-size: .75em !important;
+  /* Optional extras: */
+  font-weight: bold;
+  /* color: #1976d2 !important; optional blue color for visibility */ */
+}
+/* Set the width of the GPIO Settings box */
 .config-section.gpio-settings {
-    grid-column: 1 / -1;      /* Span all columns */
-    grid-row: 2 / span 2;  /* Span 2 rows */
+  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
+  max-width: 100%;       /* Optional: prevents overflow on small screens */
+  margin: 0 auto;        /* Optional: center the box horizontally */
 }
 
 /* Optional: Make sure the grid auto-rows are tall enough */
@@ -1409,7 +1422,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 </div>
             </div>
-            <!-- GPIO Settings: spans 4 columns and 2 rows -->
+            <!-- GPIO Settings -->
             <div class="config-section gpio-settings">
                 <h3>GPIO Settings</h3>
                 <div class="form-group">
@@ -1418,23 +1431,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
                 <div class="form-group checkbox">
                     <input type="checkbox" id="cos_activate_level" name="cos_activate_level" {% if config.get('GPIO', 'cos_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
-                    <label for="cos_activate_level">COS Activate Level (High)</label>
+                    <label for="cos_activate_level">COS Active High</label>
                 </div>
+                <br>
                 <div class="form-group">
-                    <label for="remote_busy_pin">Remote Busy Pin:</label>
-                    <input type="number" id="remote_busy_pin" name="remote_busy_pin" min="0" value="{{ config.get('GPIO', 'remote_busy_pin', fallback='20') }}">
-                </div>
-                <div class="form-group checkbox">
-                    <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
-                    <label for="remote_busy_activate_level">Remote Busy Activate Level (High)</label>
-                </div>
-                <div class="form-group">
-                    <label for="cos_debounce_time">COS Debounce Time (seconds):</label>
+                    <label for="cos_debounce_time">COS Debounce Time (secs):</label>
                     <input type="number" id="cos_debounce_time" name="cos_debounce_time" min="0" step="0.1" value="{{ config.get('GPIO', 'cos_debounce_time', fallback='1.0') }}">
                 </div>
                 <div class="form-group">
                     <label for="max_cos_interruptions">Max COS Interruptions:</label>
                     <input type="number" id="max_cos_interruptions" name="max_cos_interruptions" min="0" value="{{ config.get('GPIO', 'max_cos_interruptions', fallback='3') }}">
+                </div>
+                <hr class="blue-divider">
+                <div class="form-group">
+                    <label for="remote_busy_pin">Remote Device Busy Pin:</label>
+                    <input type="number" id="remote_busy_pin" name="remote_busy_pin" min="0" value="{{ config.get('GPIO', 'remote_busy_pin', fallback='20') }}">
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
+                    <label for="remote_busy_activate_level">Remote Device Busy Active High</label>
                 </div>
             </div>
         </div>
@@ -1497,6 +1512,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="base-configurator-msg" style="margin-top:8px; color:#388e3c; font-size:1em;"></div>
   </div>
 </div>
+<!-- ... your original HTML before here ... -->
 <script>
 // --- Base Configurator Modal JS ---
 document.addEventListener("DOMContentLoaded", function() {
@@ -1507,6 +1523,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const addRowBtn = document.getElementById('add-base-configurator-row');
     const saveBtn = document.getElementById('save-base-configurator');
     const msgDiv = document.getElementById('base-configurator-msg');
+    let dragSrcRow = null;
 
     // Open modal and load configurator
     if (configuratorBtn && configuratorModal && closeconfigurator) {
@@ -1526,80 +1543,117 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 
-function makeRow(rowData = {base_no: "", end_no: "", type: "", interval: "", desc: ""}) {
-    const tr = document.createElement("tr");
-    tr.draggable = true;
-    tr.style.cursor = "grab";
+    function makeRow(rowData = {base_no: "", end_no: "", type: "", interval: "", desc: ""}) {
+        const tr = document.createElement("tr");
+        tr.draggable = true;
+        tr.style.cursor = "grab";
 
-    const tdBase = document.createElement("td");
-    const tdEnd = document.createElement("td");
-    const tdType = document.createElement("td");
-    const tdInterval = document.createElement("td");
-    const tdDesc = document.createElement("td");
-    const tdDel = document.createElement("td");
+        const tdBase = document.createElement("td");
+        const tdEnd = document.createElement("td");
+        const tdType = document.createElement("td");
+        const tdInterval = document.createElement("td");
+        const tdDesc = document.createElement("td");
+        const tdDel = document.createElement("td");
 
-    // Base No. input
-    const inputBase = document.createElement("input");
-    inputBase.type = "text";
-    inputBase.value = rowData.base_no || "";
-    inputBase.placeholder = "Base No.";
-    inputBase.className = "base-no";
-    tdBase.appendChild(inputBase);
+        // Base No. input
+        const inputBase = document.createElement("input");
+        inputBase.type = "text";
+        inputBase.value = rowData.base_no || "";
+        inputBase.placeholder = "Base No.";
+        inputBase.className = "base-no";
+        tdBase.appendChild(inputBase);
 
-    // End No. input
-    const inputEnd = document.createElement("input");
-    inputEnd.type = "text";
-    inputEnd.value = rowData.end_no || "";
-    inputEnd.placeholder = "End No.";
-    inputEnd.className = "end-no";
-    tdEnd.appendChild(inputEnd);
+        // End No. input
+        const inputEnd = document.createElement("input");
+        inputEnd.type = "text";
+        inputEnd.value = rowData.end_no || "";
+        inputEnd.placeholder = "End No.";
+        inputEnd.className = "end-no";
+        tdEnd.appendChild(inputEnd);
 
-    // Type dropdown
-    const selectType = document.createElement("select");
-    selectType.className = "base-type";
-    ["", "Rotating", "Random", "SudoRandom"].forEach(optVal => {
-        const opt = document.createElement("option");
-        opt.value = optVal;
-        opt.textContent = optVal;
-        if (rowData.type === optVal) opt.selected = true;
-        selectType.appendChild(opt);
-    });
-    tdType.appendChild(selectType);
+        // Type dropdown
+        const selectType = document.createElement("select");
+        selectType.className = "base-type";
+        ["", "Rotating", "Random", "SudoRandom"].forEach(optVal => {
+            const opt = document.createElement("option");
+            opt.value = optVal;
+            opt.textContent = optVal;
+            if (rowData.type === optVal) opt.selected = true;
+            selectType.appendChild(opt);
+        });
+        tdType.appendChild(selectType);
 
-    // Interval input
-    const inputInterval = document.createElement("input");
-    inputInterval.type = "number";
-    inputInterval.className = "base-interval";
-    inputInterval.min = "0";
-    inputInterval.step = "1";
-    inputInterval.value = typeof rowData.interval !== "undefined" ? rowData.interval : "";
-    inputInterval.placeholder = "0";
-    tdInterval.appendChild(inputInterval);
+        // Interval input
+        const inputInterval = document.createElement("input");
+        inputInterval.type = "number";
+        inputInterval.className = "base-interval";
+        inputInterval.min = "0";
+        inputInterval.step = "1";
+        inputInterval.value = typeof rowData.interval !== "undefined" ? rowData.interval : "";
+        inputInterval.placeholder = "0";
+        tdInterval.appendChild(inputInterval);
 
-    // Description input
-    const inputDesc = document.createElement("input");
-    inputDesc.type = "text";
-    inputDesc.className = "base-desc";
-    inputDesc.value = rowData.desc || "";
-    inputDesc.placeholder = "Description";
-    tdDesc.appendChild(inputDesc);
+        // Description input
+        const inputDesc = document.createElement("input");
+        inputDesc.type = "text";
+        inputDesc.className = "base-desc";
+        inputDesc.value = rowData.desc || "";
+        inputDesc.placeholder = "Description";
+        tdDesc.appendChild(inputDesc);
 
-    // Delete button
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "Delete";
-    delBtn.type = "button";
-    delBtn.onclick = function() { tr.remove(); };
-    tdDel.appendChild(delBtn);
+        // Delete button
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.type = "button";
+        delBtn.onclick = function() { tr.remove(); };
+        tdDel.appendChild(delBtn);
 
-    // Append in order
-    tr.appendChild(tdBase);
-    tr.appendChild(tdEnd);
-    tr.appendChild(tdType);
-    tr.appendChild(tdInterval);
-    tr.appendChild(tdDesc);
-    tr.appendChild(tdDel);
-    return tr;
-}
+        // --- DRAG AND DROP ROWS ---
+        tr.addEventListener('dragstart', function (e) {
+            dragSrcRow = tr;
+            tr.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', '');
+        });
+        tr.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            if (tr !== dragSrcRow) tr.classList.add('dragover');
+        });
+        tr.addEventListener('dragleave', function (e) {
+            tr.classList.remove('dragover');
+        });
+        tr.addEventListener('drop', function (e) {
+            e.preventDefault();
+            tr.classList.remove('dragover');
+            if (dragSrcRow && dragSrcRow !== tr) {
+                const bounding = tr.getBoundingClientRect();
+                const offset = e.clientY - bounding.top;
+                if (offset < bounding.height / 2) {
+                    tr.parentNode.insertBefore(dragSrcRow, tr);
+                } else {
+                    tr.parentNode.insertBefore(dragSrcRow, tr.nextSibling);
+                }
+            }
+            dragSrcRow = null;
+        });
+        tr.addEventListener('dragend', function (e) {
+            tr.classList.remove('dragging');
+            // Remove dragover from all rows
+            const rows = tr.parentNode.querySelectorAll('tr');
+            rows.forEach(row => row.classList.remove('dragover'));
+            dragSrcRow = null;
+        });
+        // --- END DRAG AND DROP ROWS ---
+
+        // Append in order
+        tr.appendChild(tdBase);
+        tr.appendChild(tdEnd);
+        tr.appendChild(tdType);
+        tr.appendChild(tdInterval);
+        tr.appendChild(tdDesc);
+        tr.appendChild(tdDel);
+        return tr;
+    }
 
     function loadBaseConfigurator() {
         fetch("/api/base_configurator", {credentials: 'same-origin'})
@@ -1618,42 +1672,42 @@ function makeRow(rowData = {base_no: "", end_no: "", type: "", interval: "", des
         };
     }
 
-if (saveBtn) {
-    saveBtn.onclick = function() {
-        // Gather data
-        const rows = tableBody.querySelectorAll("tr");
-        const configurator = [];
-        for (let tr of rows) {
-            const base_no = tr.children[0].querySelector("input").value.trim();
-            const end_no = tr.children[1].querySelector("input").value.trim();
-            const type = tr.children[2].querySelector("select").value;
-            const interval = tr.children[3].querySelector("input").value.trim();
-            const desc = tr.children[4].querySelector("input").value.trim();
-            if (base_no || end_no || type || interval || desc) {
-                configurator.push({base_no, end_no, type, interval, desc});
+    if (saveBtn) {
+        saveBtn.onclick = function() {
+            // Gather data
+            const rows = tableBody.querySelectorAll("tr");
+            const configurator = [];
+            for (let tr of rows) {
+                const base_no = tr.children[0].querySelector("input").value.trim();
+                const end_no = tr.children[1].querySelector("input").value.trim();
+                const type = tr.children[2].querySelector("select").value;
+                const interval = tr.children[3].querySelector("input").value.trim();
+                const desc = tr.children[4].querySelector("input").value.trim();
+                if (base_no || end_no || type || interval || desc) {
+                    configurator.push({base_no, end_no, type, interval, desc});
+                }
             }
-        }
-        fetch("/api/save_base_configurator", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(configurator)
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            if (data.success) {
-                msgDiv.style.color = "#388e3c";
-                msgDiv.textContent = "Configuration saved successfully.";
-            } else {
+            fetch("/api/save_base_configurator", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(configurator)
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.success) {
+                    msgDiv.style.color = "#388e3c";
+                    msgDiv.textContent = "Configuration saved successfully.";
+                } else {
+                    msgDiv.style.color = "#d32f2f";
+                    msgDiv.textContent = "Error saving configuration: " + (data.error || "Unknown error");
+                }
+            }).catch(e => {
                 msgDiv.style.color = "#d32f2f";
-                msgDiv.textContent = "Error saving configuration: " + (data.error || "Unknown error");
-            }
-        }).catch(e => {
-            msgDiv.style.color = "#d32f2f";
-            msgDiv.textContent = "Network or server error.";
-        });
-    };
-}
+                msgDiv.textContent = "Network or server error.";
+            });
+        };
+    }
 });
 </script>
 <script>
@@ -2295,15 +2349,18 @@ def download_drx_log():
 def load_base_configurator_from_ini():
     config = configparser.ConfigParser()
     config.read(config_file_path)
-    rows = []
+    # Build per-type row lists
+    type_to_rows = {}
     for section, type_name in CONFIG_TYPES:
         if section not in config:
+            type_to_rows[type_name] = []
             continue
         bases = config[section].get("base", "").split(",")
         ends = config[section].get("end", "").split(",")
         intervals = config[section].get("interval", "").split(",")
         descs = config[section].get("description", "").split(",") if "description" in config[section] else [""] * len(bases)
         max_len = max(len(bases), len(ends), len(intervals), len(descs))
+        rows = []
         for i in range(max_len):
             rows.append({
                 "base_no": bases[i].strip() if i < len(bases) else "",
@@ -2312,7 +2369,27 @@ def load_base_configurator_from_ini():
                 "desc": descs[i].strip() if i < len(descs) else "",
                 "type": type_name,
             })
-    return rows
+        type_to_rows[type_name] = rows
+    # Now, reorder according to [BaseOrder]
+    order_section = config["BaseOrder"] if "BaseOrder" in config else {}
+    order = order_section.get("order", "")
+    if order:
+        rows = []
+        indices = {type_name: 0 for _, type_name in CONFIG_TYPES}
+        # Parse order keys, e.g., "Rotating:0,Random:1"
+        for entry in order.split(","):
+            if ':' in entry:
+                t, i_str = entry.split(':', 1)
+                i = int(i_str)
+                if t in type_to_rows and i < len(type_to_rows[t]):
+                    rows.append(type_to_rows[t][i])
+        return rows
+    else:
+        # Fallback: concat in legacy grouped order
+        rows = []
+        for _, type_name in CONFIG_TYPES:
+            rows.extend(type_to_rows[type_name])
+        return rows
 
 def save_base_configurator_to_ini(rows):
     config = configparser.ConfigParser()
@@ -2326,17 +2403,36 @@ def save_base_configurator_to_ini(rows):
         config[section]["interval"] = ""
         config[section]["description"] = ""
     # Group rows by type
+    type_to_rows = {type_name: [] for _, type_name in CONFIG_TYPES}
+    for row in rows:
+        type_to_rows.get(row.get("type"), []).append(row)
+
+    # Write grouped data as before
     for section, type_name in CONFIG_TYPES:
-        group = [r for r in rows if r.get("type") == type_name]
+        group = type_to_rows[type_name]
         if group:
             config[section]["base"] = ",".join(r.get("base_no", "") for r in group)
             config[section]["end"] = ",".join(r.get("end_no", "") for r in group)
             config[section]["interval"] = ",".join(r.get("interval", "") for r in group)
             config[section]["description"] = ",".join(r.get("desc", "") for r in group)
+
+    # Create [BaseOrder] section
+    if "BaseOrder" not in config:
+        config["BaseOrder"] = {}
+    # For each row, store which type and its index in that type group
+    type_indices = {type_name: 0 for _, type_name in CONFIG_TYPES}
+    order_entries = []
+    for row in rows:
+        t = row.get("type")
+        idx = type_indices[t]
+        order_entries.append(f"{t}:{idx}")
+        type_indices[t] += 1
+    config["BaseOrder"]["order"] = ",".join(order_entries)
+
     # Write to file
     with open(config_file_path, 'w') as f:
         config.write(f)
-    # Send reload command to backend
+    # Reload
     write_webcmd({"type": "reload_config"})
     wait_cmd_processed()
 

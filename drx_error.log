@@ -1,0 +1,7 @@
+[2025-07-09 10:34:53] Exception in play_rotating_section:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 1857, in play_rotating_section
+    for f in os.listdir(SOUND_DIRECTORY):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '~/DRX/sounds/'
+

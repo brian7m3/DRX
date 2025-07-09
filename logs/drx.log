@@ -207,3 +207,45 @@
 2025-07-09 07:59:58.106: WX Report: {'observations': 'Overcast', 'temperature': '73 degrees', 'humidity': '99 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.0', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
 2025-07-09 08:59:58.116: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-09 08:59:58.117: WX Report: {'observations': 'Overcast', 'temperature': '75 degrees', 'humidity': '99 percent', 'winddir': 'ESE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.0', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 09:55:39.557: Configuration reload requested from web
+2025-07-09 09:56:08.087: Configuration reload requested from web
+2025-07-09 09:56:45.376: Configuration reload requested from web
+2025-07-09 09:57:36.179: Configuration reload requested from web
+2025-07-09 09:57:49.694: Configuration reload requested from web
+2025-07-09 09:58:16.973: Configuration reload requested from web
+2025-07-09 09:58:35.993: Configuration reload requested from web
+2025-07-09 09:59:23.793: Configuration reload requested from web
+2025-07-09 09:59:58.102: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 09:59:58.102: WX Report: {'observations': 'Overcast', 'temperature': '77 degrees', 'humidity': '91 percent', 'winddir': 'S', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.01', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 10:06:36.885: Configuration reload requested from web
+2025-07-09 10:12:03.654: Configuration reload requested from web
+2025-07-09 10:33:11.236: Configuration reload requested from web
+2025-07-09 10:34:38.828: Configuration reload requested from web
+2025-07-09 10:34:53.341: Play requested: P5300 (web input box)
+2025-07-09 10:35:19.616: Configuration reload requested from web
+2025-07-09 10:35:25.372: Play requested: P5300 (web input box)
+2025-07-09 10:35:30.607: Play: 5312-IID .wav [normal] - successful
+2025-07-09 10:44:32.513: Play requested: P4100 (web input box)
+2025-07-09 10:44:32.514: Play (serial/auto): 4100 - failed -> file not found
+2025-07-09 10:44:44.526: Play requested: P5050 (web input box)
+2025-07-09 10:44:44.528: Play (serial/auto): 5050 - failed -> file not found
+2025-07-09 10:44:51.533: Play requested: P5300 (web input box)
+2025-07-09 10:45:05.030: Play: 5313-IID .wav [normal] - successful
+2025-07-09 10:56:34.134: Play requested: P5300 (web input box)
+2025-07-09 10:56:40.468: Play: 5314-IID .wav [normal] - successful
+2025-07-09 10:56:43.893: Play requested: P5300 (web input box)
+2025-07-09 10:56:57.892: Play: 5315-IID .wav [normal] - successful
+2025-07-09 10:57:02.410: Play requested: P5308 (web input box)
+2025-07-09 10:57:11.882: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-09 10:58:04.219: Play requested: 5016.wav (web dropdown)
+2025-07-09 10:58:05.027: Play: 5016.wav [normal] - successful
+2025-07-09 10:59:58.127: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 10:59:58.127: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '81 degrees', 'humidity': '83 percent', 'winddir': 'WNW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.01', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 11:10:02.994: Play requested: 5007.wav (web dropdown)
+2025-07-09 11:10:03.200: Play: 5007.wav [normal] - successful
+2025-07-09 11:10:04.998: Play requested: 5007.wav (web dropdown)
+2025-07-09 11:10:05.203: Play: 5007.wav [normal] - successful
+2025-07-09 11:11:29.566: Play requested: 5013.wav (web dropdown)
+2025-07-09 11:11:29.772: Play: 5013.wav [normal] - successful
+2025-07-09 11:12:09.603: Play requested: 5013.wav (web dropdown)
+2025-07-09 11:12:09.809: Play: 5013.wav [normal] - successful

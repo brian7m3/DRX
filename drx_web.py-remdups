@@ -47,189 +47,6 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
-/* Status and Playback - Combined */
-.status-last-played,
-#playback-status {
-  font-size: .75em !important;
-  font-weight: bold;
-  /* color: #1976d2 !important; /* optional blue color for visibility */ 
-}
-
-/* GPIO Settings Box */
-.config-section.gpio-settings {
-  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
-  max-width: 100%;       /* Optional: prevents overflow on small screens */
-  margin: 0 auto;        /* Optional: center the box horizontally */
-}
-
-/* Configuration Sections and Responsive Grid */
-.config-sections {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
-  grid-auto-rows: minmax(150px, auto); /* adjust as needed */
-}
-@media (max-width: 1100px) {
-  .config-sections {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .config-section.gpio-settings {
-    grid-column: 1 / -1;
-    grid-row: auto / span 2;
-  }
-}
-@media (max-width: 700px) {
-  .config-sections {
-    grid-template-columns: 1fr;
-  }
-  .config-section.gpio-settings {
-    grid-column: 1 / -1;
-    grid-row: auto / span 2;
-  }
-}
-
-/* Split Layouts */
-.split-vertical {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 8px;
-}
-.split-half {
-  flex: 1 1 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #ddd;
-}
-.split-half:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-/* Condense Configuration Settings Area */
-.config-section {
-  background: var(--primary-light);
-  border-radius: 10px;
-  padding: 9px 8px 8px 8px;
-  margin-bottom: 7px;
-  box-shadow: 0 2px 7px rgba(0,0,0,0.02);
-}
-.config-section h3 {
-  color: var(--primary);
-  margin-top: 0;
-  margin-bottom: 7px;
-  font-size: 1em;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
-  padding-bottom: 3px;
-}
-
-/* Form Groups (Both Standard and Checkbox) */
-.form-group,
-.form-group.checkbox {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-.form-group {
-  margin-bottom: 7px;
-}
-.form-group.checkbox {
-  margin-bottom: 4px;
-}
-
-/* Inputs and Selects (Global & Table) */
-.form-group input[type="text"],
-.form-group input[type="password"],
-.form-group input[type="number"],
-.form-group select {
-  padding: 8px;
-  font-size: 0.97em;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  width: 100%;
-  box-sizing: border-box;
-}
-#sound_directory, #serial_port, #sound_device {
-  width: 160px;
-  max-width: 98%;
-}
-#cos_pin, #remote_busy_pin, #max_cos_interruptions {
-  width: 50px;
-}
-#serial_timeout, #serial_line_timeout, #cos_debounce_time {
-  width: 55px;
-}
-#web_username {
-  width: 110px;
-}
-
-/* Help Text */
-.help-text {
-  font-size: 0.85em;
-  color: #666;
-  margin-top: 3px;
-  margin-left: 4px;
-  font-style: italic;
-  max-width: 160px;
-  line-height: 1.25;
-}
-
-/* Base Configurator Table */
-#base-configurator-table {
-  table-layout: fixed;
-  width: 100%;
-}
-#base-configurator-table th {
-  background: #e3e6f0;
-}
-#base-configurator-table td {
-  padding: 2px 5px;
-  vertical-align: middle;
-}
-#base-configurator-table input.base-no,
-#base-configurator-table input.base-interval,
-#base-configurator-table input.end-no {
-  box-sizing: border-box;
-}
-#base-configurator-table input.base-no {
-  width: 50px;
-}
-#base-configurator-table select.base-type {
-  width: 110px;
-  padding: 3px 4px;
-  font-size: 1em;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  box-sizing: border-box;
-}
-#base-configurator-table textarea.base-desc,
-#base-configurator-table input.base-desc {
-  width: 100%;
-  min-width: 100px;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-#base-configurator-table input.base-interval {
-  width: 70px;
-  min-width: 40px;
-  max-width: 100px;
-}
-#base-configurator-table input.end-no {
-  width: 60px;
-  min-width: 40px;
-  max-width: 90px;
-}
-
-/* Drag and Drop Table Row Effects */
-.dragging {
-  opacity: 0.5;
-}
-.dragover {
-  outline: 2px dashed #3949ab;
-}
-</style>
-<style>
 :root {
   --primary: #3949ab;
   --primary-light: #e3e6f0;
@@ -324,7 +141,7 @@ button:hover, button:focus {
   background: linear-gradient(90deg,var(--accent),var(--primary));
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.14);
 }
-#logout-btn { float: right; margin-top: 10px;}
+#logout-btn { float: right; margin-top: 10px; }
 
 .status-list li { font-size: 1.1em; margin-bottom: 0.7em;}
 .status-good { color: var(--success); font-weight: bold; }
@@ -518,17 +335,22 @@ pre.stateblock, .stateblock {
 .form-group.checkbox label {
   margin-bottom: 0;
   min-width: 90px;
-  font-size: 0.93em;
+  font-size: 0.95em;
   font-weight: 500;
-}
-.form-group label {
-    margin-bottom: 0; /* or 5px if you prefer more spacing */
-    min-width: 90px;
-    font-size: 0.95em; /* or 0.93em */
-    font-weight: 500;
 }
 .form-group.checkbox input[type="checkbox"] {
   margin-right: 8px;
+}
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group select {
+  padding: 8px;
+  font-size: 0.97em;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  width: 100%;
+  box-sizing: border-box;
 }
 #sound_directory, #serial_port, #sound_device {
   width: 160px;
@@ -542,6 +364,17 @@ pre.stateblock, .stateblock {
 }
 #web_username {
   width: 110px;
+}
+
+/* Help Text */
+.help-text {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 3px;
+  margin-left: 4px;
+  font-style: italic;
+  max-width: 160px;
+  line-height: 1.25;
 }
 
 /* Base Configurator Table */

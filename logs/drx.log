@@ -11,3 +11,17 @@ Test log entry
 2025-07-09 14:59:58.168: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '84 degrees', 'humidity': '76 percent', 'winddir': 'SSW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.99', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.02'}
 2025-07-09 15:59:58.168: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-09 15:59:58.169: WX Report: {'observations': 'Overcast', 'temperature': '81 degrees', 'humidity': '94 percent', 'winddir': 'NW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 16:59:58.176: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 16:59:58.176: WX Report: {'observations': 'Partly Cloudy', 'temperature': '85 degrees', 'humidity': '74 percent', 'winddir': 'SSW', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 17:05:05.060: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
+2025-07-09 17:25:49.506: Play: 5320-IID .wav [normal] - successful
+2025-07-09 17:25:51.511: Play: 5638-CT.wav [interruptible] - successful
+2025-07-09 17:26:00.625: Play: 5638-CT.wav [interruptible] - successful
+2025-07-09 17:26:10.538: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-09 17:28:44.760: Play: 5638-CT.wav [interruptible] - successful
+2025-07-09 17:28:50.716: Play: 5638-CT.wav [interruptible] - successful
+2025-07-09 17:28:56.626: Play: 5638-CT.wav [interruptible] - successful
+2025-07-09 17:29:06.494: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-09 17:35:15.049: Play: 5410-PID .wav [normal] - successful
+2025-07-09 17:36:16.823: Play: 5640-CT.wav [interruptible] - successful
+2025-07-09 17:36:27.186: Play: 5171-TM PL 77.wav [normal] - successful

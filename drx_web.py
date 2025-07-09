@@ -959,55 +959,6 @@ h1 {
 <script>
 let updateStatus;
 document.addEventListener("DOMContentLoaded", function() {
-    // Play Selected (dropdown) form
-    const dropdownForm = document.getElementById('play-dropdown-form');
-    if (dropdownForm) {
-        dropdownForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(dropdownForm);
-            fetch(dropdownForm.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                headers: {'X-Requested-With': 'XMLHttpRequest'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.local_url) {
-                    window.location = data.local_url;
-                }
-                updateStatus();
-                updateSerialSection();
-                updateLogsSection();
-                updateStateSection();
-            });
-        });
-    }
-    // Play Input form
-    const inputForm = document.getElementById('play-input-form');
-    if (inputForm) {
-        inputForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(inputForm);
-            fetch(inputForm.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                headers: {'X-Requested-With': 'XMLHttpRequest'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.local_url) {
-                    window.location = data.local_url;
-                }
-                updateStatus();
-                updateSerialSection();
-                updateLogsSection();
-                updateStateSection();
-            });
-        });
-    }
-
     function updateMessageTimer() {
         fetch("/api/message_timer", {credentials: 'same-origin'})
         .then(response => response.json())
@@ -1174,10 +1125,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data.local_url && playMethod === 'local') {
                     window.location = data.local_url;
                 }
-                updateStatus();
-                updateSerialSection();
-                updateLogsSection();
-                updateStateSection();
+                if (typeof updateStatus === "function") updateStatus();
+                if (typeof updateSerialSection === "function") updateSerialSection();
+                if (typeof updateLogsSection === "function") updateLogsSection();
+                if (typeof updateStateSection === "function") updateStateSection();
             });
         });
     }
@@ -1201,10 +1152,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data.local_url && playMethod === 'local') {
                     window.location = data.local_url;
                 }
-                updateStatus();
-                updateSerialSection();
-                updateLogsSection();
-                updateStateSection();
+                if (typeof updateStatus === "function") updateStatus();
+                if (typeof updateSerialSection === "function") updateSerialSection();
+                if (typeof updateLogsSection === "function") updateLogsSection();
+                if (typeof updateStateSection === "function") updateStateSection();
             });
         });
     }

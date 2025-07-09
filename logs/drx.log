@@ -9,3 +9,5 @@ Test log entry
 2025-07-09 14:26:03.359: Configuration reload requested from web
 2025-07-09 14:59:58.167: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-09 14:59:58.168: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '84 degrees', 'humidity': '76 percent', 'winddir': 'SSW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.99', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.02'}
+2025-07-09 15:59:58.168: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 15:59:58.169: WX Report: {'observations': 'Overcast', 'temperature': '81 degrees', 'humidity': '94 percent', 'winddir': 'NW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}

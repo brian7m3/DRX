@@ -401,30 +401,40 @@ pre.stateblock {
   background: #ffeaea;
 }
 /* Modal styling */
-.modal {
-  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
-  overflow: auto; background-color: rgba(0,0,0,0.33);
-}
-.modal-content {
-  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
-  animation: popupIn 0.33s;
-}
-@keyframes popupIn {
-  from { transform: scale(0.95); opacity: 0;}
-  to   { transform: scale(1); opacity: 1;}
-}
-.close {
-  color: var(--primary); float: right; font-size: 2em; font-weight: bold; cursor: pointer;
-}
-.close:hover { color: var(--danger); }
 @media (max-width: 700px) {
-  #main-card { padding: 1.1em 0.5em;}
-  h1 { font-size: 1.4em;}
-  h2 { font-size: 1.09em;}
-  .card-section { padding: 0.7em 0.5em;}
-  button { width: 100%; }
-  #logout-btn { float: none; margin-top: 8px; }
-  .modal-content { width: 99vw; padding: 1.2em; }
+  .config-sections {
+    grid-template-columns: 1fr;
+  }
+  #main-card {
+    padding: 1.1em 0.5em;
+  }
+  h1 {
+    font-size: 1.4em;
+  }
+  h2 {
+    font-size: 1.09em;
+  }
+  .card-section {
+    padding: 0.7em 0.5em;
+  }
+  button {
+    width: 100%;
+  }
+  #logout-btn {
+    float: none;
+    margin-top: 8px;
+  }
+  .modal-content {
+    width: 99vw;
+    padding: 1.2em;
+  }
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .button-row form {
+    width: 100%;
+  }
 }
 .bases-block {
   background: #e3e6f0;
@@ -459,25 +469,6 @@ pre.stateblock {
   color: #3949ab; float: right; font-size: 2em; font-weight: bold; cursor: pointer;
 }
 .close:hover { color: #d32f2f; }
-.config-section {
-    background: var(--primary-light);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.config-section h3 {
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 8px;
-}
-.form-group {
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-}
 .form-group label {
     margin-bottom: 5px;
     font-weight: 500;
@@ -503,11 +494,6 @@ pre.stateblock {
 .form-group.checkbox label {
     margin-bottom: 0;
 }
-@media (max-width: 700px) {
-    .config-sections {
-        grid-template-columns: 1fr;
-    }
-}
 /* Config form styling */
 .config-sections {
   display: flex;
@@ -529,15 +515,6 @@ pre.stateblock {
 }
 .button-row form {
     margin: 0;
-}
-@media (max-width: 700px) {
-    .button-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .button-row form {
-        width: 100%;
-    }
 }
 .logs {
   overflow-y: auto;
@@ -573,8 +550,8 @@ pre.stateblock {
     color: #eee;
   }
   .stateblock {
-    background: #939393 !important; /* Change this to your preferred dark background color */
-    color: #000000 !important;      /* Optional: ensures text is readable in dark mode */
+    background: #939393 !important;
+    color: #000000 !important;
   }
   input, select, textarea {
     background: #23272b;
@@ -586,26 +563,26 @@ pre.stateblock {
     color: #eee;
   }
   #message-timer {
-    background: #23272b;         /* or var(--card) or a dark color */
-    color: var(--primary);       /* or #90a4ff for blue accent */
+    background: #23272b;
+    color: var(--primary);
     border: 2px solid var(--primary);
   }
   #message-timer.ready {
-    color: var(--success);       /* you can keep this or lighten it */
+    color: var(--success);
     border-color: var(--success);
-    background: #163021;         /* a dark green shade, or use var(--card) */
+    background: #163021;
   }
   #message-timer.running {
     color: var(--danger);
     border-color: var(--danger);
-    background: #3a2121;         /* a dark red shade, or var(--card) */
-  }  
+    background: #3a2121;
+  }
   #base-configurator-table th {
-    background: #2a2e3a !important;   /* A dark blue/gray */
-    color: #fff;           /* White text */  
+    background: #2a2e3a !important;
+    color: #fff;
   }
   .config-sections .config-section {
-    background: #011f4b; /* Warm dark brown/orange for dark mode, adjust as desired */
+    background: #011f4b;
   }
 }
 .your-card { margin-bottom: 0.8em; }

@@ -708,12 +708,17 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.local_url) {
-                    window.location = data.local_url;
+                    window.open(
+                        data.local_url,
+                        'PlayerPopup',
+                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
+                    );
+                    return; // <-- just return; (optional)
                 }
-                updateStatus();
-                updateSerialSection();
-                updateLogsSection();
-                updateStateSection();
+                if (typeof updateStatus === "function") updateStatus();
+                if (typeof updateSerialSection === "function") updateSerialSection();
+                if (typeof updateLogsSection === "function") updateLogsSection();
+                if (typeof updateStateSection === "function") updateStateSection();
             });
         });
     }
@@ -732,16 +737,21 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.local_url) {
-                    window.location = data.local_url;
+                    window.open(
+                        data.local_url,
+                        'PlayerPopup',
+                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
+                    );
+                    return;
                 }
-                updateStatus();
-                updateSerialSection();
-                updateLogsSection();
-                updateStateSection();
+                if (typeof updateStatus === "function") updateStatus();
+                if (typeof updateSerialSection === "function") updateSerialSection();
+                if (typeof updateLogsSection === "function") updateLogsSection();
+                if (typeof updateStateSection === "function") updateStateSection();
             });
         });
     }
-
+});
     function updateMessageTimer() {
         fetch("/api/message_timer", {credentials: 'same-origin'})
         .then(response => response.json())
@@ -1133,19 +1143,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. Initialize hidden fields to match selector on page load
+    // Sync hidden fields on load and selector change
     var method = document.getElementById('play_method_selector').value;
     document.getElementById('play_method_dropdown').value = method;
     document.getElementById('play_method_input').value = method;
-
-    // 2. Update hidden fields whenever selector changes
     document.getElementById('play_method_selector').addEventListener('change', function() {
         var method = this.value;
         document.getElementById('play_method_dropdown').value = method;
         document.getElementById('play_method_input').value = method;
     });
 
-    // 3. Always sync hidden field before AJAX submit
     function syncPlayMethodHidden(hiddenId) {
         var method = document.getElementById('play_method_selector').value;
         document.getElementById(hiddenId).value = method;
@@ -1157,6 +1164,7 @@ document.addEventListener("DOMContentLoaded", function() {
             syncPlayMethodHidden('play_method_dropdown');
             event.preventDefault();
             const formData = new FormData(dropdownForm);
+            const playMethod = document.getElementById('play_method_selector').value;
             fetch(dropdownForm.action, {
                 method: 'POST',
                 body: formData,
@@ -1165,13 +1173,22 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.local_url) {
-                    window.location = data.local_url;
+                if (data.local_url && playMethod === 'local') {
+                    window.open(
+                        data.local_url,
+                        'PlayerPopup',
+                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
+                    );
                 }
+                // For "normal" mode, just update the dashboard
                 if (typeof updateStatus === "function") updateStatus();
                 if (typeof updateSerialSection === "function") updateSerialSection();
                 if (typeof updateLogsSection === "function") updateLogsSection();
                 if (typeof updateStateSection === "function") updateStateSection();
+            })
+            .catch(e => {
+                alert("Error: " + e);
+                console.error(e);
             });
         });
     }
@@ -1182,6 +1199,7 @@ document.addEventListener("DOMContentLoaded", function() {
             syncPlayMethodHidden('play_method_input');
             event.preventDefault();
             const formData = new FormData(inputForm);
+            const playMethod = document.getElementById('play_method_selector').value;
             fetch(inputForm.action, {
                 method: 'POST',
                 body: formData,
@@ -1190,13 +1208,22 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.local_url) {
-                    window.location = data.local_url;
+                if (data.local_url && playMethod === 'local') {
+                    window.open(
+                        data.local_url,
+                        'PlayerPopup',
+                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
+                    );
                 }
+                // For "normal" mode, just update the dashboard
                 if (typeof updateStatus === "function") updateStatus();
                 if (typeof updateSerialSection === "function") updateSerialSection();
                 if (typeof updateLogsSection === "function") updateLogsSection();
                 if (typeof updateStateSection === "function") updateStateSection();
+            })
+            .catch(e => {
+                alert("Error: " + e);
+                console.error(e);
             });
         });
     }
@@ -1311,15 +1338,6 @@ function updateDtmfLog() {
 }
 setInterval(updateDtmfLog, 2000);
 window.addEventListener('DOMContentLoaded', updateDtmfLog);
-document.addEventListener("DOMContentLoaded", function() {
-    function syncPlayMethod(event) {
-        var method = document.getElementById('play_method_selector').value;
-        document.getElementById('play_method_dropdown').value = method;
-        document.getElementById('play_method_input').value = method;
-    }
-    document.getElementById('play-dropdown-form').addEventListener('submit', syncPlayMethod);
-    document.getElementById('play-input-form').addEventListener('submit', syncPlayMethod);
-});
 </script>
 <div class="card-section">
     <h2>Configuration Settings</h2>

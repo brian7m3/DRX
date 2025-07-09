@@ -1116,17 +1116,7 @@ function updateUptime() {
 setInterval(updateUptime, 1000);
 window.addEventListener('DOMContentLoaded', updateUptime);
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Convert Python boolean strings to proper checkbox state
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(function(checkbox) {
-        if (checkbox.getAttribute('data-value') === 'True') {
-            checkbox.checked = true;
-        }
-    });
-});
-</script>
+
 </head>
 <body>
 <div id="main-card">
@@ -1325,6 +1315,34 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error(e);
             });
         });
+    }
+    
+    // Convert Python boolean strings to proper checkbox state
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.getAttribute('data-value') === 'True') {
+            checkbox.checked = true;
+        }
+    });
+    
+    // Auto-adjust dropdown width based on longest option
+    var select = document.querySelector('select[name="track_dropdown"]');
+    if (select) {
+        var longest = 0;
+        for (var i = 0; i < select.options.length; i++) {
+            var option = select.options[i];
+            // Create a temporary span to measure text width
+            var span = document.createElement('span');
+            span.style.visibility = 'hidden';
+            span.style.position = 'absolute';
+            span.style.font = window.getComputedStyle(select).font;
+            span.textContent = option.text;
+            document.body.appendChild(span);
+            if (span.offsetWidth > longest) longest = span.offsetWidth;
+            document.body.removeChild(span);
+        }
+        // Add some padding for the dropdown arrow
+        select.style.width = (longest + 24) + 'px';
     }
 });
 </script>
@@ -1575,28 +1593,7 @@ window.addEventListener('DOMContentLoaded', updateDtmfLog);
         </div>
     </form>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var select = document.querySelector('select[name="track_dropdown"]');
-    if (select) {
-        var longest = 0;
-        for (var i = 0; i < select.options.length; i++) {
-            var option = select.options[i];
-            // Create a temporary span to measure text width
-            var span = document.createElement('span');
-            span.style.visibility = 'hidden';
-            span.style.position = 'absolute';
-            span.style.font = window.getComputedStyle(select).font;
-            span.textContent = option.text;
-            document.body.appendChild(span);
-            if (span.offsetWidth > longest) longest = span.offsetWidth;
-            document.body.removeChild(span);
-        }
-        // Add some padding for the dropdown arrow
-        select.style.width = (longest + 24) + 'px';
-    }
-});
-</script>
+
 <!-- Base Configurator Modal -->
 <div id="base-configurator-modal" class="modal">
   <div class="modal-content" style="max-width: 1200px;">

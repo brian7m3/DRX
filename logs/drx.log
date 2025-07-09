@@ -1,1 +1,11 @@
 Test log entry
+2025-07-09 12:59:58.139: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 12:59:58.140: WX Report: {'observations': 'A Few Clouds', 'temperature': '85 degrees', 'humidity': '74 percent', 'winddir': 'NNE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.01', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 13:59:58.164: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 13:59:58.164: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '87 degrees', 'humidity': '68 percent', 'winddir': 'WNW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.0', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 14:24:04.241: Play requested: 5505-PID(N) All Nite Long.wav (web dropdown)
+2025-07-09 14:24:23.923: Play: 5505-PID(N) All Nite Long.wav [normal] - successful
+2025-07-09 14:25:31.326: Configuration reload requested from web
+2025-07-09 14:26:03.359: Configuration reload requested from web
+2025-07-09 14:59:58.167: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 14:59:58.168: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '84 degrees', 'humidity': '76 percent', 'winddir': 'SSW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.99', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.02'}

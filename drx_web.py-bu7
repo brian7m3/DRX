@@ -47,10 +47,23 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
-/* Make GPIO Settings card span all 4 columns and give it 2 rows */
+.status-last-played {
+  font-size: .75em !important;
+  /* Optional extras: */
+  font-weight: bold;
+  /* color: #1976d2 !important; /* optional blue color for visibility */ 
+}
+#playback-status {
+  font-size: .75em !important;
+  /* Optional extras: */
+  font-weight: bold;
+  /* color: #1976d2 !important; optional blue color for visibility */ */
+}
+/* Set the width of the GPIO Settings box */
 .config-section.gpio-settings {
-    grid-column: 1 / -1;      /* Span all columns */
-    grid-row: 2 / span 2;  /* Span 2 rows */
+  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
+  max-width: 100%;       /* Optional: prevents overflow on small screens */
+  margin: 0 auto;        /* Optional: center the box horizontally */
 }
 
 /* Optional: Make sure the grid auto-rows are tall enough */

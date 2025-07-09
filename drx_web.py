@@ -47,24 +47,10 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
-/* Consolidated dashboard styles */
-.status-last-played {
-  font-size: .75em !important;
-  /* Optional extras: */
-  font-weight: bold;
-  /* color: #1976d2 !important; /* optional blue color for visibility */ 
-}
-#playback-status {
-  font-size: .75em !important;
-  /* Optional extras: */
-  font-weight: bold;
-  /* color: #1976d2 !important; optional blue color for visibility */ */
-}
-/* Set the width of the GPIO Settings box */
+/* Make GPIO Settings card span all 4 columns and give it 2 rows */
 .config-section.gpio-settings {
-  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
-  max-width: 100%;       /* Optional: prevents overflow on small screens */
-  margin: 0 auto;        /* Optional: center the box horizontally */
+    grid-column: 1 / -1;      /* Span all columns */
+    grid-row: 2 / span 2;  /* Span 2 rows */
 }
 
 /* Optional: Make sure the grid auto-rows are tall enough */
@@ -972,6 +958,56 @@ h1 {
 </style>
 <script>
 let updateStatus;
+document.addEventListener("DOMContentLoaded", function() {
+    // Play Selected (dropdown) form
+    const dropdownForm = document.getElementById('play-dropdown-form');
+    if (dropdownForm) {
+        dropdownForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(dropdownForm);
+            fetch(dropdownForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url) {
+                    window.location = data.local_url;
+                }
+                updateStatus();
+                updateSerialSection();
+                updateLogsSection();
+                updateStateSection();
+            });
+        });
+    }
+    // Play Input form
+    const inputForm = document.getElementById('play-input-form');
+    if (inputForm) {
+        inputForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(inputForm);
+            fetch(inputForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url) {
+                    window.location = data.local_url;
+                }
+                updateStatus();
+                updateSerialSection();
+                updateLogsSection();
+                updateStateSection();
+            });
+        });
+    }
+
     function updateMessageTimer() {
         fetch("/api/message_timer", {credentials: 'same-origin'})
         .then(response => response.json())
@@ -1086,18 +1122,116 @@ function updateCosMinutes() {
     updateLogsSection();
     updateStateSection();
 
-    // Help Modal
-    var helpBtn = document.getElementById('help-btn');
-    var helpModal = document.getElementById('help-modal');
-    var closeBtn = document.getElementById('close-help');
-    if (helpBtn && helpModal && closeBtn) {
-        helpBtn.onclick = function() { helpModal.style.display = "block"; };
-        closeBtn.onclick = function() { helpModal.style.display = "none"; };
-        window.onclick = function(event) {
-            if (event.target == helpModal) { helpModal.style.display = "none"; }
-        };
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Convert Python boolean strings to proper checkbox state
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.getAttribute('data-value') === 'True') {
+            checkbox.checked = true;
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Initialize hidden fields to match selector on page load
+    var method = document.getElementById('play_method_selector').value;
+    document.getElementById('play_method_dropdown').value = method;
+    document.getElementById('play_method_input').value = method;
+
+    // 2. Update hidden fields whenever selector changes
+    document.getElementById('play_method_selector').addEventListener('change', function() {
+        var method = this.value;
+        document.getElementById('play_method_dropdown').value = method;
+        document.getElementById('play_method_input').value = method;
+    });
+
+    // 3. Always sync hidden field before AJAX submit
+    function syncPlayMethodHidden(hiddenId) {
+        var method = document.getElementById('play_method_selector').value;
+        document.getElementById(hiddenId).value = method;
+    }
+
+    // 4. Handle "Play Selected" dropdown form
+    const dropdownForm = document.getElementById('play-dropdown-form');
+    if (dropdownForm) {
+        dropdownForm.addEventListener('submit', function(event) {
+            syncPlayMethodHidden('play_method_dropdown');
+            event.preventDefault();
+            const formData = new FormData(dropdownForm);
+            const playMethod = document.getElementById('play_method_selector').value;
+            fetch(dropdownForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url && playMethod === 'local') {
+                    window.location = data.local_url;
+                }
+                updateStatus();
+                updateSerialSection();
+                updateLogsSection();
+                updateStateSection();
+            });
+        });
+    }
+
+    // 5. Handle "Play Input" text form
+    const inputForm = document.getElementById('play-input-form');
+    if (inputForm) {
+        inputForm.addEventListener('submit', function(event) {
+            syncPlayMethodHidden('play_method_input');
+            event.preventDefault();
+            const formData = new FormData(inputForm);
+            const playMethod = document.getElementById('play_method_selector').value;
+            fetch(inputForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url && playMethod === 'local') {
+                    window.location = data.local_url;
+                }
+                updateStatus();
+                updateSerialSection();
+                updateLogsSection();
+                updateStateSection();
+            });
+        });
     }
 });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var select = document.querySelector('select[name="track_dropdown"]');
+    if (select) {
+        var longest = 0;
+        for (var i = 0; i < select.options.length; i++) {
+            var option = select.options[i];
+            // Create a temporary span to measure text width
+            var span = document.createElement('span');
+            span.style.visibility = 'hidden';
+            span.style.position = 'absolute';
+            span.style.font = window.getComputedStyle(select).font;
+            span.textContent = option.text;
+            document.body.appendChild(span);
+            if (span.offsetWidth > longest) longest = span.offsetWidth;
+            document.body.removeChild(span);
+        }
+        // Add some padding for the dropdown arrow
+        select.style.width = (longest + 24) + 'px';
+    }
+});
+</script>
 function updateUptime() {
     fetch("{{ url_for('api_drx_uptime') }}", {credentials: 'same-origin'})
     .then(response => response.json())
@@ -1230,122 +1364,6 @@ window.addEventListener('DOMContentLoaded', updateUptime);
         </div>
     </div>
 </div>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Sync hidden fields on load and selector change
-    var method = document.getElementById('play_method_selector').value;
-    document.getElementById('play_method_dropdown').value = method;
-    document.getElementById('play_method_input').value = method;
-    document.getElementById('play_method_selector').addEventListener('change', function() {
-        var method = this.value;
-        document.getElementById('play_method_dropdown').value = method;
-        document.getElementById('play_method_input').value = method;
-    });
-
-    function syncPlayMethodHidden(hiddenId) {
-        var method = document.getElementById('play_method_selector').value;
-        document.getElementById(hiddenId).value = method;
-    }
-
-    const dropdownForm = document.getElementById('play-dropdown-form');
-    if (dropdownForm) {
-        dropdownForm.addEventListener('submit', function(event) {
-            syncPlayMethodHidden('play_method_dropdown');
-            event.preventDefault();
-            const formData = new FormData(dropdownForm);
-            const playMethod = document.getElementById('play_method_selector').value;
-            fetch(dropdownForm.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                headers: {'X-Requested-With': 'XMLHttpRequest'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.local_url && playMethod === 'local') {
-                    window.open(
-                        data.local_url,
-                        'PlayerPopup',
-                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
-                    );
-                }
-                // For "normal" mode, just update the dashboard
-                if (typeof updateStatus === "function") updateStatus();
-                if (typeof updateSerialSection === "function") updateSerialSection();
-                if (typeof updateLogsSection === "function") updateLogsSection();
-                if (typeof updateStateSection === "function") updateStateSection();
-            })
-            .catch(e => {
-                alert("Error: " + e);
-                console.error(e);
-            });
-        });
-    }
-
-    const inputForm = document.getElementById('play-input-form');
-    if (inputForm) {
-        inputForm.addEventListener('submit', function(event) {
-            syncPlayMethodHidden('play_method_input');
-            event.preventDefault();
-            const formData = new FormData(inputForm);
-            const playMethod = document.getElementById('play_method_selector').value;
-            fetch(inputForm.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                headers: {'X-Requested-With': 'XMLHttpRequest'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.local_url && playMethod === 'local') {
-                    window.open(
-                        data.local_url,
-                        'PlayerPopup',
-                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
-                    );
-                }
-                // For "normal" mode, just update the dashboard
-                if (typeof updateStatus === "function") updateStatus();
-                if (typeof updateSerialSection === "function") updateSerialSection();
-                if (typeof updateLogsSection === "function") updateLogsSection();
-                if (typeof updateStateSection === "function") updateStateSection();
-            })
-            .catch(e => {
-                alert("Error: " + e);
-                console.error(e);
-            });
-        });
-    }
-    
-    // Convert Python boolean strings to proper checkbox state
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(function(checkbox) {
-        if (checkbox.getAttribute('data-value') === 'True') {
-            checkbox.checked = true;
-        }
-    });
-    
-    // Auto-adjust dropdown width based on longest option
-    var select = document.querySelector('select[name="track_dropdown"]');
-    if (select) {
-        var longest = 0;
-        for (var i = 0; i < select.options.length; i++) {
-            var option = select.options[i];
-            // Create a temporary span to measure text width
-            var span = document.createElement('span');
-            span.style.visibility = 'hidden';
-            span.style.position = 'absolute';
-            span.style.font = window.getComputedStyle(select).font;
-            span.textContent = option.text;
-            document.body.appendChild(span);
-            if (span.offsetWidth > longest) longest = span.offsetWidth;
-            document.body.removeChild(span);
-        }
-        // Add some padding for the dropdown arrow
-        select.style.width = (longest + 24) + 'px';
-    }
-});
-</script>
         <!-- Help Modal HTML -->
         <div id="help-modal" class="modal">
           <div class="modal-content">
@@ -1403,7 +1421,21 @@ document.addEventListener("DOMContentLoaded", function() {
               </li>
           </div>
         </div>
-    </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Help Modal
+        var helpBtn = document.getElementById('help-btn');
+        var helpModal = document.getElementById('help-modal');
+        var closeBtn = document.getElementById('close-help');
+        if (helpBtn && helpModal && closeBtn) {
+            helpBtn.onclick = function() { helpModal.style.display = "block"; };
+            closeBtn.onclick = function() { helpModal.style.display = "none"; };
+            window.onclick = function(event) {
+                if (event.target == helpModal) { helpModal.style.display = "none"; }
+            };
+        }
+    });
+    </script>
     <div class="card-section">
     <h2>Recent Log Entries</h2>
     <div class="logs" id="logs-section">

@@ -25,3 +25,9 @@ Test log entry
 2025-07-09 17:35:15.049: Play: 5410-PID .wav [normal] - successful
 2025-07-09 17:36:16.823: Play: 5640-CT.wav [interruptible] - successful
 2025-07-09 17:36:27.186: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-09 17:44:43.785: Play: 5405-PID .wav [normal] - successful
+2025-07-09 17:59:58.186: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-09 17:59:58.186: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '81 degrees', 'humidity': '88 percent', 'winddir': 'NNW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.94', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-09 18:18:26.869: Configuration reload requested from web
+2025-07-09 18:25:19.046: Configuration reload requested from web
+2025-07-09 18:27:09.663: Configuration reload requested from web

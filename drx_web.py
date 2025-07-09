@@ -47,6 +47,7 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
+/* Consolidated dashboard styles */
 .status-last-played {
   font-size: .75em !important;
   /* Optional extras: */
@@ -251,8 +252,8 @@ DASHBOARD_TEMPLATE = '''
     max-width: 90px;
     box-sizing: border-box;
 }
-</style>
-<style>
+
+/* CSS Variables and main layout */
 :root {
   --primary: #3949ab;
   --primary-light: #e3e6f0;
@@ -279,479 +280,698 @@ body {
   padding: 1em 3em;
   position: relative;
 }
-h1, h2 {
+h1 {
   color: var(--primary);
   font-weight: 700;
+  margin-bottom: 1em;
+  text-align: center;
   letter-spacing: 1px;
 }
-h1 {
-  margin-top: 0;
-  font-size: 2.1em;
+#status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 1em;
 }
-h2 {
-  border-bottom: 1px solid var(--primary-light);
-  padding-bottom: 0.3em;
-  margin-top: 2em;
-  margin-bottom: 0.8em;
-  font-size: 1.3em;
+@media (max-width: 770px) {
+  #status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-.card-section {
-  background: #fff;
-  border: 1px solid #e2e2e2;
+@media (max-width: 500px) {
+  #status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.status-item {
+  background: var(--primary-light);
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.status-item strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+.card {
+  background: var(--primary-light);
   border-radius: 12px;
-  box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
-  margin: 24px auto;
-  padding: 1.3em 1.6em;
-  max-width: 950px;   /* Or whatever width you like */
-  min-width: 280px;
-  width: 100%;
-  box-sizing: border-box;
+  padding: 1.5em;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
-form {
-  margin-bottom: 1.3em;
+.card h2 {
+  color: var(--primary);
+  margin-top: 0;
+  margin-bottom: 1em;
+  font-size: 1.3em;
+  font-weight: 700;
 }
-input, select, textarea {
-  font-size: 1.07em;
-  border: 1.5px solid var(--grey);
-  border-radius: 6px;
-  padding: 0.45em;
-  margin-right: 0.7em;
-  background: #f9f9fc;
-  color: #2d2d2d;
-  transition: border 0.2s;
-}
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-button {
+.card h3 {
+  color: var(--primary);
+  margin-top: 0;
+  margin-bottom: 1em;
   font-size: 1.1em;
+  font-weight: 600;
+}
+.small-card {
+  padding: 1.2em;
+}
+.small-card h3 {
+  margin-bottom: 0.8em;
+  font-size: 1em;
+}
+.card p {
+  margin-bottom: 0.5em;
+  line-height: 1.4;
+  color: #333;
+}
+.card .last-played {
+  margin-bottom: 1em;
+  font-size: 0.9em;
+  color: #666;
+}
+.card .last-played strong {
+  color: var(--primary);
+}
+.card .log-item {
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  font-size: 0.85em;
+  font-family: 'Courier New', monospace;
+}
+.card .log-item.info {
+  border-left: 4px solid var(--accent);
+}
+.card .log-item.warning {
+  border-left: 4px solid var(--warning);
+}
+.card .log-item.error {
+  border-left: 4px solid var(--danger);
+}
+.card .log-item.success {
+  border-left: 4px solid var(--success);
+}
+.card .log-item .timestamp {
+  font-size: 0.8em;
+  color: #666;
+  margin-right: 0.5em;
+}
+.card .log-item .message {
+  word-wrap: break-word;
+}
+.card .log-item .level {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-right: 0.5em;
+}
+.card .log-item .level.info {
+  color: var(--accent);
+}
+.card .log-item .level.warning {
+  color: var(--warning);
+}
+.card .log-item .level.error {
+  color: var(--danger);
+}
+.card .log-item .level.success {
+  color: var(--success);
+}
+.card .state-item {
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  font-size: 0.85em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card .state-item .key {
+  font-weight: 600;
+  color: var(--primary);
+}
+.card .state-item .value {
+  color: #333;
+  font-family: 'Courier New', monospace;
+}
+.card .state-item.boolean-true .value {
+  color: var(--success);
+  font-weight: bold;
+}
+.card .state-item.boolean-false .value {
+  color: var(--danger);
+  font-weight: bold;
+}
+.card .state-item.highlighted {
+  background: rgba(233,235,255,0.9);
+  border-left: 4px solid var(--accent);
+}
+.card .controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 1em;
+}
+.card .controls button {
+  flex: 1;
+  padding: 0.7em 1.2em;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(90deg,var(--primary),var(--accent));
-  color: #fff;
-  padding: 0.53em 1.25em;
+  font-size: 0.9em;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s, box-shadow .18s;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  box-shadow: 0 1px 4px 0 rgba(31,38,135,0.07);
+  transition: all 0.2s;
 }
-button:hover, button:focus {
-  background: linear-gradient(90deg,var(--accent),var(--primary));
-  box-shadow: 0 2px 8px 0 rgba(31,38,135,0.14);
+.card .controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
-#logout-btn { float: right; margin-top: 10px;}
-.status-list li { font-size: 1.1em; margin-bottom: 0.7em;}
-.status-good { color: var(--success); font-weight: bold; }
-.status-warn { color: var(--warning); font-weight: bold; }
-.status-bad { color: var(--danger); font-weight: bold; }
-.logs, .serials {
-  background: #212121; 
-  color: #ececec; 
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1em;
-  padding: 1.1em; 
-  border-radius: 9px; 
-  margin-top: 0.7em; 
-  margin-bottom: 1.2em; 
-  overflow-x: auto; 
-  max-height: 220px;
-}
-pre.stateblock {
-  background: var(--primary-light);
-  color: #222;
-  padding: 1.1em;
-  border-radius: 9px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1em;
-  margin: 0 0 1em 0;
-  white-space: pre-line;
-}
-.label {
+.card .controls .btn-primary {
   background: var(--primary);
-  color: #fff;
-  border-radius: 4px;
-  padding: 0.13em 0.56em;
-  font-size: 1em;
-  margin-right: 0.44em;
+  color: white;
 }
-#message-timer {
-  display: inline-block;
-  font-size: 1.25em;
-  font-weight: 700;
-  background: #fff;
-  border: 2px solid var(--primary);
+.card .controls .btn-primary:hover {
+  background: #303f9f;
+}
+.card .controls .btn-danger {
+  background: var(--danger);
+  color: white;
+}
+.card .controls .btn-danger:hover {
+  background: #c62828;
+}
+.card .controls .btn-success {
+  background: var(--success);
+  color: white;
+}
+.card .controls .btn-success:hover {
+  background: #2e7d32;
+}
+.card .controls .btn-warning {
+  background: var(--warning);
+  color: white;
+}
+.card .controls .btn-warning:hover {
+  background: #f57f17;
+}
+.card .controls .btn-secondary {
+  background: var(--grey);
+  color: white;
+}
+.card .controls .btn-secondary:hover {
+  background: #9e9e9e;
+}
+.card .controls .btn-outline {
+  background: transparent;
   color: var(--primary);
-  border-radius: 7px;
-  padding: 0.1em 0.6em;
-  min-width: 64px;
-  text-align: center;
-  margin-left: 0.6em;
-  transition: color 0.2s, border 0.2s, background 0.2s;
+  border: 2px solid var(--primary);
 }
-#message-timer.ready {
-  color: var(--success);
-  border-color: var(--success);
-  background: #e4fbe7;
+.card .controls .btn-outline:hover {
+  background: var(--primary);
+  color: white;
 }
-#message-timer.running {
-  color: var(--danger);
-  border-color: var(--danger);
-  background: #ffeaea;
-}
-/* Modal styling */
-.modal {
-  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
-  overflow: auto; background-color: rgba(0,0,0,0.33);
-}
-.modal-content {
-  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
-  animation: popupIn 0.33s;
-}
-@keyframes popupIn {
-  from { transform: scale(0.95); opacity: 0;}
-  to   { transform: scale(1); opacity: 1;}
-}
-.close {
-  color: var(--primary); float: right; font-size: 2em; font-weight: bold; cursor: pointer;
-}
-.close:hover { color: var(--danger); }
-@media (max-width: 700px) {
-  #main-card { padding: 1.1em 0.5em;}
-  h1 { font-size: 1.4em;}
-  h2 { font-size: 1.09em;}
-  .card-section { padding: 0.7em 0.5em;}
-  button { width: 100%; }
-  #logout-btn { float: none; margin-top: 8px; }
-  .modal-content { width: 99vw; padding: 1.2em; }
-}
-.bases-block {
-  background: #e3e6f0;
-}
-.stateblock-1 { background: #cdd5df !important; }
-.stateblock-2 { background: #cdd5df !important; }
-.stateblock-3 { background: #cdd5df !important; }
-.stateblock-4 { background: #cdd5df !important; }
-.stateblock {
-  color: #222;
-  padding: 1em;
-  border-radius: 8px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1em;
-  margin: 0 0 1em 0;
-  white-space: pre-line;
-  box-shadow: 0 1px 4px 0 rgba(31,38,135,0.03);
-}
-.modal {
-  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
-  overflow: auto; background-color: rgba(0,0,0,0.33);
-}
-.modal-content {
-  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
-  animation: popupIn 0.33s;
-}
-@keyframes popupIn {
-  from { transform: scale(0.95); opacity: 0;}
-  to   { transform: scale(1); opacity: 1;}
-}
-.close {
-  color: #3949ab; float: right; font-size: 2em; font-weight: bold; cursor: pointer;
-}
-.close:hover { color: #d32f2f; }
-.config-section {
-    background: var(--primary-light);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.config-section h3 {
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 8px;
-}
-.form-group {
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-}
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    font-size: 0.95em;
-}
-.form-group input[type="text"], 
-.form-group input[type="password"],
-.form-group input[type="number"],
-.form-group select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-.form-group.checkbox {
-    flex-direction: row;
-    align-items: center;
-}
-.form-group.checkbox input[type="checkbox"] {
-    margin-right: 8px;
-}
-.form-group.checkbox label {
-    margin-bottom: 0;
-}
-@media (max-width: 700px) {
-    .config-sections {
-        grid-template-columns: 1fr;
-    }
-}
-/* Config form styling */
-.config-sections {
+.card .play-controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
+  gap: 10px;
+  margin-top: 1em;
 }
-.help-text {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 3px;
-    font-style: italic;
+.card .play-controls input[type="text"] {
+  flex: 1;
+  padding: 0.7em;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9em;
 }
-.button-row {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: flex-start;
-    align-items: center;
+.card .play-controls button {
+  padding: 0.7em 1.2em;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--primary);
+  color: white;
 }
-.button-row form {
-    margin: 0;
+.card .play-controls button:hover {
+  background: #303f9f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
-@media (max-width: 700px) {
-    .button-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .button-row form {
-        width: 100%;
-    }
+.card .play-controls select {
+  padding: 0.7em;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9em;
 }
-.logs {
-  overflow-y: auto;
-  max-height: 220px;
+.card .play-controls label {
+  font-weight: 600;
+  color: var(--primary);
+  margin-right: 0.5em;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: #90a4ff;
-    --primary-light: #22263a;
-    --accent: #5c6bc0;
-    --success: #6fd36f;
-    --warning: #ffe082;
-    --danger: #ff867f;
-    --background: #181c26;
-    --card: #23272b;
-    --grey: #888;
-  }
-  body {
-    background: var(--background);
-    color: #f0f0f0;
-  }
-  .card-section, .config-section {
-    background: #494a49;
-    color: #f0f0f0;
-    box-shadow: 0 2px 8px 0 rgba(31,38,135,0.19);
-  }
-  #main-card {
-    background: var(--card);
-    color: #f0f0f0;
-  }
-  .logs, .serials {
-    background: #000000;
-    color: #eee;
-  }
-  .stateblock {
-    background: #939393 !important; /* Change this to your preferred dark background color */
-    color: #000000 !important;      /* Optional: ensures text is readable in dark mode */
-  }
-  input, select, textarea {
-    background: #23272b;
-    color: #eee;
-    border-color: #555;
-  }
-  .modal-content {
-    background: #272b38;
-    color: #eee;
-  }
-  #message-timer {
-    background: #23272b;         /* or var(--card) or a dark color */
-    color: var(--primary);       /* or #90a4ff for blue accent */
-    border: 2px solid var(--primary);
-  }
-  #message-timer.ready {
-    color: var(--success);       /* you can keep this or lighten it */
-    border-color: var(--success);
-    background: #163021;         /* a dark green shade, or use var(--card) */
-  }
-  #message-timer.running {
-    color: var(--danger);
-    border-color: var(--danger);
-    background: #3a2121;         /* a dark red shade, or var(--card) */
-  }  
-  #base-configurator-table th {
-    background: #2a2e3a !important;   /* A dark blue/gray */
-    color: #fff;           /* White text */  
-  }
-  .config-sections .config-section {
-    background: #011f4b; /* Warm dark brown/orange for dark mode, adjust as desired */
-  }
-}
-.your-card { margin-bottom: 0.8em; }
-.card-section.center-buttons {
+.card .play-controls .form-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.5em 0;    /* ensures enough space for vertical centering */
-  /* or use height: 100px; if you want a fixed height */
-  /* or use padding for flexible height */
+  gap: 10px;
+  margin-bottom: 0.5em;
 }
-select[name="track_dropdown"] {
-    min-width: 100px;
-    max-width: 100%;
+.card .play-controls .form-row:last-child {
+  margin-bottom: 0;
+}
+.card .play-controls .form-row input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+.card .play-controls .form-row select {
+  flex: 0 0 auto;
+}
+.card .play-controls .form-row button {
+  flex: 0 0 auto;
+}
+.card .play-controls .form-row label {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.card .play-controls .form-row.full-width {
+  flex: 1;
+}
+.card .play-controls .form-row.full-width input[type="text"] {
+  flex: 1;
+}
+.card .modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1em;
+}
+.card .modal-actions button {
+  flex: 1;
+  padding: 0.7em 1.2em;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.card .modal-actions .btn-primary {
+  background: var(--primary);
+  color: white;
+}
+.card .modal-actions .btn-primary:hover {
+  background: #303f9f;
+}
+.card .modal-actions .btn-secondary {
+  background: var(--grey);
+  color: white;
+}
+.card .modal-actions .btn-secondary:hover {
+  background: #9e9e9e;
+}
+.card .modal-actions .btn-danger {
+  background: var(--danger);
+  color: white;
+}
+.card .modal-actions .btn-danger:hover {
+  background: #c62828;
+}
+.card .modal-actions .btn-success {
+  background: var(--success);
+  color: white;
+}
+.card .modal-actions .btn-success:hover {
+  background: #2e7d32;
+}
+.card .modal-actions .btn-warning {
+  background: var(--warning);
+  color: white;
+}
+.card .modal-actions .btn-warning:hover {
+  background: #f57f17;
+}
+.card .modal-actions .btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.card .modal-actions .btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+.card .help-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.card .help-modal-content {
+  background-color: var(--card);
+  margin: 5% auto;
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  width: 80%;
+  max-width: 600px;
+}
+.card .help-modal-content h2 {
+  color: var(--primary);
+  margin-top: 0;
+  margin-bottom: 1em;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+.card .help-modal-content h3 {
+  color: var(--primary);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+.card .help-modal-content p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+  color: #333;
+}
+.card .help-modal-content ul {
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+  color: #333;
+}
+.card .help-modal-content li {
+  margin-bottom: 0.5em;
+  line-height: 1.4;
+}
+.card .help-modal-content .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: -10px;
+}
+.card .help-modal-content .close:hover,
+.card .help-modal-content .close:focus {
+  color: #000;
+}
+.card .help-modal-content .code {
+  background: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #d32f2f;
+}
+.card .help-modal-content .example {
+  background: #f5f5f5;
+  padding: 1em;
+  border-radius: 6px;
+  margin: 1em 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #333;
+  border-left: 4px solid var(--accent);
+}
+.help-button {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.help-button:hover {
+  background: #303f9f;
+  transform: scale(1.1);
+}
+.card .dtmf-log {
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 1em;
+  margin-top: 1em;
+}
+.card .dtmf-log .dtmf-entry {
+  margin-bottom: 0.5em;
+  font-size: 0.85em;
+  font-family: 'Courier New', monospace;
+}
+.card .dtmf-log .dtmf-entry .timestamp {
+  color: #666;
+  margin-right: 0.5em;
+}
+.card .dtmf-log .dtmf-entry .dtmf-code {
+  color: var(--primary);
+  font-weight: bold;
+}
+.card .dtmf-log .dtmf-entry .description {
+  color: #333;
+}
+.card .dtmf-log .dtmf-entry.recent {
+  background: rgba(233,235,255,0.9);
+  border-left: 4px solid var(--accent);
+  padding: 0.5em;
+  border-radius: 4px;
+}
+.card .serial-log {
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 1em;
+  margin-top: 1em;
+}
+.card .serial-log .serial-entry {
+  margin-bottom: 0.5em;
+  font-size: 0.85em;
+  font-family: 'Courier New', monospace;
+}
+.card .serial-log .serial-entry .timestamp {
+  color: #666;
+  margin-right: 0.5em;
+}
+.card .serial-log .serial-entry .direction {
+  color: var(--primary);
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+.card .serial-log .serial-entry .data {
+  color: #333;
+}
+.card .serial-log .serial-entry.recent {
+  background: rgba(233,235,255,0.9);
+  border-left: 4px solid var(--accent);
+  padding: 0.5em;
+  border-radius: 4px;
+}
+.card .serial-log .serial-entry.outgoing {
+  background: rgba(255,235,233,0.9);
+  border-left: 4px solid var(--danger);
+}
+.card .serial-log .serial-entry.incoming {
+  background: rgba(233,255,233,0.9);
+  border-left: 4px solid var(--success);
+}
+.card .message-timer {
+  display: inline-block;
+  padding: 0.3em 0.6em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin-left: 0.5em;
+}
+.card .message-timer.running {
+  background: var(--warning);
+  color: white;
+}
+.card .message-timer.ready {
+  background: var(--success);
+  color: white;
+}
+.card .led-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 0.5em;
+  vertical-align: middle;
+}
+.card .led-indicator.led-cos-active {
+  background: #00ff00;
+  border: 2px solid #00cc00;
+  box-shadow: 0 0 6px 2px #00ff00cc;
+}
+.card .led-indicator.led-cos-inactive {
+  background: #bbb;
+  border: 2px solid #888;
+  box-shadow: none;
+}
+.card .led-indicator.led-remote-active {
+  background: #ff4343;
+  border: 2px solid #c40000;
+  box-shadow: 0 0 6px 2px #ff4343cc;
+}
+.card .led-indicator.led-remote-inactive {
+  background: #bbb;
+  border: 2px solid #888;
+  box-shadow: none;
+}
+.card .led-indicator.led-serial-active {
+  background: #2266ff;
+  border: 2px solid #0055cc;
+  box-shadow: 0 0 6px 2px #2266ffcc;
+}
+.card .led-indicator.led-serial-inactive {
+  background: #bbb;
+  border: 2px solid #888;
+  box-shadow: none;
+}
+.card .led-indicator.led-sound-active {
+  background: #ff8800;
+  border: 2px solid #cc6600;
+  box-shadow: 0 0 6px 2px #ff8800cc;
+}
+.card .led-indicator.led-sound-inactive {
+  background: #bbb;
+  border: 2px solid #888;
+  box-shadow: none;
+}
+.card .led-indicator.led-active {
+  background: #00ff00;
+  border: 2px solid #00cc00;
+  box-shadow: 0 0 6px 2px #00ff00cc;
+}
+.card .led-indicator.led-inactive {
+  background: #bbb;
+  border: 2px solid #888;
+  box-shadow: none;
+}
+.card .led-indicator.led-warning {
+  background: #fbc02d;
+  border: 2px solid #f57f17;
+  box-shadow: 0 0 6px 2px #fbc02dcc;
+}
+.card .led-indicator.led-error {
+  background: #d32f2f;
+  border: 2px solid #c62828;
+  box-shadow: 0 0 6px 2px #d32f2fcc;
+}
+.card .led-indicator.led-info {
+  background: #1976d2;
+  border: 2px solid #0d47a1;
+  box-shadow: 0 0 6px 2px #1976d2cc;
+}
+.card .led-indicator.led-success {
+  background: #388e3c;
+  border: 2px solid #2e7d32;
+  box-shadow: 0 0 6px 2px #388e3ccc;
+}
+.card .led-indicator.led-primary {
+  background: #3949ab;
+  border: 2px solid #303f9f;
+  box-shadow: 0 0 6px 2px #3949abcc;
+}
+.card .led-indicator.led-secondary {
+  background: #bdbdbd;
+  border: 2px solid #9e9e9e;
+  box-shadow: 0 0 6px 2px #bdbdbdcc;
+}
+.led-cos-active {
+  background: #00ff00;
+  border-color: #00cc00;
+  box-shadow: 0 0 6px 2px #00ff00cc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
+}
+.led-serial-active {
+  background: #2266ff;
+  border-color: #2266ff;
+  box-shadow: 0 0 6px 2px #29aaffcc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
+}
+.led-remote-active {
+  background: #ff4343;
+  border-color: #c40000;
+  box-shadow: 0 0 6px 2px #ff4343cc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
+}
+.led-inactive {
+  background: #bbb;
+  border-color: #888;
+  box-shadow: none;
 }
 
-
-        tr.addEventListener('dragenter', function(e) {
-            e.preventDefault();
-            tr.classList.add('dragover');
-        });
-        tr.addEventListener('dragleave', function(e) {
-            tr.classList.remove('dragover');
-        });
-
-        tr.appendChild(tdBase);
-        tr.appendChild(tdDesc);
-        tr.appendChild(tdDel);
-        return tr;
-    }
-
-    function loadBaseConfigurator() {
-        fetch("/api/base_configurator", {credentials: 'same-origin'})
-        .then(resp => resp.json())
-        .then(data => {
-            tableBody.innerHTML = "";
-            (data || []).forEach(row => {
-                tableBody.appendChild(makeRow(row));
-            });
-        });
-    }
-
-    if (addRowBtn) {
-        addRowBtn.onclick = function() {
-            tableBody.appendChild(makeRow());
-        };
-    }
-
-    if (saveBtn) {
-        saveBtn.onclick = function() {
-            // Gather data
-            const rows = tableBody.querySelectorAll("tr");
-            const configurator = [];
-            for (let tr of rows) {
-                const base_no = tr.children[0].querySelector("input").value.trim();
-                const desc = tr.children[1].querySelector("input").value.trim();
-                if (base_no || desc) {
-                    configurator.push({base_no, desc});
-                }
-            }
-            fetch("/api/save_base_configurator", {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(configurator)
-            })
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.success) {
-                    msgDiv.style.color = "#388e3c";
-                    msgDiv.textContent = "configurator saved successfully.";
-                } else {
-                    msgDiv.style.color = "#d32f2f";
-                    msgDiv.textContent = "Error saving configurator: " + (data.error || "Unknown error");
-                }
-            }).catch(e => {
-                msgDiv.style.color = "#d32f2f";
-                msgDiv.textContent = "Network or server error.";
-            });
-        };
-    }
-});
-
+/* Play track specific styles */
+.play-track-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+.play-track-main {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.play-track-subcard {
+  flex: 0 0 220px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  background: var(--primary-light);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
+  padding: 1em 1.4em;
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.subcard-title {
+  font-size: 1.13em;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.6em;
+  text-align: center;
+}
+.subcard-content {
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.3;
+}
+@media (max-width: 800px) {
+  .play-track-flex {
+    flex-direction: column;
+  }
+  .play-track-subcard {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin-top: 12px;
+  }
+}
 </style>
 <script>
 let updateStatus;
-document.addEventListener("DOMContentLoaded", function() {
-    // Play Selected (dropdown) form
-    const dropdownForm = document.getElementById('play-dropdown-form');
-    if (dropdownForm) {
-        dropdownForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(dropdownForm);
-            fetch(dropdownForm.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                headers: {'X-Requested-With': 'XMLHttpRequest'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.local_url) {
-                    window.open(
-                        data.local_url,
-                        'PlayerPopup',
-                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
-                    );
-                    return; // <-- just return; (optional)
-                }
-                if (typeof updateStatus === "function") updateStatus();
-                if (typeof updateSerialSection === "function") updateSerialSection();
-                if (typeof updateLogsSection === "function") updateLogsSection();
-                if (typeof updateStateSection === "function") updateStateSection();
-            });
-        });
-    }
-    // Play Input form
-    const inputForm = document.getElementById('play-input-form');
-    if (inputForm) {
-        inputForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(inputForm);
-            fetch(inputForm.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                headers: {'X-Requested-With': 'XMLHttpRequest'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.local_url) {
-                    window.open(
-                        data.local_url,
-                        'PlayerPopup',
-                        'width=440,height=180,resizable=yes,scrollbars=no,status=no'
-                    );
-                    return;
-                }
-                if (typeof updateStatus === "function") updateStatus();
-                if (typeof updateSerialSection === "function") updateSerialSection();
-                if (typeof updateLogsSection === "function") updateLogsSection();
-                if (typeof updateStateSection === "function") updateStateSection();
-            });
-        });
-    }
-});
     function updateMessageTimer() {
         fetch("/api/message_timer", {credentials: 'same-origin'})
         .then(response => response.json())
@@ -896,17 +1116,7 @@ function updateUptime() {
 setInterval(updateUptime, 1000);
 window.addEventListener('DOMContentLoaded', updateUptime);
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Convert Python boolean strings to proper checkbox state
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(function(checkbox) {
-        if (checkbox.getAttribute('data-value') === 'True') {
-            checkbox.checked = true;
-        }
-    });
-});
-</script>
+
 </head>
 <body>
 <div id="main-card">
@@ -1020,127 +1230,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
-<style>
-.play-track-flex {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-}
-.play-track-main {
-  flex: 1 1 0;
-  min-width: 0;
-}
-.play-track-subcard {
-  flex: 0 0 220px;
-  width: 220px;
-  min-width: 220px;
-  max-width: 220px;
-  background: var(--primary-light);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
-  padding: 1em 1.4em;
-  margin-top: 22px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.subcard-title {
-  font-size: 1.13em;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 0.7em;
-  letter-spacing: 1px;
-}
-.subcard-timer {
-  font-size: 1.6em;
-  font-weight: 700;
-  margin-bottom: 0.8em;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-#message-timer {
-  display: inline-block;
-  min-width: 80px;
-  width: 80px;
-  text-align: center;
-  font-size: 0.75em;
-  font-weight: 500;
-  background: #fff;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-  border-radius: 7px;
-  padding: 0.1em 0.6em;
-  transition: color 0.2s, border 0.2s, background 0.2s;
-}
-.subcard-row {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.9em;
-  flex-wrap: nowrap;
-}
-.subcard-label, .subcard-value {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-}
-.subcard-label {
-  font-size: 1em;
-  color: var(--primary);
-  font-weight: 500;
-  min-width: 110px;
-  max-width: 110px;
-}
-.subcard-value {
-  font-size: 1.1em;
-}
-@media (max-width: 900px) {
-  .play-track-flex {
-    flex-direction: column;
-    align-items: center;
-  }
-  .play-track-subcard {
-    margin-top: 22px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 220px;
-    min-width: 220px;
-    max-width: 220px;
-    align-self: center;
-  }
-}
-.led-indicator {
-  display: inline-block;
-  width: 19px;
-  height: 19px;
-  border-radius: 6px;
-  margin-right: 6px;
-  background: #bbb;
-  border: 2.5px solid #666;
-  box-shadow: 0 2px 8px 0 rgba(30,30,70,0.13) inset;
-  vertical-align: middle;
-  transition: background 0.2s, box-shadow 0.2s, border 0.2s;
-}
-.led-cos-active {
-  background: #29aaff;
-  border-color: #2266ff;
-  box-shadow: 0 0 6px 2px #29aaffcc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
-}
-.led-remote-active {
-  background: #ff4343;
-  border-color: #c40000;
-  box-shadow: 0 0 6px 2px #ff4343cc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
-}
-.led-inactive {
-  background: #bbb;
-  border-color: #888;
-  box-shadow: none;
-}
-
-</style>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     // Sync hidden fields on load and selector change
@@ -1226,6 +1315,34 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error(e);
             });
         });
+    }
+    
+    // Convert Python boolean strings to proper checkbox state
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.getAttribute('data-value') === 'True') {
+            checkbox.checked = true;
+        }
+    });
+    
+    // Auto-adjust dropdown width based on longest option
+    var select = document.querySelector('select[name="track_dropdown"]');
+    if (select) {
+        var longest = 0;
+        for (var i = 0; i < select.options.length; i++) {
+            var option = select.options[i];
+            // Create a temporary span to measure text width
+            var span = document.createElement('span');
+            span.style.visibility = 'hidden';
+            span.style.position = 'absolute';
+            span.style.font = window.getComputedStyle(select).font;
+            span.textContent = option.text;
+            document.body.appendChild(span);
+            if (span.offsetWidth > longest) longest = span.offsetWidth;
+            document.body.removeChild(span);
+        }
+        // Add some padding for the dropdown arrow
+        select.style.width = (longest + 24) + 'px';
     }
 });
 </script>
@@ -1476,28 +1593,7 @@ window.addEventListener('DOMContentLoaded', updateDtmfLog);
         </div>
     </form>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var select = document.querySelector('select[name="track_dropdown"]');
-    if (select) {
-        var longest = 0;
-        for (var i = 0; i < select.options.length; i++) {
-            var option = select.options[i];
-            // Create a temporary span to measure text width
-            var span = document.createElement('span');
-            span.style.visibility = 'hidden';
-            span.style.position = 'absolute';
-            span.style.font = window.getComputedStyle(select).font;
-            span.textContent = option.text;
-            document.body.appendChild(span);
-            if (span.offsetWidth > longest) longest = span.offsetWidth;
-            document.body.removeChild(span);
-        }
-        // Add some padding for the dropdown arrow
-        select.style.width = (longest + 24) + 'px';
-    }
-});
-</script>
+
 <!-- Base Configurator Modal -->
 <div id="base-configurator-modal" class="modal">
   <div class="modal-content" style="max-width: 1200px;">

@@ -298,3 +298,148 @@
 2025-07-10 18:48:14.412: Play: 5625-CT.wav [interruptible] - successful
 2025-07-10 18:48:18.623: Play: 5191-TO End You Know Better.wav [normal] - successful
 2025-07-10 18:48:25.520: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:54:22.022: Play: 5426-PID .wav [normal] - successful
+2025-07-10 18:54:28.271: Play: 5625-CT.wav [interruptible] - successful
+2025-07-10 18:54:29.345: Play requested: P5171IM (web input box)
+2025-07-10 18:54:31.052: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:54:33.531: Play: 5625-CT.wav [interruptible] - successful
+2025-07-10 18:54:44.688: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:55:08.883: Configuration reload requested from web
+2025-07-10 18:55:26.149: Play requested: P5171MI (web input box)
+2025-07-10 18:55:30.904: Play requested: P5171MI (web input box)
+2025-07-10 18:55:32.613: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:55:34.452: Play: 5625-CT.wav [interruptible] - successful
+2025-07-10 18:55:40.912: Play requested: P5171IM (web input box)
+2025-07-10 18:55:46.730: Play: 5625-CT.wav [interruptible] - successful
+2025-07-10 18:55:57.886: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:56:31.462: Play requested: P5171IM (web input box)
+2025-07-10 18:56:33.170: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:56:35.217: Play: 5625-CT.wav [interruptible] - successful
+2025-07-10 18:56:46.334: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:57:37.029: Play requested: P5171RM (web input box)
+2025-07-10 18:57:41.249: Play: 5171-TM PL 77.wav [repeat] - successful
+2025-07-10 18:57:42.488: Play: 5632-CT.wav [interruptible] - successful
+2025-07-10 18:57:48.542: Play requested: P5171PM (web input box)
+2025-07-10 18:57:53.152: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:58:48.108: Play requested: P5171PM (web input box)
+2025-07-10 18:58:51.423: Play: 5171-TM PL 77.wav [pause] - playback error
+2025-07-10 18:58:52.632: Play: 5632-CT.wav [interruptible] - successful
+2025-07-10 18:59:55.664: Play requested: P5171IM (web input box)
+2025-07-10 18:59:57.373: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 18:59:58.332: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 18:59:59.133: Temperature Report: Current temperature is 78 degrees
+2025-07-10 19:00:05.335: Play: 5632-CT.wav [interruptible] - successful
+2025-07-10 19:00:15.914: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:01:33.739: Play requested: P5171WM (web input box)
+2025-07-10 19:01:38.957: Play: 5171-TM PL 77.wav [wait_for_cos] - successful
+2025-07-10 19:01:40.129: Play: 5632-CT.wav [interruptible] - successful
+2025-07-10 19:01:48.967: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:03:51.714: Interrupt: 5504-PID(N) Shake It Up played without COS, did not switch to 6000
+2025-07-10 19:13:04.434: Play requested: P5171WM (web input box)
+2025-07-10 19:13:06.946: Play: 5171-TM PL 77.wav [wait_for_cos] - successful
+2025-07-10 19:13:10.167: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-10 19:13:11.440: Play: 5669-CT.wav [interruptible] - successful
+2025-07-10 19:13:14.444: Play requested: P5171IM (web input box)
+2025-07-10 19:13:18.347: Play: 5669-CT.wav [interruptible] - successful
+2025-07-10 19:13:28.804: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:14:05.241: Play requested: P5171IM (web input box)
+2025-07-10 19:14:06.949: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:14:09.848: Play: 5669-CT.wav [interruptible] - successful
+2025-07-10 19:14:20.358: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:14:22.757: Configuration reload requested from web
+2025-07-10 19:14:33.017: Play requested: P5177IM (web input box)
+2025-07-10 19:14:33.019: Play (serial/auto): 5177 - failed -> file not found
+2025-07-10 19:14:35.019: Play requested: P5177IM (web input box)
+2025-07-10 19:14:35.021: Play (serial/auto): 5177 - failed -> file not found
+2025-07-10 19:14:48.785: Play requested: P5177IM (web input box)
+2025-07-10 19:14:48.786: Play (serial/auto): 5177 - failed -> file not found
+2025-07-10 19:14:50.037: Play requested: P5177IM (web input box)
+2025-07-10 19:14:50.038: Play (serial/auto): 5177 - failed -> file not found
+2025-07-10 19:15:24.818: Play requested: P5171IM (web input box)
+2025-07-10 19:15:26.528: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:15:31.075: Play requested: P5171I (web input box)
+2025-07-10 19:15:32.785: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 19:16:16.361: Play requested: P5171IM (web input box)
+2025-07-10 19:16:18.073: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:16:19.114: Play requested: P5171IM (web input box)
+2025-07-10 19:16:20.822: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:17:38.329: Play requested: P5171IM (web input box)
+2025-07-10 19:17:40.039: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:17:41.582: Play requested: P5171IM (web input box)
+2025-07-10 19:17:43.291: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:22:08.119: Play requested: P5171IM (web input box)
+2025-07-10 19:22:09.830: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:22:46.808: Interrupt: 5504-PID(N) Shake It Up played without COS, did not switch to 6000
+2025-07-10 19:25:56.245: Play requested: P5171IM (web input box)
+2025-07-10 19:25:57.853: Play: 5171-TM PL 77.wav [interruptible] - interrupted
+2025-07-10 19:25:59.749: Play requested: P5171IM (web input box)
+2025-07-10 19:26:00.631: Play: 5635-CT.wav [interruptible] - interrupted
+2025-07-10 19:26:00.836: Play: 5171-TM PL 77.wav [interruptible] - interrupted
+2025-07-10 19:26:04.315: Play: 5635-CT.wav [interruptible] - successful
+2025-07-10 19:26:11.263: Play requested: P5171RM (web input box)
+2025-07-10 19:26:12.973: Play: 5171-TM PL 77.wav [repeat] - successful
+2025-07-10 19:26:14.796: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:26:21.023: Play requested: P5171i6000 (web input box)
+2025-07-10 19:26:24.778: Playback stopped from web
+2025-07-10 19:26:28.540: Interrupt: 5171-TM PL 77 interrupted by COS, switched to 6000
+2025-07-10 19:26:28.737: Play: 5635-CT.wav [interruptible] - interrupted
+2025-07-10 19:26:40.451: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:27:07.818: Play requested: P5171IMAP5174IM (web input box)
+2025-07-10 19:27:09.531: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 19:27:12.573: Play requested: P5171IMAP5174IM (web input box)
+2025-07-10 19:27:15.826: Play requested: P5171IMAP5174IM (web input box)
+2025-07-10 19:27:17.536: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 19:27:26.338: Play requested: P5171IMA5174IM (web input box)
+2025-07-10 19:27:28.049: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 19:27:29.091: Play requested: P5171IMA5174IM (web input box)
+2025-07-10 19:27:31.051: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-10 19:27:46.607: Configuration reload requested from web
+2025-07-10 19:28:04.623: Play requested: P5171IMA5174IM (web input box)
+2025-07-10 19:28:12.881: Play requested: P5171IMA5174IM (web input box)
+2025-07-10 19:28:20.639: Play requested: P5171IA5174IM (web input box)
+2025-07-10 19:28:22.350: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 19:28:23.392: Play requested: P5171IA5174IM (web input box)
+2025-07-10 19:28:28.648: Play requested: P5171IA5174IM (web input box)
+2025-07-10 19:28:30.358: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 19:28:39.159: Play requested: P5171IMA5174I (web input box)
+2025-07-10 19:28:42.412: Play requested: P5171IMA5174I (web input box)
+2025-07-10 19:28:44.324: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-10 19:28:45.666: Play requested: P5171IMA5174I (web input box)
+2025-07-10 19:28:47.168: Play requested: P5171IMA5174I (web input box)
+2025-07-10 19:28:49.128: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-10 19:29:24.954: Play requested: P5171r (web input box)
+2025-07-10 19:29:26.664: Play: 5171-TM PL 77.wav [repeat] - successful
+2025-07-10 19:29:57.483: Play requested: P5171p (web input box)
+2025-07-10 19:29:59.193: Play: 5171-TM PL 77.wav [pause] - playback error
+2025-07-10 19:30:28.014: Play requested: P5171w (web input box)
+2025-07-10 19:30:30.524: Play: 5171-TM PL 77.wav [wait_for_cos] - successful
+2025-07-10 19:32:17.126: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
+2025-07-10 19:33:06.989: Play requested: P5171w (web input box)
+2025-07-10 19:33:09.241: Play requested: P5171w (web input box)
+2025-07-10 19:33:14.246: Play requested: P5171W (web input box)
+2025-07-10 19:33:16.757: Play: 5171-TM PL 77.wav [wait_for_cos] - successful
+2025-07-10 19:33:19.004: Play requested: P5171R (web input box)
+2025-07-10 19:33:20.716: Play: 5171-TM PL 77.wav [repeat] - successful
+2025-07-10 19:33:25.511: Play requested: P5171i6000 (web input box)
+2025-07-10 19:33:27.217: Interrupt: 5171-TM PL 77 played without COS, did not switch to 6000
+2025-07-10 19:45:24.758: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 19:45:56.269: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-10 19:45:56.270: TOP: Reporting 20 seconds
+2025-07-10 19:46:00.893: Play: 5613-CT.wav [interruptible] - successful
+2025-07-10 19:46:05.106: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 19:46:11.508: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:46:55.749: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 19:47:20.847: TOP: Reporting 20 seconds
+2025-07-10 19:47:25.471: Play: 5613-CT.wav [interruptible] - successful
+2025-07-10 19:47:29.686: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 19:47:36.085: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:47:47.755: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 19:47:49.755: TOP: Reporting 20 seconds
+2025-07-10 19:47:54.334: Play: 5613-CT.wav [interruptible] - successful
+2025-07-10 19:47:58.547: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 19:48:04.996: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:48:29.756: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 19:48:37.319: TOP: Reporting 2 seconds
+2025-07-10 19:48:41.996: Play: 5613-CT.wav [interruptible] - successful
+2025-07-10 19:48:46.206: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 19:48:52.858: Play: 5174-TM sparc.us.wav [repeat] - successful

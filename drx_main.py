@@ -996,7 +996,7 @@ def process_command(command):
             return
 
         # DO NOT uppercase the suffix here!
-        interruptible = suffix == "I"
+        interruptible = "I" in suffix if suffix else False
         repeat = "R" in suffix if suffix else False
         pausing = "P" in suffix if suffix else False
         message_mode = "M" in suffix if suffix else False
@@ -2454,29 +2454,29 @@ def parse_serial_command(command):
     """
     Accepts:
       - Pxxxx
-      - PxxxxI, PxxxxP, PxxxxR, PxxxxM, PxxxxIM, PxxxxRM, etc.
+      - PxxxxI (and combinations like PxxxxIM)
+      - PxxxxP (and combinations like PxxxxPM)
+      - PxxxxR (and combinations like PxxxxRM)
       - PxxxxiYYYY (interrupt-to-another), ignoring any suffix after second code
-    Returns:
-      (base: str, suffix: str or None, interrupt_to: str or None)
     """
-    command = command.strip()  # DO NOT .upper() here
-
-    # Handle interrupt-to-another, e.g. P1234I5678 or P1234i5678
-    m = re.match(r'^P(\d{4})I(\d{4})', command)
-    if not m:
-        m = re.match(r'^P(\d{4})i(\d{4})', command)
+    # Strip whitespace but don't convert to uppercase at all
+    command = command.strip()
+    
+    # First check for lowercase 'i' interrupt-to-another format
+    m = re.match(r'^[Pp](\d{4})i(\d{4})', command)
     if m:
         return (m.group(1), "i", m.group(2))
-
-    # Handle all other suffix forms using parse_suffixes
-    m = re.match(r'^P(\d{4})(.*)$', command)
+    
+    # Check for valid suffix combinations - match only uppercase characters
+    m = re.match(r'^[Pp](\d{4})([IPRWM]+)$', command)
     if m:
-        base = m.group(1)
-        suffix = m.group(2)
-        # Use the parse_suffixes to extract valid trailing suffixes (I, P, R, M, W)
-        base2, suffixes = parse_suffixes(f"{base}{suffix}")
-        return (base2, suffixes, None)
-
+        return (m.group(1), m.group(2), None)
+        
+    # Basic command with no mode
+    m = re.match(r'^[Pp](\d{4})$', command)
+    if m:
+        return (m.group(1), "", None)
+        
     return (None, None, None)
 
 def process_serial_commands():

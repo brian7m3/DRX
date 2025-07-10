@@ -565,7 +565,7 @@ pre.stateblock {
   overflow: auto; background-color: rgba(0,0,0,0.33);
 }
 .modal-content {
-  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
+  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 1000px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
   animation: popupIn 0.33s;
 }
 @keyframes popupIn {

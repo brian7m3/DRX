@@ -2386,12 +2386,7 @@ def serial_read_loop():
                     if cleaned_line == "TOT":
                         debug_log("TOT command received.")
                         handle_tot_start()
-                        
-                    if cleaned_line == "TOP":
-                        debug_log("TOP command received.")
-                        handle_top_command()
-                        
-
+                                            
                     if cleaned_line:
                         m = dtmf_pattern.match(cleaned_line)
                         debug_log(f"DTMF match: {m is not None}")

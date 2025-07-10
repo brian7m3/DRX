@@ -145,3 +145,59 @@
 2025-07-10 15:59:58.244: WX Report: {'observations': 'Fair', 'temperature': '78 degrees', 'humidity': '77 percent', 'winddir': 'SSW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
 2025-07-10 16:03:41.712: Configuration reload requested from web
 2025-07-10 16:04:20.748: Configuration reload requested from web
+2025-07-10 16:16:47.466: Play requested: 5006.wav (web dropdown)
+2025-07-10 16:16:48.023: Play: 5006.wav [normal] - successful
+2025-07-10 16:59:58.265: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 16:59:58.266: WX Report: {'observations': 'Fair', 'temperature': '79 degrees', 'humidity': '79 percent', 'winddir': 'NNW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-10 17:05:05.155: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
+2025-07-10 17:09:52.502: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-10 17:09:53.653: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:10:04.363: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:10:29.017: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 17:10:33.092: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:10:38.782: Status: Time Out Seconds | Currently Playing: Timed 7 seconds | Info: Reporting time out duration
+2025-07-10 17:10:42.292: Status: Time Out Seconds | Currently Playing: Timed 7 seconds | Info: Reporting time out duration
+2025-07-10 17:10:49.965: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 17:10:51.773: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:11:16.416: Play requested: TOP (web input box)
+2025-07-10 17:11:16.417: Status: Time Out Seconds | Currently Playing: Timed 7 seconds | Info: Reporting time out duration
+2025-07-10 17:11:49.704: Play requested: TOT (web input box)
+2025-07-10 17:12:00.045: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:12:03.967: Play requested: TOS (web input box)
+2025-07-10 17:12:07.471: Play requested: TOP (web input box)
+2025-07-10 17:12:07.471: Status: Time Out Seconds | Currently Playing: Timed 8 seconds | Info: Reporting time out duration
+2025-07-10 17:12:12.812: Play: 5174-TM sparc.us.wav [repeat] - successful
+2025-07-10 17:12:57.915: Status: Time Out Seconds | Currently Playing: Timed 8 seconds | Info: Reporting time out duration
+2025-07-10 17:13:01.172: Status: Time Out Seconds | Currently Playing: Timed 8 seconds | Info: Reporting time out duration
+2025-07-10 17:13:08.643: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 17:13:09.755: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:13:20.522: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:13:48.927: Script execution failed: OS - File not found
+2025-07-10 17:13:48.927: Script execution started: OS
+2025-07-10 17:14:13.353: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:14:24.980: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:14:35.689: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:14:48.367: Status: Time Out Seconds | Currently Playing: Timed 1 seconds | Info: Reporting time out duration
+2025-07-10 17:14:51.723: Status: Time Out Seconds | Currently Playing: Timed 1 seconds | Info: Reporting time out duration
+2025-07-10 17:14:56.254: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:15:06.962: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:16:57.003: Play requested: TOP (web input box)
+2025-07-10 17:16:57.004: Status: Time Out Seconds | Currently Playing: Timed 1 seconds | Info: Reporting time out duration
+2025-07-10 17:17:02.870: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:17:17.523: Play requested: TOT (web input box)
+2025-07-10 17:17:33.540: Status: Time Out Seconds | Currently Playing: Timed 15 seconds | Info: Reporting time out duration
+2025-07-10 17:17:33.540: Play requested: TOP (web input box)
+2025-07-10 17:17:38.405: Play: 5652-CT.wav [interruptible] - successful
+2025-07-10 17:17:49.111: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:19:25.491: Play: 5432-PID All the Right Buttons.wav [normal] - successful
+2025-07-10 17:23:50.776: Play: 5606-CT.wav [interruptible] - successful
+2025-07-10 17:24:02.199: Play requested: TOT (web input box)
+2025-07-10 17:24:12.208: Status: Time Out Seconds | Currently Playing: Timed 0 seconds | Info: Reporting time out duration
+2025-07-10 17:24:12.208: Play requested: TOP (web input box)
+2025-07-10 17:24:16.415: Play: 5606-CT.wav [interruptible] - successful
+2025-07-10 17:24:27.432: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:24:53.790: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 17:25:01.851: Status: Time Out Seconds | Currently Playing: Timed 10 seconds | Info: Reporting time out duration
+2025-07-10 17:25:09.670: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 17:25:10.584: Play: 5606-CT.wav [interruptible] - successful
+2025-07-10 17:25:21.548: Play: 5171-TM PL 77.wav [normal] - successful

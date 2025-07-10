@@ -47,6 +47,212 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
+.status-last-played {
+  font-size: .75em !important;
+  /* Optional extras: */
+  font-weight: bold;
+  /* color: #1976d2 !important; /* optional blue color for visibility */ 
+}
+#playback-status {
+  font-size: .75em !important;
+  /* Optional extras: */
+  font-weight: bold;
+  /* color: #1976d2 !important; optional blue color for visibility */ */
+}
+/* Set the width of the GPIO Settings box */
+.config-section.gpio-settings {
+  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
+  max-width: 100%;       /* Optional: prevents overflow on small screens */
+  margin: 0 auto;        /* Optional: center the box horizontally */
+}
+
+/* Optional: Make sure the grid auto-rows are tall enough */
+.config-sections {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+    grid-auto-rows: minmax(150px, auto); /* adjust as needed */
+}
+
+/* Responsive: Stack full-width on small screens */
+@media (max-width: 1100px) {
+    .config-sections {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .config-section.gpio-settings {
+        grid-column: 1 / -1;
+        grid-row: auto / span 2;
+    }
+}
+@media (max-width: 700px) {
+    .config-sections {
+        grid-template-columns: 1fr;
+    }
+    .config-section.gpio-settings {
+        grid-column: 1 / -1;
+        grid-row: auto / span 2;
+    }
+}
+.split-vertical {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.split-half {
+  flex: 1 1 0;
+  /* Optional: Add a border or divider for clarity */
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.split-half:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+/* Condense Configuration Settings area */
+.config-section {
+    background: var(--primary-light);
+    border-radius: 10px;
+    padding: 9px 8px 8px 8px;
+    margin-bottom: 7px;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.02);
+}
+
+.config-section h3 {
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 7px;
+    font-size: 1em;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    padding-bottom: 3px;
+}
+
+.form-group {
+    margin-bottom: 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label {
+    margin-bottom: 0;
+    min-width: 90px;
+    font-size: 0.93em;
+    font-weight: 500;
+}
+
+.form-group input[type="text"], 
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group select {
+    padding: 4px 6px;
+    font-size: 0.97em;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    width: 50px;
+    min-width: 40px;
+    max-width: 150px;
+    box-sizing: border-box;
+}
+#sound_directory, #serial_port, #sound_device {
+    width: 160px;
+    max-width: 98%;
+}
+#cos_pin, #remote_busy_pin, #max_cos_interruptions {
+    width: 50px;
+}
+#serial_timeout, #serial_line_timeout, #cos_debounce_time {
+    width: 55px;
+}
+#web_username {
+    width: 110px;
+}
+
+.form-group.checkbox {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+    gap: 6px;
+}
+
+.help-text {
+    font-size: 0.78em;
+    color: #666;
+    margin-top: 0;
+    margin-left: 4px;
+    font-style: italic;
+    max-width: 160px;
+    line-height: 1.25;
+}
+#base-configurator-table input[type="text"] {
+    box-sizing: border-box;
+    padding: 4px 6px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    margin: 2px 0;
+}
+.dragging {
+    opacity: 0.5;
+}
+.dragover {
+    outline: 2px dashed #3949ab;
+}
+#base-configurator-table td {
+    padding: 2px 5px;
+    vertical-align: middle;
+}
+#base-configurator-table th {
+    background: #e3e6f0;
+}
+#base-configurator-table input.base-no {
+    width: 50px;
+    box-sizing: border-box;
+}
+#base-configurator-table select.base-type {
+    width: 100px;
+    box-sizing: border-box;
+}
+#base-configurator-table textarea.base-desc,
+#base-configurator-table input.base-desc {
+    width: 100%;
+    min-width: 100px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+#base-configurator-table td {
+    padding: 2px 5px;
+    vertical-align: middle;
+}
+#base-configurator-table select.base-type {
+    width: 110px;
+    padding: 3px 4px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+}
+#base-configurator-table {
+    table-layout: fixed;
+    width: 100%;
+}
+#base-configurator-table input.base-interval {
+    width: 70px;
+    min-width: 40px;
+    max-width: 100px;
+    box-sizing: border-box;
+}
+#base-configurator-table input.end-no {
+    width: 60px;
+    min-width: 40px;
+    max-width: 90px;
+    box-sizing: border-box;
+}
+</style>
+<style>
 :root {
   --primary: #3949ab;
   --primary-light: #e3e6f0;
@@ -58,8 +264,6 @@ DASHBOARD_TEMPLATE = '''
   --card: #fff;
   --grey: #bdbdbd;
 }
-
-/* General layout */
 body {
   background: var(--background);
   font-family: 'Roboto', Arial, sans-serif;
@@ -98,13 +302,11 @@ h2 {
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
   margin: 24px auto;
   padding: 1.3em 1.6em;
-  max-width: 950px;
+  max-width: 950px;   /* Or whatever width you like */
   min-width: 280px;
   width: 100%;
   box-sizing: border-box;
 }
-
-/* Forms and Inputs */
 form {
   margin-bottom: 1.3em;
 }
@@ -122,8 +324,6 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary);
 }
-
-/* Button styles */
 button {
   font-size: 1.1em;
   border: none;
@@ -141,30 +341,24 @@ button:hover, button:focus {
   background: linear-gradient(90deg,var(--accent),var(--primary));
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.14);
 }
-#logout-btn { float: right; margin-top: 10px; }
-
+#logout-btn { float: right; margin-top: 10px;}
 .status-list li { font-size: 1.1em; margin-bottom: 0.7em;}
 .status-good { color: var(--success); font-weight: bold; }
 .status-warn { color: var(--warning); font-weight: bold; }
 .status-bad { color: var(--danger); font-weight: bold; }
-
 .logs, .serials {
-  background: #212121;
-  color: #ececec;
+  background: #212121; 
+  color: #ececec; 
   font-family: 'Roboto Mono', monospace;
   font-size: 1em;
-  padding: 1.1em;
-  border-radius: 9px;
-  margin-top: 0.7em;
-  margin-bottom: 1.2em;
-  overflow-x: auto;
+  padding: 1.1em; 
+  border-radius: 9px; 
+  margin-top: 0.7em; 
+  margin-bottom: 1.2em; 
+  overflow-x: auto; 
   max-height: 220px;
 }
-.logs {
-  overflow-y: auto;
-  max-height: 220px;
-}
-pre.stateblock, .stateblock {
+pre.stateblock {
   background: var(--primary-light);
   color: #222;
   padding: 1.1em;
@@ -173,10 +367,6 @@ pre.stateblock, .stateblock {
   font-size: 1em;
   margin: 0 0 1em 0;
   white-space: pre-line;
-  box-shadow: 0 1px 4px 0 rgba(31,38,135,0.03);
-}
-.stateblock-1, .stateblock-2, .stateblock-3, .stateblock-4 {
-  background: #cdd5df !important;
 }
 .label {
   background: var(--primary);
@@ -186,7 +376,6 @@ pre.stateblock, .stateblock {
   font-size: 1em;
   margin-right: 0.44em;
 }
-/* Timer styles */
 #message-timer {
   display: inline-block;
   font-size: 1.25em;
@@ -211,256 +400,13 @@ pre.stateblock, .stateblock {
   border-color: var(--danger);
   background: #ffeaea;
 }
-
-/* Status and Playback - Combined */
-.status-last-played,
-#playback-status {
-  font-size: .75em !important;
-  font-weight: bold;
-}
-
-/* GPIO Settings Box */
-.config-section.gpio-settings {
-  width: 300px;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-/* Configuration Sections and Responsive Grid */
-.config-sections {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-bottom: 20px;
-  grid-auto-rows: minmax(220px, auto);
-}
-@media (max-width: 1100px) {
-  .config-sections {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .config-section.gpio-settings {
-    grid-column: 1 / -1;
-    grid-row: auto / span 2;
-  }
-}
-@media (max-width: 700px) {
-  .config-sections {
-    grid-template-columns: 1fr;
-  }
-  .config-section.gpio-settings {
-    grid-column: 1 / -1;
-    grid-row: auto / span 2;
-  }
-  #main-card {
-    padding: 1.1em 0.5em;
-  }
-  h1 {
-    font-size: 1.4em;
-  }
-  h2 {
-    font-size: 1.09em;
-  }
-  .card-section {
-    padding: 0.7em 0.5em;
-  }
-  button {
-    width: 100%;
-  }
-  #logout-btn {
-    float: none;
-    margin-top: 8px;
-  }
-  .modal-content {
-    width: 99vw;
-    padding: 1.2em;
-  }
-  .button-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .button-row form {
-    width: 100%;
-  }
-}
-
-/* Split Layouts */
-.split-vertical {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 8px;
-}
-.split-half {
-  flex: 1 1 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #ddd;
-}
-.split-half:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-/* Condense Configuration Settings Area */
-.config-section {
-  background: var(--primary-light);
-  border-radius: 10px;
-  padding: 9px 8px 8px 8px;
-  margin-bottom: 7px;
-  box-shadow: 0 2px 7px rgba(0,0,0,0.02);
- /* max-width: 220px; */
-  min-width: 130px;
-  min-height: 220px;
-}
-.config-section h3 {
-  color: var(--primary);
-  margin-top: 0;
-  margin-bottom: 7px;
-  font-size: 1em;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
-  padding-bottom: 3px;
-}
-
-/* Form Groups (Both Standard and Checkbox) */
-.form-group,
-.form-group.checkbox {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-.form-group {
-  margin-bottom: 7px;
-}
-.form-group.checkbox {
-  margin-bottom: 4px;
-}
-.form-group label,
-.form-group.checkbox label {
-  margin-bottom: 0;
-  min-width: 90px;
-  font-size: 0.95em;
-  font-weight: 500;
-}
-.form-group.checkbox input[type="checkbox"] {
-  margin-right: 8px;
-}
-.form-group input[type="text"],
-.form-group input[type="password"],
-.form-group input[type="number"],
-.form-group select {
-  padding: 8px;
-  font-size: 0.97em;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  width: 100%;
-  box-sizing: border-box;
-}
-#sound_directory, #serial_port, #sound_device {
-  width: 160px;
-  max-width: 98%;
-}
-#cos_pin, #remote_busy_pin, #max_cos_interruptions {
-  width: 50px;
-}
-#serial_timeout, #serial_line_timeout, #cos_debounce_time {
-  width: 60px;
-}
-#web_username {
-  width: 110px;
-}
-
-/* Help Text */
-.help-text {
-  font-size: 0.85em;
-  color: #666;
-  margin-top: 3px;
-  margin-left: 4px;
-  font-style: italic;
-  max-width: 160px;
-  line-height: 1.25;
-}
-
-/* Base Configurator Table */
-#base-configurator-table {
-  table-layout: fixed;
-  width: 100%;
-}
-#base-configurator-table th {
-  background: #e3e6f0;
-}
-#base-configurator-table td {
-  padding: 2px 5px;
-  vertical-align: middle;
-}
-#base-configurator-table input[type="text"] {
-  box-sizing: border-box;
-  padding: 4px 6px;
-  font-size: 1em;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  margin: 2px 0;
-}
-#base-configurator-table input.base-no {
-  width: 50px;
-  box-sizing: border-box;
-}
-#base-configurator-table select.base-type {
-  width: 110px;
-  padding: 3px 4px;
-  font-size: 1em;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  box-sizing: border-box;
-}
-#base-configurator-table textarea.base-desc,
-#base-configurator-table input.base-desc {
-  width: 100%;
-  min-width: 100px;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-#base-configurator-table input.base-interval {
-  width: 70px;
-  min-width: 40px;
-  max-width: 100px;
-  box-sizing: border-box;
-}
-#base-configurator-table input.end-no {
-  width: 60px;
-  min-width: 40px;
-  max-width: 90px;
-  box-sizing: border-box;
-}
-
-/* Drag and Drop Table Row Effects */
-.dragging {
-  opacity: 0.5;
-}
-.dragover {
-  outline: 2px dashed #3949ab;
-}
-
 /* Modal styling */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.33);
+  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
+  overflow: auto; background-color: rgba(0,0,0,0.33);
 }
 .modal-content {
-  background: #fefefe;
-  margin: 7% auto;
-  padding: 2em;
-  border: 1px solid #888;
-  width: 96%;
-  max-width: 540px;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px #3333;
+  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
   animation: popupIn 0.33s;
 }
 @keyframes popupIn {
@@ -468,41 +414,135 @@ pre.stateblock, .stateblock {
   to   { transform: scale(1); opacity: 1;}
 }
 .close {
-  color: #3949ab;
-  float: right;
-  font-size: 2em;
-  font-weight: bold;
-  cursor: pointer;
+  color: var(--primary); float: right; font-size: 2em; font-weight: bold; cursor: pointer;
+}
+.close:hover { color: var(--danger); }
+@media (max-width: 700px) {
+  #main-card { padding: 1.1em 0.5em;}
+  h1 { font-size: 1.4em;}
+  h2 { font-size: 1.09em;}
+  .card-section { padding: 0.7em 0.5em;}
+  button { width: 100%; }
+  #logout-btn { float: none; margin-top: 8px; }
+  .modal-content { width: 99vw; padding: 1.2em; }
+}
+.bases-block {
+  background: #e3e6f0;
+}
+.stateblock-1 { background: #cdd5df !important; }
+.stateblock-2 { background: #cdd5df !important; }
+.stateblock-3 { background: #cdd5df !important; }
+.stateblock-4 { background: #cdd5df !important; }
+.stateblock {
+  color: #222;
+  padding: 1em;
+  border-radius: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1em;
+  margin: 0 0 1em 0;
+  white-space: pre-line;
+  box-shadow: 0 1px 4px 0 rgba(31,38,135,0.03);
+}
+.modal {
+  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
+  overflow: auto; background-color: rgba(0,0,0,0.33);
+}
+.modal-content {
+  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
+  animation: popupIn 0.33s;
+}
+@keyframes popupIn {
+  from { transform: scale(0.95); opacity: 0;}
+  to   { transform: scale(1); opacity: 1;}
+}
+.close {
+  color: #3949ab; float: right; font-size: 2em; font-weight: bold; cursor: pointer;
 }
 .close:hover { color: #d32f2f; }
-
-/* Button row styles */
-.button-row {
+.config-section {
+    background: var(--primary-light);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.config-section h3 {
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 8px;
+}
+.form-group {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+.form-group input[type="text"], 
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.form-group.checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+.form-group.checkbox input[type="checkbox"] {
+    margin-right: 8px;
+}
+.form-group.checkbox label {
+    margin-bottom: 0;
+}
+@media (max-width: 700px) {
+    .config-sections {
+        grid-template-columns: 1fr;
+    }
+}
+/* Config form styling */
+.config-sections {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: flex-start;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.help-text {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 3px;
+    font-style: italic;
+}
+.button-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
 }
 .button-row form {
-  margin: 0;
+    margin: 0;
 }
-
-/* Misc */
-.bases-block { background: #e3e6f0; }
-.your-card { margin-bottom: 0.8em; }
-.card-section.center-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em 0;
+@media (max-width: 700px) {
+    .button-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .button-row form {
+        width: 100%;
+    }
 }
-select[name="track_dropdown"] {
-  min-width: 100px;
-  max-width: 100%;
+.logs {
+  overflow-y: auto;
+  max-height: 220px;
 }
-
-/* Dark theme overrides */
 @media (prefers-color-scheme: dark) {
   :root {
     --primary: #90a4ff;
@@ -533,8 +573,8 @@ select[name="track_dropdown"] {
     color: #eee;
   }
   .stateblock {
-    background: #939393 !important;
-    color: #000000 !important;
+    background: #939393 !important; /* Change this to your preferred dark background color */
+    color: #000000 !important;      /* Optional: ensures text is readable in dark mode */
   }
   input, select, textarea {
     background: #23272b;
@@ -546,28 +586,109 @@ select[name="track_dropdown"] {
     color: #eee;
   }
   #message-timer {
-    background: #23272b;
-    color: var(--primary);
+    background: #23272b;         /* or var(--card) or a dark color */
+    color: var(--primary);       /* or #90a4ff for blue accent */
     border: 2px solid var(--primary);
   }
   #message-timer.ready {
-    color: var(--success);
+    color: var(--success);       /* you can keep this or lighten it */
     border-color: var(--success);
-    background: #163021;
+    background: #163021;         /* a dark green shade, or use var(--card) */
   }
   #message-timer.running {
     color: var(--danger);
     border-color: var(--danger);
-    background: #3a2121;
-  }
+    background: #3a2121;         /* a dark red shade, or var(--card) */
+  }  
   #base-configurator-table th {
-    background: #2a2e3a !important;
-    color: #fff;
+    background: #2a2e3a !important;   /* A dark blue/gray */
+    color: #fff;           /* White text */  
   }
   .config-sections .config-section {
-    background: #011f4b;
+    background: #011f4b; /* Warm dark brown/orange for dark mode, adjust as desired */
   }
 }
+.your-card { margin-bottom: 0.8em; }
+.card-section.center-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 0;    /* ensures enough space for vertical centering */
+  /* or use height: 100px; if you want a fixed height */
+  /* or use padding for flexible height */
+}
+select[name="track_dropdown"] {
+    min-width: 100px;
+    max-width: 100%;
+}
+
+
+        tr.addEventListener('dragenter', function(e) {
+            e.preventDefault();
+            tr.classList.add('dragover');
+        });
+        tr.addEventListener('dragleave', function(e) {
+            tr.classList.remove('dragover');
+        });
+
+        tr.appendChild(tdBase);
+        tr.appendChild(tdDesc);
+        tr.appendChild(tdDel);
+        return tr;
+    }
+
+    function loadBaseConfigurator() {
+        fetch("/api/base_configurator", {credentials: 'same-origin'})
+        .then(resp => resp.json())
+        .then(data => {
+            tableBody.innerHTML = "";
+            (data || []).forEach(row => {
+                tableBody.appendChild(makeRow(row));
+            });
+        });
+    }
+
+    if (addRowBtn) {
+        addRowBtn.onclick = function() {
+            tableBody.appendChild(makeRow());
+        };
+    }
+
+    if (saveBtn) {
+        saveBtn.onclick = function() {
+            // Gather data
+            const rows = tableBody.querySelectorAll("tr");
+            const configurator = [];
+            for (let tr of rows) {
+                const base_no = tr.children[0].querySelector("input").value.trim();
+                const desc = tr.children[1].querySelector("input").value.trim();
+                if (base_no || desc) {
+                    configurator.push({base_no, desc});
+                }
+            }
+            fetch("/api/save_base_configurator", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(configurator)
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.success) {
+                    msgDiv.style.color = "#388e3c";
+                    msgDiv.textContent = "configurator saved successfully.";
+                } else {
+                    msgDiv.style.color = "#d32f2f";
+                    msgDiv.textContent = "Error saving configurator: " + (data.error || "Unknown error");
+                }
+            }).catch(e => {
+                msgDiv.style.color = "#d32f2f";
+                msgDiv.textContent = "Network or server error.";
+            });
+        };
+    }
+});
+
 </style>
 <script>
 let updateStatus;
@@ -1105,10 +1226,11 @@ document.addEventListener("DOMContentLoaded", function() {
                   <li><b>R:</b> Repeats the wav - P1001R.  Repeats x number of times until plays through. *</li>
                   <li><b>P:</b> Pauses the wav - P1001P.  Pauses x number of times before giving up. *</li>
                   <li><b>W:</b> Waits for COS (including debounce) to go inactive before playing the wav - P1001W. *</li>
-                  <li><b>M:</b> Message that plays when timer expires P1001M, P1001RM, P2000A5000M.  For example, a tail message that won't play more than x minutes. *</li>
-                  <li><b>A:</b> Alternates between Bases and/or Single Tracks.  P4000A5000A6000I (example with Repeat suffix).  This can cross base types. ***</li>
-                  <li><b>J:</b> Joins Bases and/or Single Tracks.  P5189RJ5300I (example with Repeat and Interrupt suffixes).  This can cross base types. ***</li>
-                  <li><b>i:</b> Interrupts primary wav and immediately plays secondary even if COS active - P3050i3000.  The i command is not supported with the A or J suffix.</li>
+                  <li><b>M:</b> Message that plays when timer expires P1001M, P1001RM, P2000A5000M (means 2000 will always play, 5000 will only play when timer expired.  For example, a tail message that won't play more than x minutes. *</li>
+                  <li><b>A:</b> Alternates between Bases and/or Single Tracks.  P4000A5000A6000I (example with Repeat suffix).  This can cross base types. </li>
+                  <li><b>J:</b> Joins Bases and/or Single Tracks.  P5189RJ5300I (example with Repeat and Interrupt suffixes).  This can cross base types. </li>
+                  <li><b>J/A:</b> You can combine J and A with suffixes into one command such as: P5600WJ5050PA5600i6000 </li>
+                  <li><b>i:</b> Interrupts primary wav and immediately plays secondary even if COS active - P3050i3000, P5600i6000A5050i6000A5600i6000.  The i command is not supported with the J suffix.</li>
               <h3>Record Functions</h3>
               All tracks must start with an R and end with &#92;n).
               <br>
@@ -1133,7 +1255,6 @@ document.addEventListener("DOMContentLoaded", function() {
                   <br>
                   ** Waits for cos inactive with debounce.</li>
                   <br>
-                  *** When using A and J suffixes, do not use suffixes on bases (P, R, etc.)  You can use I but if used on the first wav, the entire J sequence will stop on interrupt.  Suffixes are ok to use on single tracks with A or J.  A and J can not be used in the same command.
                 </ul>
               </li>
           </div>
@@ -1305,23 +1426,25 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="config-section gpio-settings">
                 <h3>GPIO Settings</h3>
                 <div class="form-group">
+                    <label for="remote_busy_pin">Remote Busy Pin:</label>
+                    <input type="number" id="remote_busy_pin" name="remote_busy_pin" min="0" value="{{ config.get('GPIO', 'remote_busy_pin', fallback='20') }}">
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
+                    <label for="remote_busy_activate_level">Remote Device Busy Active High</label>
+                </div>
+                <hr style="background-color: blue;">
+                <div class="form-group">
                     <label for="cos_pin">COS Pin:</label>
                     <input type="number" id="cos_pin" name="cos_pin" min="0" value="{{ config.get('GPIO', 'cos_pin', fallback='16') }}">
                 </div>
                 <div class="form-group checkbox">
                     <input type="checkbox" id="cos_activate_level" name="cos_activate_level" {% if config.get('GPIO', 'cos_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
-                    <label for="cos_activate_level">COS Active High </label>
+                    <label for="cos_activate_level">COS Active High</label>
                 </div>
+                <br>
                 <div class="form-group">
-                    <label for="remote_busy_pin">RDB Pin:</label>
-                    <input type="number" id="remote_busy_pin" name="remote_busy_pin" min="0" value="{{ config.get('GPIO', 'remote_busy_pin', fallback='20') }}">
-                </div>
-                <div class="form-group checkbox">
-                    <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
-                    <label for="remote_busy_activate_level">RDB Active High </label>
-                </div>
-                <div class="form-group">
-                    <label for="cos_debounce_time">COS Debounce (seconds):</label>
+                    <label for="cos_debounce_time">COS Debounce Time (seconds):</label>
                     <input type="number" id="cos_debounce_time" name="cos_debounce_time" min="0" step="0.1" value="{{ config.get('GPIO', 'cos_debounce_time', fallback='1.0') }}">
                 </div>
                 <div class="form-group">

@@ -1,3 +1,152 @@
+[2025-07-09 21:59:05] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600WJ5050PJ5600i6000'
+
+[2025-07-09 21:59:03] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600WJ5050PJ5600i6000'
+
+[2025-07-09 21:50:47] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:50:46] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:50:46] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:50:44] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:50:14] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:49:42] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:49:37] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5600J5050i6000'
+
+[2025-07-09 21:48:24] Exception in maybe_run_webcmd:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 2986, in maybe_run_webcmd
+    cmd = json.load(f)
+          ^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+[2025-07-09 21:46:57] Exception in maybe_run_webcmd:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 2986, in maybe_run_webcmd
+    cmd = json.load(f)
+          ^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+[2025-07-09 19:49:46] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5300M5400'
+
+[2025-07-09 19:47:08] Exception in maybe_run_webcmd:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 2986, in maybe_run_webcmd
+    cmd = json.load(f)
+          ^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+[2025-07-09 19:42:47] Exception in process_command:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 995, in process_command
+    code = int(code_str)
+           ^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '5300M5400'
+
+[2025-07-09 19:42:46] Exception in maybe_run_webcmd:
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 2986, in maybe_run_webcmd
+    cmd = json.load(f)
+          ^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
 [2025-07-09 10:34:53] Exception in play_rotating_section:
 Traceback (most recent call last):
   File "/home/drx/DRX/drx_main.py", line 1857, in play_rotating_section

@@ -816,11 +816,14 @@ def handle_join_series(bases, suffixes, overall_m):
     If overall_m is True, treat as one message for timer logic.
     Section bases (Random, Rotation, SudoRandom) are played using play_any_section_by_type.
     Direct base codes use play_direct_track.
+
+    This version processes each base+suffix as an individual DRX command, ensuring
+    suffixes (R, P, I, M, etc.) are respected per segment, and message timer logic applies per-segment.
     """
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
     global message_timer_last_played, message_timer_value
 
-    # Message timer: check if allowed
+    # If overall_m is set (M at the end of the join), enforce message timer for the whole series
     if overall_m:
         should_play = should_allow_message_timer_play(True, message_timer_value, message_timer_last_played)
         if not should_play:
@@ -835,33 +838,12 @@ def handle_join_series(bases, suffixes, overall_m):
         set_remote_busy(True)
         status_manager.set_join_series(bases)
 
+        # For each base+suffix, build the DRX command and process individually
         for i, base in enumerate(bases):
-            suf = suffixes[i].upper()
-            interruptible = "I" in suf
-            repeat = "R" in suf
-            pausing = "P" in suf
-            wait_for_cos = "W" in suf
-            code_str = f"{base:04d}"
-
-            # Section/Direct detection
-            typ, end, interval = get_base_type_and_info(base)
-            if typ in ('Random', 'Rotation', 'SudoRandom'):
-                # Play section using section handler
-                play_any_section_by_type(
-                    base, end, interval, typ,
-                    interruptible=interruptible,
-                    repeat=repeat,
-                    pausing=pausing,
-                    wait_for_cos=wait_for_cos
-                )
-            else:
-                play_direct_track(
-                    code_str,
-                    interruptible=interruptible,
-                    pausing=pausing,
-                    repeat=repeat,
-                    wait_for_cos=wait_for_cos
-                )
+            suf = suffixes[i].upper() if i < len(suffixes) and suffixes[i] else ""
+            cmd = f"P{base:04d}{suf}"
+            process_command(cmd)
+            # Do not clear REMOTE_BUSY here; keep it active for the entire series
 
         status_manager.set_idle()
     finally:

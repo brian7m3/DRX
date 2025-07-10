@@ -3791,7 +3791,8 @@ def handle_tot_start():
             return
         tot_active = True
         tot_start_time = time.time()
-        debug_log("TOT: Timer started.")
+        debug_log("TOT: Timer started, activating remote device.")
+        set_remote_busy(True)  # Add this line
         status_manager.set_status(
             status="Time Out Timer",
             playing="TOT Active",
@@ -3807,6 +3808,7 @@ def handle_tot_stop():
             tot_active = False
             tot_start_time = None
             debug_log(f"TOT: Timer stopped, duration: {tot_last_seconds} seconds.")
+            # Note: Keep remote device active - it will be deactivated by TOP command
 
 def monitor_tot_cos():
     """Monitor COS and stop TOT timer when COS goes inactive."""
@@ -3826,7 +3828,8 @@ def handle_top_command():
         info="Reporting time out duration"
     )
     log_recent(f"Status: Time Out Seconds | Currently Playing: Timed {tot_last_seconds} seconds | Info: Reporting time out duration")
-    set_remote_busy(True)
+    
+    # Note: Remote device should already be active from TOT, don't set it again
     try:
         to1 = os.path.join(EXTRA_SOUND_DIR, "to1.wav")
         if os.path.exists(to1):
@@ -3843,8 +3846,8 @@ def handle_top_command():
         if os.path.exists(to2):
             play_single_wav(to2, block_interrupt=True, reset_status_on_end=False)
     finally:
-        set_remote_busy(False)
-        status_manager.set_idle()   
+        set_remote_busy(False)  # Only deactivate here at the end of TOP
+        status_manager.set_idle()      
 
 def reload_config():
     global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE

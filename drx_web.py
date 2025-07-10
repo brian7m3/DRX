@@ -47,6 +47,40 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
+/* Base Configurator Validation Styles */
+.base-error {
+    border: 2px solid #d32f2f !important;
+    background-color: #ffebee !important;
+}
+
+.validation-error {
+    color: #d32f2f;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-top: 5px;
+    padding: 5px;
+    background-color: #ffebee;
+    border: 1px solid #d32f2f;
+    border-radius: 4px;
+    display: none;
+}
+
+.save-disabled {
+    background: #ccc !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+#base-configurator-validation-summary {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #ffebee;
+    border: 1px solid #d32f2f;
+    border-radius: 4px;
+    color: #d32f2f;
+    font-weight: bold;
+    display: none;
+}
 .status-last-played {
   font-size: .75em !important;
   /* Optional extras: */
@@ -1489,9 +1523,12 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="close" id="close-base-configurator">&times;</span>
       <h2 style="display:inline-block; margin:0 0 0 10px;">Base Configurator</h2>
     </div>
-    <small class="help-text">Hint: You can drag the columns to rearrange them.  This window is draggable as well.</small>
+    <small class="help-text">Hint: You can drag the columns to rearrange them. This window is draggable as well.</small>
     <br>
     <br>
+    <!-- Add validation summary -->
+    <div id="base-configurator-validation-summary"></div>
+    
     <div id="base-configurator-table-section">
       <table id="base-configurator-table" style="width:100%; border-collapse:collapse;">
         <thead>
@@ -1514,9 +1551,8 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="base-configurator-msg" style="margin-top:8px; color:#388e3c; font-size:1em;"></div>
   </div>
 </div>
-<!-- ... your original HTML before here ... -->
 <script>
-// --- Base Configurator Modal JS ---
+// --- Base Configurator Modal JS with Validation ---
 document.addEventListener("DOMContentLoaded", function() {
     const configuratorBtn = document.getElementById('base-configurator-btn');
     const configuratorModal = document.getElementById('base-configurator-modal');
@@ -1525,6 +1561,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const addRowBtn = document.getElementById('add-base-configurator-row');
     const saveBtn = document.getElementById('save-base-configurator');
     const msgDiv = document.getElementById('base-configurator-msg');
+    const validationSummary = document.getElementById('base-configurator-validation-summary');
     let dragSrcRow = null;
 
     // Open modal and load configurator
@@ -1536,13 +1573,114 @@ document.addEventListener("DOMContentLoaded", function() {
         closeconfigurator.onclick = function() {
             configuratorModal.style.display = "none";
             msgDiv.textContent = "";
+            clearValidationErrors();
         };
         window.onclick = function(event) {
             if (event.target == configuratorModal) {
                 configuratorModal.style.display = "none";
                 msgDiv.textContent = "";
+                clearValidationErrors();
             }
         };
+    }
+
+    // Validation functions
+    function parseNumber(str) {
+        const num = parseInt(str.trim());
+        return isNaN(num) ? null : num;
+    }
+
+    function rangesOverlap(range1, range2) {
+        // range1 and range2 are objects with {start, end} where end might be null
+        const r1Start = range1.start;
+        const r1End = range1.end !== null ? range1.end : range1.start;
+        const r2Start = range2.start;
+        const r2End = range2.end !== null ? range2.end : range2.start;
+        
+        return r1Start <= r2End && r2Start <= r1End;
+    }
+
+    function validateRanges() {
+        const rows = tableBody.querySelectorAll("tr");
+        const ranges = [];
+        const validationErrors = [];
+        
+        // Clear previous errors
+        clearValidationErrors();
+        
+        // Parse all ranges
+        rows.forEach((tr, index) => {
+            const baseInput = tr.children[0].querySelector("input");
+            const endInput = tr.children[1].querySelector("input");
+            const baseNo = parseNumber(baseInput.value);
+            const endNo = parseNumber(endInput.value);
+            
+            if (baseNo !== null) {
+                ranges.push({
+                    index: index,
+                    start: baseNo,
+                    end: endNo,
+                    baseInput: baseInput,
+                    endInput: endInput,
+                    row: tr
+                });
+            }
+        });
+        
+        // Check for overlaps
+        for (let i = 0; i < ranges.length; i++) {
+            for (let j = i + 1; j < ranges.length; j++) {
+                const range1 = ranges[i];
+                const range2 = ranges[j];
+                
+                if (rangesOverlap(range1, range2)) {
+                    // Mark both ranges as errors
+                    range1.baseInput.classList.add('base-error');
+                    if (range1.endInput.value.trim()) {
+                        range1.endInput.classList.add('base-error');
+                    }
+                    range2.baseInput.classList.add('base-error');
+                    if (range2.endInput.value.trim()) {
+                        range2.endInput.classList.add('base-error');
+                    }
+                    
+                    const range1Desc = range1.end !== null ? 
+                        `${range1.start}-${range1.end}` : `${range1.start}`;
+                    const range2Desc = range2.end !== null ? 
+                        `${range2.start}-${range2.end}` : `${range2.start}`;
+                    
+                    validationErrors.push(
+                        `Row ${range1.index + 1} (${range1Desc}) overlaps with Row ${range2.index + 1} (${range2Desc})`
+                    );
+                }
+            }
+        }
+        
+        // Update UI based on validation results
+        if (validationErrors.length > 0) {
+            validationSummary.innerHTML = 
+                '<strong>Range Overlaps Detected:</strong><br>' + 
+                validationErrors.join('<br>');
+            validationSummary.style.display = 'block';
+            saveBtn.classList.add('save-disabled');
+            saveBtn.disabled = true;
+            return false;
+        } else {
+            validationSummary.style.display = 'none';
+            saveBtn.classList.remove('save-disabled');
+            saveBtn.disabled = false;
+            return true;
+        }
+    }
+
+    function clearValidationErrors() {
+        const inputs = tableBody.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.classList.remove('base-error');
+        });
+        validationSummary.style.display = 'none';
+        saveBtn.classList.remove('save-disabled');
+        saveBtn.disabled = false;
     }
 
     function makeRow(rowData = {base_no: "", end_no: "", type: "", interval: "", desc: ""}) {
@@ -1563,6 +1701,12 @@ document.addEventListener("DOMContentLoaded", function() {
         inputBase.value = rowData.base_no || "";
         inputBase.placeholder = "Base No.";
         inputBase.className = "base-no";
+        
+        // Add validation on input
+        inputBase.addEventListener('input', function() {
+            setTimeout(validateRanges, 100); // Small delay to allow for rapid typing
+        });
+        
         tdBase.appendChild(inputBase);
 
         // End No. input
@@ -1571,6 +1715,12 @@ document.addEventListener("DOMContentLoaded", function() {
         inputEnd.value = rowData.end_no || "";
         inputEnd.placeholder = "End No.";
         inputEnd.className = "end-no";
+        
+        // Add validation on input
+        inputEnd.addEventListener('input', function() {
+            setTimeout(validateRanges, 100); // Small delay to allow for rapid typing
+        });
+        
         tdEnd.appendChild(inputEnd);
 
         // Type dropdown
@@ -1607,7 +1757,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const delBtn = document.createElement("button");
         delBtn.textContent = "Delete";
         delBtn.type = "button";
-        delBtn.onclick = function() { tr.remove(); };
+        delBtn.onclick = function() { 
+            tr.remove(); 
+            setTimeout(validateRanges, 50); // Revalidate after deletion
+        };
         tdDel.appendChild(delBtn);
 
         // --- DRAG AND DROP ROWS ---
@@ -1635,6 +1788,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     tr.parentNode.insertBefore(dragSrcRow, tr.nextSibling);
                 }
+                // Revalidate after reordering
+                setTimeout(validateRanges, 50);
             }
             dragSrcRow = null;
         });
@@ -1665,17 +1820,28 @@ document.addEventListener("DOMContentLoaded", function() {
             (data || []).forEach(row => {
                 tableBody.appendChild(makeRow(row));
             });
+            // Validate after loading
+            setTimeout(validateRanges, 100);
         });
     }
 
     if (addRowBtn) {
         addRowBtn.onclick = function() {
             tableBody.appendChild(makeRow());
+            // Validate after adding (though new empty row shouldn't cause issues)
+            setTimeout(validateRanges, 50);
         };
     }
 
     if (saveBtn) {
         saveBtn.onclick = function() {
+            // Final validation before save
+            if (!validateRanges()) {
+                msgDiv.style.color = "#d32f2f";
+                msgDiv.textContent = "Cannot save: Please resolve range overlaps first.";
+                return;
+            }
+            
             // Gather data
             const rows = tableBody.querySelectorAll("tr");
             const configurator = [];
@@ -1700,6 +1866,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (data.success) {
                     msgDiv.style.color = "#388e3c";
                     msgDiv.textContent = "Configuration saved successfully.";
+                    clearValidationErrors();
                 } else {
                     msgDiv.style.color = "#d32f2f";
                     msgDiv.textContent = "Error saving configuration: " + (data.error || "Unknown error");

@@ -597,3 +597,29 @@ Test log entry
 2025-07-10 09:05:58.336: Configuration reload requested from web
 2025-07-10 09:06:41.631: Configuration reload requested from web
 2025-07-10 09:06:55.896: Configuration reload requested from web
+2025-07-10 09:59:58.228: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 09:59:58.228: WX Report: {'observations': 'Light Rain', 'temperature': '71 degrees', 'humidity': '98 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.02'}
+2025-07-10 10:03:19.084: Configuration reload requested from web
+2025-07-10 10:03:27.845: Play requested: S2001 (web input box)
+2025-07-10 10:03:27.848: Script 2001 executed successfully
+2025-07-10 10:03:27.848: Script execution started: 2001
+2025-07-10 10:10:05.048: Configuration reload requested from web
+2025-07-10 10:15:01.317: Play requested: TOT (web input box)
+2025-07-10 10:15:24.845: Play requested: TOP (web input box)
+2025-07-10 10:15:24.845: Status: Time Out Seconds | Currently Playing: Timed 0 seconds | Info: Reporting time out duration
+2025-07-10 10:15:40.865: Play requested: S2000 (web input box)
+2025-07-10 10:15:40.867: Script 2000 executed successfully
+2025-07-10 10:15:40.867: Script execution started: 2000
+2025-07-10 10:15:45.872: Play requested: TOP (web input box)
+2025-07-10 10:15:45.872: Status: Time Out Seconds | Currently Playing: Timed 39 seconds | Info: Reporting time out duration
+2025-07-10 10:16:48.706: Configuration reload requested from web
+2025-07-10 10:16:58.717: Play requested: P5985 (web input box)
+2025-07-10 10:16:58.968: Play requested: P5985 (web input box)
+2025-07-10 10:17:03.634: Play: 5985.WAV [normal] - successful
+2025-07-10 10:17:08.600: Play: 5985.WAV [normal] - successful
+2025-07-10 10:33:28.703: Configuration reload requested from web
+2025-07-10 10:35:14.829: Configuration reload requested from web
+2025-07-10 10:59:58.259: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 10:59:58.260: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '96 percent', 'winddir': 'SW', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.99', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-10 11:10:10.763: Configuration reload requested from web
+2025-07-10 11:10:19.022: Configuration reload requested from web

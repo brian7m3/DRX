@@ -13,19 +13,22 @@ device = plughw:2,0
 message timer = 10
 
 [Rotation]
-base = 5300,5379,5170
-end = 5331,5382,5174
+base = 5300,5170,5379
+end = 5331,5173,5182
 interval = 0,0,0
+description = IID Normal,TM PL 77 3 Times then Check Us Out @ sparc.us,IID Star Trek
 
 [Random]
-base = 5400,5050
-end = 5432,5068
-interval = 0,10
+base = 5400,5530,5549
+end = 5432,5537,5567
+interval = 0,0,10
+description = PID Normal,PID Star Trek,CT Star Trek
 
 [SudoRandom]
-base = 5600,5500,5594,5530
-end = 5669,5505,5598,5537
-interval = 10,1,0,0
+base = 5600,5500,5594
+end = 5669,5505,5598
+interval = 10,0,0
+description = CT Normal,PID Night TIme,PID Saturday Night
 
 [GPIO]
 cos_pin = 16
@@ -46,3 +49,5 @@ port = 505
 enable_cos_override = false
 enable_debug_logging = false
 
+[BaseOrder]
+order = Rotating:0,Random:0,SudoRandom:0,Rotating:1,SudoRandom:1,SudoRandom:2,Rotating:2,Random:1,Random:2

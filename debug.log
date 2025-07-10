@@ -1,0 +1,723 @@
+[2025-07-09 23:03:34] RAW process_command input: 'P5500i6000'
+[2025-07-09 23:03:34] process_command reached
+[2025-07-09 23:03:34] Worker c1446fde: Processing command: P5500i6000
+[2025-07-09 23:03:34] is_cos_active: False
+[2025-07-09 23:03:34] DTMF match: False
+[2025-07-09 23:03:34] Got serial line: 'P5500i6000'
+[2025-07-09 23:03:34] Line buffer: 'P5500i6000\n'
+[2025-07-09 23:03:34] Raw serial bytes: b'P5500i6000\n'
+[2025-07-09 23:01:35] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:01:35] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 23:01:35] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 23:01:34] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:01:34] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 23:01:34] NORMAL MODE ACTIVE
+[2025-07-09 23:01:34] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 23:01:34] play_sound: exists? True
+[2025-07-09 23:01:34] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 23:01:34] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=None
+[2025-07-09 23:01:34] Playing file: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 23:01:34] Matching files for code_str=5171: ['5171-TM PL 77.wav']
+[2025-07-09 23:01:34] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 23:01:34] play_direct_track: code_str=5171
+[2025-07-09 23:01:34] RAW process_command input: 'P5171'
+[2025-07-09 23:01:34] process_command reached
+[2025-07-09 23:01:34] [ALT SERIES] Evaluating segment 3/4: P5171
+[2025-07-09 23:01:34] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 23:01:34] process_command reached
+[2025-07-09 23:01:34] Worker c1446fde: Processing command: P5171A5171A5171A5174RM
+[2025-07-09 23:01:34] is_cos_active: False
+[2025-07-09 23:01:34] DTMF match: False
+[2025-07-09 23:01:33] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 23:01:33] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 23:01:33] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 23:01:33] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:01:32] play_single_wav: filename=/home/drx/DRX/sounds/extra/15.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:01:32] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:01:32] TOP command received in process_command.
+[2025-07-09 23:01:32] RAW process_command input: 'TOP'
+[2025-07-09 23:01:32] process_command reached
+[2025-07-09 23:01:32] Worker c1446fde: Processing command: TOP
+[2025-07-09 23:01:25] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:01:25] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 23:01:25] aplay error: Playing WAVE '/home/drx/DRX/sounds/5661-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 23:01:24] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:01:24] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 23:01:24] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 23:01:24] play_sound: filename=/home/drx/DRX/sounds/5661-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 23:01:24] play_sound: exists? True
+[2025-07-09 23:01:24] play_sound: absolute filename to play: /home/drx/DRX/sounds/5661-CT.wav
+[2025-07-09 23:01:24] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5661-CT.wav, display_name=5661-CT from SudoRandom Base 5600
+[2025-07-09 23:01:23] RAW process_command input: 'P5600I'
+[2025-07-09 23:01:23] process_command reached
+[2025-07-09 23:01:23] Worker c1446fde: Processing command: P5600I
+[2025-07-09 23:01:23] is_cos_active: False
+[2025-07-09 23:01:23] DTMF match: False
+[2025-07-09 23:01:23] Got serial line: 'P5600I'
+[2025-07-09 23:01:23] Line buffer: 'P5600I\n'
+[2025-07-09 23:01:23] Raw serial bytes: b'P5600I\n'
+[2025-07-09 23:01:22] TOT: Timer stopped, duration: 15 seconds.
+[2025-07-09 23:01:22] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:22] Increment block running
+[2025-07-09 23:01:21] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:21] Increment block running
+[2025-07-09 23:01:20] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:20] Increment block running
+[2025-07-09 23:01:19] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:19] Increment block running
+[2025-07-09 23:01:18] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:18] Increment block running
+[2025-07-09 23:01:17] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:17] Increment block running
+[2025-07-09 23:01:16] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:16] Increment block running
+[2025-07-09 23:01:15] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:15] Increment block running
+[2025-07-09 23:01:14] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:14] Increment block running
+[2025-07-09 23:01:13] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:13] Increment block running
+[2025-07-09 23:01:12] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:12] Increment block running
+[2025-07-09 23:01:10] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:10] Increment block running
+[2025-07-09 23:01:09] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:09] Increment block running
+[2025-07-09 23:01:08] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:08] Increment block running
+[2025-07-09 23:01:07] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:07] Increment block running
+[2025-07-09 23:01:07] TOT: Timer started.
+[2025-07-09 23:01:07] TOT command received in process_command.
+[2025-07-09 23:01:07] RAW process_command input: 'TOT'
+[2025-07-09 23:01:07] process_command reached
+[2025-07-09 23:01:07] Worker c1446fde: Processing command: TOT
+[2025-07-09 23:01:06] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:06] Increment block running
+[2025-07-09 23:01:05] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:01:05] Increment block running
+[2025-07-09 23:01:03] TOT: Ignored, COS not active at start.
+[2025-07-09 23:01:03] TOT command received in process_command.
+[2025-07-09 23:01:03] RAW process_command input: 'TOT'
+[2025-07-09 23:01:03] process_command reached
+[2025-07-09 23:01:03] Worker c1446fde: Processing command: TOT
+[2025-07-09 23:01:01] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:01:01] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 23:01:01] aplay error: Playing WAVE '/home/drx/DRX/sounds/5661-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 23:01:00] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:01:00] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 23:01:00] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 23:01:00] play_sound: filename=/home/drx/DRX/sounds/5661-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 23:01:00] play_sound: exists? True
+[2025-07-09 23:01:00] play_sound: absolute filename to play: /home/drx/DRX/sounds/5661-CT.wav
+[2025-07-09 23:01:00] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5661-CT.wav, display_name=5661-CT from SudoRandom Base 5600
+[2025-07-09 23:01:00] RAW process_command input: 'P5600I'
+[2025-07-09 23:01:00] process_command reached
+[2025-07-09 23:01:00] Worker c1446fde: Processing command: P5600I
+-09 23:01:00] DTMF match: False
+[2025-07-09 23:01:00] Got serial line: 'P5600I'
+[2025-07-09 23:01:00] Line buffer: 'P5600I\n'
+[2025-07-09 23:01:00] Raw serial bytes: b'P5600I\n'
+[2025-07-09 23:00:59] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:00:59] Increment block running
+[2025-07-09 23:00:58] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:00:58] Increment block running
+[2025-07-09 23:00:55] TOT: Ignored, COS not active at start.
+[2025-07-09 23:00:55] TOT command received in process_command.
+[2025-07-09 23:00:55] RAW process_command input: 'TOT'
+[2025-07-09 23:00:55] process_command reached
+[2025-07-09 23:00:55] Worker c1446fde: Processing command: TOT
+[2025-07-09 23:00:54] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:00:54] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 23:00:54] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 23:00:52] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:00:52] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 23:00:52] NORMAL MODE ACTIVE
+[2025-07-09 23:00:52] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 23:00:52] play_sound: exists? True
+[2025-07-09 23:00:52] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 23:00:52] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=None
+[2025-07-09 23:00:52] Playing file: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 23:00:52] Matching files for code_str=5171: ['5171-TM PL 77.wav']
+[2025-07-09 23:00:52] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 23:00:52] play_direct_track: code_str=5171
+[2025-07-09 23:00:52] RAW process_command input: 'P5171'
+[2025-07-09 23:00:52] process_command reached
+[2025-07-09 23:00:52] [ALT SERIES] Evaluating segment 2/4: P5171
+[2025-07-09 23:00:52] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 23:00:52] process_command reached
+[2025-07-09 23:00:52] Worker c1446fde: Processing command: P5171A5171A5171A5174RM
+[2025-07-09 23:00:52] is_cos_active: False
+[2025-07-09 23:00:52] DTMF match: False
+[2025-07-09 23:00:52] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 23:00:52] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 23:00:52] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 23:00:44] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:00:43] play_single_wav: filename=/home/drx/DRX/sounds/extra/8.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:43] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:00:43] TOP command received in process_command.
+[2025-07-09 23:00:43] RAW process_command input: 'TOP'
+[2025-07-09 23:00:43] process_command reached
+[2025-07-09 23:00:43] Worker c1446fde: Processing command: TOP
+[2025-07-09 23:00:43] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:00:43] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 23:00:43] aplay error: Playing WAVE '/home/drx/DRX/sounds/5661-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 23:00:42] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:00:42] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 23:00:42] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 23:00:42] play_sound: filename=/home/drx/DRX/sounds/5661-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 23:00:42] play_sound: exists? True
+[2025-07-09 23:00:42] play_sound: absolute filename to play: /home/drx/DRX/sounds/5661-CT.wav
+[2025-07-09 23:00:42] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5661-CT.wav, display_name=5661-CT from SudoRandom Base 5600
+[2025-07-09 23:00:42] RAW process_command input: 'P5600I'
+[2025-07-09 23:00:42] process_command reached
+[2025-07-09 23:00:42] Worker c1446fde: Processing command: P5600I
+[2025-07-09 23:00:42] is_cos_active: False
+[2025-07-09 23:00:42] DTMF match: False
+[2025-07-09 23:00:42] Got serial line: 'P5600I'
+[2025-07-09 23:00:42] Line buffer: 'P5600I\n'
+[2025-07-09 23:00:42] Raw serial bytes: b'P5600I\n'
+[2025-07-09 23:00:40] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 23:00:40] Increment block running
+[2025-07-09 23:00:36] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:00:35] play_single_wav: filename=/home/drx/DRX/sounds/extra/8.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:35] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:00:35] TOP command received in process_command.
+[2025-07-09 23:00:35] RAW process_command input: 'TOP'
+[2025-07-09 23:00:35] process_command reached
+[2025-07-09 23:00:35] Worker c1446fde: Processing command: TOP
+[2025-07-09 23:00:34] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:00:33] play_single_wav: filename=/home/drx/DRX/sounds/extra/8.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:33] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 23:00:33] TOP command received in process_command.
+[2025-07-09 23:00:33] RAW process_command input: 'TOP'
+[2025-07-09 23:00:33] process_command reached
+[2025-07-09 23:00:33] Worker c1446fde: Processing command: TOP
+[2025-07-09 23:00:31] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 23:00:31] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-09 23:00:31] W1 CONDITIONS: WX report completed
+[2025-07-09 23:00:30] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:30] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-09 23:00:30] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:30] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-09 23:00:28] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:28] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-09 23:00:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/rising.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:27] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/rising.wav
+[2025-07-09 23:00:27] W1 CONDITIONS: WAV file not found: /home/drx/DRX/sounds/extra/call_pressurestatus.wav
+[2025-07-09 23:00:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:26] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-09 23:00:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:26] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-09 23:00:25] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:25] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-09 23:00:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:24] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-09 23:00:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:24] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-09 23:00:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:22] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-09 23:00:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:21] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-09 23:00:20] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:20] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-09 23:00:19] play_single_wav: filename=/home/drx/DRX/sounds/extra/guststo.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:19] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/guststo.wav
+[2025-07-09 23:00:18] play_single_wav: filename=/home/drx/DRX/sounds/extra/Calm.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:18] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/Calm.wav
+[2025-07-09 23:00:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:17] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-09 23:00:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:17] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-09 23:00:16] play_single_wav: filename=/home/drx/DRX/sounds/extra/4.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:16] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/4.wav
+[2025-07-09 23:00:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/90.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:15] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/90.wav
+[2025-07-09 23:00:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:13] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-09 23:00:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:13] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-09 23:00:12] play_single_wav: filename=/home/drx/DRX/sounds/extra/5.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:12] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/5.wav
+[2025-07-09 23:00:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/70.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:11] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/70.wav
+[2025-07-09 23:00:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:09] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-09 23:00:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches_per_hour.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:08] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/inches_per_hour.wav
+[2025-07-09 23:00:07] play_single_wav: filename=/home/drx/DRX/sounds/extra/2.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:07] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/2.wav
+[2025-07-09 23:00:06] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:06] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-09 23:00:06] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:06] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-09 23:00:05] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:05] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-09 23:00:03] play_single_wav: filename=/home/drx/DRX/sounds/extra/precip_rate.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:03] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/precip_rate.wav
+[2025-07-09 23:00:02] play_single_wav: filename=/home/drx/DRX/sounds/extra/MostlyCloudy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 23:00:02] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/MostlyCloudy.wav
+[2025-07-09 22:59:58] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 22:59:58] W1 CONDITIONS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-09 22:59:58] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:59:58] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-09 22:59:58] RAW process_command input: 'W1'
+[2025-07-09 22:59:58] process_command reached
+[2025-07-09 22:59:58] Worker c1446fde: Processing command: W1
+[2025-07-09 22:59:58] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:59:58] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:59:58] aplay error: Playing WAVE '/home/drx/DRX/sounds/9980-cond_tone.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:59:57] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:59:57] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 22:59:57] NORMAL MODE ACTIVE
+[2025-07-09 22:59:57] play_sound: filename=/home/drx/DRX/sounds/9980-cond_tone.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:59:57] play_sound: exists? True
+[2025-07-09 22:59:57] play_sound: absolute filename to play: /home/drx/DRX/sounds/9980-cond_tone.wav
+[2025-07-09 22:59:57] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9980-cond_tone.wav, display_name=None
+[2025-07-09 22:59:57] Playing file: /home/drx/DRX/sounds/9980-cond_tone.wav
+[2025-07-09 22:59:57] Matching files for code_str=9980: ['9980-cond_tone.wav']
+[2025-07-09 22:59:57] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 22:59:57] play_direct_track: code_str=9980
+[2025-07-09 22:59:57] RAW process_command input: 'P9980'
+[2025-07-09 22:59:57] process_command reached
+[2025-07-09 22:59:57] Worker c1446fde: Processing command: P9980
+wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 22:59:43] play_direct_track: code_str=5171
+[2025-07-09 22:59:43] RAW process_command input: 'P5171'
+[2025-07-09 22:59:43] process_command reached
+[2025-07-09 22:59:43] [ALT SERIES] Evaluating segment 1/4: P5171
+[2025-07-09 22:59:43] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:59:43] process_command reached
+[2025-07-09 22:59:43] Worker c1446fde: Processing command: P5171A5171A5171A5174RM
+[2025-07-09 22:59:43] is_cos_active: False
+[2025-07-09 22:59:43] DTMF match: False
+[2025-07-09 22:59:43] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:59:43] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:59:43] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:59:34] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:59:34] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:59:34] aplay error: Playing WAVE '/home/drx/DRX/sounds/5661-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:59:33] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:59:33] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 22:59:33] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 22:59:33] play_sound: filename=/home/drx/DRX/sounds/5661-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:59:33] play_sound: exists? True
+[2025-07-09 22:59:33] play_sound: absolute filename to play: /home/drx/DRX/sounds/5661-CT.wav
+[2025-07-09 22:59:33] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5661-CT.wav, display_name=5661-CT from SudoRandom Base 5600
+[2025-07-09 22:59:33] RAW process_command input: 'P5600I'
+[2025-07-09 22:59:33] process_command reached
+[2025-07-09 22:59:33] Worker c1446fde: Processing command: P5600I
+-09 22:59:33] DTMF match: False
+[2025-07-09 22:59:33] Got serial line: 'P5600I'
+[2025-07-09 22:59:33] Line buffer: 'P5600I\n'
+[2025-07-09 22:59:33] Raw serial bytes: b'P5600I\n'
+[2025-07-09 22:59:32] TOT: Timer stopped, duration: 8 seconds.
+[2025-07-09 22:59:32] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:32] Increment block running
+[2025-07-09 22:59:31] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:31] Increment block running
+[2025-07-09 22:59:30] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:30] Increment block running
+[2025-07-09 22:59:29] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:29] Increment block running
+[2025-07-09 22:59:28] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:28] Increment block running
+[2025-07-09 22:59:27] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:27] Increment block running
+[2025-07-09 22:59:26] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:26] Increment block running
+[2025-07-09 22:59:25] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:25] Increment block running
+[2025-07-09 22:59:24] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:24] Increment block running
+[2025-07-09 22:59:23] TOT: Timer started.
+[2025-07-09 22:59:23] TOT command received in process_command.
+[2025-07-09 22:59:23] RAW process_command input: 'TOT'
+[2025-07-09 22:59:23] process_command reached
+[2025-07-09 22:59:23] Worker c1446fde: Processing command: TOT
+[2025-07-09 22:59:23] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:59:23] Increment block running
+[2025-07-09 22:59:22] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-09 22:59:22] prepend_or_replace_today_entry CALLED with 2025-07-09 and 1
+[2025-07-09 22:59:22] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-09 22:59:22] Called prepend_or_replace_today_entry(2025-07-09, 1)
+[2025-07-09 22:59:22] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-09 22:59:22] prepend_or_replace_today_entry called with 2025-07-09, 1
+[2025-07-09 22:59:22] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-09 22:59:22] minutes_rounded: 1, last_written_minutes: -1
+[2025-07-09 22:59:22] Increment block running
+[2025-07-09 22:59:11] Serial connection established successfully
+[2025-07-09 22:59:11] Worker c1446fde: starting
+erial port /dev/ttyUSB0...
+[2025-07-09 22:59:11] Loaded activity state: 1 minutes for 2025-07-09
+[2025-07-09 22:59:11] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:56:52] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:56:52] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:56:52] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:56:50] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:56:50] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 22:56:50] NORMAL MODE ACTIVE
+[2025-07-09 22:56:50] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:56:50] play_sound: exists? True
+[2025-07-09 22:56:50] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:56:50] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=None
+[2025-07-09 22:56:50] Playing file: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:56:50] Matching files for code_str=5171: ['5171-TM PL 77.wav']
+[2025-07-09 22:56:50] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 22:56:50] play_direct_track: code_str=5171
+[2025-07-09 22:56:50] RAW process_command input: 'P5171'
+[2025-07-09 22:56:50] process_command reached
+[2025-07-09 22:56:50] [ALT SERIES] Evaluating segment 1/4: P5171
+[2025-07-09 22:56:50] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:56:50] process_command reached
+[2025-07-09 22:56:50] Worker b2cb3b2e: Processing command: P5171A5171A5171A5174RM
+[2025-07-09 22:56:50] is_cos_active: False
+[2025-07-09 22:56:50] DTMF match: False
+[2025-07-09 22:56:50] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:56:50] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:56:50] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:56:47] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:56:47] play_single_wav: filename=/home/drx/DRX/sounds/extra/8.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 22:56:47] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:56:47] TOP command received in process_command.
+[2025-07-09 22:56:47] RAW process_command input: 'TOP'
+[2025-07-09 22:56:47] process_command reached
+[2025-07-09 22:56:47] Worker b2cb3b2e: Processing command: TOP
+[2025-07-09 22:56:42] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:56:42] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:56:42] aplay error: Playing WAVE '/home/drx/DRX/sounds/5642-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:56:40] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:56:40] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 22:56:40] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 22:56:40] play_sound: filename=/home/drx/DRX/sounds/5642-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:56:40] play_sound: exists? True
+[2025-07-09 22:56:40] play_sound: absolute filename to play: /home/drx/DRX/sounds/5642-CT.wav
+[2025-07-09 22:56:40] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5642-CT.wav, display_name=5642-CT from SudoRandom Base 5600
+[2025-07-09 22:56:40] RAW process_command input: 'P5600I'
+[2025-07-09 22:56:40] process_command reached
+[2025-07-09 22:56:40] Worker b2cb3b2e: Processing command: P5600I
+-07-09 22:56:40] is_cos_active: False
+[2025-07-09 22:56:40] DTMF match: False
+[2025-07-09 22:56:40] Got serial line: 'P5600I'
+[2025-07-09 22:56:40] Line buffer: 'P5600I\n'
+[2025-07-09 22:56:40] Raw serial bytes: b'P5600I\n'
+[2025-07-09 22:56:39] TOT: Timer stopped, duration: 8 seconds.
+[2025-07-09 22:56:39] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:39] Increment block running
+[2025-07-09 22:56:38] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:38] Increment block running
+[2025-07-09 22:56:37] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:37] Increment block running
+[2025-07-09 22:56:36] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:36] Increment block running
+[2025-07-09 22:56:35] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:35] Increment block running
+[2025-07-09 22:56:34] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:34] Increment block running
+[2025-07-09 22:56:33] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:33] Increment block running
+[2025-07-09 22:56:32] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:32] Increment block running
+[2025-07-09 22:56:31] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:31] Increment block running
+[2025-07-09 22:56:31] TOT: Timer started.
+[2025-07-09 22:56:31] TOT command received in process_command.
+[2025-07-09 22:56:31] RAW process_command input: 'TOT'
+[2025-07-09 22:56:31] process_command reached
+[2025-07-09 22:56:31] Worker b2cb3b2e: Processing command: TOT
+[2025-07-09 22:56:30] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:30] Increment block running
+[2025-07-09 22:56:29] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:56:29] Increment block running
+[2025-07-09 22:56:28] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-09 22:56:28] prepend_or_replace_today_entry CALLED with 2025-07-09 and 1
+[2025-07-09 22:56:28] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-09 22:56:28] Called prepend_or_replace_today_entry(2025-07-09, 1)
+[2025-07-09 22:56:28] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-09 22:56:28] prepend_or_replace_today_entry called with 2025-07-09, 1
+[2025-07-09 22:56:28] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-09 22:56:28] minutes_rounded: 1, last_written_minutes: -1
+[2025-07-09 22:56:28] Increment block running
+[2025-07-09 22:56:16] Serial connection established successfully
+[2025-07-09 22:56:16] Worker b2cb3b2e: starting
+erial port /dev/ttyUSB0...
+[2025-07-09 22:56:16] Loaded activity state: 1 minutes for 2025-07-09
+[2025-07-09 22:56:16] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:54:04] RAW process_command input: 'P5500i6000'
+[2025-07-09 22:54:04] process_command reached
+[2025-07-09 22:54:04] Worker 01aa9cc2: Processing command: P5500i6000
+-09 22:54:04] DTMF match: False
+[2025-07-09 22:54:04] Got serial line: 'P5500i6000'
+[2025-07-09 22:54:04] Line buffer: 'P5500i6000\n'
+[2025-07-09 22:54:04] Raw serial bytes: b'P5500i6000\n'
+[2025-07-09 22:51:27] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:51:27] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:51:27] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:51:26] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:51:26] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 22:51:26] NORMAL MODE ACTIVE
+[2025-07-09 22:51:26] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:51:26] play_sound: exists? True
+[2025-07-09 22:51:26] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:51:26] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=None
+[2025-07-09 22:51:26] Playing file: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:51:26] Matching files for code_str=5171: ['5171-TM PL 77.wav']
+[2025-07-09 22:51:26] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 22:51:26] play_direct_track: code_str=5171
+[2025-07-09 22:51:26] RAW process_command input: 'P5171'
+[2025-07-09 22:51:26] process_command reached
+[2025-07-09 22:51:26] [ALT SERIES] Evaluating segment 2/4: P5171
+[2025-07-09 22:51:26] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:51:26] process_command reached
+[2025-07-09 22:51:26] Worker 01aa9cc2: Processing command: P5171A5171A5171A5174RM
+[2025-07-09 22:51:26] is_cos_active: False
+[2025-07-09 22:51:26] DTMF match: False
+[2025-07-09 22:51:26] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:51:26] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:51:26] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:51:22] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:51:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/12.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 22:51:21] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:51:21] TOP command received in process_command.
+[2025-07-09 22:51:21] RAW process_command input: 'TOP'
+[2025-07-09 22:51:21] process_command reached
+[2025-07-09 22:51:21] Worker 01aa9cc2: Processing command: TOP
+[2025-07-09 22:51:17] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:51:17] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:51:17] aplay error: Playing WAVE '/home/drx/DRX/sounds/5612-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:51:16] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:51:16] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 22:51:16] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 22:51:16] play_sound: filename=/home/drx/DRX/sounds/5612-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:51:16] play_sound: exists? True
+[2025-07-09 22:51:16] play_sound: absolute filename to play: /home/drx/DRX/sounds/5612-CT.wav
+[2025-07-09 22:51:16] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5612-CT.wav, display_name=5612-CT from SudoRandom Base 5600
+[2025-07-09 22:51:16] RAW process_command input: 'P5600I'
+[2025-07-09 22:51:16] process_command reached
+[2025-07-09 22:51:16] Worker 01aa9cc2: Processing command: P5600I
+-07-09 22:51:16] is_cos_active: False
+[2025-07-09 22:51:16] DTMF match: False
+[2025-07-09 22:51:16] Got serial line: 'P5600I'
+[2025-07-09 22:51:16] Line buffer: 'P5600I\n'
+[2025-07-09 22:51:16] Raw serial bytes: b'P5600I\n'
+[2025-07-09 22:51:15] TOT: Timer stopped, duration: 12 seconds.
+[2025-07-09 22:51:14] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:14] Increment block running
+[2025-07-09 22:51:13] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:13] Increment block running
+[2025-07-09 22:51:12] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:12] Increment block running
+[2025-07-09 22:51:11] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:11] Increment block running
+[2025-07-09 22:51:10] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:10] Increment block running
+[2025-07-09 22:51:09] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:09] Increment block running
+[2025-07-09 22:51:08] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:08] Increment block running
+[2025-07-09 22:51:07] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:07] Increment block running
+[2025-07-09 22:51:06] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:06] Increment block running
+[2025-07-09 22:51:05] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:05] Increment block running
+[2025-07-09 22:51:04] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:04] Increment block running
+[2025-07-09 22:51:03] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:03] Increment block running
+[2025-07-09 22:51:02] TOT: Timer started.
+[2025-07-09 22:51:02] TOT command received in process_command.
+[2025-07-09 22:51:02] RAW process_command input: 'TOT'
+[2025-07-09 22:51:02] process_command reached
+[2025-07-09 22:51:02] Worker 01aa9cc2: Processing command: TOT
+[2025-07-09 22:51:02] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:02] Increment block running
+[2025-07-09 22:51:01] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:01] Increment block running
+[2025-07-09 22:51:00] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:51:00] Increment block running
+[2025-07-09 22:50:54] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:50:53] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 22:50:53] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:50:53] TOP command received in process_command.
+[2025-07-09 22:50:53] RAW process_command input: 'TOP'
+[2025-07-09 22:50:53] process_command reached
+[2025-07-09 22:50:53] Worker 01aa9cc2: Processing command: TOP
+[2025-07-09 22:50:52] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:50:51] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 22:50:51] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:50:51] TOP command received in process_command.
+[2025-07-09 22:50:51] RAW process_command input: 'TOP'
+[2025-07-09 22:50:51] process_command reached
+[2025-07-09 22:50:51] Worker 01aa9cc2: Processing command: TOP
+[2025-07-09 22:50:43] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:50:43] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:50:43] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:50:41] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:50:41] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 22:50:41] NORMAL MODE ACTIVE
+[2025-07-09 22:50:41] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:50:41] play_sound: exists? True
+[2025-07-09 22:50:41] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:50:41] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=None
+[2025-07-09 22:50:41] Playing file: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:50:41] Matching files for code_str=5171: ['5171-TM PL 77.wav']
+[2025-07-09 22:50:41] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 22:50:41] play_direct_track: code_str=5171
+[2025-07-09 22:50:41] RAW process_command input: 'P5171'
+[2025-07-09 22:50:41] process_command reached
+[2025-07-09 22:50:41] [ALT SERIES] Evaluating segment 1/4: P5171
+[2025-07-09 22:50:41] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:50:41] process_command reached
+[2025-07-09 22:50:41] [SERIAL LOOP] Queued command: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:50:41] is_cos_active: False
+[2025-07-09 22:50:41] DTMF match: False
+[2025-07-09 22:50:41] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:50:41] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:50:41] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:50:39] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:50:38] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-09 22:50:38] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:50:38] TOP command received in process_command.
+[2025-07-09 22:50:38] RAW process_command input: 'TOP'
+[2025-07-09 22:50:38] process_command reached
+[2025-07-09 22:50:38] Worker 01aa9cc2: Processing command: TOP
+[2025-07-09 22:50:32] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:50:32] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:50:32] aplay error: Playing WAVE '/home/drx/DRX/sounds/5612-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:50:31] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:50:31] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 22:50:31] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 22:50:31] play_sound: filename=/home/drx/DRX/sounds/5612-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:50:31] play_sound: exists? True
+[2025-07-09 22:50:31] play_sound: absolute filename to play: /home/drx/DRX/sounds/5612-CT.wav
+[2025-07-09 22:50:31] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5612-CT.wav, display_name=5612-CT from SudoRandom Base 5600
+[2025-07-09 22:50:31] RAW process_command input: 'P5600I'
+[2025-07-09 22:50:31] process_command reached
+[2025-07-09 22:50:31] Worker 01aa9cc2: Processing command: P5600I
+-09 22:50:31] DTMF match: False
+[2025-07-09 22:50:31] Got serial line: 'P5600I'
+[2025-07-09 22:50:31] Line buffer: 'P5600I\n'
+[2025-07-09 22:50:31] Raw serial bytes: b'P5600I\n'
+[2025-07-09 22:50:30] TOT: Timer stopped, duration: 3 seconds.
+[2025-07-09 22:50:29] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:50:29] Increment block running
+[2025-07-09 22:50:28] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:50:28] Increment block running
+[2025-07-09 22:50:27] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:50:27] Increment block running
+[2025-07-09 22:50:26] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:50:26] Increment block running
+[2025-07-09 22:50:26] TOT: Timer started.
+[2025-07-09 22:50:26] TOT command received in process_command.
+[2025-07-09 22:50:26] RAW process_command input: 'TOT'
+[2025-07-09 22:50:26] process_command reached
+[2025-07-09 22:50:26] Worker 01aa9cc2: Processing command: TOT
+[2025-07-09 22:50:25] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:50:25] Increment block running
+[2025-07-09 22:50:24] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-09 22:50:24] prepend_or_replace_today_entry CALLED with 2025-07-09 and 1
+[2025-07-09 22:50:24] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-09 22:50:24] Called prepend_or_replace_today_entry(2025-07-09, 1)
+[2025-07-09 22:50:24] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-09 22:50:24] prepend_or_replace_today_entry called with 2025-07-09, 1
+[2025-07-09 22:50:24] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-09 22:50:24] minutes_rounded: 1, last_written_minutes: -1
+[2025-07-09 22:50:24] Increment block running
+[2025-07-09 22:50:15] Serial connection established successfully
+[2025-07-09 22:50:15] Worker 01aa9cc2: starting
+[2025-07-09 22:50:15] Attempting to connect to serial port /dev/ttyUSB0...
+[2025-07-09 22:50:15] Loaded activity state: 1 minutes for 2025-07-09
+[2025-07-09 22:50:15] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:47:03] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:47:03] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:47:03] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:47:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:47:01] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-09 22:47:01] NORMAL MODE ACTIVE
+[2025-07-09 22:47:01] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:47:01] play_sound: exists? True
+[2025-07-09 22:47:01] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:47:01] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=None
+[2025-07-09 22:47:01] Playing file: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-09 22:47:01] Matching files for code_str=5171: ['5171-TM PL 77.wav']
+[2025-07-09 22:47:01] Directory listing: ['5194-Cmd Disconnecting.wav', '5190-TO Start Never Been So Humiliated.wav', '5412-PID .wav', '5537.wav', '5201.wav', '5634-CT.wav', '5900.wav', '5312-IID .wav', '5422-PID .wav', '5022.wav', '5408-PID .wav', '5020.wav', '5008.wav', "5123-Msg Its Almost 9 O'Clock.wav", '5060-CT Star Trek.wav', '5415-PID .wav', '5125-Msg Talk Net will begin 2 mins.wav', '5531.wav', '5840.wav', '5406-PID .wav', '5411-PID .wav', '5044.wav', '5604-CT.wav', '5944.wav', '5935.wav', '5949.WAV', '5041.wav', '5955.WAV', '5585.wav', '5017.wav', '5313-IID .wav', '5960.wav', '5043.wav', '5614-CT.wav', '5519.wav', '5598.wav', '5092.wav', '5179-TM ARES Subnet at 8 Tonight.wav', 'echo-start.wav', '5978.WAV', '5101-Cmd Access Mode CT.wav', '5919.wav', '5429-PID .wav', '5655-CT.wav', '5016.wav', '5613-CT.wav', '5053-CT Star Trek.wav', '5410-PID .wav', '5905.wav', '5659-CT.wav', '5665-CT.wav', '5927.wav', '5965.wav', '5658-CT.wav', '5409-PID .wav', '5012.wav', '5623-CT.wav', '9980-cond_tone.wav', '5977.wav', '5804.wav', '5948.WAV', '5058-CT Star Trek.wav', "5129-Msg 9 PM Don't Give a Damn.wav", '5211.wav', '5205.wav', '5937.wav', '5197-Cmd Linked to KB1MMR Repeater.wav', '5940.wav', '5915.wav', '5654-CT.wav', '5006.wav', '5057-CT Star Trek.wav', '5034.wav', '5028.wav', '5064-CT Star Trek.wav', '5517.wav', '5621-CT.wav', '5988.wav', '5029.wav', '5007.wav', '5051-CT Star Trek.wav', '5830.wav', '5941.wav', '5629-CT.wav', '.lgd-nfy0', '5381-IID ST.wav', '5956.WAV', '5055-CT Star Trek.wav', '5910.wav', '5014.wav', '5326-IID .wav', 'temp', '5609-CT.wav', '5405-PID .wav', '5618-CT.wav', '5595.wav', '9999.wav', '5964.WAV', '5841.wav', '5192-Cmd Gated PL On.wav', '5214.wav', '5067-CT Star Trek.wav', '5986.wav', '5979.wav', '5652-CT.wav', '5174-TM sparc.us.wav', '5414-PID .wav', '5310-IID Silly Thing in Reverse.wav', '5023.wav', '5315-IID .wav', '5173-TM PL 77.wav', '5639-CT.wav', '5909.wav', '5036.wav', '5648-CT.wav', '5010.wav', 'orig', '6000-CW 2000Hz.wav', '5068-CT Star Trek.wav', '5980.wav', '5619-CT.wav', '5821.wav', '5303-IID Sense of Humor.wav', '5603-CT.wav', '5018.wav', '5432-PID All the Right Buttons.wav', '5431-PID .wav', '5416-PID .wav', '5128-Msg Unablab 1 PM Polish Your Nails.wav', '5215.wav', '5175-TM Simplex Net 8 Tonight.wav', '5844.wav', '5180.wav', '5002.wav', '5062-CT Star Trek.wav', '5597.cw', '5647-CT.wav', "5309-IID That's going to be Trouble.wav", '5402-PID Press Your PTT.wav', '5664-CT.wav', '5667-CT.wav', '5037.wav', '5127-Msg Unablab 1 PM Back to Work.wav', '5934.wav', '5990.wav', '5615-CT.wav', '5642-CT.wav', '5417-PID .wav', '5208.wav', '5019.wav', '5210.wav', '5587.wav', '5641-CT.wav', '5533.wav', '5181-Msg Romeo Net in 5 mins.wav', '5912.wav', '5407-PID .wav', '9000.wav', '5624-CT.wav', '5171-TM PL 77.wav', '5423-PID .wav', '5025.wav', '5954.WAV', '5035.wav', '5803.wav', '5967.WAV', '5602-CT.wav', '5217.wav', '5606-CT.wav', '5939.wav', '5596.wav', '5120-Msg Its 505 Yabba Dabba Do.wav', '5968.WAV', '5321-IID .wav', '5302-IID Number You Have Reached.wav', '5802.wav', '5612-CT.wav', '5063-CT Star Trek.wav', '5928.wav', '5189-TM SPARC Meeting This Monday.wav', '5186.wav', '5831.wav', '5413-PID .wav', '5961.wav', '5325-IID .wav', '5320-IID .wav', '5323-IID .wav', '5042.wav', '5184.wav', '5219.wav', '5666-CT.wav', '5056-CT Star Trek.wav', '5823.wav', '5902.wav', '5669-CT.wav', '5924.wav', '5330-IID .wav', '5649-CT.wav', '5943.wav', '5974.WAV', '5419-PID .wav', '5003.wav', '5601-CT.wav', '5021.wav', '5938.wav', '5984.wav', '5952.wav', '5854.wav', '5209.wav', '5908.wav', '5953.WAV', '5066-CT Star Trek.wav', '5501-PID(N) Light Up Night.wav', "5503-PID(N) Not Father's Repeater.wav", '5038.wav', '5610-CT.wav', '5950.WAV', '5404-PID Do It With Frequency.wav', '5981.WAV', '5824.wav', '5213.wav', '5059-CT Star Trek.wav', '5946.WAV', '5925.wav', '5660-CT.wav', '5525.wav', '5982.WAV', '5000.wav', '5914.wav', '5307-IID All New 505.wav', '5636-CT.wav', '5983.WAV', '5663-CT.wav', '5906.wav', '5403-PID Going Above and Beyond.wav', '5009.wav', '5005.wav', '5382-IID ST.wav', '5903.wav', '5643-CT.wav', '5032.wav', '5929.wav', '5521.wav', '5091.wav', '5653-CT.wav', 'extra', '5305-IID Breaking New Ground.wav', '5185-TM R2 ARES Net 7:45.wav', '5586.wav', '5504-PID(N) Shake It Up.wav', '5198.wav', '5187-TM KW1MH Net tonight at 6.wav', '5616-CT.wav', '5430-PID .wav', '5901.wav', '5622-CT.wav', '5801.wav', '5216.wav', '5926.wav', '5250.cw', '5425-PID .wav', '5668-CT.wav', '5962.wav', '5516.wav', '5628-CT.wav', '5001.wav', '5991.wav', '5304-IID Speed of Light.wav', '5203.wav', '5631-CT.wav', '5534.wav', '5122-Msg Its 2 AM.wav', '5251.cw', '5401-PID Have It Your Way.wav', '5936.wav', '5308-IID We Have the Technology.wav', '5608-CT.wav', '5013.wav', '5522.wav', '5322-IID .wav', '5318-IID .wav', '5985.WAV', '5052-CT Star Trek.wav', '5418-PID .wav', '5638-CT.wav', '5832.wav', '5646-CT.wav', '5637-CT.wav', '5520.wav', '5126-Msg Unablab Time for Lunch.wav', '5172-TM PL 77.wav', '5581.wav', '5121-Msg Its 1 AM.wav', '5170-Msg Remote Base Off.wav', '5627-CT.wav', '5026.wav', '5930.wav', '5199-AID Nicole.wav', '5916.wav', '5202.wav', '5625-CT.wav', '5176-TM Meeting Tonight at 7.wav', '5958.wav', '5843.wav', '5820.wav', '5195.wav', '5428-PID .wav', '5306-IID 505 Zone.wav', '5800.wav', '5661-CT.wav', '5969.wav', '9981-temp_tone.wav', 'test.wav', '5904.wav', '5031.wav', '5027.wav', '5626-CT.wav', '5850.wav', '5945.wav', '5975.wav', '5922.wav', '5972.WAV', '5206.wav', '5093.wav', '5645-CT.wav', '5632-CT.wav', '5822.wav', '5957.WAV', '5662-CT.wav', '5607-CT.wav', '5314-IID .wav', '5913.wav', '5204.wav', '5657-CT.wav', '5015.wav', '5331-IID High Above CT.wav', '5855.wav', '5011.wav', '5611-CT.wav', '5524.wav', '5426-PID .wav', '5040.wav', '5329-IID .wav', '5920.wav', '5976.WAV', '5191-TO End You Know Better.wav', '5630-CT.wav', '5921.wav', '5970.wav', '5963.WAV', '5987.wav', '5851.wav', '5090.wav', '5324-IID .wav', '5640-CT.wav', '5061-CT Star Trek.wav', '5966.WAV', '5951.WAV', '5911.wav', '5635-CT.wav', '5502.cw', '5833.wav', '5947.WAV', '6000-temp test file.wav', '5973.wav', '5617-CT.wav', '5124-Msg TGIF Off to Moes.wav', 'echo-to.wav', '5196.wav', '5532.wav', '5633-CT.wav', '5328-IID .wav', '5651-CT.wav', '5380-IID ST.wav', '5582.wav', '5931.wav', "5130-Msg Homer It's 10 in the Morning.wav", '5518.wav', '5100-Cmd Access Mode CS.wav', '5942.wav', '5907.wav', '5523.wav', '5932.wav', '5580.wav', '5536.wav', '5193-Cmd Gated PL Off.wav', '5033.wav', '5301-IID Welcome to the Machine.wav', '5319-IID .wav', '5065-CT Star Trek.wav', '5054-CT Star Trek.wav', '5311-IID .wav', '5327-IID .wav', '5959.wav', '5535.wav', '5316-IID .wav', '5183.wav', '5182-TM SPARC Net Tonight at 8.wav', '5989.wav', '5024.wav', '5218.wav', '5644-CT.wav', '5917.wav', '5971.WAV', '5317-IID .wav', '5620-CT.wav', '5420-PID .wav', '5252.cw', '5656-CT.wav', '5220.wav', '5505-PID(N) All Nite Long.wav', '5207.wav', '5918.wav', '5923.wav', '5605-CT.wav', '5004.wav', '5030.wav', 'echo-end.wav', '5427-PID .wav', '5424-PID .wav', '5842.wav', '5933.wav', '5421-PID .wav', '5212.wav', '5650-CT.wav']
+[2025-07-09 22:47:01] play_direct_track: code_str=5171
+[2025-07-09 22:47:01] RAW process_command input: 'P5171'
+[2025-07-09 22:47:01] process_command reached
+[2025-07-09 22:47:01] [ALT SERIES] Evaluating segment 1/4: P5171
+[2025-07-09 22:47:01] RAW process_command input: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:47:01] process_command reached
+[2025-07-09 22:47:01] Worker 3a00396d: Processing command: P5171A5171A5171A5174RM
+[2025-07-09 22:47:01] is_cos_active: False
+[2025-07-09 22:47:01] DTMF match: False
+[2025-07-09 22:47:01] Got serial line: 'P5171A5171A5171A5174RM'
+[2025-07-09 22:47:01] Line buffer: 'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:47:01] Raw serial bytes: b'P5171A5171A5171A5174RM\n'
+[2025-07-09 22:46:57] RAW process_command input: 'TOP'
+[2025-07-09 22:46:57] process_command reached
+[2025-07-09 22:46:57] Worker 3a00396d: Processing command: TOP
+[2025-07-09 22:46:52] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-09 22:46:52] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-09 22:46:52] aplay error: Playing WAVE '/home/drx/DRX/sounds/5626-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-09 22:46:51] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-09 22:46:51] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-09 22:46:51] INTERRUPTIBLE MODE ACTIVE
+[2025-07-09 22:46:51] play_sound: filename=/home/drx/DRX/sounds/5626-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-09 22:46:51] play_sound: exists? True
+[2025-07-09 22:46:51] play_sound: absolute filename to play: /home/drx/DRX/sounds/5626-CT.wav
+[2025-07-09 22:46:51] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5626-CT.wav, display_name=5626-CT from SudoRandom Base 5600
+[2025-07-09 22:46:51] RAW process_command input: 'P5600I'
+[2025-07-09 22:46:51] process_command reached
+[2025-07-09 22:46:51] Worker 3a00396d: Processing command: P5600I
+[2025-07-09 22:46:51] is_cos_active: False
+[2025-07-09 22:46:51] DTMF match: False
+[2025-07-09 22:46:51] Got serial line: 'P5600I'
+[2025-07-09 22:46:51] Line buffer: 'P5600I\n'
+[2025-07-09 22:46:51] Raw serial bytes: b'P5600I\n'
+[2025-07-09 22:46:50] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:50] Increment block running
+[2025-07-09 22:46:49] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:49] Increment block running
+[2025-07-09 22:46:48] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:48] Increment block running
+[2025-07-09 22:46:47] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:47] Increment block running
+[2025-07-09 22:46:46] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:46] Increment block running
+[2025-07-09 22:46:45] RAW process_command input: 'TOT'
+[2025-07-09 22:46:45] process_command reached
+[2025-07-09 22:46:45] Worker 3a00396d: Processing command: TOT
+[2025-07-09 22:46:45] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:45] Increment block running
+[2025-07-09 22:46:44] minutes_rounded: 1, last_written_minutes: 1
+[2025-07-09 22:46:44] Increment block running
+[2025-07-09 22:46:43] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-09 22:46:43] prepend_or_replace_today_entry CALLED with 2025-07-09 and 1
+[2025-07-09 22:46:43] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-09 22:46:43] Called prepend_or_replace_today_entry(2025-07-09, 1)
+[2025-07-09 22:46:43] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-09 22:46:43] prepend_or_replace_today_entry called with 2025-07-09, 1
+[2025-07-09 22:46:43] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-09 22:46:43] minutes_rounded: 1, last_written_minutes: -1
+[2025-07-09 22:46:43] Increment block running
+[2025-07-09 22:46:34] Serial connection established successfully
+[2025-07-09 22:46:34] Worker 3a00396d: starting
+[2025-07-09 22:46:34] Attempting to connect to serial port /dev/ttyUSB0...
+[2025-07-09 22:46:34] Loaded activity state: 1 minutes for 2025-07-09
+[2025-07-09 22:46:34] set_remote_busy(False): wrote True, pin now reads 1

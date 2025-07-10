@@ -277,7 +277,6 @@ log_file_path = os.path.join(script_dir, 'drx_error.log')
 alternate_series_pointers = {}
 alternate_series_track_pointers = {}
 alternate_series_last_played = {}
-# --- New Alternate Series State (in-memory only) ---
 alternate_series_state = {}  # key: command string, value: {"pointer": int, "need_to_increment": bool}
 message_timer_last_played = 0
 message_timer_value = None
@@ -296,6 +295,10 @@ dtmf_lock = threading.Lock()
 STATE_FILE = os.path.join(DRX_DIRECTORY, "drx_state.json")  # NOTE: No longer used for writes - only for backward compatibility
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
 LOG_WEB_FILE = os.path.join(DRX_DIRECTORY, "logs", "drx.log")
+tot_active = False
+tot_start_time = None
+tot_last_seconds = 0
+tot_lock = threading.Lock()
 
 # --- In-Memory State for REST API ---
 current_state_memory = {}
@@ -869,6 +872,16 @@ def process_command(command):
     debug_log("process_command reached")
     debug_log(f"RAW process_command input: {repr(command)}")
     try:
+        # --- TOT/TOP Time Out Timer logic ---
+        if command.strip().upper() == "TOT":
+            debug_log("TOT command received in process_command.")
+            handle_tot_start()
+            return
+        if command.strip().upper() == "TOP":
+            debug_log("TOP command received in process_command.")
+            handle_top_command()
+            return
+
         cmd = command.strip().upper()
 
         # --- Repeater Activity A1 Command: Speak previous day's activity minutes ---
@@ -2368,6 +2381,17 @@ def serial_read_loop():
                     line, line_buffer = line_buffer.split('\n', 1)
                     cleaned_line = line.strip()
                     debug_log(f"Got serial line: {cleaned_line!r}")
+
+                    # --- TOT/TOP Time Out Timer logic ---
+                    if cleaned_line == "TOT":
+                        debug_log("TOT command received.")
+                        handle_tot_start()
+                        continue
+                    if cleaned_line == "TOP":
+                        debug_log("TOP command received.")
+                        handle_top_command()
+                        continue
+
                     if cleaned_line:
                         m = dtmf_pattern.match(cleaned_line)
                         debug_log(f"DTMF match: {m is not None}")
@@ -3764,6 +3788,69 @@ def speak_wx_conditions():
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 
+def handle_tot_start():
+    global tot_active, tot_start_time
+    with tot_lock:
+        if not is_cos_active():
+            debug_log("TOT: Ignored, COS not active at start.")
+            return
+        tot_active = True
+        tot_start_time = time.time()
+        debug_log("TOT: Timer started.")
+        status_manager.set_status(
+            status="Time Out Timer",
+            playing="TOT Active",
+            info="Timing until COS goes inactive"
+        )
+
+def handle_tot_stop():
+    """Stop TOT timer and record seconds when COS goes inactive."""
+    global tot_active, tot_start_time, tot_last_seconds
+    with tot_lock:
+        if tot_active and tot_start_time:
+            tot_last_seconds = int(time.time() - tot_start_time)
+            tot_active = False
+            tot_start_time = None
+            debug_log(f"TOT: Timer stopped, duration: {tot_last_seconds} seconds.")
+
+def monitor_tot_cos():
+    """Monitor COS and stop TOT timer when COS goes inactive."""
+    prev_cos = is_cos_active()
+    while True:
+        now_cos = is_cos_active()
+        if tot_active and not now_cos and prev_cos:
+            handle_tot_stop()
+        prev_cos = now_cos
+        time.sleep(0.05)
+        
+def handle_top_command():
+    global tot_last_seconds
+    status_manager.set_status(
+        status="Time Out Seconds",
+        playing=f"Timed {tot_last_seconds} seconds",
+        info="Reporting time out duration"
+    )
+    log_recent(f"Status: Time Out Seconds | Currently Playing: Timed {tot_last_seconds} seconds | Info: Reporting time out duration")
+    set_remote_busy(True)
+    try:
+        to1 = os.path.join(EXTRA_SOUND_DIR, "to1.wav")
+        if os.path.exists(to1):
+            play_single_wav(to1, block_interrupt=True, reset_status_on_end=False)
+        wavs = get_wav_sequence_for_number(tot_last_seconds)
+        for wav in wavs:
+            wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
+            if os.path.exists(wav_path):
+                play_single_wav(wav_path, block_interrupt=True, reset_status_on_end=False)
+        sec_wav = os.path.join(EXTRA_SOUND_DIR, "seconds.wav")
+        if os.path.exists(sec_wav):
+            play_single_wav(sec_wav, block_interrupt=True, reset_status_on_end=False)
+        to2 = os.path.join(EXTRA_SOUND_DIR, "to2.wav")
+        if os.path.exists(to2):
+            play_single_wav(to2, block_interrupt=True, reset_status_on_end=False)
+    finally:
+        set_remote_busy(False)
+        status_manager.set_idle()   
+
 def reload_config():
     global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE
     global COS_PIN, COS_ACTIVE_LEVEL, REMOTE_BUSY_PIN, REMOTE_BUSY_ACTIVE_LEVEL, COS_DEBOUNCE_TIME, MAX_COS_INTERRUPTIONS
@@ -3863,6 +3950,7 @@ def main():
             threading.Thread(target=dtmf_cos_edge_monitor, daemon=True).start()
             threading.Thread(target=monitor_cos, daemon=True).start()
             threading.Thread(target=run_flask_server, daemon=True).start()
+            threading.Thread(target=monitor_tot_cos, daemon=True).start()
 
             if is_terminal():
                 try:

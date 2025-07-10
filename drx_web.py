@@ -4,6 +4,7 @@ import time
 import configparser
 import requests
 import subprocess
+import re
 from flask import Flask, render_template_string, redirect, url_for, request, session, send_from_directory, jsonify, flash
 
 DRX_START_TIME = time.time()
@@ -29,6 +30,11 @@ CONFIG_TYPES = [
     ("Random", "Random"),
     ("SudoRandom", "SudoRandom"),
 ]
+TOT_STATE = {
+    'active': False,
+    'start_time': None,
+    'timeout_duration': 300  # 5 minutes in seconds
+}
 
 
 # --- State API Configuration ---
@@ -47,6 +53,23 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
+/* Flashing COS LED for TOT */
+@keyframes flash-red {
+    0%, 50% { 
+        background: #ff4343;
+        border-color: #c40000;
+        box-shadow: 0 0 6px 2px #ff4343cc, 0 2px 8px 0 rgba(30,30,70,0.13) inset;
+    }
+    51%, 100% { 
+        background: #bbb;
+        border-color: #888;
+        box-shadow: none;
+    }
+}
+
+.led-cos-flashing {
+    animation: flash-red 1s infinite;
+}
 /* Play Local Modal */
 #play-local-modal {
     display: none;
@@ -849,47 +872,58 @@ if (inputForm) {
     updateMessageTimer();
 
     // Poll status every second
-    updateStatus = function() {
-        fetch("{{ url_for('status_api') }}", {credentials: 'same-origin'})
-        .then(response => response.json())
-        .then(data => {
-            document.querySelectorAll('.status-currently-playing').forEach(function(el) {
-                el.textContent = data.currently_playing || "None";
-            });
-            document.querySelectorAll('.status-last-played').forEach(function(el) {
-                el.textContent = data.last_played || "None";
-            });
-            if (document.getElementById('playback-status')) {
-                let statusLabel = data.playback_status || "Idle";
-                if (statusLabel === "Restarting") {
-                    statusLabel = "Pending Restart";
-                }
-                document.getElementById('playback-status').textContent = statusLabel;
-            }
-            // COS LED
-            const cosLed = document.getElementById('cos-led');
-            if (cosLed) {
-                if (data.cos_state) {
-                    cosLed.className = 'led-indicator led-cos-active';
-                    cosLed.title = 'COS Active';
-                } else {
-                    cosLed.className = 'led-indicator led-inactive';
-                    cosLed.title = 'COS Inactive';
-                }
-            }
-            // Remote Device LED
-            const rdbLed = document.getElementById('remote-device-led');
-            if (rdbLed) {
-                if (data.remote_device_active) {
-                    rdbLed.className = 'led-indicator led-remote-active';
-                    rdbLed.title = 'Remote Device Active';
-                } else {
-                    rdbLed.className = 'led-indicator led-inactive';
-                    rdbLed.title = 'Remote Device Inactive';
-                }
-            }
+updateStatus = function() {
+    fetch("{{ url_for('status_api') }}", {credentials: 'same-origin'})
+    .then(response => response.json())
+    .then(data => {
+        document.querySelectorAll('.status-currently-playing').forEach(function(el) {
+            el.textContent = data.currently_playing || "None";
         });
-    };
+        document.querySelectorAll('.status-last-played').forEach(function(el) {
+            el.textContent = data.last_played || "None";
+        });
+        if (document.getElementById('playback-status')) {
+            let statusLabel = data.playback_status || "Idle";
+            if (statusLabel === "Restarting") {
+                statusLabel = "Pending Restart";
+            }
+            document.getElementById('playback-status').textContent = statusLabel;
+        }
+        
+        // COS LED with TOT flashing support
+        const cosLed = document.getElementById('cos-led');
+        if (cosLed) {
+            // Remove all previous classes
+            cosLed.className = 'led-indicator';
+            
+            if (data.tot_active) {
+                // TOT is active - flash red regardless of COS state
+                cosLed.classList.add('led-cos-flashing');
+                cosLed.title = 'TOT Active - Time Out Timer Running';
+            } else if (data.cos_state) {
+                // Normal COS active
+                cosLed.classList.add('led-cos-active');
+                cosLed.title = 'COS Active';
+            } else {
+                // COS inactive
+                cosLed.classList.add('led-inactive');
+                cosLed.title = 'COS Inactive';
+            }
+        }
+        
+        // Remote Device LED (unchanged)
+        const rdbLed = document.getElementById('remote-device-led');
+        if (rdbLed) {
+            if (data.remote_device_active) {
+                rdbLed.className = 'led-indicator led-remote-active';
+                rdbLed.title = 'Remote Device Active';
+            } else {
+                rdbLed.className = 'led-indicator led-inactive';
+                rdbLed.title = 'Remote Device Inactive';
+            }
+        }
+    });
+};
 
     function updateSerialSection() {
         fetch("{{ url_for('api_serial_commands') }}", {credentials: 'same-origin'})
@@ -2416,7 +2450,18 @@ def edit_config_structured():
 @app.route("/api/status")
 @require_login
 def status_api():
+    # Update TOT state (check for timeout)
+    update_tot_state()
+    
     state = read_state()
+    
+    # Check recent serial commands for TOT/TOP
+    serial_history = state.get("serial_history", [])
+    for entry in serial_history[-10:]:  # Check last 10 commands
+        cmd = entry.get("cmd", "").upper().strip()
+        if process_serial_command_for_tot(cmd):
+            break  # Stop after first relevant command found
+    
     data = {
         "currently_playing": state.get("currently_playing"),
         "last_played": state.get("last_played"),
@@ -2425,6 +2470,7 @@ def status_api():
         "serial_port_missing": state.get("serial_port_missing", False),
         "sound_card_missing": state.get("sound_card_missing", False),
         "remote_device_active": state.get("remote_device_active", False),
+        "tot_active": TOT_STATE['active'],  # Add TOT state
     }
     return jsonify(data)
 
@@ -2641,6 +2687,41 @@ def save_base_configurator_to_ini(rows):
     # Reload
     write_webcmd({"type": "reload_config"})
     wait_cmd_processed()
+
+def update_tot_state():
+    """Check if TOT should be reset due to timeout"""
+    global TOT_STATE
+    if TOT_STATE['active'] and TOT_STATE['start_time']:
+        if time.time() - TOT_STATE['start_time'] > TOT_STATE['timeout_duration']:
+            TOT_STATE['active'] = False
+            TOT_STATE['start_time'] = None
+            return True  # State changed
+    return False
+
+import re
+
+def process_serial_command_for_tot(command):
+    """Process serial commands to track TOT/TOP state"""
+    global TOT_STATE
+    command_upper = command.upper().strip()
+    
+    # Use regex to find TOT or TOP as whole words
+    # This pattern looks for TOT or TOP surrounded by word boundaries
+    tot_match = re.search(r'\bTOT\b', command_upper)
+    top_match = re.search(r'\bTOP\b', command_upper)
+    
+    if tot_match and not top_match:
+        # Found TOT as a whole word
+        TOT_STATE['active'] = True
+        TOT_STATE['start_time'] = time.time()
+        return True  # State changed
+    elif top_match:
+        # Found TOP as a whole word
+        TOT_STATE['active'] = False
+        TOT_STATE['start_time'] = None
+        return True  # State changed
+    
+    return False  # No state change
 
 @app.route("/api/base_configurator", methods=["GET"])
 def api_base_configurator():

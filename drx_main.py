@@ -299,6 +299,7 @@ tot_active = False
 tot_start_time = None
 tot_last_seconds = 0
 tot_lock = threading.Lock()
+tot_remote_active = False
 
 # --- In-Memory State for REST API ---
 current_state_memory = {}
@@ -3784,48 +3785,63 @@ def speak_wx_conditions():
         set_remote_busy(False)
 
 def handle_tot_start():
-    global tot_active, tot_start_time
+    global tot_active, tot_start_time, tot_remote_active
     with tot_lock:
         if not is_cos_active():
             debug_log("TOT: Ignored, COS not active at start.")
             return
+        
+        # Set both flags - one for timer measurement, one for remote device
+        tot_active = True
+        tot_remote_active = True
+        tot_start_time = time.time()
+        
         # Set remote busy pin active at the start of TOT
         set_remote_busy(True)
         debug_log("TOT: Setting REMOTE_BUSY to active")
         
-        tot_active = True
-        tot_start_time = time.time()
         debug_log("TOT: Timer started.")
         status_manager.set_status(
             status="Time Out Timer",
             playing="TOT Active",
             info="Timing until COS goes inactive"
         )
+        
+        # Start safety timer
         start_tot_safety_timer()
 
 def handle_tot_stop():
-    """Stop TOT timer and record seconds when COS goes inactive."""
+    """
+    Stop TOT timer and record seconds when COS goes inactive.
+    Important: This only stops the timer measurement, NOT the remote device activity.
+    """
     global tot_active, tot_start_time, tot_last_seconds
     with tot_lock:
         if tot_active and tot_start_time:
             tot_last_seconds = int(time.time() - tot_start_time)
-            tot_active = False
+            tot_active = False  # Stop the timer
             tot_start_time = None
             debug_log(f"TOT: Timer stopped, duration: {tot_last_seconds} seconds.")
+            # Explicitly note that we're keeping remote device active
+            debug_log("TOT: Keeping REMOTE_BUSY active until TOP command received")
+            
+            # Update status but keep remote device active
+            status_manager.set_status(
+                status="Time Out Timer",
+                playing="Waiting for TOP command",
+                info=f"Timed {tot_last_seconds} seconds, waiting for readout"
+            )
             # Do NOT deactivate remote busy pin here - wait for TOP command
 
-def monitor_tot_cos():
-    """Monitor COS and stop TOT timer when COS goes inactive."""
-    prev_cos = is_cos_active()
-    while True:
-        now_cos = is_cos_active()
-        if tot_active and not now_cos and prev_cos:
-            handle_tot_stop()
-        prev_cos = now_cos
-        time.sleep(0.05)
-        
 def handle_top_command():
-    global tot_last_seconds
+    global tot_last_seconds, tot_remote_active
+    
+    # Check if we have a valid timing to report
+    if tot_last_seconds <= 0:
+        debug_log("TOP: No timing available to report")
+        status_manager.set_idle()
+        return
+    
     status_manager.set_status(
         status="Time Out Seconds",
         playing=f"Timed {tot_last_seconds} seconds",
@@ -3833,8 +3849,15 @@ def handle_top_command():
     )
     log_recent(f"Status: Time Out Seconds | Currently Playing: Timed {tot_last_seconds} seconds | Info: Reporting time out duration")
     
-    # Remote busy pin is already active from TOT command
-    # No need to set it again
+    # Ensure remote busy pin is active (it should be from TOT command)
+    # but set it again just to be sure
+    with tot_lock:
+        if tot_remote_active:
+            debug_log("TOP: REMOTE_BUSY already active, maintaining state")
+        else:
+            set_remote_busy(True)
+            debug_log("TOP: Setting REMOTE_BUSY to active")
+            tot_remote_active = True
     
     try:
         to1 = os.path.join(EXTRA_SOUND_DIR, "to1.wav")
@@ -3852,24 +3875,53 @@ def handle_top_command():
         if os.path.exists(to2):
             play_single_wav(to2, block_interrupt=True, reset_status_on_end=False)
     finally:
-        # Now finally release the remote busy pin
-        set_remote_busy(False)
-        debug_log("TOP: Setting REMOTE_BUSY to inactive")
-        status_manager.set_idle()  
+        # Now finally release the remote busy pin and clear the flag
+        with tot_lock:
+            set_remote_busy(False)
+            tot_remote_active = False
+            debug_log("TOP: Setting REMOTE_BUSY to inactive")
+        status_manager.set_idle()
 
 def start_tot_safety_timer():
     """Start a safety timer that will deactivate remote busy if TOP isn't received."""
     def safety_timeout():
-        global tot_active
+        global tot_remote_active
         with tot_lock:
-            if tot_active:  # If still active after timeout period
+            if tot_remote_active:  # If still active after timeout period
                 debug_log("TOT: Safety timeout reached. Deactivating remote busy pin.")
                 set_remote_busy(False)
-                tot_active = False
+                tot_remote_active = False
                 status_manager.set_idle()
     
-    # Start the timer - 5 minutes max
-    safety_timer = threading.Timer(300, safety_timeout)
+    # Start the timer - 10 minutes max
+    safety_timer = threading.Timer(600, safety_timeout)
+    safety_timer.daemon = True
+    safety_timer.start()  
+
+def monitor_tot_cos():
+    """Monitor COS and stop TOT timer when COS goes inactive."""
+    prev_cos = is_cos_active()
+    while True:
+        now_cos = is_cos_active()
+        # Only call handle_tot_stop when COS goes from active to inactive
+        if tot_active and not now_cos and prev_cos:
+            handle_tot_stop()  # This function now only stops the timer, not the remote device
+        prev_cos = now_cos
+        time.sleep(0.05)
+
+def start_tot_safety_timer():
+    """Start a safety timer that will deactivate remote busy if TOP isn't received."""
+    def safety_timeout():
+        global tot_remote_active
+        with tot_lock:
+            if tot_remote_active:  # If still active after timeout period
+                debug_log("TOT: Safety timeout reached. Deactivating remote busy pin.")
+                set_remote_busy(False)
+                tot_remote_active = False
+                status_manager.set_idle()
+    
+    # Start the timer - 10 minutes max
+    safety_timer = threading.Timer(600, safety_timeout)
     safety_timer.daemon = True
     safety_timer.start()
 

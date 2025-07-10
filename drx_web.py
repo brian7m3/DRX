@@ -2455,24 +2455,50 @@ def status_api():
     
     state = read_state()
     
+    # Check if connection to drx_main.py is lost
+    connection_lost = False
+    updated_at = state.get('updated_at')
+    if not updated_at or time.time() - float(updated_at) > 2.5:  # No update in 2.5 seconds
+        connection_lost = True
+        # Simulate receipt of TOP command when connection is lost
+        # This will reset TOT to "completed" state rather than just inactive
+        handle_top_command_on_disconnect()
+    
     # Check recent serial commands for TOT/TOP
-    serial_history = state.get("serial_history", [])
-    for entry in serial_history[-10:]:  # Check last 10 commands
-        cmd = entry.get("cmd", "").upper().strip()
-        if process_serial_command_for_tot(cmd):
-            break  # Stop after first relevant command found
+    if not connection_lost:  # Only process commands if connection is active
+        serial_history = state.get("serial_history", [])
+        for entry in serial_history[-10:]:  # Check last 10 commands
+            cmd = entry.get("cmd", "").upper().strip()
+            if process_serial_command_for_tot(cmd):
+                break  # Stop after first relevant command found
     
     data = {
         "currently_playing": state.get("currently_playing"),
         "last_played": state.get("last_played"),
         "playback_status": state.get("playback_status"),
-        "cos_state": is_cos_active(),
+        "cos_state": False if connection_lost else is_cos_active(),  # COS inactive if disconnected
         "serial_port_missing": state.get("serial_port_missing", False),
         "sound_card_missing": state.get("sound_card_missing", False),
         "remote_device_active": state.get("remote_device_active", False),
-        "tot_active": TOT_STATE['active'],  # Add TOT state
+        "tot_active": TOT_STATE['active'],  # This will now reflect the "TOP processed" state
+        "tot_completed": TOT_STATE.get('completed', False)  # Include completed state if it exists
     }
     return jsonify(data)
+
+# Add this new function to simulate TOP command processing on disconnect
+def handle_top_command_on_disconnect():
+    global TOT_STATE
+    # Only process if TOT is currently active
+    if TOT_STATE.get('active', False):
+        # Set TOT to completed state (similar to what TOP would do)
+        TOT_STATE['active'] = False
+        TOT_STATE['completed'] = True
+        TOT_STATE['end_time'] = time.time()
+        # If you have a function that processes TOP commands, call it here:
+        # process_top_command()
+        
+        # Log the automatic TOP action
+        log_recent("Connection to drx_main.py lost - TOT automatically reset to completed state")
 
 @app.route("/debug/ping")
 def debug_ping():

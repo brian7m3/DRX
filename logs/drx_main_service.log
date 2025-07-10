@@ -1,3 +1,45 @@
 # Log rotated on Thu 10 Jul 12:00:01 EDT 2025
 No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 3980, in <module>
+    main()            
+    ^^^^^^
+  File "/home/drx/DRX/drx_main.py", line 3922, in main
+    gpio_setup()
+  File "/home/drx/DRX/drx_main.py", line 632, in gpio_setup
+    lgpio.gpio_claim_output(h, REMOTE_BUSY_PIN)
+  File "/usr/lib/python3/dist-packages/lgpio.py", line 781, in gpio_claim_output
+    return _u2i(_lgpio._gpio_claim_output(handle&0xffff, lFlags, gpio, level))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/lgpio.py", line 458, in _u2i
+    raise error(error_text(v))
+lgpio.error: 'GPIO busy'
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.

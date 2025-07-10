@@ -237,3 +237,9 @@
 2025-07-10 17:59:01.322: Status: Time Out Seconds | Currently Playing: Timed 10 seconds | Info: Reporting time out duration
 2025-07-10 17:59:08.889: Play: 5191-TO End You Know Better.wav [normal] - successful
 2025-07-10 17:59:10.798: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:59:58.278: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 17:59:58.278: WX Report: {'observations': 'Fair', 'temperature': '78 degrees', 'humidity': '82 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.96', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-10 18:06:47.450: Play: 5418-PID .wav [normal] - successful
+2025-07-10 18:10:14.819: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 18:10:15.229: Play: 5651-CT.wav [interruptible] - interrupted
+2025-07-10 18:10:24.635: Status: Time Out Seconds | Currently Playing: Timed 10 seconds | Info: Reporting time out duration

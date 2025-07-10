@@ -3789,6 +3789,10 @@ def handle_tot_start():
         if not is_cos_active():
             debug_log("TOT: Ignored, COS not active at start.")
             return
+        # Set remote busy pin active at the start of TOT
+        set_remote_busy(True)
+        debug_log("TOT: Setting REMOTE_BUSY to active")
+        
         tot_active = True
         tot_start_time = time.time()
         debug_log("TOT: Timer started.")
@@ -3797,6 +3801,7 @@ def handle_tot_start():
             playing="TOT Active",
             info="Timing until COS goes inactive"
         )
+        start_tot_safety_timer()
 
 def handle_tot_stop():
     """Stop TOT timer and record seconds when COS goes inactive."""
@@ -3807,6 +3812,7 @@ def handle_tot_stop():
             tot_active = False
             tot_start_time = None
             debug_log(f"TOT: Timer stopped, duration: {tot_last_seconds} seconds.")
+            # Do NOT deactivate remote busy pin here - wait for TOP command
 
 def monitor_tot_cos():
     """Monitor COS and stop TOT timer when COS goes inactive."""
@@ -3826,7 +3832,10 @@ def handle_top_command():
         info="Reporting time out duration"
     )
     log_recent(f"Status: Time Out Seconds | Currently Playing: Timed {tot_last_seconds} seconds | Info: Reporting time out duration")
-    set_remote_busy(True)
+    
+    # Remote busy pin is already active from TOT command
+    # No need to set it again
+    
     try:
         to1 = os.path.join(EXTRA_SOUND_DIR, "to1.wav")
         if os.path.exists(to1):
@@ -3843,8 +3852,26 @@ def handle_top_command():
         if os.path.exists(to2):
             play_single_wav(to2, block_interrupt=True, reset_status_on_end=False)
     finally:
+        # Now finally release the remote busy pin
         set_remote_busy(False)
-        status_manager.set_idle()   
+        debug_log("TOP: Setting REMOTE_BUSY to inactive")
+        status_manager.set_idle()  
+
+def start_tot_safety_timer():
+    """Start a safety timer that will deactivate remote busy if TOP isn't received."""
+    def safety_timeout():
+        global tot_active
+        with tot_lock:
+            if tot_active:  # If still active after timeout period
+                debug_log("TOT: Safety timeout reached. Deactivating remote busy pin.")
+                set_remote_busy(False)
+                tot_active = False
+                status_manager.set_idle()
+    
+    # Start the timer - 5 minutes max
+    safety_timer = threading.Timer(300, safety_timeout)
+    safety_timer.daemon = True
+    safety_timer.start()
 
 def reload_config():
     global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE

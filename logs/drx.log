@@ -623,3 +623,13 @@ Test log entry
 2025-07-10 10:59:58.260: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '96 percent', 'winddir': 'SW', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.99', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
 2025-07-10 11:10:10.763: Configuration reload requested from web
 2025-07-10 11:10:19.022: Configuration reload requested from web
+2025-07-10 11:32:12.047: Play requested: 5005.wav (web dropdown)
+2025-07-10 11:32:12.554: Play: 5005.wav [normal] - successful
+2025-07-10 11:40:17.763: Play requested: P5003 (web input box)
+2025-07-10 11:40:18.221: Play: 5003.wav [normal] - successful
+2025-07-10 11:40:21.267: Play requested: P5003 (web input box)
+2025-07-10 11:40:21.724: Play: 5003.wav [normal] - successful
+2025-07-10 11:42:42.661: Play requested: 5013.wav (web dropdown)
+2025-07-10 11:42:42.867: Play: 5013.wav [normal] - successful
+2025-07-10 11:42:49.169: Play requested: P5300 (web input box)
+2025-07-10 11:42:59.766: Play: 5304-IID Speed of Light.wav [normal] - successful

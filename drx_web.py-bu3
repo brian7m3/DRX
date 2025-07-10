@@ -47,64 +47,6 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
-/* Play Local Modal */
-#play-local-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-
-#play-local-modal .modal-content {
-    background: #fefefe;
-    margin: 10% auto;
-    padding: 2em;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    text-align: center;
-}
-
-#play-local-modal h2 {
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 1em;
-}
-
-#play-local-modal audio {
-    width: 100%;
-    max-width: 500px;
-    margin: 1em 0;
-}
-
-#play-local-modal .close {
-    color: var(--primary);
-    float: right;
-    font-size: 2em;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: -10px;
-}
-
-#play-local-modal .close:hover {
-    color: var(--danger);
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    #play-local-modal .modal-content {
-        background: #272b38;
-        color: #eee;
-        border-color: #555;
-    }
-}
 /* Base Configurator Validation Styles */
 .base-error {
     border: 2px solid #d32f2f !important;
@@ -722,105 +664,54 @@ select[name="track_dropdown"] {
 <script>
 let updateStatus;
 document.addEventListener("DOMContentLoaded", function() {
-    // Play Local Modal elements
-    const playLocalModal = document.getElementById('play-local-modal');
-    const playLocalTitle = document.getElementById('play-local-title');
-    const playLocalAudio = document.getElementById('play-local-audio');
-    const playLocalSource = document.getElementById('play-local-source');
-    const closePlayLocal = document.getElementById('close-play-local');
-    const playLocalCloseBtn = document.getElementById('play-local-close-btn');
-
-    // Play Local Modal functions
-    function openPlayLocalModal(filename) {
-        playLocalTitle.textContent = `Playing: ${filename}`;
-        playLocalSource.src = `/audio/${filename}`;
-        playLocalAudio.load(); // Reload the audio element
-        playLocalModal.style.display = 'block';
-    }
-
-    function closePlayLocalModal() {
-        playLocalModal.style.display = 'none';
-        playLocalAudio.pause();
-        playLocalAudio.currentTime = 0;
-        playLocalSource.src = '';
-    }
-
-    // Modal close events
-    if (closePlayLocal) {
-        closePlayLocal.onclick = closePlayLocalModal;
-    }
-    if (playLocalCloseBtn) {
-        playLocalCloseBtn.onclick = closePlayLocalModal;
-    }
-    
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        if (event.target == playLocalModal) {
-            closePlayLocalModal();
-        }
-    };
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && playLocalModal.style.display === 'block') {
-            closePlayLocalModal();
-        }
-    });
-
-// Play Selected (dropdown) form
-const dropdownForm = document.getElementById('play-dropdown-form');
-if (dropdownForm) {
-    dropdownForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(dropdownForm);
-        fetch(dropdownForm.action, {
-            method: 'POST',
-            body: formData,
-            credentials: 'same-origin',
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.local_play && data.filename) {
-                // Open modal with the filename
-                openPlayLocalModal(data.filename);
-            } else {
-                // Normal DRX play - update status
+    // Play Selected (dropdown) form
+    const dropdownForm = document.getElementById('play-dropdown-form');
+    if (dropdownForm) {
+        dropdownForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(dropdownForm);
+            fetch(dropdownForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url) {
+                    window.location = data.local_url;
+                }
                 updateStatus();
                 updateSerialSection();
                 updateLogsSection();
                 updateStateSection();
-            }
+            });
         });
-    });
-}
-// Play Input form
-const inputForm = document.getElementById('play-input-form');
-if (inputForm) {
-    inputForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(inputForm);
-        fetch(inputForm.action, {
-            method: 'POST',
-            body: formData,
-            credentials: 'same-origin',
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.local_play && data.filename) {
-                // Open modal with the filename
-                openPlayLocalModal(data.filename);
-            } else {
-                // Normal DRX play - update status
+    }
+    // Play Input form
+    const inputForm = document.getElementById('play-input-form');
+    if (inputForm) {
+        inputForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(inputForm);
+            fetch(inputForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.local_url) {
+                    window.location = data.local_url;
+                }
                 updateStatus();
                 updateSerialSection();
                 updateLogsSection();
                 updateStateSection();
-            }
+            });
         });
-    });
-}
+    }
 
     function updateMessageTimer() {
         fetch("/api/message_timer", {credentials: 'same-origin'})
@@ -1961,19 +1852,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 })();
 </script>
-<!-- Play Local Modal -->
-<div id="play-local-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="close-play-local">&times;</span>
-        <h2 id="play-local-title">Playing Audio</h2>
-        <audio id="play-local-audio" controls autoplay>
-            <source id="play-local-source" src="" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
-        <br>
-        <button id="play-local-close-btn" type="button">Close</button>
-    </div>
-</div>
 </body>
 </html>
 '''
@@ -2220,8 +2098,7 @@ def play_track():
 
     if play_method == "local":
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            # Return filename directly for AJAX modal handling
-            return jsonify({"success": True, "local_play": True, "filename": track})
+            return jsonify({"success": True, "local_url": url_for('play_local', filename=track)})
         return redirect(url_for('play_local', filename=track))
     else:
         write_webcmd({"type": "play", "input": track})
@@ -2233,12 +2110,14 @@ def play_track():
 @app.route('/localplay/<filename>')
 @require_login
 def play_local(filename):
-    # Always return JSON - no more separate page
-    return jsonify({
-        "success": True,
-        "filename": filename,
-        "audio_url": url_for('get_audio', filename=filename)
-    })
+    return render_template_string('''
+        <h2>Playing {{ filename }}</h2>
+        <audio controls autoplay>
+          <source src="{{ url_for('get_audio', filename=filename) }}" type="audio/wav">
+          Your browser does not support the audio element.
+        </audio>
+        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    ''', filename=filename)
 
 @app.route('/audio/<filename>')
 @require_login

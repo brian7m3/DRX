@@ -220,3 +220,8 @@
 2025-07-10 17:40:06.741: Play: 5171-TM PL 77.wav [normal] - successful
 2025-07-10 17:40:06.888: Status: Time Out Seconds | Currently Playing: Timed 11 seconds | Info: Reporting time out duration
 2025-07-10 17:40:14.707: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 17:44:47.774: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 17:44:48.190: Play: 5639-CT.wav [interruptible] - interrupted
+2025-07-10 17:44:59.750: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 17:45:00.246: Status: Time Out Seconds | Currently Playing: Timed 12 seconds | Info: Reporting time out duration
+2025-07-10 17:45:08.063: Play: 5191-TO End You Know Better.wav [normal] - successful

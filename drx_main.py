@@ -3792,7 +3792,7 @@ def handle_tot_start():
         tot_active = True
         tot_start_time = time.time()
         debug_log("TOT: Timer started, activating remote device.")
-        set_remote_busy(True)  # Add this line
+        set_remote_busy(True)  # Add this line!
         status_manager.set_status(
             status="Time Out Timer",
             playing="TOT Active",

@@ -1,0 +1,53 @@
+[Serial]
+port = /dev/ttyUSB0
+baudrate = 57600
+timeout = .5
+line_timeout = 2.0
+
+[Sound]
+directory = /home/drx/DRX/sounds/
+extension = .wav
+device = plughw:2,0
+
+[General]
+message timer = 10
+
+[Rotation]
+base = 5300,5170,5379
+end = 5331,5173,5182
+interval = 0,0,0
+description = IID Normal,TM PL 77 3 Times then Check Us Out @ sparc.us,IID Star Trek
+
+[Random]
+base = 5400,5530,5549
+end = 5432,5537,5567
+interval = 0,0,10
+description = PID Normal,PID Star Trek,CT Star Trek
+
+[SudoRandom]
+base = 5600,5500,5594
+end = 5669,5505,5598
+interval = 10,0,0
+description = CT Normal,PID Night TIme,PID Saturday Night
+
+[GPIO]
+cos_pin = 16
+cos_activate_level = False
+remote_busy_pin = 20
+remote_busy_activate_level = True
+cos_debounce_time = 0.8
+max_cos_interruptions = 3
+
+[WebAuth]
+username = k1sox
+password = drxpass-147.505!
+
+[Web]
+port = 505
+
+[Debug]
+enable_cos_override = false
+enable_debug_logging = false
+
+[BaseOrder]
+order = Rotating:0,Random:0,SudoRandom:0,Rotating:1,SudoRandom:1,SudoRandom:2,Rotating:2,Random:1,Random:2

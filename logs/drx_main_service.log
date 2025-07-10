@@ -21,3 +21,119 @@ No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
 No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+Traceback (most recent call last):
+  File "/home/drx/DRX/drx_main.py", line 308, in <module>
+    state['tot_active'] = tot_active
+    ^^^^^
+NameError: name 'state' is not defined
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.

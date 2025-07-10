@@ -1242,6 +1242,8 @@ document.addEventListener("DOMContentLoaded", function() {
                   <li><b>W1F:</b> Weather Conditions Forced, same as W1 but doesn't have the cos rule -> W1F &#92;n. **</li>
                   <li><b>W2:</b> Temperature -> W2 &#92;n. **</li>
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
+                  <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
+                  <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
               <h3>Bases:</h3> 
                   A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  This will continue and loop back to 4201.
                   <br>
@@ -2146,28 +2148,7 @@ def edit_config_structured():
     if 'General' not in existing_config:
         existing_config['General'] = {}
     existing_config['General']['Message Timer'] = form_data.get('message_timer', '10')
-    
-    # Update Rotation section
-    if 'Rotation' not in existing_config:
-        existing_config['Rotation'] = {}
-    existing_config['Rotation']['base'] = form_data.get('rotation_base', '5300')
-    existing_config['Rotation']['end'] = form_data.get('rotation_end', '5331')
-    existing_config['Rotation']['interval'] = form_data.get('rotation_interval', '0')
-    
-    # Update Random section
-    if 'Random' not in existing_config:
-        existing_config['Random'] = {}
-    existing_config['Random']['base'] = form_data.get('random_base', '5400')
-    existing_config['Random']['end'] = form_data.get('random_end', '5432')
-    existing_config['Random']['interval'] = form_data.get('random_interval', '0')
-    
-    # Update SudoRandom section
-    if 'SudoRandom' not in existing_config:
-        existing_config['SudoRandom'] = {}
-    existing_config['SudoRandom']['base'] = form_data.get('sudorandom_base', '5600')
-    existing_config['SudoRandom']['end'] = form_data.get('sudorandom_end', '5669')
-    existing_config['SudoRandom']['interval'] = form_data.get('sudorandom_interval', '10')
-    
+     
     # Update GPIO section
     if 'GPIO' not in existing_config:
         existing_config['GPIO'] = {}

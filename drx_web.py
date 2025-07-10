@@ -641,6 +641,11 @@ pre.stateblock {
   .config-sections .config-section {
     background: #011f4b; /* Warm dark brown/orange for dark mode, adjust as desired */
   }
+  #base-configurator-validation-summary {
+    background-color: #3a2121;
+    border: 1px solid #ff867f;
+    color: #ff867f;
+  } 
 }
 .your-card { margin-bottom: 0.8em; }
 .card-section.center-buttons {
@@ -655,74 +660,6 @@ select[name="track_dropdown"] {
     min-width: 100px;
     max-width: 100%;
 }
-
-
-        tr.addEventListener('dragenter', function(e) {
-            e.preventDefault();
-            tr.classList.add('dragover');
-        });
-        tr.addEventListener('dragleave', function(e) {
-            tr.classList.remove('dragover');
-        });
-
-        tr.appendChild(tdBase);
-        tr.appendChild(tdDesc);
-        tr.appendChild(tdDel);
-        return tr;
-    }
-
-    function loadBaseConfigurator() {
-        fetch("/api/base_configurator", {credentials: 'same-origin'})
-        .then(resp => resp.json())
-        .then(data => {
-            tableBody.innerHTML = "";
-            (data || []).forEach(row => {
-                tableBody.appendChild(makeRow(row));
-            });
-        });
-    }
-
-    if (addRowBtn) {
-        addRowBtn.onclick = function() {
-            tableBody.appendChild(makeRow());
-        };
-    }
-
-    if (saveBtn) {
-        saveBtn.onclick = function() {
-            // Gather data
-            const rows = tableBody.querySelectorAll("tr");
-            const configurator = [];
-            for (let tr of rows) {
-                const base_no = tr.children[0].querySelector("input").value.trim();
-                const desc = tr.children[1].querySelector("input").value.trim();
-                if (base_no || desc) {
-                    configurator.push({base_no, desc});
-                }
-            }
-            fetch("/api/save_base_configurator", {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(configurator)
-            })
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.success) {
-                    msgDiv.style.color = "#388e3c";
-                    msgDiv.textContent = "configurator saved successfully.";
-                } else {
-                    msgDiv.style.color = "#d32f2f";
-                    msgDiv.textContent = "Error saving configurator: " + (data.error || "Unknown error");
-                }
-            }).catch(e => {
-                msgDiv.style.color = "#d32f2f";
-                msgDiv.textContent = "Network or server error.";
-            });
-        };
-    }
-});
-
 </style>
 <script>
 let updateStatus;

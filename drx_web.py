@@ -127,41 +127,43 @@ DASHBOARD_TEMPLATE = '''
         color: #eee;
         border-color: #555;
     }
-}
-/* Base Configurator Validation Styles */
-.base-error {
-    border: 2px solid #d32f2f !important;
-    background-color: #ffebee !important;
-}
-
-.validation-error {
-    color: #d32f2f;
-    font-size: 0.85em;
-    font-weight: bold;
-    margin-top: 5px;
-    padding: 5px;
-    background-color: #ffebee;
-    border: 1px solid #d32f2f;
-    border-radius: 4px;
-    display: none;
-}
-
-.save-disabled {
-    background: #ccc !important;
-    cursor: not-allowed !important;
-    opacity: 0.6;
-}
-
-#base-configurator-validation-summary {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #ffebee;
-    border: 1px solid #d32f2f;
-    border-radius: 4px;
-    color: #d32f2f;
-    font-weight: bold;
-    display: none;
-}
+    
+    /* Dark mode error styles - add these new styles */
+    .base-error {
+        border: 2px solid #ff7777 !important;
+        background-color: rgba(255, 119, 119, 0.25) !important;
+    }
+    
+    .validation-error {
+        color: #ff7777;
+        background-color: rgba(255, 119, 119, 0.15);
+        border: 1px solid #ff7777;
+    }
+    
+    #base-configurator-validation-summary {
+        background-color: rgba(255, 119, 119, 0.15);
+        border: 1px solid #ff7777;
+        color: #ff7777;
+    }
+    
+    /* Improve select element visibility */
+    select {
+        background-color: #2d333b; /* Dark background */
+        color: #e6edf3; /* Light text */
+        border: 1px solid #444c56;
+    }
+    
+    /* Improve dropdown options visibility */
+    select option {
+        background-color: #2d333b; /* Dark background */
+        color: #e6edf3; /* Light text */
+    }
+    
+    /* Ensure the selected option is visible */
+    select option:checked {
+        background-color: #347d39; /* GitHub-style green */
+        color: white;
+    }
 .status-last-played {
   font-size: .75em !important;
   /* Optional extras: */
@@ -1680,88 +1682,128 @@ document.addEventListener("DOMContentLoaded", function() {
         return r1Start <= r2End && r2Start <= r1End;
     }
 
-    function validateRanges() {
-        const rows = tableBody.querySelectorAll("tr");
-        const ranges = [];
-        const validationErrors = [];
+function validateRanges() {
+    const rows = tableBody.querySelectorAll("tr");
+    const ranges = [];
+    const validationErrors = [];
+    
+    // Clear previous errors
+    clearValidationErrors();
+    
+    // Parse all ranges
+    rows.forEach((tr, index) => {
+        const baseInput = tr.children[0].querySelector("input");
+        const endInput = tr.children[1].querySelector("input");
+        const typeSelect = tr.children[2].querySelector("select");
+        const intervalInput = tr.children[3].querySelector("input");
         
-        // Clear previous errors
-        clearValidationErrors();
+        const baseNo = parseNumber(baseInput.value);
+        const endNo = parseNumber(endInput.value);
+        const type = typeSelect.value;
         
-        // Parse all ranges
-        rows.forEach((tr, index) => {
-            const baseInput = tr.children[0].querySelector("input");
-            const endInput = tr.children[1].querySelector("input");
-            const baseNo = parseNumber(baseInput.value);
-            const endNo = parseNumber(endInput.value);
-            
-            if (baseNo !== null) {
-                ranges.push({
-                    index: index,
-                    start: baseNo,
-                    end: endNo,
-                    baseInput: baseInput,
-                    endInput: endInput,
-                    row: tr
-                });
-            }
-        });
-        
-        // Check for overlaps
-        for (let i = 0; i < ranges.length; i++) {
-            for (let j = i + 1; j < ranges.length; j++) {
-                const range1 = ranges[i];
-                const range2 = ranges[j];
-                
-                if (rangesOverlap(range1, range2)) {
-                    // Mark both ranges as errors
-                    range1.baseInput.classList.add('base-error');
-                    if (range1.endInput.value.trim()) {
-                        range1.endInput.classList.add('base-error');
-                    }
-                    range2.baseInput.classList.add('base-error');
-                    if (range2.endInput.value.trim()) {
-                        range2.endInput.classList.add('base-error');
-                    }
-                    
-                    const range1Desc = range1.end !== null ? 
-                        `${range1.start}-${range1.end}` : `${range1.start}`;
-                    const range2Desc = range2.end !== null ? 
-                        `${range2.start}-${range2.end}` : `${range2.start}`;
-                    
-                    validationErrors.push(
-                        `Row ${range1.index + 1} (${range1Desc}) overlaps with Row ${range2.index + 1} (${range2Desc})`
-                    );
-                }
+        // 1. Validate that base and end numbers are 4 digits and not negative
+        if (baseInput.value.trim() !== "") {
+            if (!/^\d{1,4}$/.test(baseInput.value.trim())) {
+                baseInput.classList.add('base-error');
+                validationErrors.push(`Row ${index + 1}: Base number must be 1-4 digits and not negative`);
+            } else if (baseInput.value.trim().length < 4) {
+                // Pad with zeros for display purposes only (doesn't affect the saved value)
+                baseInput.placeholder = baseInput.value.trim().padStart(4, '0');
             }
         }
         
-        // Update UI based on validation results
-        if (validationErrors.length > 0) {
-            validationSummary.innerHTML = 
-                '<strong>Range Overlaps Detected:</strong><br>' + 
-                validationErrors.join('<br>');
-            validationSummary.style.display = 'block';
-            saveBtn.classList.add('save-disabled');
-            saveBtn.disabled = true;
-            return false;
-        } else {
-            validationSummary.style.display = 'none';
-            saveBtn.classList.remove('save-disabled');
-            saveBtn.disabled = false;
-            return true;
+        if (endInput.value.trim() !== "") {
+            if (!/^\d{1,4}$/.test(endInput.value.trim())) {
+                endInput.classList.add('base-error');
+                validationErrors.push(`Row ${index + 1}: End number must be 1-4 digits and not negative`);
+            } else if (endInput.value.trim().length < 4) {
+                // Pad with zeros for display purposes only (doesn't affect the saved value)
+                endInput.placeholder = endInput.value.trim().padStart(4, '0');
+            }
+        }
+        
+        // 2. Validate that type is selected
+        if (type === "") {
+            typeSelect.classList.add('base-error');
+            validationErrors.push(`Row ${index + 1}: Type must be selected`);
+        }
+        
+        // 3. Validate that end number is at least 2 greater than base number
+        if (baseNo !== null && endNo !== null) {
+            if (endNo - baseNo < 2) {
+                endInput.classList.add('base-error');
+                baseInput.classList.add('base-error');
+                validationErrors.push(`Row ${index + 1}: End number must be at least 2 greater than base number`);
+            }
+        }
+        
+        if (baseNo !== null) {
+            ranges.push({
+                index: index,
+                start: baseNo,
+                end: endNo,
+                baseInput: baseInput,
+                endInput: endInput,
+                row: tr
+            });
+        }
+    });
+    
+    // Check for overlaps (existing validation)
+    for (let i = 0; i < ranges.length; i++) {
+        for (let j = i + 1; j < ranges.length; j++) {
+            const range1 = ranges[i];
+            const range2 = ranges[j];
+            
+            if (rangesOverlap(range1, range2)) {
+                // Mark both ranges as errors
+                range1.baseInput.classList.add('base-error');
+                if (range1.endInput.value.trim()) {
+                    range1.endInput.classList.add('base-error');
+                }
+                range2.baseInput.classList.add('base-error');
+                if (range2.endInput.value.trim()) {
+                    range2.endInput.classList.add('base-error');
+                }
+                
+                const range1Desc = range1.end !== null ? 
+                    `${range1.start}-${range1.end}` : `${range1.start}`;
+                const range2Desc = range2.end !== null ? 
+                    `${range2.start}-${range2.end}` : `${range2.start}`;
+                
+                validationErrors.push(
+                    `Row ${range1.index + 1} (${range1Desc}) overlaps with Row ${range2.index + 1} (${range2Desc})`
+                );
+            }
         }
     }
-
-    function clearValidationErrors() {
-        const inputs = tableBody.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.classList.remove('base-error');
-        });
+    
+    // Update UI based on validation results
+    if (validationErrors.length > 0) {
+        validationSummary.innerHTML = 
+            '<strong>Validation Errors:</strong><br>' + 
+            validationErrors.join('<br>');
+        validationSummary.style.display = 'block';
+        saveBtn.classList.add('save-disabled');
+        saveBtn.disabled = true;
+        return false;
+    } else {
         validationSummary.style.display = 'none';
         saveBtn.classList.remove('save-disabled');
         saveBtn.disabled = false;
+        return true;
     }
+}
+
+    function clearValidationErrors() {
+    const inputs = tableBody.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.classList.remove('base-error');
+    });
+    validationSummary.style.display = 'none';
+    saveBtn.classList.remove('save-disabled');
+    saveBtn.disabled = false;
+}
 
     function makeRow(rowData = {base_no: "", end_no: "", type: "", interval: "", desc: ""}) {
         const tr = document.createElement("tr");

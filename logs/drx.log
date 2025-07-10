@@ -138,3 +138,10 @@
 2025-07-10 14:05:57.155: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
 2025-07-10 14:06:14.767: Play: 5622-CT.wav [interruptible] - successful
 2025-07-10 14:06:25.376: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 14:13:01.432: Play: 5408-PID .wav [normal] - successful
+2025-07-10 14:59:58.276: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 14:59:58.277: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '78 degrees', 'humidity': '81 percent', 'winddir': 'ENE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-10 15:59:58.243: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 15:59:58.244: WX Report: {'observations': 'Fair', 'temperature': '78 degrees', 'humidity': '77 percent', 'winddir': 'SSW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-10 16:03:41.712: Configuration reload requested from web
+2025-07-10 16:04:20.748: Configuration reload requested from web

@@ -443,3 +443,67 @@
 2025-07-10 19:48:41.996: Play: 5613-CT.wav [interruptible] - successful
 2025-07-10 19:48:46.206: Play: 5191-TO End You Know Better.wav [normal] - successful
 2025-07-10 19:48:52.858: Play: 5174-TM sparc.us.wav [repeat] - successful
+2025-07-10 19:53:18.749: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 19:53:19.163: Play: 5606-CT.wav [interruptible] - interrupted
+2025-07-10 19:53:30.629: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 19:53:47.910: Status: Time Out Seconds | Currently Playing: Timed 24 seconds | Info: Reporting time out duration
+2025-07-10 19:53:56.434: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 19:54:57.225: Interrupt: 5501-PID(N) Light Up Night played without COS, did not switch to 6000
+2025-07-10 19:59:58.297: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-10 19:59:58.298: WX Report: {'observations': 'Fair', 'temperature': '76 degrees', 'humidity': '86 percent', 'winddir': 'SW', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '29.99', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-10 20:00:37.747: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:00:44.771: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:00:46.619: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:00:49.019: TOP: Reporting 6 seconds
+2025-07-10 20:00:56.691: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:01:07.766: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:01:31.217: TOP: Reporting 18 seconds
+2025-07-10 20:01:35.492: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:01:39.703: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:01:46.863: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:04:39.288: Interrupt: 5505-PID(N) All Nite Long played without COS, did not switch to 6000
+2025-07-10 20:05:24.751: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:05:37.523: TOP: Reporting 8 seconds
+2025-07-10 20:05:41.196: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:05:45.408: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:05:52.608: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:06:00.773: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:06:12.244: TOP: Reporting 6 seconds
+2025-07-10 20:06:16.271: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:06:20.481: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:06:27.831: Play: 5174-TM sparc.us.wav [repeat] - successful
+2025-07-10 20:06:41.760: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:06:53.634: TOP: Reporting 7 seconds
+2025-07-10 20:06:57.657: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:07:01.873: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:07:08.972: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:08:06.787: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:08:16.154: TOP: Reporting 4 seconds
+2025-07-10 20:08:20.277: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:08:24.490: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:08:31.642: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:09:50.757: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:10:01.221: TOP: Reporting 5 seconds
+2025-07-10 20:10:05.299: Play: 5665-CT.wav [interruptible] - successful
+2025-07-10 20:10:09.508: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:10:16.709: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:13:10.786: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:13:17.946: TOP: Reporting 2 seconds
+2025-07-10 20:13:22.122: Play: 5618-CT.wav [interruptible] - successful
+2025-07-10 20:13:26.333: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:13:37.787: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:13:58.465: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-10 20:13:59.042: Play: 5618-CT.wav [interruptible] - successful
+2025-07-10 20:14:00.426: TOP: Reporting 17 seconds
+2025-07-10 20:14:08.494: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:18:41.743: Play: 5190-TO Start Never Been So Humiliated.wav [normal] - successful
+2025-07-10 20:18:42.160: Play: 5657-CT.wav [interruptible] - interrupted
+2025-07-10 20:18:53.666: Play: 5171-TM PL 77.wav [normal] - successful
+2025-07-10 20:19:09.942: Status: Time Out Seconds | Currently Playing: Timed 23 seconds | Info: Reporting time out duration
+2025-07-10 20:19:18.216: Play: 5191-TO End You Know Better.wav [normal] - successful
+2025-07-10 20:19:58.229: Play requested: P5171IM (web input box)
+2025-07-10 20:19:59.940: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-10 20:20:07.488: Play requested: P5171r (web input box)
+2025-07-10 20:20:12.743: Play requested: P5171r (web input box)
+2025-07-10 20:20:17.749: Play requested: P5171R (web input box)
+2025-07-10 20:20:19.460: Play: 5171-TM PL 77.wav [repeat] - successful

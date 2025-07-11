@@ -876,7 +876,8 @@ def process_command(command):
         # --- TOT/TOP Time Out Timer logic ---
         if command.strip().upper() == "TOT":
             debug_log("TOT command received in process_command.")
-            handle_tot_start()
+            # Directly handle TOT command here, like the other working commands
+            handle_tot_command()
             return
         if command.strip().upper() == "TOP":
             debug_log("TOP command received in process_command.")
@@ -3785,49 +3786,59 @@ def speak_wx_conditions():
         set_remote_busy(False)
 
 def handle_tot_start():
-    global tot_active, tot_start_time
+    global tot_active, tot_start_time, tot_remote_active
     with tot_lock:
         if not is_cos_active():
             debug_log("TOT: Ignored, COS not active at start.")
             return
+        
+        # Set both flags - one for timer measurement, one for remote device
         tot_active = True
+        tot_remote_active = True
         tot_start_time = time.time()
+        
+        # Set remote busy pin active at the start of TOT
+        #set_remote_busy(True)
+        #debug_log("TOT: Setting REMOTE_BUSY to active")
+        
         debug_log("TOT: Timer started.")
         status_manager.set_status(
             status="Time Out Timer",
             playing="TOT Active",
             info="Timing until COS goes inactive"
         )
-
-def handle_tot_stop():
-    """Stop TOT timer and record seconds when COS goes inactive."""
-    global tot_active, tot_start_time, tot_last_seconds
-    with tot_lock:
-        if tot_active and tot_start_time:
-            tot_last_seconds = int(time.time() - tot_start_time)
-            tot_active = False
-            tot_start_time = None
-            debug_log(f"TOT: Timer stopped, duration: {tot_last_seconds} seconds.")
-
-def monitor_tot_cos():
-    """Monitor COS and stop TOT timer when COS goes inactive."""
-    prev_cos = is_cos_active()
-    while True:
-        now_cos = is_cos_active()
-        if tot_active and not now_cos and prev_cos:
-            handle_tot_stop()
-        prev_cos = now_cos
-        time.sleep(0.05)
         
+        # Start safety timer
+        start_tot_safety_timer()
+
+
+
 def handle_top_command():
-    global tot_last_seconds
+    global tot_last_seconds, tot_remote_active
+    
+    # Check if we have a valid timing to report
+    if tot_last_seconds <= 0:
+        debug_log("TOP: No timing available to report")
+        status_manager.set_idle()
+        return
+    
     status_manager.set_status(
         status="Time Out Seconds",
         playing=f"Timed {tot_last_seconds} seconds",
         info="Reporting time out duration"
     )
     log_recent(f"Status: Time Out Seconds | Currently Playing: Timed {tot_last_seconds} seconds | Info: Reporting time out duration")
-    set_remote_busy(True)
+    
+    # Ensure remote busy pin is active (it should be from TOT command)
+    # but set it again just to be sure
+    with tot_lock:
+        if tot_remote_active:
+            debug_log("TOP: REMOTE_BUSY already active, maintaining state")
+        else:
+            set_remote_busy(True)
+            debug_log("TOP: Setting REMOTE_BUSY to active")
+            tot_remote_active = True
+    
     try:
         to1 = os.path.join(EXTRA_SOUND_DIR, "to1.wav")
         if os.path.exists(to1):
@@ -3844,8 +3855,155 @@ def handle_top_command():
         if os.path.exists(to2):
             play_single_wav(to2, block_interrupt=True, reset_status_on_end=False)
     finally:
+        # Now finally release the remote busy pin and clear the flag
+        with tot_lock:
+            set_remote_busy(False)
+            tot_remote_active = False
+            debug_log("TOP: Setting REMOTE_BUSY to inactive")
+        status_manager.set_idle()
+
+def handle_tot_command():
+    """
+    Handle the TOT command - start timing when COS is active.
+    Follow same pattern as W1, W2, A1 commands.
+    """
+    global tot_active, tot_start_time
+    
+    try:
+        debug_log("TOT COMMAND: Setting REMOTE_BUSY to active immediately")
+        set_remote_busy(True)
+        
+        # Only proceed with timing if COS is active
+        if not is_cos_active():
+            debug_log("TOT COMMAND: COS not active, cannot start timing")
+            status_manager.set_status("TOT Error", "COS not active", "Cannot start timing without active transmission")
+            time.sleep(2)  # Brief display of error message
+            return
+        
+        # Start the timer
+        tot_active = True
+        tot_start_time = time.time()
+        
+        # Set status
+        status_manager.set_status(
+            status="Time Out Timer",
+            playing="TOT Active",
+            info="Timing transmission duration"
+        )
+        
+        # Wait for COS to become inactive (transmission ends)
+        debug_log("TOT COMMAND: Waiting for COS to become inactive")
+        while is_cos_active():
+            time.sleep(0.1)
+        
+        # Calculate duration
+        end_time = time.time()
+        duration_seconds = int(end_time - tot_start_time)
+        tot_active = False
+        
+        # Store the duration for TOP command to use
+        global tot_last_seconds
+        tot_last_seconds = duration_seconds
+        
+        debug_log(f"TOT COMMAND: Transmission ended, duration: {duration_seconds} seconds")
+        
+        # Update status to show timing complete
+        status_manager.set_status(
+            status="Time Out Timer",
+            playing=f"Timed {duration_seconds} seconds",
+            info="Timing complete, waiting for TOP command"
+        )
+        set_remote_busy(True)
+        # Important: DON'T release the remote busy pin here
+        # Keep it active until TOP command is received
+        debug_log("TOT COMMAND: REMOTE_BUSY will remain active until TOP command is received")
+        
+    except Exception as e:
+        debug_log(f"TOT COMMAND: Exception in handle_tot_command: {e}")
+        log_exception("handle_tot_command")
+        # Don't release remote busy pin even on exception
+
+def handle_top_command():
+    """
+    Handle the TOP command - announce the timed duration.
+    Follow same pattern as W1, W2, A1 commands.
+    """
+    global tot_last_seconds
+    
+    try:
+        # Remote busy should already be active from TOT command
+        # No need to set it again, but let's verify
+        debug_log("TOP COMMAND: Verifying REMOTE_BUSY is active")
+        if not is_remote_busy_active():
+            debug_log("TOP COMMAND: REMOTE_BUSY was not active, setting it now")
+            set_remote_busy(True)
+        
+        # Check if we have a valid timing to announce
+        if tot_last_seconds <= 0:
+            debug_log("TOP COMMAND: No valid timing available")
+            status_manager.set_status("TOP Error", "No timing", "No valid timing available")
+            time.sleep(2)  # Brief display of error message
+            return
+            
+        status_manager.set_status(
+            status="Time Out Playback",
+            playing=f"Timed {tot_last_seconds} seconds",
+            info="Announcing timed duration"
+        )
+        
+        log_recent(f"TOP: Reporting {tot_last_seconds} seconds")
+        
+        # Play the announcement
+        debug_log("TOP COMMAND: Playing announcement")
+        
+        to1 = os.path.join(EXTRA_SOUND_DIR, "to1.wav")
+        if os.path.exists(to1):
+            debug_log(f"TOP COMMAND: Playing {to1}")
+            play_single_wav(to1, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+        
+        wavs = get_wav_sequence_for_number(tot_last_seconds)
+        for wav in wavs:
+            wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
+            if os.path.exists(wav_path):
+                debug_log(f"TOP COMMAND: Playing {wav_path}")
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+        
+        sec_wav = os.path.join(EXTRA_SOUND_DIR, "seconds.wav")
+        if os.path.exists(sec_wav):
+            debug_log(f"TOP COMMAND: Playing {sec_wav}")
+            play_single_wav(sec_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+        
+        to2 = os.path.join(EXTRA_SOUND_DIR, "to2.wav")
+        if os.path.exists(to2):
+            debug_log(f"TOP COMMAND: Playing {to2}")
+            play_single_wav(to2, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            
+        debug_log("TOP COMMAND: Announcement completed")
+        
+    except Exception as e:
+        debug_log(f"TOP COMMAND: Exception in handle_top_command: {e}")
+        log_exception("handle_top_command")
+    finally:
+        # Always release remote busy and reset status, even on exception
+        debug_log("TOP COMMAND: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
-        status_manager.set_idle() 
+        status_manager.set_idle()
+
+def start_tot_safety_timer():
+    """Start a safety timer that will deactivate remote busy if TOP isn't received."""
+    def safety_timeout():
+        global tot_remote_active
+        with tot_lock:
+            if tot_remote_active:  # If still active after timeout period
+                debug_log("TOT: Safety timeout reached. Deactivating remote busy pin.")
+                set_remote_busy(False)
+                tot_remote_active = False
+                status_manager.set_idle()
+    
+    # Start the timer - 10 minutes max
+    safety_timer = threading.Timer(600, safety_timeout)
+    safety_timer.daemon = True
+    safety_timer.start()
 
 def reload_config():
     global config, SOUND_DIRECTORY, SOUND_FILE_EXTENSION, SOUND_DEVICE
@@ -3946,7 +4104,6 @@ def main():
             threading.Thread(target=dtmf_cos_edge_monitor, daemon=True).start()
             threading.Thread(target=monitor_cos, daemon=True).start()
             threading.Thread(target=run_flask_server, daemon=True).start()
-            threading.Thread(target=monitor_tot_cos, daemon=True).start()
 
             if is_terminal():
                 try:

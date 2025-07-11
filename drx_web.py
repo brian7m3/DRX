@@ -1337,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <div id="help-modal" class="modal">
           <div class="modal-content">
             <span class="close" id="close-help">&times;</span>
-            <h2>Help: DRX (Digital Repeater Xpander</h2>
+            <h2>Help: DRX (Digital Repeater Xpander)</h2>
             <ul>
               <li><b>Play Specific Track:</b> Use the dropdown to select a track or use the input to specify one directly.</li>
               <li><b>Play Method:</b> 

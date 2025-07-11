@@ -1375,6 +1375,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
                   <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
                   <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
+                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
               <h3>Bases:</h3> 
                   A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  This will continue and loop back to 4201.
                   <br>

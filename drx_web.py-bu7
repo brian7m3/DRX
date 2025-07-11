@@ -1026,25 +1026,15 @@ document.addEventListener('DOMContentLoaded', function() {
             </form>
         </div>
     </div>
-    
-    <!-- Create a flex container to align version info with uptime info -->
-    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-        <!-- Left side: Uptime and Activity -->
-        <div>
-            <div><b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span></div>
-            <div class="your-card">
-                <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
-                    {{ state.get('cos_today_minutes', 0) }}
-                </span>
-            </div>
-        </div>
-        
-        <!-- Right side: Version info -->
-        <div class="version-info" style="text-align: right; font-size: 0.8em; color: #777;">
-            <div>Main Ver: {{ version }}</div>
-            <div>Web Ver: {{ web_version }}</div>
-        </div>
-    </div>
+    <div class="version-info" style="text-align: right; font-size: 0.8em; color: #777; margin-top: 5px;">
+    <div>Main Ver: {{ version }}</div>
+    <div>Web Ver: {{ web_version }}</div>
+</div>
+    <b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span>
+<div class="your-card">
+    <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
+        {{ state.get('cos_today_minutes', 0) }}
+</div>
 </div>
 <div class="card-section play-track-flex">
     <div class="play-track-main">

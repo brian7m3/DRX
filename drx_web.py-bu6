@@ -6,7 +6,6 @@ import requests
 import subprocess
 import re
 from flask import Flask, render_template_string, redirect, url_for, request, session, send_from_directory, jsonify, flash
-from drx_main import VERSION
 
 DRX_START_TIME = time.time()
 
@@ -1026,25 +1025,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </form>
         </div>
     </div>
-    
-    <!-- Create a flex container to align version info with uptime info -->
-    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-        <!-- Left side: Uptime and Activity -->
-        <div>
-            <div><b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span></div>
-            <div class="your-card">
-                <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
-                    {{ state.get('cos_today_minutes', 0) }}
-                </span>
-            </div>
-        </div>
-        
-        <!-- Right side: Version info -->
-        <div class="version-info" style="text-align: right; font-size: 0.8em; color: #777;">
-            <div>Main Ver: {{ version }}</div>
-            <div>Web Ver: {{ web_version }}</div>
-        </div>
-    </div>
+    <b>DRX Uptime:</b> <span id="drx-uptime">{{ drx_uptime }}</span>
+<div class="your-card">
+    <b>Minutes of Activity:</b> <span id="cos-today-minutes" class="status-good" style="font-size:1.15em;">
+        {{ state.get('cos_today_minutes', 0) }}
+</div>
 </div>
 <div class="card-section play-track-flex">
     <div class="play-track-main">
@@ -2202,10 +2187,8 @@ def load_recent_web_log(n=10):
             lines = [line.rstrip() for line in lines if line.strip()]
         if not lines:
             return ["Log file is empty."]
-        
-        # More precise regex that only targets timestamps (e.g., 2023-07-11 13:45:23.456)
-        # This will look for dates/times and only remove milliseconds from them
-        return [re.sub(r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\.\d{1,6}', r'\1', line) for line in lines[-n:]]
+        # Remove milliseconds from timestamps if present
+        return [re.sub(r"\.\d{1,6}", "", line) for line in lines[-n:]]
     except Exception as e:
         return [f"Error loading log: {e}"]
 
@@ -2257,11 +2240,10 @@ def dashboard():
         session=session,
         state_blocks_html=state_blocks_html,
         drx_uptime=get_drx_uptime(),
+        # Add weather system status to template
         weather_status=weather_status,
         weather_class=weather_class,
-        weather_color=weather_color,
-        version=VERSION,
-        web_version="2.00"
+        weather_color=weather_color
     )
 def is_cos_active():
     try:

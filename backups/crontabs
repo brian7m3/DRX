@@ -1,0 +1,4 @@
+0 12 * * * /usr/local/bin/drx-control rotate main
+0 12 * * * /usr/local/bin/drx-control rotate web
+*/15 * * * * python3 /home/drx/DRX/wx/wx_gen.py
+59 * * * * python3 /home/drx/DRX/wx/wx_gen.py

@@ -1,0 +1,1 @@
+run sudo drx-setup.sh from any directory

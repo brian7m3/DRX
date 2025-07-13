@@ -1,0 +1,90 @@
+import json
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
+import time
+
+def get_nws_zone_from_zip(zip_code):
+    """
+    Finds the NWS forecast zone ID for a given US zip code.
+    Returns the zone ID (e.g., 'WVC039') or None.
+    """
+    # Use a public geocoding API to get lat/lon
+    geocode_url = f"https://api.zippopotam.us/us/{zip_code}"
+    headers = {'User-Agent': 'NWS Alert Checker Script'}
+    try:
+        with urlopen(Request(geocode_url, headers=headers)) as response:
+            geocode_data = json.load(response)
+            lat = geocode_data['places'][0]['latitude']
+            lon = geocode_data['places'][0]['longitude']
+    except (HTTPError, URLError, KeyError, IndexError):
+        return None, "Could not get location data for the ZIP code."
+
+    # Use lat/lon to query the NWS API for the forecast zone
+    points_url = f"https://api.weather.gov/points/{lat},{lon}"
+    try:
+        with urlopen(Request(points_url, headers=headers)) as response:
+            points_data = json.load(response)
+            # The forecastZone is a URL, we need to extract the ID from it
+            zone_url = points_data.get('properties', {}).get('forecastZone')
+            if zone_url:
+                zone_id = zone_url.split('/')[-1]
+                return zone_id, None
+            else:
+                return None, "Could not determine NWS forecast zone."
+    except (HTTPError, URLError, KeyError):
+        return None, "Could not contact the NWS API to get the forecast zone."
+
+
+def check_for_active_alerts(zone_id):
+    """
+    Checks the NWS API for active alerts for a given forecast zone.
+    """
+    alerts_url = f"https://api.weather.gov/alerts/active?zone={zone_id}"
+    headers = {'User-Agent': 'NWS Alert Checker Script'}
+
+    try:
+        with urlopen(Request(alerts_url, headers=headers)) as response:
+            alerts_data = json.load(response)
+        
+        active_alerts = alerts_data.get('features', [])
+        
+        if not active_alerts:
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] No active alerts for zone {zone_id}.")
+        else:
+            print(f"\n!!! ACTIVE ALERTS FOUND FOR ZONE {zone_id} !!!")
+            for alert in active_alerts:
+                properties = alert.get('properties', {})
+                print("--------------------------------------------------")
+                print(f"  Event: {properties.get('event')}")
+                print(f"  Headline: {properties.get('headline')}")
+                print(f"  Severity: {properties.get('severity')}")
+                print(f"  Effective: {properties.get('effective')}")
+                print(f"  Expires: {properties.get('expires')}")
+                print("--------------------------------------------------\n")
+
+    except (HTTPError, URLError) as e:
+        print(f"An error occurred while checking for alerts: {e}")
+
+if __name__ == "__main__":
+    zip_input = input("Enter a 5-digit US ZIP code to monitor for alerts: ")
+    if not (zip_input.isdigit() and len(zip_input) == 5):
+        print("Invalid ZIP code. Exiting.")
+        exit()
+
+    print("Finding NWS forecast zone for that ZIP code...")
+    zone, error_msg = get_nws_zone_from_zip(zip_input)
+    
+    if error_msg:
+        print(error_msg)
+        exit()
+
+    print(f"Successfully found NWS Zone: {zone}. Starting monitor...")
+    
+    # This loop will run forever. Press Ctrl+C to stop.
+    try:
+        while True:
+            check_for_active_alerts(zone)
+            # Wait for 5 minutes (300 seconds) before checking again
+            time.sleep(300)
+    except KeyboardInterrupt:
+        print("\nMonitoring stopped by user.")

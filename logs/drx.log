@@ -1,4 +1,103 @@
-# Log rotated on Fri 11 Jul 12:10:37 EDT 2025
-2025-07-11 16:40:50.969: Play requested: P0000 (web input box)
-2025-07-11 16:41:02.296: Play: 0000-Welcome.wav [normal] - successful
-2025-07-11 16:42:35.263: Play: 5410-PID .wav [normal] - successful
+# Log rotated on Sun 13 Jul 00:00:01 EDT 2025
+2025-07-13 00:00:07.273: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 00:00:07.274: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '68 degrees', 'humidity': '98 percent', 'winddir': 'SE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.12', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 00:59:58.557: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 00:59:58.558: WX Report: {'observations': 'Overcast', 'temperature': '67 degrees', 'humidity': '98 percent', 'winddir': 'SE', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '30.11', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 01:59:58.550: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 01:59:58.551: WX Report: {'observations': 'Overcast', 'temperature': '66 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.11', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 02:59:58.581: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 02:59:58.581: WX Report: {'observations': 'Overcast', 'temperature': '66 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.11', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 03:59:58.543: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 03:59:58.543: WX Report: {'observations': 'Overcast', 'temperature': '66 degrees', 'humidity': '99 percent', 'winddir': 'NW', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.1', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 04:59:58.561: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 04:59:58.561: WX Report: {'observations': 'Fog/Mist', 'temperature': '66 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.11', 'pressure_status': 'rising', 'visibility': '5.00 miles', 'precipRate': '0.00'}
+2025-07-13 05:59:58.572: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 05:59:58.572: WX Report: {'observations': 'Fog/Mist', 'temperature': '65 degrees', 'humidity': '99 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.11', 'pressure_status': 'rising', 'visibility': '5.00 miles', 'precipRate': '0.00'}
+2025-07-13 06:59:58.563: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 06:59:58.563: WX Report: {'observations': 'Fog/Mist', 'temperature': '66 degrees', 'humidity': '99 percent', 'winddir': 'ESE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.12', 'pressure_status': 'rising', 'visibility': '5.00 miles', 'precipRate': '0.00'}
+2025-07-13 07:59:58.557: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 07:59:58.558: WX Report: {'observations': 'Fog/Mist', 'temperature': '68 degrees', 'humidity': '98 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.14', 'pressure_status': 'rising', 'visibility': '5.00 miles', 'precipRate': '0.00'}
+2025-07-13 08:20:55.530: Play: 5304-IID Speed of Light.wav [normal] - successful
+2025-07-13 08:20:56.235: Play: 5659-CT.wav [interruptible] - successful
+2025-07-13 08:21:07.436: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 08:22:20.648: Play requested: W1 (web input box)
+2025-07-13 08:22:20.648: WX Report: {'observations': 'Overcast', 'temperature': '70 degrees', 'humidity': '94 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 08:23:23.495: Play: 5659-CT.wav [interruptible] - successful
+2025-07-13 08:23:58.253: Play requested: P5300R (web input box)
+2025-07-13 08:24:10.516: Playback stopped from web
+2025-07-13 08:24:10.534: Play: 5305-IID Breaking New Ground.wav [repeat] - interrupted
+2025-07-13 08:24:11.139: Play: 5659-CT.wav [interruptible] - successful
+2025-07-13 08:24:27.534: Play requested: P5300P (web input box)
+2025-07-13 08:24:52.818: Play: 5306-IID 505 Zone.wav [pause] - playback error
+2025-07-13 08:24:53.386: Play: 5659-CT.wav [interruptible] - successful
+2025-07-13 08:25:09.264: Play: 5659-CT.wav [interruptible] - successful
+2025-07-13 08:30:34.955: Play: 5419-PID Bigger Boat.wav [normal] - successful
+2025-07-13 08:59:58.567: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 08:59:58.567: WX Report: {'observations': 'Overcast', 'temperature': '70 degrees', 'humidity': '93 percent', 'winddir': 'NW', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 09:59:58.584: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 09:59:58.584: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '89 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 10:33:17.683: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 10:33:18.446: Play: 5630-CT.wav [interruptible] - successful
+2025-07-13 10:33:28.153: Play requested: P5300 (web input box)
+2025-07-13 10:33:29.591: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 10:33:33.408: Play requested: P5300 (web input box)
+2025-07-13 10:33:43.169: Play requested: P5300 (web input box)
+2025-07-13 10:34:12.698: Configuration reload requested from web
+2025-07-13 10:34:21.706: Play requested: P5300 (web input box)
+2025-07-13 10:34:23.709: Play requested: P5300 (web input box)
+2025-07-13 10:42:26.666: Play requested: P5300 (web input box)
+2025-07-13 10:42:31.671: Play requested: P5300 (web input box)
+2025-07-13 10:42:37.272: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 10:42:57.285: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-13 10:59:58.598: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 10:59:58.607: WX Report: {'observations': 'Overcast', 'temperature': '76 degrees', 'humidity': '84 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.13', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 11:10:52.868: [STATE] No rotation state found in memory
+2025-07-13 11:10:59.374: Play requested: P5300 (web input box)
+2025-07-13 11:10:59.390: [ROTATION] Base 5300: Track None -> 5301
+2025-07-13 11:11:09.976: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 11:11:12.136: Play requested: P5300 (web input box)
+2025-07-13 11:11:16.890: Play requested: P5300 (web input box)
+2025-07-13 11:13:33.303: [STATE] No rotation state found in memory
+2025-07-13 11:13:38.058: Play requested: P5300 (web input box)
+2025-07-13 11:13:38.064: Rotation for base 5300 is already active, ignoring repeat trigger.
+2025-07-13 11:13:40.311: Play requested: P5300 (web input box)
+2025-07-13 11:13:43.815: Play requested: P5300 (web input box)
+2025-07-13 11:19:41.567: [STATE] No rotation state found in memory
+2025-07-13 11:19:41.567: [INIT] Reset rotation active flags
+2025-07-13 11:19:48.074: Play requested: P5300 (web input box)
+2025-07-13 11:19:48.081: [ROTATION] Start - Base 5300 active state: True
+2025-07-13 11:19:48.081: Rotation for base 5300 is already active, ignoring repeat trigger.
+2025-07-13 11:19:49.826: Play requested: P5300 (web input box)
+2025-07-13 11:19:50.327: Play requested: P5300 (web input box)
+2025-07-13 11:19:53.580: Play requested: P5300 (web input box)
+2025-07-13 11:19:53.831: Play requested: P5300 (web input box)
+2025-07-13 11:23:55.470: [STATE] No rotation state found in memory
+2025-07-13 11:23:55.470: [INIT] Reset rotation active flags
+2025-07-13 11:24:03.226: Play requested: P5300 (web input box)
+2025-07-13 11:24:05.228: Play requested: P5300 (web input box)
+2025-07-13 11:24:05.979: Play requested: P5300 (web input box)
+2025-07-13 11:29:24.996: [STATE] No rotation state found in memory
+2025-07-13 11:29:24.996: [INIT] Reset rotation active flags
+2025-07-13 11:29:33.753: Play requested: P5300 (web input box)
+2025-07-13 11:29:36.005: Play requested: P5300 (web input box)
+2025-07-13 11:32:22.931: Play requested: P5300 (web input box)
+2025-07-13 11:32:25.934: Play requested: P5300 (web input box)
+2025-07-13 11:32:33.549: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 11:32:53.581: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-13 11:36:42.776: Play requested: P5300 (web input box)
+2025-07-13 11:36:53.391: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 11:36:55.037: Play requested: P5300 (web input box)
+2025-07-13 11:37:15.067: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-13 11:38:20.084: Play requested: P5300 (web input box)
+2025-07-13 11:38:30.699: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 11:55:32.148: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 11:55:33.415: Play: 5622-CT.wav [interruptible] - successful
+2025-07-13 11:55:42.910: Configuration reload requested from web
+2025-07-13 11:55:44.074: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 11:59:58.573: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 11:59:58.573: WX Report: {'observations': 'Overcast', 'temperature': '77 degrees', 'humidity': '82 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.12', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 12:59:58.591: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 12:59:58.591: WX Report: {'observations': 'Overcast', 'temperature': '79 degrees', 'humidity': '80 percent', 'winddir': 'SSW', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.12', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 13:07:36.674: Play: 5380-IID ST 147 point 505 7 of 9.wav [normal] - successful
+2025-07-13 13:07:36.771: Play (serial/auto): 5049 - failed -> file not found
+2025-07-13 13:07:48.544: Play: 5171-TM PL 77.wav [interruptible] - successful

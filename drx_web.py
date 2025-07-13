@@ -2261,8 +2261,8 @@ def dashboard():
         weather_status=weather_status,
         weather_class=weather_class,
         weather_color=weather_color,
-        version=VERSION,
-        web_version="2.00"
+        version=state.get("version", "Unknown"),
+        web_version="2.00.01"
     )
 def is_cos_active():
     try:

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+read -p "Enter path to files (relative or absolute): " dir
+read -p "Enter starting file number: " start
+read -p "Enter ending file number: " end
+read -p "Enter text to append (before .wav): " append
+
+for ((n=start; n<=end; n++)); do
+    src="${dir}/${n}.wav"
+    dest="${dir}/${n}${append}.wav"
+    if [[ -f "$src" ]]; then
+        mv "$src" "$dest"
+        echo "Renamed: $src -> $dest"
+    else
+        echo "File not found: $src"
+    fi
+done

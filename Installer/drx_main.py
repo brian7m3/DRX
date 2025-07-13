@@ -254,7 +254,7 @@ class PlaybackStatusManager:
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEBUG_LOG_PATH = os.path.join(SCRIPT_DIR, "debug.log")
 SCRIPT_NAME = "DRX"
-VERSION = "2.00.01"
+VERSION = "2.00"
 
 serial_buffer = ""
 serial_history = []
@@ -1869,7 +1869,6 @@ def play_rotating_section(
         import os
         current_time = time.time()
         last_played = last_played_dict.get(base, 0)
-        
         # Build a list of (track_num, filename) for all present files in the range
         available_tracks = []
         for track_num in range(base + 1, end + 1):
@@ -1877,41 +1876,31 @@ def play_rotating_section(
                 if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
                     available_tracks.append((track_num, f))
                     break  # Only take the first matching file for each number
-        
+
         if not available_tracks:
             # Reset status if nothing to play!
             status_manager.set_idle()
             return
 
-        # Get current track number from current file
-        current_file = current_track_dict.get(base)
-        current_track_num = None
-        if current_file:
-            try:
-                current_track_num = int(os.path.basename(current_file).split("-")[0].split(".")[0])
-            except:
-                current_track_num = None
+        # Use filenames for rotating logic, not just track numbers
+        available_files = [f for _, f in available_tracks]
 
-        # Find current position in available tracks based on track number
-        current_idx = 0
-        if current_track_num:
-            for idx, (num, _) in enumerate(available_tracks):
-                if num == current_track_num:
-                    current_idx = idx
-                    break
-        
-        # Rotation logic based on track numbers
+        # Determine current file
+        current_file = current_track_dict.get(base)
+        if current_file not in available_files:
+            current_file = available_files[0]
+
+        # Rotation logic
         if last_played == 0:
-            next_idx = current_idx
+            next_file = current_file
             last_played_dict[base] = current_time
         elif current_time - last_played >= interval:
-            next_idx = (current_idx + 1) % len(available_tracks)
+            idx = available_files.index(current_file)
+            next_file = available_files[(idx + 1) % len(available_files)]
             last_played_dict[base] = current_time
         else:
-            next_idx = current_idx
+            next_file = current_file
 
-        # Get next track
-        next_track_num, next_file = available_tracks[next_idx]
         current_track_dict[base] = next_file
         next_track = os.path.join(SOUND_DIRECTORY, next_file)
 
@@ -2999,7 +2988,6 @@ def write_state():
         "cos_active": is_cos_active(),
         "remote_device_active": is_remote_busy_active(),
         "uptime": get_drx_uptime(),
-        "version": VERSION,
 
         "random_last_played": {b: random_last_played.get(b, 0) for b in random_bases},
         "random_current_track": {b: os.path.basename(random_current_track.get(b, "")) if random_current_track.get(b, "") else "N/A" for b in random_bases},

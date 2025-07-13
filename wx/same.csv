@@ -1,0 +1,58 @@
+EAS Event (NWR-SAME) Codes,,
+Weather-Related Events 1,NWR-SAME Code,Status
+Blizzard Warning,BZW,Operational
+Coastal Flood Watch,CFA,Operational
+Coastal Flood Warning,CFW,Operational
+Dust Storm Warning,DSW,Operational
+Extreme Wind Warning,EWW,Operational
+Flash Flood Watch,FFA,Operational
+Flash Flood Warning,FFW,Operational
+Flash Flood Statement,FFS,Operational
+Flood Watch,FLA,Operational
+Flood Warning,FLW,Operational
+Flood Statement,FLS,Operational
+High Wind Watch,HWA,Operational
+High Wind Warning,HWW,Operational
+Hurricane Watch,HUA,Operational
+Hurricane Warning,HUW,Operational
+Hurricane Statement,HLS,Operational
+Severe Thunderstorm Watch,SVA,Operational
+Severe Thunderstorm Warning,SVR,Operational
+Severe Weather Statement,SVS,Operational
+Snow Squall Warning,SQW 2,Operational
+Special Marine Warning,SMW,Operational
+Special Weather Statement,SPS,Operational
+Storm Surge Watch,SSA,Operational
+Storm Surge Warning,SSW,Operational
+Tornado Watch,TOA,Operational
+Tornado Warning,TOR,Operational
+Tropical Storm Watch,TRA,Operational
+Tropical Storm Warning,TRW,Operational
+Tsunami Watch,TSA,Operational
+Tsunami Warning,TSW,Operational
+Winter Storm Watch,WSA,Operational
+Winter Storm Warning,WSW,Operational
+Non-Weather-Related Events 1,NWR-SAME Code,Status
+State and Local Codes-Optional,,
+Avalanche Watch,AVA,Operational
+Avalanche Warning,AVW,Operational
+Blue Alert,BLU,Operational
+Child Abduction Emergency,CAE,Operational
+Civil Danger Warning,CDW,Operational
+Civil Emergency Message,CEM,Operational
+Earthquake Warning,EQW,Operational
+Evacuation Immediate,EVI,Operational
+Fire Warning,FRW,Operational
+Hazardous Materials Warning,HMW,Operational
+Law Enforcement Warning,LEW,Operational
+Local Area Emergency,LAE,Operational
+911 Telephone Outage Emergency,TOE,Operational
+Nuclear Power Plant Warning,NUW,Operational
+Radiological Hazard Warning,RHW,Operational
+Shelter in Place Warning,SPW,Operational
+Volcano Warning,VOW,Operational
+Administrative Events 1,NWR-SAME Code,Status
+Administrative Message,ADR,Operational
+Practice/Demo Warning,DMO,Operational
+Required Monthly Test,RMT,Operational
+Required Weekly Test,RWT,Operational

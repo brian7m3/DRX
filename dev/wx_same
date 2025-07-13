@@ -1,0 +1,244 @@
+import json
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
+import time
+from datetime import datetime
+import os
+import csv
+import configparser
+
+def load_config():
+    """
+    Load configuration from wx_config.ini file in the script's directory.
+    Returns zip_code and polling_time, or defaults if not found.
+    """
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, 'wx_config.ini')
+    
+    config = configparser.ConfigParser()
+    
+    # Default values
+    zip_code = None
+    polling_time = 300  # Default 5 minutes
+    
+    try:
+        config.read(config_path)
+        
+        if 'SAME Alerts' in config:
+            zip_code = config.get('SAME Alerts', 'zip_code', fallback=None)
+            if zip_code:
+                zip_code = zip_code.strip()
+            
+            polling_str = config.get('SAME Alerts', 'polling_time', fallback='300')
+            try:
+                polling_time = int(polling_str.strip())
+            except ValueError:
+                print(f"Warning: Invalid polling_time '{polling_str}' in config, using default 300 seconds")
+                polling_time = 300
+                
+    except Exception as e:
+        print(f"Warning: Error reading wx_config.ini: {e}")
+    
+    return zip_code, polling_time
+
+def load_eas_descriptions():
+    """
+    Load EAS code descriptions from same.csv file in the script's directory.
+    Returns a dictionary mapping EAS codes to descriptions.
+    """
+    descriptions = {}
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(script_dir, 'same.csv')
+    
+    try:
+        with open(csv_path, 'r') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if len(row) >= 2:
+                    description = row[0].strip()
+                    code = row[1].strip()
+                    descriptions[code] = description
+    except FileNotFoundError:
+        print(f"Warning: same.csv not found in {script_dir}")
+        print("Falling back to API descriptions.")
+    except Exception as e:
+        print(f"Warning: Error reading same.csv: {e}")
+        print("Falling back to API descriptions.")
+    
+    return descriptions
+
+def parse_nws_date(date_string):
+    """
+    Parses an ISO 8601 date string from the NWS API and formats it.
+    Example input: '2024-07-16T14:58:00-05:00'
+    Returns: '2024-07-16 14:58:00'
+    """
+    if not date_string:
+        return "N/A"
+    try:
+        dt_obj = datetime.fromisoformat(date_string)
+        return dt_obj.strftime('%Y-%m-%d %H:%M:%S')
+    except (ValueError, TypeError):
+        return date_string
+
+def get_nws_zone_from_zip(zip_code, user_agent):
+    """
+    Finds the NWS forecast zone ID for a given US zip code.
+    """
+    headers = {'User-Agent': user_agent}
+    geocode_url = f"https://api.zippopotam.us/us/{zip_code}"
+    try:
+        with urlopen(Request(geocode_url, headers=headers), timeout=10) as response:
+            geocode_data = json.load(response)
+            lat = geocode_data['places'][0]['latitude']
+            lon = geocode_data['places'][0]['longitude']
+    except (HTTPError, URLError, KeyError, IndexError) as e:
+        return None, f"Could not get location data for ZIP {zip_code}. Reason: {e}"
+
+    points_url = f"https://api.weather.gov/points/{lat},{lon}"
+    try:
+        with urlopen(Request(points_url, headers=headers), timeout=10) as response:
+            points_data = json.load(response)
+            zone_url = points_data.get('properties', {}).get('forecastZone')
+            if zone_url:
+                zone_id = zone_url.split('/')[-1]
+                return zone_id, None
+            else:
+                return None, "Could not determine NWS forecast zone from API response."
+    except (HTTPError, URLError) as e:
+        return None, f"Could not contact NWS API for zone info. Reason: {e}"
+    except KeyError:
+        return None, "NWS API response for zone info was in an unexpected format."
+
+def extract_same_code(properties):
+    """
+    Extract the 3-letter SAME code(s) from the alert properties.
+    Returns multiple codes separated by commas if present.
+    """
+    # The eventCode field contains the raw dictionary like {'SAME': ['FFA', 'FFW'], 'NationalWeatherService': ['FAA']}
+    event_code = properties.get('eventCode')
+    
+    all_codes = []
+    
+    if isinstance(event_code, dict):
+        # Extract from SAME array
+        same_codes = event_code.get('SAME', [])
+        if same_codes and isinstance(same_codes, list):
+            all_codes.extend(same_codes)
+        
+        # If no SAME codes, try NationalWeatherService
+        if not all_codes:
+            nws_codes = event_code.get('NationalWeatherService', [])
+            if nws_codes and isinstance(nws_codes, list):
+                all_codes.extend(nws_codes)
+    
+    elif isinstance(event_code, str):
+        # If it's already a string, just add it
+        all_codes.append(event_code)
+    
+    # Return comma-separated list of codes, or 'N/A' if none found
+    return ', '.join(all_codes) if all_codes else 'N/A'
+
+def get_description_from_code(code, eas_descriptions, properties):
+    """
+    Get description for an EAS code from the CSV file.
+    Falls back to API data if code not found in CSV.
+    """
+    # If multiple codes, use the first one for lookup
+    first_code = code.split(',')[0].strip()
+    
+    if first_code in eas_descriptions:
+        return eas_descriptions[first_code]
+    else:
+        # Fall back to extracting from headline
+        headline = properties.get('headline', '')
+        if ' issued ' in headline:
+            description = headline.split(' issued ')[0]
+        elif ' remains in effect' in headline:
+            description = headline.split(' remains in effect')[0]
+        elif ' in effect' in headline:
+            description = headline.split(' in effect')[0]
+        else:
+            # Fall back to event field
+            description = properties.get('event', 'No description available.')
+        return description
+
+def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
+    """
+    Checks the NWS API for active alerts and displays them in the requested format.
+    """
+    alerts_url = f"https://api.weather.gov/alerts/active?zone={zone_id}"
+    headers = {'User-Agent': user_agent}
+    try:
+        with urlopen(Request(alerts_url, headers=headers), timeout=10) as response:
+            alerts_data = json.load(response)
+        
+        active_alerts = alerts_data.get('features', [])
+        
+        current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+        if not active_alerts:
+            print(f"[{current_time}] No active alerts for ZIP Code {zip_code} (Zone: {zone_id}).")
+        else:
+            print(f"\n--- Active Alerts for ZIP {zip_code} at {current_time} ---")
+            for alert in active_alerts:
+                properties = alert.get('properties', {})
+                
+                # Extract the 3-letter SAME code(s)
+                eas_code = extract_same_code(properties)
+                
+                # Get description from CSV file based on code
+                description = get_description_from_code(eas_code, eas_descriptions, properties)
+                
+                issued = parse_nws_date(properties.get('effective'))
+                expires = parse_nws_date(properties.get('expires'))
+                location = properties.get('areaDesc', 'N/A')
+
+                # Display in the new, clean format
+                print(f"""
+  EAS Code:    {eas_code}
+  Description: {description}
+  Issued:      {issued}
+  Expires:     {expires}
+  Location:    {location}
+  Monitored:   ZIP Code {zip_code}
+""")
+            print("-" * 50) # Add a separator for clarity
+
+    except (HTTPError, URLError) as e:
+        print(f"An error occurred while checking for alerts: {e}")
+
+if __name__ == "__main__":
+    USER_AGENT = "WX-SAME-Script (drx@example.com)"
+    
+    # Load configuration
+    config_zip, polling_time = load_config()
+    
+    # Load EAS descriptions from CSV file
+    eas_descriptions = load_eas_descriptions()
+
+    # Get ZIP code - from config or ask user
+    if config_zip and config_zip.isdigit() and len(config_zip) == 5:
+        zip_input = config_zip
+        print(f"Using ZIP code from config: {zip_input}")
+    else:
+        zip_input = input("Enter a 5-digit US ZIP code to monitor for alerts: ").strip()
+        if not (zip_input.isdigit() and len(zip_input) == 5):
+            print("Invalid ZIP code. Exiting.")
+            exit()
+
+    print(f"Polling interval: {polling_time} seconds")
+    print("Finding NWS forecast zone for that ZIP code...")
+    zone, error_msg = get_nws_zone_from_zip(zip_input, USER_AGENT)
+    
+    if error_msg:
+        print(f"Error: {error_msg}")
+        exit()
+
+    print(f"Successfully found NWS Zone: {zone}. Starting monitor for ZIP {zip_input}...")
+    
+    try:
+        while True:
+            check_for_active_alerts(zone, zip_input, USER_AGENT, eas_descriptions)
+            time.sleep(polling_time)
+    except KeyboardInterrupt:
+        print("\nMonitoring stopped by user.")

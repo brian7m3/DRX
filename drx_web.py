@@ -54,6 +54,32 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
+.weather-normal {
+    color: #388e3c !important;
+    background: #e3ffe3;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+}
+.weather-alert {
+    color: #fff !important;
+    background: #ff2222;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+    animation: flash-red 1s infinite;
+}
+.weather-inactive {
+    color: #fff !important;
+    background: #d32f2f;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+}
+@keyframes flash-red {
+    0%, 50% { background: #ff2222; color: #fff; }
+    51%, 100% { background: #fff; color: #ff2222; }
+}
 /* Flashing COS LED for TOT */
 @keyframes flash-red {
     0%, 50% { 
@@ -1136,7 +1162,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="subcard-row">
             <div class="subcard-label">Weather System:</div>
             <div class="subcard-value">
-                <span class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
+                <span id="weather-badge" class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
             </div>
         </div>
     </div>
@@ -2066,6 +2092,27 @@ function validateRanges() {
         <button id="play-local-close-btn" type="button">Close</button>
     </div>
 </div>
+<script>
+function refreshWeatherBadge() {
+    fetch("/api/status", {credentials: 'same-origin'})
+    .then(response => response.json())
+    .then(state => {
+        let badge = document.getElementById('weather-badge');
+        if (!badge) return;
+        if (state.wx_alert_active) {
+            badge.className = 'weather-alert';
+            badge.textContent = 'ALERT';
+            badge.style.color = '#fff';
+        } else {
+            badge.className = 'weather-normal';
+            badge.textContent = 'ACTIVE';
+            badge.style.color = '#388e3c';
+        }
+    });
+}
+setInterval(refreshWeatherBadge, 1000);
+document.addEventListener('DOMContentLoaded', refreshWeatherBadge);
+</script>
 </body>
 </html>
 '''
@@ -2523,28 +2570,35 @@ def status_api():
     updated_at = state.get('updated_at')
     if not updated_at or time.time() - float(updated_at) > 2.5:  # No update in 2.5 seconds
         connection_lost = True
-        # Simulate receipt of TOP command when connection is lost
-        # This will reset TOT to "completed" state rather than just inactive
         handle_top_command_on_disconnect()
     
     # Check recent serial commands for TOT/TOP
-    if not connection_lost:  # Only process commands if connection is active
+    if not connection_lost:
         serial_history = state.get("serial_history", [])
-        for entry in serial_history[-10:]:  # Check last 10 commands
+        for entry in serial_history[-10:]:
             cmd = entry.get("cmd", "").upper().strip()
             if process_serial_command_for_tot(cmd):
-                break  # Stop after first relevant command found
+                break
+    
+    # --- Weather System Unified Status (ALERT overrides all) ---
+    wx_alert_active = state.get("wx_alert_active", False)
+    weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
     
     data = {
         "currently_playing": state.get("currently_playing"),
         "last_played": state.get("last_played"),
         "playback_status": state.get("playback_status"),
-        "cos_state": False if connection_lost else is_cos_active(),  # COS inactive if disconnected
+        "cos_state": False if connection_lost else is_cos_active(),
         "serial_port_missing": state.get("serial_port_missing", False),
         "sound_card_missing": state.get("sound_card_missing", False),
         "remote_device_active": state.get("remote_device_active", False),
-        "tot_active": TOT_STATE['active'],  # This will now reflect the "TOP processed" state
-        "tot_completed": TOT_STATE.get('completed', False)  # Include completed state if it exists
+        "tot_active": TOT_STATE['active'],
+        "tot_completed": TOT_STATE.get('completed', False),
+        # --- Weather Badge fields for AJAX/JS ---
+        "wx_alert_active": wx_alert_active,
+        "weather_status": weather_status,
+        "weather_class": weather_class,
+        "weather_color": weather_color,
     }
     return jsonify(data)
 
@@ -2662,18 +2716,20 @@ def download_dtmf_log():
         as_attachment=True
     )
 
-def get_weather_system_status():
+def get_weather_system_status(wx_alert_active=False):
     wx_dir = os.path.join(os.path.dirname(__file__), "wx")
     wx_gen = os.path.join(wx_dir, "wx_gen.py")
     wx_data = os.path.join(wx_dir, "wx_data")
+    if wx_alert_active:
+        return ("Alert", "weather-alert", "#ff2222")
     if not os.path.exists(wx_gen):
-        return ("Not Installed", "status-warn", "#888")
+        return ("Not Installed", "weather-warn", "#888")
     if not os.path.exists(wx_data):
-        return ("Inactive", "status-bad", "#d32f2f")
+        return ("Inactive", "weather-inactive", "#d32f2f")
     mtime = os.path.getmtime(wx_data)
     if time.time() - mtime > 7200:
-        return ("Inactive", "status-bad", "#d32f2f")
-    return ("Active", "status-good", "#388e3c")
+        return ("Inactive", "weather-inactive", "#d32f2f")
+    return ("Active", "weather-normal", "#388e3c")
 
 @app.route("/download_drx_log")
 @require_login

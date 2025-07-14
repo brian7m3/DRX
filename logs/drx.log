@@ -381,3 +381,28 @@
 2025-07-13 22:59:58.669: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-13 22:59:58.678: WX Report: {'observations': 'Partly Cloudy', 'temperature': '71 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.11', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
 2025-07-13 23:00:17.380: WX Alert: Flash Flood Watch
+2025-07-13 23:11:44.788: WX Alert: Flash Flood Watch
+2025-07-13 23:14:03.091: WX Alert: Flash Flood Watch
+2025-07-13 23:25:14.556: WX Alert: Flash Flood Watch
+2025-07-13 23:26:11.036: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 23:26:11.274: CT Override 5642-CT -> 5095.
+2025-07-13 23:26:12.027: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 23:26:22.987: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 23:27:03.719: CT Override 5642-CT -> 5095.
+2025-07-13 23:27:04.455: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 23:27:11.595: CT Override 5642-CT -> 5095.
+2025-07-13 23:27:12.342: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 23:27:57.654: Play: 5642-CT.wav [interruptible] - successful
+2025-07-13 23:28:06.193: Play: 5642-CT.wav [interruptible] - successful
+2025-07-13 23:28:17.197: WX Alert: Flash Flood Watch
+2025-07-13 23:29:02.463: Configuration reload requested from web
+2025-07-13 23:29:09.565: CT Override 5616-CT -> 5095.
+2025-07-13 23:29:10.271: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-13 23:29:20.023: Play: 5171-TM PL 77.wav [interruptible] - interrupted
+2025-07-13 23:29:21.340: CT Override 5616-CT -> 5095.
+2025-07-13 23:29:22.047: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-13 23:29:56.858: CT Override 5616-CT -> 5095.
+2025-07-13 23:29:57.565: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-13 23:30:07.680: CT Override 5616-CT -> 5095.
+2025-07-13 23:30:08.387: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-13 23:30:22.871: Play: 5616-CT.wav [interruptible] - successful

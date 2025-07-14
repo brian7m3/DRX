@@ -254,7 +254,7 @@ class PlaybackStatusManager:
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEBUG_LOG_PATH = os.path.join(SCRIPT_DIR, "debug.log")
 SCRIPT_NAME = "DRX"
-VERSION = "2.00.01"
+VERSION = "2.01.00"
 
 serial_buffer = ""
 serial_history = []
@@ -300,6 +300,8 @@ tot_start_time = None
 tot_last_seconds = 0
 tot_lock = threading.Lock()
 tot_remote_active = False
+last_alert_time = None
+ctone_override_expire = 0
 
 # --- In-Memory State for REST API ---
 current_state_memory = {}
@@ -935,6 +937,13 @@ def process_command(command):
         if cmd == "W2":
             cancel_rate_limited_timer()
             speak_temperature()
+            return
+        
+        # --- WX Alerts W3 Command ---
+        if cmd == "W3":
+            cancel_rate_limited_timer()
+            debug_log("W3 command - Weather alerts")
+            speak_wx_alerts()
             return
 
         # --- Repeater Activity Reset Command: ARST (example) ---
@@ -1633,26 +1642,36 @@ def play_single_wav(
     playback_token=None,
     wait_for_cos=False,
     reset_status_on_end=True,
-    set_status_on_play=True  # <-- new parameter, default True to preserve current behavior
+    set_status_on_play=True
 ):
-    """
-    Play the wav for code or full filename; optionally interrupt if COS becomes active.
-    Optionally, if wait_for_cos is True, wait for COS to become inactive and stable before playback.
-    Returns True if interrupted by COS, False if played to completion or interrupted by user.
-    """
     import os
-
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
+    global ctone_override_expire
 
-    if isinstance(code, str) and code.lower().endswith('.wav') and os.path.isfile(code):
-        filename = code
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    code_str = code
+    import re
+    if isinstance(code, str) and not code.lower().endswith('.wav') and not os.path.isfile(code):
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+            m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code, re.IGNORECASE)
+            if m:
+                suffix = m.group(2)
+                new_code_str = ctone + suffix
+                log_recent(f"CT Override {filebase} -> {new_code_str}.")
+                debug_log(f"CTONE OVERRIDE: play_single_wav substituting {code} with {new_code_str} (active; expires at {ctone_override_expire})")
+                code_str = new_code_str
+
+    if isinstance(code_str, str) and code_str.lower().endswith('.wav') and os.path.isfile(code_str):
+        filename = code_str
     else:
         matches = [
             f for f in os.listdir(SOUND_DIRECTORY)
-            if match_code_file(f, code, SOUND_FILE_EXTENSION)
+            if match_code_file(f, code_str, SOUND_FILE_EXTENSION)
         ]
         if not matches:
-            debug_log(f"File {code}{SOUND_FILE_EXTENSION} not found.")
+            debug_log(f"File {code_str}{SOUND_FILE_EXTENSION} not found.")
             if reset_status_on_end:
                 status_manager.set_idle()
             return False
@@ -1867,23 +1886,21 @@ def play_rotating_section(
 ):
     try:
         import os
+        global ctone_override_expire
         current_time = time.time()
         last_played = last_played_dict.get(base, 0)
-        
-        # Build a list of (track_num, filename) for all present files in the range
+
         available_tracks = []
         for track_num in range(base + 1, end + 1):
             for f in os.listdir(SOUND_DIRECTORY):
                 if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
                     available_tracks.append((track_num, f))
-                    break  # Only take the first matching file for each number
-        
+                    break
+
         if not available_tracks:
-            # Reset status if nothing to play!
             status_manager.set_idle()
             return
 
-        # Get current track number from current file
         current_file = current_track_dict.get(base)
         current_track_num = None
         if current_file:
@@ -1892,15 +1909,13 @@ def play_rotating_section(
             except:
                 current_track_num = None
 
-        # Find current position in available tracks based on track number
         current_idx = 0
         if current_track_num:
             for idx, (num, _) in enumerate(available_tracks):
                 if num == current_track_num:
                     current_idx = idx
                     break
-        
-        # Rotation logic based on track numbers
+
         if last_played == 0:
             next_idx = current_idx
             last_played_dict[base] = current_time
@@ -1910,12 +1925,29 @@ def play_rotating_section(
         else:
             next_idx = current_idx
 
-        # Get next track
         next_track_num, next_file = available_tracks[next_idx]
         current_track_dict[base] = next_file
         next_track = os.path.join(SOUND_DIRECTORY, next_file)
 
-        # Format currently_playing string with context
+        filebase = os.path.splitext(os.path.basename(next_track))[0]
+
+        # --- CTONE OVERRIDE CHECK ---
+        wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+        ctone = config.get('WX', 'ctone', fallback='').strip()
+        now = time.time()
+        debug_log(f"[CTONE PATCH] ROTATING WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+            import re
+            m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
+            if m:
+                suffix = m.group(2)
+                new_code_str = ctone + suffix
+                log_recent(f"CT Override {filebase} -> {new_code_str}.")
+                debug_log(f"[CTONE PATCH] play_rotating_section: OVERRIDE {filebase} -> {new_code_str}")
+                play_direct_track(new_code_str, interruptible, pausing, repeat, wait_for_cos)
+                rotation_active[base] = False
+                return  # <---- CRUCIAL
+
         track_filename = os.path.basename(next_file)
         track_num = track_filename.split("-")[0].split(".")[0]
         title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
@@ -1928,12 +1960,11 @@ def play_rotating_section(
 
         currently_playing_str = format_currently_playing(track_num, title, "Rotating Base", base)
 
-        # Call play_sound with correct keyword argument 'repeating'
         play_sound(
             next_track,
             interruptible=interruptible,
             pausing=pausing,
-            repeating=repeat,  # <-- IMPORTANT: use repeating, not repeat
+            repeating=repeat,
             wait_for_cos=wait_for_cos,
             display_name=currently_playing_str
         )
@@ -1941,7 +1972,6 @@ def play_rotating_section(
     except Exception:
         log_exception("play_rotating_section")
         rotation_active[base] = False
-        # Reset status on exception, too!
         status_manager.set_idle()
 
 def play_randomized_section(
@@ -1956,6 +1986,7 @@ def play_randomized_section(
     wait_for_cos=False
 ):
     try:
+        global ctone_override_expire
         current_time = time.time()
         last_played = last_played_dict.get(base, 0)
         current_track = current_track_dict.get(base, None)
@@ -1970,12 +2001,28 @@ def play_randomized_section(
             new_track = current_track
 
         import os
-        # Parse the track number and title from filename (e.g. 5308-something.wav)
+        filebase = os.path.splitext(os.path.basename(new_track))[0]
+
+        # --- CTONE OVERRIDE CHECK ---
+        wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+        ctone = config.get('WX', 'ctone', fallback='').strip()
+        now = time.time()
+        debug_log(f"[CTONE PATCH] RANDOM WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+            import re
+            m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
+            if m:
+                suffix = m.group(2)
+                new_code_str = ctone + suffix
+                log_recent(f"CT Override {filebase} -> {new_code_str}.")
+                debug_log(f"[CTONE PATCH] play_randomized_section: OVERRIDE {filebase} -> {new_code_str}")
+                play_direct_track(new_code_str, interruptible, pausing, repeating, wait_for_cos)
+                return  # <---- CRUCIAL
+
         track_filename = os.path.basename(new_track)
         track_num = track_filename.split("-")[0].split(".")[0]
         title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
-        
-        # Helper for display string
+
         def format_currently_playing(track_num, title, base_type, base_num):
             if title:
                 return f"{track_num}-{title} from {base_type} {base_num}"
@@ -1984,7 +2031,6 @@ def play_randomized_section(
 
         currently_playing_str = format_currently_playing(track_num, title, "Random Base", base)
 
-        # Pass display_name to play_sound so that web UI gets the full context
         play_sound(
             new_track,
             interruptible=interruptible,
@@ -1995,7 +2041,7 @@ def play_randomized_section(
         )
     except Exception:
         log_exception("play_randomized_section")
-        
+
 def play_sudo_random_section(
     base,
     end,
@@ -2009,6 +2055,7 @@ def play_sudo_random_section(
     wait_for_cos=False
 ):
     global sudo_random_last_file
+    global ctone_override_expire
     current_time = time.time()
     matching_files = find_matching_files(base, end)
     if not matching_files:
@@ -2018,7 +2065,6 @@ def play_sudo_random_section(
     played_in_cycle = played_in_cycle_dict.get(base)
     if played_in_cycle is None:
         played_in_cycle = set()
-    # Only pick a new track if interval expired or current track missing
     if current_track is not None and (current_time - last_interval < interval) and current_track in matching_files:
         file_to_play = current_track
     else:
@@ -2031,13 +2077,28 @@ def play_sudo_random_section(
         interval_track_dict[base] = file_to_play
         last_interval_dict[base] = current_time
         played_in_cycle.add(file_to_play)
-    # Always store the updated set back
     played_in_cycle_dict[base] = played_in_cycle
     sudo_random_last_file[base] = file_to_play
 
-    # --------- NEW: Set currently_playing with context ---------
     import os
-    # Parse the track number and title from filename (e.g. 5308-something.wav)
+    filebase = os.path.splitext(os.path.basename(file_to_play))[0]
+
+    # --- CTONE OVERRIDE CHECK ---
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    debug_log(f"[CTONE PATCH] SUDORANDOM WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+    if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+        import re
+        m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
+        if m:
+            suffix = m.group(2)
+            new_code_str = ctone + suffix
+            log_recent(f"CT Override {filebase} -> {new_code_str}.")
+            debug_log(f"[CTONE PATCH] play_sudo_random_section: OVERRIDE {filebase} -> {new_code_str}")
+            play_direct_track(new_code_str, interruptible, pausing, repeat, wait_for_cos)
+            return  # <---- CRUCIAL
+
     track_filename = os.path.basename(file_to_play)
     track_num = track_filename.split("-")[0].split(".")[0]
     title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
@@ -2049,40 +2110,62 @@ def play_sudo_random_section(
             return f"{track_num} from {base_type} {base_num}"
 
     currently_playing_str = format_currently_playing(track_num, title, "SudoRandom Base", base)
-    # ----------------------------------------------------------
-
     play_sound(
         file_to_play,
         interruptible=interruptible,
         pausing=pausing,
-        repeating=repeat,  # <-- FIXED: use repeating, not repeat
+        repeating=repeat,
         wait_for_cos=wait_for_cos,
         display_name=currently_playing_str
     )
 
 def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False, wait_for_cos=False):
-    debug_log(f"play_direct_track: code_str={code_str}")
-    
-    try:
-        files = os.listdir(SOUND_DIRECTORY)
-        debug_log(f"Directory listing: {files}")
-        
-        # Filter files that match our code
-        matches = [f for f in files if match_code_file(f, code_str, SOUND_FILE_EXTENSION)]
-        debug_log(f"Matching files for code_str={code_str}: {matches}")
-        
-        if matches:
-            filename = os.path.join(SOUND_DIRECTORY, matches[0])
-            debug_log(f"Playing file: {filename}")
-            # Play directly (NO thread)
-            play_sound(filename, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
-        else:
-            debug_log(f"Play (serial/auto): {code_str} - failed -> file not found")
-            log_recent(f"Play (serial/auto): {code_str} - failed -> file not found")
-    except Exception as e:
-        debug_log(f"Exception in play_direct_track: {str(e)}")
-        import traceback
-        debug_log(traceback.format_exc())     
+    """
+    Play a track directly by its code string, optionally applying C-tone WX alert override.
+    """
+    debug_log(f"play_direct_track: code_str={code_str}, interruptible={interruptible}, pausing={pausing}, repeat={repeat}, wait_for_cos={wait_for_cos}")
+    global ctone_override_expire
+
+    # --- C-tone WX Alert Override Logic ---
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    import re
+    debug_log(f"[CTONE PATCH] DIRECT WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+    if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+        m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code_str, re.IGNORECASE)
+        if m:
+            suffix = m.group(2)
+            new_code_str = ctone + suffix
+            log_recent(f"CT Override {filebase} -> {new_code_str}.")
+            debug_log(f"[CTONE PATCH] play_direct_track: OVERRIDE {code_str} -> {new_code_str}")
+            code_str = new_code_str
+
+    # Now resolve the code_str to a filename and play it
+    import os
+    matches = [
+        f for f in os.listdir(SOUND_DIRECTORY)
+        if match_code_file(f, code_str, SOUND_FILE_EXTENSION)
+    ]
+    if not matches:
+        debug_log(f"File {code_str}{SOUND_FILE_EXTENSION} not found in play_direct_track.")
+        status_manager.set_idle()
+        return False
+    filename = os.path.join(SOUND_DIRECTORY, matches[0])
+
+    debug_log(
+        f"play_direct_track: resolved filename={filename}, interruptible={interruptible}, pausing={pausing}, repeat={repeat}, wait_for_cos={wait_for_cos}"
+    )
+    # Pass through to play_sound or play_single_wav or your preferred playback mechanism
+    play_sound(
+        filename,
+        interruptible=interruptible,
+        pausing=pausing,
+        repeating=repeat,
+        wait_for_cos=wait_for_cos,
+        display_name=os.path.splitext(os.path.basename(filename))[0]
+    )
+    return True     
 
 def play_interrupt_to_another(base_filename, code2, playback_token=None):
     import os
@@ -2607,6 +2690,18 @@ def process_serial_commands():
                     serial_buffer = serial_buffer[:index] + serial_buffer[index+2:]
                 serial_buffer = serial_buffer.lstrip()
                 continue
+            
+            # Standalone W3 command (case-insensitive, surrounded by non-word chars or start/end)
+            match_w3 = re.search(r'\bW3\b', serial_buffer.upper())
+            if match_w3:
+                debug_log(f"Processing W3 command")
+                command_queue.put("W3")
+                # Remove W3 from buffer
+                index = serial_buffer.upper().find("W3")
+                if index != -1:
+                    serial_buffer = serial_buffer[:index] + serial_buffer[index+2:]
+            serial_buffer = serial_buffer.lstrip()
+            continue
 
             # --- Join series (J) and alternate series (A) pattern matching ---
             # Join series: e.g. P1001JR2002IM or P1001J2002J3003M
@@ -3827,6 +3922,533 @@ def speak_wx_conditions():
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 
+# START OF WX ALERT SECTION
+
+def wx_alert_check(config, debug_log=None):
+    """
+    Check if weather alerts are enabled and if the alerts file exists.
+    Compare the latest issued time to see if it's a new alert.
+    
+    Args:
+        config: ConfigParser object containing the configuration
+        debug_log: Debug logging function (optional)
+        
+    Returns:
+        bool: True if alerts are enabled and a NEW alert exists, False otherwise
+    """
+    global last_alert_time
+    
+    try:
+        # Check if weather alerts are enabled in config
+        if config.has_section('WX') and config.getboolean('WX', 'alerts', fallback=False):
+            # Check if the wx_alerts file exists
+            wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+            if os.path.exists(wx_alerts_path):
+                # Read the file and check for latest issued time
+                with open(wx_alerts_path, 'r') as f:
+                    content = f.read()
+                
+                # Find all instances of "Issued:" pattern and get the last one
+                # Pattern matches "  Issued:      2025-07-13 07:04:00" with flexible spacing
+                issued_pattern = r'Issued:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})'
+                matches = re.findall(issued_pattern, content)
+                
+                if matches:
+                    # Get the last (most recent) issued time
+                    latest_issued_time = matches[-1]
+                    
+                    debug_log(f"Latest alert issued time: {latest_issued_time}")
+                    
+                    # Check if this is a new alert
+                    if latest_issued_time != last_alert_time:
+                        last_alert_time = latest_issued_time
+                        debug_log(f"New weather alert detected: {latest_issued_time}")
+                        return True
+                    else:
+                        debug_log(f"Alert already processed: {latest_issued_time}")
+                        return False
+                else:
+                    debug_log("No 'Issued:' timestamp found in wx_alerts file")
+                    
+    except Exception as e:
+        debug_log(f"Error checking weather alerts: {e}")
+    
+    return False
+
+def wx_alert_action(config, debug_log=None):
+    """
+    Perform actions when weather alert is detected.
+    This function is called when wx_alerts file contains a new alert.
+    
+    Args:
+        config: ConfigParser object containing the configuration
+        debug_log: Debug logging function (optional)
+    """
+    try:
+        if debug_log:
+            debug_log("Weather alert action triggered")
+        
+        # --- CTONE OVERRIDE PATCH ---
+        global ctone_override_expire
+        wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+        ctone = config.get('WX', 'ctone', fallback='').strip()
+        ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+        
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and ctone_time > 0:
+            ctone_override_expire = time.time() + ctone_time * 60
+            if debug_log:
+                debug_log(f"[CTONE PATCH] Set ctone_override_expire to {ctone_override_expire} for {ctone_time} minutes (now={time.time()})")
+        else:
+            ctone_override_expire = 0
+            if debug_log:
+                debug_log(f"[CTONE PATCH] ctone_override_expire cleared or not set. WX: {wx_alerts} ctone: '{ctone}' time: {ctone_time}")
+
+        # Call speak_wx_alerts to announce the alert
+        speak_wx_alerts()
+        
+        # Additional actions can be added here
+        # Examples:
+        # - Log to file
+        # - Send notifications
+        # - Update display
+        
+    except Exception as e:
+        if debug_log:
+            debug_log(f"Error in wx_alert_action: {e}")
+
+def wx_alert_monitor(config, debug_log=None):
+    """
+    Monitor for weather alerts at the specified interval (now in seconds).
+    This function runs in a separate thread.
+    
+    Args:
+        config: ConfigParser object containing the configuration
+        debug_log: Debug logging function (optional)
+    """
+    try:
+        # Get the check interval from config (default to 300 seconds)
+        interval_seconds = config.getint('WX', 'interval', fallback=300)
+        
+        debug_log(f"Weather alert monitoring started. Checking every {interval_seconds} seconds.")
+        
+        while True:
+            if wx_alert_check(config, debug_log):
+                wx_alert_action(config, debug_log)
+            
+            # Wait for the specified interval
+            time.sleep(interval_seconds)
+            
+    except Exception as e:
+        debug_log(f"Error in weather alert monitor: {e}")
+
+def start_wx_alert_monitoring(config, debug_log=None):
+    """
+    Start the weather alert monitoring in a separate thread.
+    Call this function from your main program initialization.
+    
+    Args:
+        config: ConfigParser object containing the configuration
+        debug_log: Debug logging function (optional)
+    """
+    try:
+        # Only start monitoring if alerts are enabled
+        if config.has_section('WX') and config.getboolean('WX', 'alerts', fallback=False):
+            # Create and start the monitoring thread
+            monitor_thread = threading.Thread(
+                target=wx_alert_monitor,
+                args=(config, debug_log),
+                daemon=True,  # Thread will stop when main program exits
+                name="WXAlertMonitor"
+            )
+            monitor_thread.start()
+            debug_log("Weather alert monitoring thread started.")
+        else:
+            debug_log("Weather alerts are disabled in configuration.")
+            # Do not start monitoring if alerts = false
+            return
+            
+    except Exception as e:
+        debug_log(f"Error starting weather alert monitoring: {e}")
+        
+def speak_wx_alerts(*args, **kwargs):
+    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
+
+    try:
+        debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
+        set_remote_busy(True)
+
+        # COS debounce logic (from speak_activity_minutes_for_previous_day)
+        if is_cos_active():
+            status_manager.set_weather_report("Waiting for channel to clear", "")
+            # Wait for channel to clear (debounce, as before)
+            while True:
+                if is_cos_active():
+                    debug_log("W3 ALERTS: Waiting for COS to become inactive")
+                    while is_cos_active():
+                        time.sleep(0.1)
+                    debug_log("W3 ALERTS: COS has become inactive, starting debounce timer")
+
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        debug_log("W3 ALERTS: COS became active again during debounce period, restarting wait process")
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    debug_log(f"W3 ALERTS: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
+                    break
+        else:
+            # No need to wait, set status to "WX Alert Report"
+            status_manager.set_weather_report("WX Alert Report", "Playing Alert")
+
+        wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+        
+        if not os.path.exists(wx_alerts_path):
+            debug_log("No wx_alerts file found")
+            status_manager.set_weather_report("WX Alert Report", "No active alerts")
+            wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+            if os.path.exists(wav_path):
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            status_manager.set_idle()
+            return
+        
+        # Read the alerts file
+        with open(wx_alerts_path, 'r') as f:
+            alert_content = f.read()
+        
+        # Find the last alert block in the file
+        alert_blocks = re.split(r'-{10,}', alert_content)
+        
+        description = None
+        issued_time = None
+        expires_time = None
+        
+        # Get the last complete alert block
+        for block in reversed(alert_blocks):
+            if 'EAS Code:' in block and 'Issued:' in block:
+                # Extract key information
+                desc_match = re.search(r'Description:\s+(.+)', block)
+                issued_match = re.search(r'Issued:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+                expires_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+                
+                if desc_match:
+                    description = desc_match.group(1).strip()
+                if issued_match:
+                    issued_time = issued_match.group(1)
+                if expires_match:
+                    expires_time = expires_match.group(1)
+                
+                if description and issued_time and expires_time:
+                    break
+        
+        if not description:
+            debug_log("No valid alert found in wx_alerts file")
+            status_manager.set_weather_report("WX Alert Report", "No valid alerts")
+            wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+            if os.path.exists(wav_path):
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            status_manager.set_idle()
+            return
+        
+        debug_log(f"Speaking weather alert - Description: {description}, Issued: {issued_time}, Expires: {expires_time}")
+        log_recent(f"WX Alert: {description}")
+        
+        # Set status ONCE at start of sequence
+        status_manager.set_weather_report("WX Alert Report", f"Alert: {description}")
+        
+        wavs = []
+        
+        # 1. Start with wx_alert.wav
+        wavs.append("wx_alert.wav")
+        
+        # 2. Build description WAVs with improved lookup logic
+        description_wavs = []
+        description_lower = description.lower()
+        words = description_lower.split()
+        
+        # First try full description with underscores
+        full_desc_wav = f"{description_lower.replace(' ', '_')}.wav"
+        full_desc_path = os.path.join(EXTRA_SOUND_DIR, full_desc_wav)
+        
+        if os.path.exists(full_desc_path):
+            description_wavs.append(full_desc_wav)
+            debug_log(f"Found full description WAV: {full_desc_wav}")
+        else:
+            debug_log(f"Full description not found: {full_desc_wav}, trying combinations")
+            
+            # For multi-word descriptions, try various combinations
+            if len(words) > 1:
+                # Try different combinations for 3-word descriptions
+                if len(words) == 3:
+                    # Try first two words joined
+                    two_word_wav = f"{words[0]}_{words[1]}.wav"
+                    two_word_path = os.path.join(EXTRA_SOUND_DIR, two_word_wav)
+                    if os.path.exists(two_word_path):
+                        description_wavs.append(two_word_wav)
+                        # Then add third word separately
+                        third_wav = f"{words[2]}.wav"
+                        third_path = os.path.join(EXTRA_SOUND_DIR, third_wav)
+                        if os.path.exists(third_path):
+                            description_wavs.append(third_wav)
+                        else:
+                            debug_log(f"Third word not found: {third_wav}")
+                    else:
+                        # Try last two words joined
+                        two_word_wav = f"{words[1]}_{words[2]}.wav"
+                        two_word_path = os.path.join(EXTRA_SOUND_DIR, two_word_wav)
+                        if os.path.exists(two_word_path):
+                            # Add first word separately
+                            first_wav = f"{words[0]}.wav"
+                            first_path = os.path.join(EXTRA_SOUND_DIR, first_wav)
+                            if os.path.exists(first_path):
+                                description_wavs.append(first_wav)
+                            description_wavs.append(two_word_wav)
+                        else:
+                            # Fall back to individual words
+                            debug_log("No two-word combinations found, using individual words")
+                            for word in words:
+                                word_wav = f"{word}.wav"
+                                word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
+                                if os.path.exists(word_path):
+                                    description_wavs.append(word_wav)
+                                else:
+                                    debug_log(f"Warning: Word not found: {word}")
+                
+                # For 2-word descriptions, try joined then individual
+                elif len(words) == 2:
+                    for word in words:
+                        word_wav = f"{word}.wav"
+                        word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
+                        if os.path.exists(word_path):
+                            description_wavs.append(word_wav)
+                        else:
+                            debug_log(f"Warning: Word not found: {word}")
+            else:
+                # Single word description
+                word_wav = f"{words[0]}.wav"
+                word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
+                if os.path.exists(word_path):
+                    description_wavs.append(word_wav)
+                else:
+                    debug_log(f"Warning: Word not found: {words[0]}")
+        
+        # Add description WAVs to main sequence
+        wavs.extend(description_wavs)
+        
+        # Add repeating.wav and description again
+        wavs.append("repeating.wav")
+        wavs.extend(description_wavs)
+        
+        # 3. Speak issued time
+        wavs.append("wx_issued.wav")
+        
+        # Parse issued time: "2025-07-13 07:04:00"
+        issued_dt = datetime.strptime(issued_time, "%Y-%m-%d %H:%M:%S")
+        
+        # Hour
+        hour = issued_dt.hour
+        if hour == 0:
+            wavs.append("0.wav")
+        else:
+            wavs += get_wav_sequence_for_number(hour)
+        
+        # Minutes and "hours"
+        if issued_dt.minute == 0:
+            # For times like 19:00:00, say "100 hours"
+            wavs.append("100.wav")
+            wavs.append("hours.wav")
+        else:
+            # Normal minute handling
+            if issued_dt.minute < 10:
+                wavs.append("oh.wav")
+                wavs.append(f"{issued_dt.minute}.wav")
+            else:
+                wavs += get_wav_sequence_for_number(issued_dt.minute)
+            wavs.append("hours.wav")
+        
+        # "on" for the date
+        wavs.append("on.wav")
+        
+        # Month
+        wavs += get_wav_sequence_for_number(issued_dt.month)
+        
+        # Day
+        wavs += get_wav_sequence_for_number(issued_dt.day)
+        
+        # Year (20 + last two digits)
+        wavs.append("20.wav")
+        year_last_two = issued_dt.year % 100
+        if year_last_two < 10:
+            wavs.append("oh.wav")
+            wavs.append(f"{year_last_two}.wav")
+        else:
+            wavs += get_wav_sequence_for_number(year_last_two)
+        
+        # 4. Speak expires time
+        wavs.append("wx_expired.wav")
+        
+        # Parse expires time
+        expires_dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
+        
+        # at
+        wavs.append("at.wav")        
+        
+        # Hour
+        hour = expires_dt.hour
+        if hour == 0:
+            wavs.append("0.wav")
+        else:
+            wavs += get_wav_sequence_for_number(hour)
+        
+        # Minutes and "hours"
+        if expires_dt.minute == 0:
+            # For times like 19:00:00, say "100 hours"
+            wavs.append("hundred.wav")
+            wavs.append("hours.wav")
+        else:
+            # Normal minute handling
+            if expires_dt.minute < 10:
+                wavs.append("oh.wav")
+                wavs.append(f"{expires_dt.minute}.wav")
+            else:
+                wavs += get_wav_sequence_for_number(expires_dt.minute)
+            wavs.append("hours.wav")
+        
+        # "on" for the date
+        wavs.append("on.wav")
+        
+        # Month
+        wavs += get_wav_sequence_for_number(expires_dt.month)
+        
+        # Day
+        wavs += get_wav_sequence_for_number(expires_dt.day)
+        
+        # Year
+        wavs.append("20.wav")
+        year_last_two = expires_dt.year % 100
+        if year_last_two < 10:
+            wavs.append("oh.wav")
+            wavs.append(f"{year_last_two}.wav")
+        else:
+            wavs += get_wav_sequence_for_number(year_last_two)
+        
+        # Play wav files
+        for wav in wavs:
+            wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
+            if os.path.exists(wav_path):
+                debug_log(f"W3 ALERTS: Playing {wav_path}")
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            else:
+                debug_log(f"W3 ALERTS: WAV file not found: {wav_path}")
+
+        debug_log("W3 ALERTS: Alert report completed")
+
+    except Exception as e:
+        debug_log(f"W3 ALERTS: Exception in speak_wx_alerts: {e}")
+        log_exception("speak_wx_alerts")
+    finally:
+        # Set status to idle at the end of the sequence
+        status_manager.set_idle()
+        debug_log("W3 ALERTS: Setting REMOTE_BUSY to inactive")
+        set_remote_busy(False)
+        
+def check_wav_exists(wav_file, debug_log=None):
+    """
+    Check if a WAV file exists in the sounds directory.
+    
+    Args:
+        wav_file: The WAV filename (can include subdirectory like 'extra/flash.wav')
+        debug_log: Debug logging function (optional)
+    
+    Returns:
+        bool: True if file exists, False otherwise
+    """
+    try:
+        # Construct the full path
+        if wav_file.startswith('extra/'):
+            full_path = f"/DRX/sounds/{wav_file}"
+        else:
+            full_path = f"/DRX/sounds/{wav_file}"
+        
+        exists = os.path.exists(full_path)
+        
+        if not exists and debug_log:
+            debug_log(f"WAV file not found: {full_path}")
+        
+        return exists
+        
+    except Exception as e:
+        if debug_log:
+            debug_log(f"Error checking WAV file existence: {e}")
+        return False
+
+def play_wav_file_with_check(wav_file, debug_log=None):
+    """
+    Wrapper function to play WAV file with existence check.
+    
+    Args:
+        wav_file: The WAV filename to play
+        debug_log: Debug logging function (optional)
+    
+    Returns:
+        bool: True if file was played, False if not found
+    """
+    if check_wav_exists(wav_file, debug_log):
+        play_wav_file(wav_file)
+        return True
+    else:
+        debug_log(f"Cannot play missing WAV file: {wav_file}")
+        return False
+    """
+    Wrapper function to play WAV file with existence check.
+    
+    Args:
+        wav_file: The WAV filename to play
+        debug_log: Debug logging function (optional)
+    
+    Returns:
+        bool: True if file was played, False if not found
+    """
+    if check_wav_exists(wav_file, debug_log):
+        play_wav_file(wav_file)
+        return True
+    else:
+        debug_log(f"Cannot play missing WAV file: {wav_file}")
+        return False
+
+def activate_ctone_override_from_alert(config):
+    """Call this from wx_alert_action or alert logic when alert triggers."""
+    global ctone_override_expire
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+    if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and ctone_time > 0:
+        ctone_override_expire = time.time() + (ctone_time * 60)
+        debug_log(f"CTONE OVERRIDE: Activated for {ctone_time} minutes (until {ctone_override_expire})")
+    else:
+        ctone_override_expire = 0
+        debug_log("CTONE OVERRIDE: Not activated (no alert or ctone config)")
+
+def ctone_override_check(code_str):
+    """Returns overridden code_str if ctone override is active and pattern matches, else returns code_str unchanged."""
+    global ctone_override_expire
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    if not (wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire):
+        return code_str
+    import re
+    # Match: four digits, optional suffix, then -CT (e.g., 5050I-CT, 5050-CT)
+    m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code_str, re.IGNORECASE)
+    if m:
+        suffix = m.group(2)
+        new_code_str = ctone + suffix
+        debug_log(f"CTONE OVERRIDE: Substituting {code_str} with {new_code_str} (active)")
+        return new_code_str
+    return code_str
+
+# END OF WX ALERT SECTION
+
 def handle_tot_start():
     global tot_active, tot_start_time
     with tot_lock:
@@ -3980,6 +4602,10 @@ def main():
         status_manager = PlaybackStatusManager(write_state)
         status_manager.register_status_callback(sync_legacy_status_variables)
         
+        # Start weather alert monitoring if enabled
+        if config.has_section('WX') and config.getboolean('WX', 'alerts', fallback=False):
+            start_wx_alert_monitoring(config, debug_log)
+        
         try:
             threading.Thread(target=serial_read_loop, daemon=True).start()
             threading.Thread(target=process_serial_commands, daemon=True).start()
@@ -4016,4 +4642,4 @@ def main():
             log_exception("main (lgpio cleanup)")
 
 if __name__ == "__main__":
-    main()            
+    main()       

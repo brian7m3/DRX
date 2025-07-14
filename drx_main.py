@@ -3126,6 +3126,14 @@ def write_state():
         "cos_today_date": cos_today_date,
     }
     
+    # --- WX ALERT STATE ---
+    try:
+        wx_alert_active = (ctone_override_expire and time.time() < ctone_override_expire)
+    except Exception:
+        wx_alert_active = False
+
+    state["wx_alert_active"] = wx_alert_active
+    
     # Store state in memory for API access
     with state_lock:
         current_state_memory = state
@@ -4446,6 +4454,14 @@ def ctone_override_check(code_str):
         debug_log(f"CTONE OVERRIDE: Substituting {code_str} with {new_code_str} (active)")
         return new_code_str
     return code_str
+    
+def is_wx_alert_active():
+    global ctone_override_expire
+    now = time.time()
+    try:
+        return (ctone_override_expire is not None and now < ctone_override_expire)
+    except Exception:
+        return False    
 
 # END OF WX ALERT SECTION
 

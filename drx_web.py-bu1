@@ -2238,11 +2238,10 @@ def dashboard():
     config.read(config_file_path)
     
     state = read_state()
-    wx_alert_active = state.get("wx_alert_active", False)
     state_blocks_html = render_template_string(STATE_BLOCKS_TEMPLATE, state=state)
     
     # --- Weather System Status ---
-    weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
+    weather_status, weather_class, weather_color = get_weather_system_status()
     
     return render_template_string(DASHBOARD_TEMPLATE,
         currently_playing=state.get("currently_playing"),
@@ -2263,9 +2262,8 @@ def dashboard():
         weather_class=weather_class,
         weather_color=weather_color,
         version=state.get("version", "Unknown"),
-        web_version="2.01.00"
+        web_version="2.00.01"
     )
-    
 def is_cos_active():
     try:
         state = read_state()
@@ -2811,21 +2809,6 @@ def process_serial_command_for_tot(command):
         return True  # State changed
     
     return False  # No state change
-
-def get_weather_system_status(wx_alert_active=False):
-    wx_dir = os.path.join(os.path.dirname(__file__), "wx")
-    wx_gen = os.path.join(wx_dir, "wx_gen.py")
-    wx_data = os.path.join(wx_dir, "wx_data")
-    if wx_alert_active:
-        return ("Alert", "status-alert", "#ff2222")
-    if not os.path.exists(wx_gen):
-        return ("Not Installed", "status-warn", "#888")
-    if not os.path.exists(wx_data):
-        return ("Inactive", "status-bad", "#d32f2f")
-    mtime = os.path.getmtime(wx_data)
-    if time.time() - mtime > 7200:
-        return ("Inactive", "status-bad", "#d32f2f")
-    return ("Active", "status-good", "#388e3c")
 
 @app.route("/api/base_configurator", methods=["GET"])
 def api_base_configurator():

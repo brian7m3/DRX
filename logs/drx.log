@@ -332,3 +332,52 @@
 2025-07-13 21:26:05.582: CT Override 5637-CT -> 5095.
 2025-07-13 21:26:06.363: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
 2025-07-13 21:26:17.360: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 21:43:51.319: WX Alert: Flash Flood Watch
+2025-07-13 21:45:20.241: WX Alert: Flash Flood Watch
+2025-07-13 21:46:14.733: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 21:46:14.922: CT Override 5639-CT -> 5095.
+2025-07-13 21:46:15.694: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 21:46:25.211: CT Override 5639-CT -> 5095.
+2025-07-13 21:46:26.004: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 21:46:36.997: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 21:47:30.397: Play: 5639-CT.wav [interruptible] - successful
+2025-07-13 21:55:47.626: Play: 5408-PID Quicker Keyer Uppers.wav [normal] - successful
+2025-07-13 21:59:58.749: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 21:59:58.778: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '73 degrees', 'humidity': '92 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.11', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 22:00:33.787: WX Alert: Flash Flood Watch
+2025-07-13 22:01:21.263: CT Override 5661-CT -> 5095.
+2025-07-13 22:01:22.049: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:01:25.457: CT Override 5661-CT -> 5095.
+2025-07-13 22:01:26.189: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:01:37.246: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 22:05:16.331: Play: 5402-PID Press Your PTT.wav [normal] - successful
+2025-07-13 22:07:32.846: WX Alert: Flash Flood Watch
+2025-07-13 22:18:10.892: WX Alert: Flash Flood Watch
+2025-07-13 22:19:06.144: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-13 22:19:06.389: CT Override 5655-CT -> 5095.
+2025-07-13 22:19:07.192: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:19:17.295: CT Override 5655-CT -> 5095.
+2025-07-13 22:19:18.091: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:19:29.084: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 22:27:01.833: WX Alert: Flash Flood Watch
+2025-07-13 22:27:46.562: CT Override 5605-CT -> 5095.
+2025-07-13 22:27:47.361: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:27:58.367: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 22:28:33.083: Play: 5405-PID You're on the Glidepath.wav [normal] - successful
+2025-07-13 22:33:11.650: WX Alert: Flash Flood Watch
+2025-07-13 22:33:56.309: CT Override 5667-CT -> 5095.
+2025-07-13 22:33:57.058: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:34:08.149: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 22:38:04.864: Play: 5425-PID Don't Leave Home Without Them.wav [normal] - successful
+2025-07-13 22:41:32.156: WX Alert: Flash Flood Watch
+2025-07-13 22:42:17.094: CT Override 5656-CT -> 5095.
+2025-07-13 22:42:17.903: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:42:28.916: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 22:43:24.690: WX Alert: Flash Flood Watch
+2025-07-13 22:44:06.052: CT Override 5651-CT -> 5095.
+2025-07-13 22:44:06.777: Play: 5095-CT(CW) N 500.wav [interruptible] - successful
+2025-07-13 22:44:17.798: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-13 22:47:36.094: Play: 5412-PID Speed Racer.wav [normal] - successful
+2025-07-13 22:59:58.669: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-13 22:59:58.678: WX Report: {'observations': 'Partly Cloudy', 'temperature': '71 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.11', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-13 23:00:17.380: WX Alert: Flash Flood Watch

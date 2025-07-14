@@ -1159,7 +1159,8 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="subcard-row">
             <div class="subcard-label">Weather System:</div>
             <div class="subcard-value">
-                <span id="weather-badge" class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
+                <span id="ctone-timer" style="display:none; font-size:0.7em; color:#ff2222; margin-right:0.5em;"></span>
+                <span id="weather-badge" class="{{ weather_class }}">{{ weather_status }}</span>
             </div>
         </div>
     </div>
@@ -1395,6 +1396,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   <li><b>W1:</b> Weather Conditions, if cos was active in the last 10 seconds, jumps to W2 -> W1 &#92;n. **</li>
                   <li><b>W1F:</b> Weather Conditions Forced, same as W1 but doesn't have the cos rule -> W1F &#92;n. **</li>
                   <li><b>W2:</b> Temperature -> W2 &#92;n. **</li>
+                  <li><b>W3:</b> WX Alerts -> W3 &#92;n to manually call up any active alert.. If you do not check Enable Alerts, you will not get automaticall WX Alerts and your tone will not change.  If you enter a track in the Override CTone section, your current courtesty tone will be overriden by the alert one (CW letter W or WX for example).  For this to work, your tones must be in the following format nnnn-CT desciption, 5601-CT.wav or 5601-CT doorbell.wav. If you leave this blank, your tone will not change upon receiving on automated wx alert.  Enter the amount of time your would like the alert to be valid for in the C-Tone Time section.  To cancel an alert in progress, uncheck the Enable Alert box.  You can re-enable it you want.  Setting the ctone time for less than the remaining time will set the alert timer to the new value.**</li>
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
                   <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
                   <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
@@ -1599,8 +1601,36 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
                 <div class="form-group">
                     <label for="wx_ctone_time">C-Tone Time (minutes):</label>
-                    <input type="number" id="wx_ctone_time" name="wx_ctone_time" min="1" max="1440" value="{{ config.get('WX', 'ctone_time', fallback='120') }}">
+                    <input
+                            type="number"
+                            id="wx_ctone_time"
+                            name="wx_ctone_time"
+                            min="1"
+                            max="1440"
+                            value="{{ config.get('WX', 'ctone_time', fallback='120') }}"
+                            {% if config.get('WX', 'use_expired_time', fallback='true').lower() == 'true' %}disabled{% endif %}
+                    >
                 </div>
+                <div class="form-group checkbox">
+                    <input
+                            type="checkbox"
+                            id="use_expired_time"
+                            name="use_expired_time"
+                            {% if config.get('WX', 'use_expired_time', fallback='true').lower() == 'true' %}checked{% endif %}
+                            onchange="toggleCtoneTime()"
+                    >
+                    <label for="use_expired_time">Use Alert Exp Instead</label>
+                </div>
+                
+                <script>
+                function toggleCtoneTime() {
+                    var useExp = document.getElementById('use_expired_time').checked;
+                    document.getElementById('wx_ctone_time').disabled = useExp;
+                }
+                window.onload = function() {
+                    toggleCtoneTime();
+                };
+                </script>
             </div>
             <!-- GPIO Settings -->
             <div class="config-section gpio-settings">
@@ -2115,12 +2145,40 @@ function validateRanges() {
 <script>
 function refreshWeatherBadge() {
     fetch("/api/status", {credentials: 'same-origin'})
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error("API error");
+        return response.json();
+    })
     .then(state => {
         let badge = document.getElementById('weather-badge');
-        if (!badge) return;
-            badge.className = state.weather_class;
+        let timer = document.getElementById('ctone-timer');
+        if (!badge || !timer) return;
+
+        // Update badge status/class/text/color if needed
+        if (state.weather_status !== undefined) {
             badge.textContent = state.weather_status;
+        }
+        if (state.weather_class !== undefined) {
+            badge.className = state.weather_class;
+        }
+        if (state.weather_color !== undefined) {
+            badge.style.color = state.weather_color;
+        }
+
+        // Timer logic
+        if (state.ctone_time_remaining != null && state.ctone_time_remaining > 0) {
+            let secs = state.ctone_time_remaining;
+            let min = Math.floor(secs / 60);
+            let s = secs % 60;
+            timer.textContent = `${min}:${s.toString().padStart(2, "0")}`;
+            timer.style.display = "inline";
+        } else {
+            timer.style.display = "none";
+            timer.textContent = "";
+        }
+    })
+    .catch(err => {
+        console.error("Weather badge refresh error:", err);
     });
 }
 setInterval(refreshWeatherBadge, 1000);
@@ -2560,6 +2618,7 @@ def edit_config_structured():
     existing_config['WX']['interval'] = form_data.get('wx_interval', '30')
     existing_config['WX']['ctone'] = form_data.get('wx_ctone', '5095')
     existing_config['WX']['ctone_time'] = form_data.get('wx_ctone_time', '120')
+    existing_config['WX']['use_expired_time'] = 'true' if form_data.get('use_expired_time') else 'false'
     
     # Update Debug section
     if 'Debug' not in existing_config:
@@ -2589,7 +2648,7 @@ def status_api():
     # Check if connection to drx_main.py is lost
     connection_lost = False
     updated_at = state.get('updated_at')
-    if not updated_at or time.time() - float(updated_at) > 2.5:  # No update in 2.5 seconds
+    if not updated_at or time.time() - float(updated_at) > 2.5:
         connection_lost = True
         handle_top_command_on_disconnect()
     
@@ -2600,11 +2659,23 @@ def status_api():
             cmd = entry.get("cmd", "").upper().strip()
             if process_serial_command_for_tot(cmd):
                 break
-    
+
     # --- Weather System Unified Status (ALERT overrides all) ---
     wx_alert_active = state.get("wx_alert_active", False)
     weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
     
+    # --- C-Tone Countdown Logic (from in-memory state) ---
+    ctone_override_expire = state.get("ctone_override_expire")
+    now = time.time()
+    ctone_time_remaining = None
+    if ctone_override_expire:
+        try:
+            ctone_override_expire = float(ctone_override_expire)
+            if now < ctone_override_expire:
+                ctone_time_remaining = int(ctone_override_expire - now)
+        except Exception:
+            ctone_time_remaining = None
+
     data = {
         "currently_playing": state.get("currently_playing"),
         "last_played": state.get("last_played"),
@@ -2620,6 +2691,8 @@ def status_api():
         "weather_status": weather_status,
         "weather_class": weather_class,
         "weather_color": weather_color,
+        # --- C-Tone countdown field ---
+        "ctone_time_remaining": ctone_time_remaining,
     }
     return jsonify(data)
 
@@ -2888,21 +2961,6 @@ def process_serial_command_for_tot(command):
         return True  # State changed
     
     return False  # No state change
-
-def get_weather_system_status(wx_alert_active=False):
-    wx_dir = os.path.join(os.path.dirname(__file__), "wx")
-    wx_gen = os.path.join(wx_dir, "wx_gen.py")
-    wx_data = os.path.join(wx_dir, "wx_data")
-    if wx_alert_active:
-        return ("Alert", "status-alert", "#ff2222")
-    if not os.path.exists(wx_gen):
-        return ("Not Installed", "status-warn", "#888")
-    if not os.path.exists(wx_data):
-        return ("Inactive", "status-bad", "#d32f2f")
-    mtime = os.path.getmtime(wx_data)
-    if time.time() - mtime > 7200:
-        return ("Inactive", "status-bad", "#d32f2f")
-    return ("Active", "status-good", "#388e3c")
 
 @app.route("/api/base_configurator", methods=["GET"])
 def api_base_configurator():

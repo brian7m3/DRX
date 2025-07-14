@@ -99,3 +99,78 @@
 2025-07-14 12:59:57.664: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-14 12:59:57.664: WX Report: {'observations': 'Overcast', 'temperature': '80 degrees', 'humidity': '83 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.07', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
 2025-07-14 13:00:40.761: WX Alert: Flash Flood Watch
+2025-07-14 13:06:19.500: WX Alert: Flash Flood Watch
+2025-07-14 13:11:17.981: WX Alert: Flash Flood Watch
+2025-07-14 13:24:16.840: WX Alert: Flash Flood Watch
+2025-07-14 13:25:05.615: WX Alert: Flash Flood Watch
+2025-07-14 13:25:54.548: WX Alert: Flash Flood Watch
+2025-07-14 13:27:53.129: WX Alert: Flash Flood Watch
+2025-07-14 13:30:11.703: WX Alert: Flash Flood Watch
+2025-07-14 13:37:05.527: Play requested: P5600 (web input box)
+2025-07-14 13:37:07.061: Play: 5655-CT.wav [normal] - successful
+2025-07-14 13:38:00.144: WX Alert: Flash Flood Watch
+2025-07-14 13:45:58.139: WX Alert: Flash Flood Watch
+2025-07-14 13:47:46.516: WX Alert: Flash Flood Watch
+2025-07-14 13:48:15.428: Configuration reload requested from web
+2025-07-14 13:52:09.153: Play requested: P5300 (web input box)
+2025-07-14 13:52:19.746: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-14 13:52:53.199: Configuration reload requested from web
+2025-07-14 13:52:54.486: WX Alert: Flash Flood Watch
+2025-07-14 13:54:42.510: WX Alert: Flash Flood Watch
+2025-07-14 13:57:00.537: WX Alert: Flash Flood Watch
+2025-07-14 13:59:57.699: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 13:59:57.700: WX Report: {'observations': 'Overcast', 'temperature': '82 degrees', 'humidity': '81 percent', 'winddir': 'SSE', 'wind_speed': '4', 'wind_gust': '7', 'pressure': '30.06', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 14:59:57.701: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 14:59:57.701: WX Report: {'observations': 'Light Rain', 'temperature': '80 degrees', 'humidity': '86 percent', 'winddir': 'S', 'wind_speed': '5', 'wind_gust': '9', 'pressure': '30.05', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 15:05:24.497: WX Alert: Flash Flood Watch
+2025-07-14 15:10:12.884: WX Alert: Flash Flood Watch
+2025-07-14 15:19:09.723: Configuration reload requested from web
+2025-07-14 15:19:51.191: WX Alert: Flash Flood Watch
+2025-07-14 15:31:39.301: WX Alert: Flash Flood Watch
+2025-07-14 15:52:52.914: Configuration reload requested from web
+2025-07-14 15:53:09.428: Configuration reload requested from web
+2025-07-14 15:53:24.191: Configuration reload requested from web
+2025-07-14 15:53:47.961: Configuration reload requested from web
+2025-07-14 15:59:57.685: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 15:59:57.685: WX Report: {'observations': 'Overcast', 'temperature': '78 degrees', 'humidity': '91 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '6', 'pressure': '30.04', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 16:59:57.680: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 16:59:57.681: WX Report: {'observations': 'Light Rain', 'temperature': '77 degrees', 'humidity': '91 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.04', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 17:05:03.619: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
+2025-07-14 17:38:49.156: WX Alert: Flash Flood Watch
+2025-07-14 17:42:27.290: WX Alert: Flash Flood Watch
+2025-07-14 17:54:26.391: WX Alert: Flash Flood Watch
+2025-07-14 17:55:23.768: Configuration reload requested from web
+2025-07-14 17:56:15.215: WX Alert: Flash Flood Watch
+2025-07-14 17:59:57.717: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 17:59:57.718: WX Report: {'observations': 'Light Rain', 'temperature': '77 degrees', 'humidity': '92 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.04', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 18:13:27.539: Configuration reload requested from web
+2025-07-14 18:13:40.550: Configuration reload requested from web
+2025-07-14 18:14:16.833: Configuration reload requested from web
+2025-07-14 18:14:24.088: Configuration reload requested from web
+2025-07-14 18:14:50.361: Configuration reload requested from web
+2025-07-14 18:15:04.873: Configuration reload requested from web
+2025-07-14 18:18:31.010: Configuration reload requested from web
+2025-07-14 18:41:38.689: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-14 18:41:38.891: CT Override 5611-CT -> 5095.
+2025-07-14 18:41:39.598: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 18:41:52.006: Play: 5185-TM R2 ARES Net 7:45.wav [interruptible] - successful
+2025-07-14 18:41:53.718: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-14 18:43:10.728: CT Override 5611-CT -> 5095.
+2025-07-14 18:43:11.434: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 18:43:16.384: CT Override 5611-CT -> 5095.
+2025-07-14 18:43:16.842: Play: 5095-CT(CW) W 500.wav [interruptible] - interrupted
+2025-07-14 18:43:21.597: CT Override 5611-CT -> 5095.
+2025-07-14 18:43:22.304: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 18:46:24.022: WX Alert: Flash Flood Watch
+2025-07-14 18:51:10.048: Play: 5403-PID Going Above and Beyond.wav [normal] - successful
+2025-07-14 18:56:01.781: WX Alert: Flash Flood Watch
+2025-07-14 18:59:57.730: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 18:59:57.730: WX Report: {'observations': 'Thunderstorm in Vicinity', 'temperature': '76 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.06', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 19:01:02.319: Configuration reload requested from web
+2025-07-14 19:01:09.825: Play requested: W3 (web input box)
+2025-07-14 19:01:09.826: WX Alert: Flash Flood Watch
+2025-07-14 19:01:58.879: Configuration reload requested from web
+2025-07-14 19:02:59.144: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-14 19:02:59.700: Play: 5619-CT.wav [interruptible] - successful
+2025-07-14 19:03:12.506: Play: 5185-TM R2 ARES Net 7:45.wav [interruptible] - successful
+2025-07-14 19:03:14.218: Play: 5171-TM PL 77.wav [interruptible] - successful

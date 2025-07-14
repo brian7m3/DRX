@@ -24,6 +24,7 @@ import uuid
 from datetime import datetime, timedelta
 from flask import Flask, jsonify
 from typing import Optional, Callable, Dict, Any
+import pytz
 
 
 class PlaybackStatusManager:
@@ -3133,7 +3134,8 @@ def write_state():
         wx_alert_active = False
 
     state["wx_alert_active"] = wx_alert_active
-    
+    state["ctone_override_expire"] = ctone_override_expire  # <--- ADD THIS LINE
+
     # Store state in memory for API access
     with state_lock:
         current_state_memory = state
@@ -3987,25 +3989,34 @@ def wx_alert_action(config, debug_log=None):
     """
     Perform actions when weather alert is detected.
     This function is called when wx_alerts file contains a new alert.
-    
-    Args:
-        config: ConfigParser object containing the configuration
-        debug_log: Debug logging function (optional)
     """
     try:
         if debug_log:
             debug_log("Weather alert action triggered")
         
-        # --- CTONE OVERRIDE PATCH ---
+        # --- CTONE OVERRIDE PATCH with use_expired_time support ---
         global ctone_override_expire
         wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
         ctone = config.get('WX', 'ctone', fallback='').strip()
         ctone_time = config.getint('WX', 'ctone_time', fallback=0)
-        
-        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and ctone_time > 0:
-            ctone_override_expire = time.time() + ctone_time * 60
-            if debug_log:
-                debug_log(f"[CTONE PATCH] Set ctone_override_expire to {ctone_override_expire} for {ctone_time} minutes (now={time.time()})")
+        use_expired_time = config.getboolean('WX', 'use_expired_time', fallback=False)
+
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4:
+            if use_expired_time:
+                expires_epoch = get_last_expires_time_from_wx_alerts()
+                now = time.time()
+                if expires_epoch and expires_epoch > now:
+                    ctone_override_expire = expires_epoch
+                    if debug_log:
+                        debug_log(f"[CTONE PATCH] Set ctone_override_expire to {ctone_override_expire} (from Expires: in wx_alerts)")
+                else:
+                    ctone_override_expire = now + ctone_time * 60
+                    if debug_log:
+                        debug_log(f"[CTONE PATCH] Expires: missing or invalid, fallback to ctone_time {ctone_time} minutes")
+            else:
+                ctone_override_expire = time.time() + ctone_time * 60
+                if debug_log:
+                    debug_log(f"[CTONE PATCH] Set ctone_override_expire to {ctone_override_expire} for {ctone_time} minutes (now={time.time()})")
         else:
             ctone_override_expire = 0
             if debug_log:
@@ -4015,10 +4026,6 @@ def wx_alert_action(config, debug_log=None):
         speak_wx_alerts()
         
         # Additional actions can be added here
-        # Examples:
-        # - Log to file
-        # - Send notifications
-        # - Update display
         
     except Exception as e:
         if debug_log:
@@ -4242,10 +4249,12 @@ def speak_wx_alerts(*args, **kwargs):
         
         # Add description WAVs to main sequence
         wavs.extend(description_wavs)
+        wavs.append("in_effect.wav")
         
         # Add repeating.wav and description again
         wavs.append("repeating.wav")
         wavs.extend(description_wavs)
+        wavs.append("in_effect.wav")
         
         # 3. Speak issued time
         wavs.append("wx_issued.wav")
@@ -4462,6 +4471,35 @@ def is_wx_alert_active():
         return (ctone_override_expire is not None and now < ctone_override_expire)
     except Exception:
         return False    
+
+def get_last_expires_time_from_wx_alerts():
+    """
+    Returns the timestamp (epoch) of the last 'Expires:' line in the wx_alerts file,
+    or None if not found or parsing error.
+    """
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        return None
+    expires_time = None
+    with open(wx_alerts_path, 'r') as f:
+        for line in f:
+            if line.strip().startswith("Expires:"):
+                try:
+                    # e.g. Expires:     2025-07-13 19:00:00
+                    parts = line.split("Expires:", 1)[1].strip()
+                    expires_time = parts  # Always take the last one (closest to bottom)
+                except Exception:
+                    continue
+    if expires_time:
+        try:
+            # Parse with no timezone (assume localtime or UTC if your system is UTC)
+            dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
+            # If your system is not UTC and you want UTC, adjust here:
+            # dt = pytz.timezone('America/Chicago').localize(dt).astimezone(pytz.utc)
+            return dt.timestamp()
+        except Exception:
+            return None
+    return None
 
 # END OF WX ALERT SECTION
 

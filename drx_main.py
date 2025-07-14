@@ -4591,6 +4591,26 @@ def reload_config():
     message_timer_value = parse_message_timer(get_config_value("General", "Message Timer", "N"))
     ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
 
+    # --- WX ALERT STATE PATCH: clear or update ctone_override_expire if WX alerts disabled/invalid ---
+    global ctone_override_expire
+    wx_alerts_enabled = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    try:
+        ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+    except Exception:
+        ctone_time = 0
+
+    now = time.time()
+    if not wx_alerts_enabled or not ctone or not ctone.isdigit() or len(ctone) != 4 or ctone_time == 0:
+        ctone_override_expire = 0  # Deactivate any active override immediately!
+        debug_log("[CTONE PATCH] WX override deactivated due to new config (alerts off, ctone blank, or ctone_time zero)")
+    elif ctone_override_expire and ctone_override_expire > 0:
+        # If ctone_time was reduced, update the expire time if needed
+        new_expire = now + (ctone_time * 60)
+        if new_expire < ctone_override_expire:
+            ctone_override_expire = new_expire
+            debug_log(f"[CTONE PATCH] WX override expire time reduced to {ctone_override_expire} due to ctone_time decrease in config")
+
 def is_terminal():
     return sys.stdin.isatty() and "TERM" in os.environ and os.environ["TERM"] != "unknown"
 

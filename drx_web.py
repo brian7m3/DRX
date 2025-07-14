@@ -54,13 +54,6 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
-.weather-normal {
-    color: #388e3c !important;
-    background: #e3ffe3;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 0.2em 0.7em;
-}
 .weather-alert {
     color: #fff !important;
     background: #ff2222;
@@ -69,6 +62,13 @@ DASHBOARD_TEMPLATE = '''
     padding: 0.2em 0.7em;
     animation: flash-red 1s infinite;
 }
+.weather-normal {
+    color: #388e3c !important;
+    background: #e3ffe3;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+}
 .weather-inactive {
     color: #fff !important;
     background: #d32f2f;
@@ -76,9 +76,12 @@ DASHBOARD_TEMPLATE = '''
     border-radius: 5px;
     padding: 0.2em 0.7em;
 }
-@keyframes flash-red {
-    0%, 50% { background: #ff2222; color: #fff; }
-    51%, 100% { background: #fff; color: #ff2222; }
+.weather-warn, .weather-notinstalled {
+    color: #fff !important;
+    background: #888;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
 }
 /* Flashing COS LED for TOT */
 @keyframes flash-red {
@@ -202,12 +205,6 @@ DASHBOARD_TEMPLATE = '''
   /* Optional extras: */
   font-weight: bold;
   /* color: #1976d2 !important; optional blue color for visibility */ */
-}
-/* Set the width of the GPIO Settings box */
-.config-section.gpio-settings {
-  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
-  max-width: 100%;       /* Optional: prevents overflow on small screens */
-  margin: 0 auto;        /* Optional: center the box horizontally */
 }
 
 /* Optional: Make sure the grid auto-rows are tall enough */
@@ -1582,16 +1579,39 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 </div>
             </div>
-            <!-- GPIO Settings: spans 4 columns and 2 rows -->
+            <!-- Weather Alert Settings -->
+            <div class="config-section">
+                    <h3>Weather (WX) Settings</h3>
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
+                        <label for="wx_alerts">Enable Alerts</label>
+                    </div>
+                <div class="form-group">
+                    <label for="wx_interval">Alert Interval (seconds):</label>
+                    <input type="number" id="wx_interval" name="wx_interval" min="1" max="3600" value="{{ config.get('WX', 'interval', fallback='30') }}">
+                </div>
+                <div class="form-group">
+                    <label for="wx_ctone">Override C-Tone:</label>
+                    <input type="number" id="wx_ctone" name="wx_ctone"
+                            min="0" max="9999" value="{{ config.get('WX', 'ctone', fallback='') }}"
+                            placeholder="0000" pattern="\d{0,4}">
+                    <small class="help-text">Leave blank for none, or enter 4-digit tone (0000–9999)</small>
+                </div>
+                <div class="form-group">
+                    <label for="wx_ctone_time">C-Tone Time (minutes):</label>
+                    <input type="number" id="wx_ctone_time" name="wx_ctone_time" min="1" max="1440" value="{{ config.get('WX', 'ctone_time', fallback='120') }}">
+                </div>
+            </div>
+            <!-- GPIO Settings -->
             <div class="config-section gpio-settings">
                 <h3>GPIO Settings</h3>
                 <div class="form-group">
-                    <label for="remote_busy_pin">Remote Busy Pin:</label>
+                    <label for="remote_busy_pin">Remote Device Busy Pin:</label>
                     <input type="number" id="remote_busy_pin" name="remote_busy_pin" min="0" value="{{ config.get('GPIO', 'remote_busy_pin', fallback='20') }}">
                 </div>
                 <div class="form-group checkbox">
                     <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
-                    <label for="remote_busy_activate_level">Remote Device Busy Active High</label>
+                    <label for="remote_busy_activate_level">RDB Active High</label>
                 </div>
                 <hr style="background-color: blue;">
                 <div class="form-group">
@@ -1604,7 +1624,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
                 <br>
                 <div class="form-group">
-                    <label for="cos_debounce_time">COS Debounce Time (seconds):</label>
+                    <label for="cos_debounce_time">COS Debounce (secs):</label>
                     <input type="number" id="cos_debounce_time" name="cos_debounce_time" min="0" step="0.1" value="{{ config.get('GPIO', 'cos_debounce_time', fallback='1.0') }}">
                 </div>
                 <div class="form-group">
@@ -2099,15 +2119,8 @@ function refreshWeatherBadge() {
     .then(state => {
         let badge = document.getElementById('weather-badge');
         if (!badge) return;
-        if (state.wx_alert_active) {
-            badge.className = 'weather-alert';
-            badge.textContent = 'ALERT';
-            badge.style.color = '#fff';
-        } else {
-            badge.className = 'weather-normal';
-            badge.textContent = 'ACTIVE';
-            badge.style.color = '#388e3c';
-        }
+            badge.className = state.weather_class;
+            badge.textContent = state.weather_status;
     });
 }
 setInterval(refreshWeatherBadge, 1000);
@@ -2539,6 +2552,14 @@ def edit_config_structured():
     if 'Web' not in existing_config:
         existing_config['Web'] = {}
     existing_config['Web']['port'] = form_data.get('web_port', '505')
+    
+    # Update WX section
+    if 'WX' not in existing_config:
+        existing_config['WX'] = {}
+    existing_config['WX']['alerts'] = 'true' if form_data.get('wx_alerts') else 'false'
+    existing_config['WX']['interval'] = form_data.get('wx_interval', '30')
+    existing_config['WX']['ctone'] = form_data.get('wx_ctone', '5095')
+    existing_config['WX']['ctone_time'] = form_data.get('wx_ctone_time', '120')
     
     # Update Debug section
     if 'Debug' not in existing_config:

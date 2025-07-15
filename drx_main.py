@@ -627,19 +627,6 @@ def log_recent(entry):
     try:
         with open(LOG_WEB_FILE, "a", encoding='utf-8') as f:
             f.write(f"{ts}: {entry}\n")
-        max_size = 500 * 1024
-        try:
-            if os.path.getsize(LOG_WEB_FILE) > max_size:
-                with open(LOG_WEB_FILE, "rb") as f:
-                    f.seek(-max_size, os.SEEK_END)
-                    data = f.read()
-                first_nl = data.find(b'\n')
-                if first_nl != -1:
-                    data = data[first_nl+1:]
-                with open(LOG_WEB_FILE, "wb") as f:
-                    f.write(data)
-        except Exception:
-            pass
     except Exception as e:
         log_error(f"log_recent failed: {e}")
 

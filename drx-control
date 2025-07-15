@@ -1,0 +1,358 @@
+#!/bin/bash
+
+# DRX Control Script (supports selective log rotation)
+# Usage: sudo drx-control [command] [service]
+# Services: main, web, drx, all
+
+# Text formatting
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+NC='\033[0m' # No Color
+BOLD='\033[1m'
+
+# Log/config paths and variables
+DRX_HOME="/home/drx/DRX"
+LOGS_DIR="$DRX_HOME/logs"
+CONFIG_FILE="$DRX_HOME/drx-control.conf"
+ROTATE_STATE_DIR="$DRX_HOME/.rotate_state"
+LOGROTATE_CONF="/etc/logrotate.d/drx"
+mkdir -p "$ROTATE_STATE_DIR"
+mkdir -p "$LOGS_DIR"
+sudo chmod 755 "$LOGS_DIR"
+
+VERSION="2.0.1"
+
+# Show version info if requested
+if [[ "$1" == "--version" || "$1" == "-v" || "$1" == "version" ]]; then
+    echo -e "drx-control version: ${BLUE}${VERSION}${NC}"
+    exit 0
+fi
+
+# Ensure /etc/logrotate.d/drx exists with recommended config
+ensure_logrotate_conf() {
+    if [ ! -f "$LOGROTATE_CONF" ]; then
+        echo -e "${YELLOW}Logrotate config not found. Creating default at $LOGROTATE_CONF...${NC}"
+        cat <<'EOF' | sudo tee "$LOGROTATE_CONF" > /dev/null
+/home/drx/DRX/logs/drx_main_service.log
+/home/drx/DRX/logs/drx_web_service.log
+/home/drx/DRX/logs/drx.log
+{
+    su drx drx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    copytruncate
+    create 644 drx drx
+    dateext
+    dateformat -%Y-%m-%d
+    sharedscripts
+    postrotate
+        echo "# Log rotated on $(date)" >> /home/drx/DRX/logs/drx_main_service.log
+        echo "# Log rotated on $(date)" >> /home/drx/DRX/logs/drx_web_service.log
+        echo "# Log rotated on $(date)" >> /home/drx/DRX/logs/drx.log
+    endscript
+}
+EOF
+        echo -e "${GREEN}Created default logrotate config at $LOGROTATE_CONF${NC}"
+    fi
+}
+
+ensure_logrotate_conf
+
+# Display header
+echo -e "${BOLD}========================================${NC}"
+echo -e "${BOLD}        DRX Control Utility            ${NC}"
+echo -e "${BLUE}              v${VERSION}${NC}"
+echo -e "${BOLD}========================================${NC}"
+
+# Function to show usage
+show_usage() {
+    echo -e "${YELLOW}Usage:${NC} sudo $0 [command] [service]"
+    echo -e "${YELLOW}Commands:${NC}"
+    echo "  start   - Start the service(s)"
+    echo "  stop    - Stop the service(s)"
+    echo "  restart - Restart the service(s)"
+    echo "  status  - Show status of the service(s)"
+    echo "  view    - View DRX status screen in tmux"
+    echo "  log     - Show recent logs from the journal or file"
+    echo "  rotate  - Rotate logs (uses logrotate for backup and clear)"
+    echo "  config  - Configure log cleanup and rotation interval"
+    echo -e "${YELLOW}Services:${NC}"
+    echo "  main    - DRX Main Script"
+    echo "  web     - DRX Web Interface"
+    echo "  drx     - drx.log (special log)"
+    echo "  all     - Both services (not valid with 'view' command)"
+    echo ""
+    echo -e "${YELLOW}Examples:${NC}"
+    echo "  sudo $0 start all     # Start both services"
+    echo "  sudo $0 view main     # View main status screen"
+    echo "  sudo $0 rotate main   # Rotate logs for main service and drx.log"
+    echo "  sudo $0 rotate drx    # Only rotate drx.log"
+    echo "  sudo $0 config        # Configure log cleanup and rotate interval"
+}
+
+# Function to check if tmux is installed
+check_tmux() {
+    if ! command -v tmux &> /dev/null; then
+        echo -e "${RED}Error: tmux is not installed. Please install it with:${NC}"
+        echo "sudo apt-get update && sudo apt-get install -y tmux"
+        exit 1
+    fi
+}
+
+# Function to view DRX in tmux
+view_in_tmux() {
+    local script_type=$1
+    local session_name="drx_${script_type}_$(date +%s)"
+    local script_path="$DRX_HOME/drx_${script_type}.py"
+
+    check_tmux
+
+    echo -e "${YELLOW}Stopping drx_${script_type} service to run in view mode...${NC}"
+    sudo systemctl stop drx_${script_type}
+
+    echo -e "${YELLOW}Starting ${script_type} in tmux session...${NC}"
+
+    echo -e "${BLUE}${BOLD}TMUX CONTROLS:${NC}"
+    echo -e "  ${YELLOW}• Ctrl+B then D${NC} = Detach (leave DRX running but exit viewer)"
+    echo -e "  ${YELLOW}• Ctrl+B then [${NC} = Scroll mode (use arrows/PageUp to scroll)"
+    echo -e "  ${YELLOW}• Ctrl+B then ?${NC} = Show all tmux commands"
+    echo -e "  ${YELLOW}• Ctrl+C${NC} = Exit DRX completely"
+    echo ""
+    echo -e "${BOLD}The service will restart automatically when you exit.${NC}"
+    echo -e "${GREEN}Starting DRX ${script_type} status screen in 3 seconds...${NC}"
+    sleep 3
+
+    sudo tmux new-session -d -s $session_name "cd $DRX_HOME && sudo python3 ${script_path}"
+    sudo tmux attach -t $session_name
+    sudo tmux kill-session -t $session_name 2>/dev/null
+
+    echo -e "${YELLOW}Tmux session ended. Automatically restarting service...${NC}"
+    sudo systemctl start drx_${script_type}
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Successfully restarted drx_${script_type} service${NC}"
+    else
+        echo -e "${RED}Failed to restart drx_${script_type} service${NC}"
+    fi
+}
+
+# Function to show logs
+show_logs() {
+    local svc=$1
+    if [ "$svc" = "drx" ]; then
+        local log_file="$LOGS_DIR/drx.log"
+        echo -e "${YELLOW}Recent logs for drx.log:${NC}"
+        if [ -f "$log_file" ]; then
+            echo -e "${BLUE}=== File Log (${log_file}) ===${NC}"
+            tail -n 50 "$log_file"
+        else
+            echo -e "${RED}drx.log not found.${NC}"
+        fi
+    else
+        local log_file="$LOGS_DIR/drx_${svc}_service.log"
+        echo -e "${YELLOW}Recent logs for drx_${svc}:${NC}"
+        if [ -f "$log_file" ]; then
+            echo -e "${BLUE}=== File Log (${log_file}) ===${NC}"
+            tail -n 50 "$log_file"
+        fi
+        echo -e "\n${BLUE}=== System Journal ===${NC}"
+        sudo journalctl -u drx_${svc} -n 50 --no-pager
+    fi
+}
+
+# Function to control services
+service_control() {
+    local cmd=$1
+    local svc=$2
+    local service_name="drx_${svc}"
+    if [ "$cmd" = "stop" ]; then
+        actioning="Stopping"
+        actioned="stopped"
+    elif [ "$cmd" = "start" ]; then
+        actioning="Starting"
+        actioned="started"
+    elif [ "$cmd" = "restart" ]; then
+        actioning="Restarting"
+        actioned="restarted"
+    else
+        actioning="${cmd^}ing"
+        actioned="${cmd}ed"
+    fi
+
+    case $cmd in
+        start|stop|restart)
+            echo -e "${YELLOW}${actioning} ${service_name}...${NC}"
+            sudo systemctl $cmd $service_name
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}Successfully ${actioned} ${service_name}${NC}"
+            else
+                echo -e "${RED}Failed to ${cmd} ${service_name}${NC}"
+            fi
+            ;;
+        status)
+            echo -e "${YELLOW}Status of ${service_name}:${NC}"
+            sudo systemctl status $service_name
+            ;;
+        view)
+            view_in_tmux $svc
+            ;;
+        log)
+            show_logs $svc
+            ;;
+        rotate)
+            rotate_logs $svc
+            ;;
+        *)
+            echo -e "${RED}Invalid command: ${cmd}${NC}"
+            show_usage
+            exit 1
+            ;;
+    esac
+}
+
+# Function for interactive log cleanup/config menu
+log_cleanup_menu() {
+    echo -e "${BLUE}Current log cleanup and rotation settings (from logrotate):${NC}"
+    echo "  Log retention days: 30"
+    echo "  Log rotation interval: daily"
+    echo ""
+    echo "  These settings are controlled in: $LOGROTATE_CONF"
+    echo ""
+    echo "  To change log retention or rotation interval, edit this file."
+    echo ""
+
+    read -p "Open logrotate config for editing now? (y/n): " edit_now
+    if [[ "$edit_now" =~ ^[Yy]$ ]]; then
+        ${EDITOR:-nano} "$LOGROTATE_CONF"
+    fi
+}
+
+# Function to rotate logs using logrotate with selective config
+rotate_logs() {
+    local logtype=$1
+    local tmp_conf=$(mktemp)
+
+    if [ "$logtype" = "drx" ]; then
+        echo "/home/drx/DRX/logs/drx.log {
+    su drx drx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    copytruncate
+    create 644 drx drx
+    dateext
+    dateformat -%Y-%m-%d
+}" > "$tmp_conf"
+    elif [ "$logtype" = "main" ]; then
+        echo "/home/drx/DRX/logs/drx_main_service.log
+/home/drx/DRX/logs/drx.log {
+    su drx drx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    copytruncate
+    create 644 drx drx
+    dateext
+    dateformat -%Y-%m-%d
+}" > "$tmp_conf"
+    elif [ "$logtype" = "web" ]; then
+        echo "/home/drx/DRX/logs/drx_web_service.log
+/home/drx/DRX/logs/drx.log {
+    su drx drx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    copytruncate
+    create 644 drx drx
+    dateext
+    dateformat -%Y-%m-%d
+}" > "$tmp_conf"
+    else # all
+        echo "/home/drx/DRX/logs/drx_main_service.log
+/home/drx/DRX/logs/drx_web_service.log
+/home/drx/DRX/logs/drx.log {
+    su drx drx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    copytruncate
+    create 644 drx drx
+    dateext
+    dateformat -%Y-%m-%d
+}" > "$tmp_conf"
+    fi
+
+    echo -e "${YELLOW}Calling logrotate for $logtype logs...${NC}"
+    sudo logrotate -v -f "$tmp_conf"
+    local rc=$?
+    rm -f "$tmp_conf"
+    if [ $rc -eq 0 ]; then
+        echo -e "${GREEN}Logrotate completed for $logtype logs.${NC}"
+    else
+        echo -e "${RED}Logrotate failed for $logtype logs.${NC}"
+    fi
+}
+
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo -e "${RED}Please run as root (use sudo).${NC}"
+    echo -e "${YELLOW}Example: sudo $0 $command $service${NC}"
+    exit 1
+fi
+
+command=$1
+service=$2
+
+if [ "$command" = "config" ]; then
+    log_cleanup_menu
+    exit 0
+fi
+
+if [ -z "$command" ] || [ -z "$service" ]; then
+    show_usage
+    exit 1
+fi
+
+case $service in
+    main)
+        service_control $command "main"
+        ;;
+    web)
+        service_control $command "web"
+        ;;
+    drx)
+        case $command in
+            rotate)
+                rotate_logs drx
+                ;;
+            log)
+                show_logs drx
+                ;;
+            *)
+                echo -e "${RED}Invalid command for drx.log: ${command}${NC}"
+                show_usage
+                exit 1
+                ;;
+        esac
+        ;;
+    all)
+        if [[ "$command" = "view" ]]; then
+            echo -e "${RED}Cannot view both services at once. Please specify 'main' or 'web'.${NC}"
+            exit 1
+        fi
+        service_control $command "main"
+        service_control $command "web"
+        ;;
+    *)
+        echo -e "${RED}Invalid service: ${service}${NC}"
+        show_usage
+        exit 1
+        ;;
+esac

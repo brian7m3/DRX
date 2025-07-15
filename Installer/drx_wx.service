@@ -1,0 +1,13 @@
+[Unit]
+Description=DRX WX SAME NWS Alert Monitor
+After=network.target
+
+[Service]
+Type=simple
+User=drx
+ExecStart=/usr/bin/python3 /home/drx/DRX/wx/wx_same.py
+WorkingDirectory=/home/drx/DRX/wx
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

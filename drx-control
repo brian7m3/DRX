@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # DRX Control Script (supports selective log rotation)
-# Usage: sudo drx-control [command] [service]
-# Services: main, web, drx, all
+# Usage: ./drx-control [command] [service]
+# Services: main, web, drx, wx, all
 
 # Text formatting
 GREEN='\033[0;32m'
@@ -15,14 +15,15 @@ BOLD='\033[1m'
 # Log/config paths and variables
 DRX_HOME="/home/drx/DRX"
 LOGS_DIR="$DRX_HOME/logs"
+WX_DIR="$DRX_HOME/wx"
 CONFIG_FILE="$DRX_HOME/drx-control.conf"
 ROTATE_STATE_DIR="$DRX_HOME/.rotate_state"
 LOGROTATE_CONF="/etc/logrotate.d/drx"
 mkdir -p "$ROTATE_STATE_DIR"
 mkdir -p "$LOGS_DIR"
-sudo chmod 755 "$LOGS_DIR"
+chmod 755 "$LOGS_DIR"
 
-VERSION="2.0.1"
+VERSION="2.1.0"
 
 # Show version info if requested
 if [[ "$1" == "--version" || "$1" == "-v" || "$1" == "version" ]]; then
@@ -70,7 +71,7 @@ echo -e "${BOLD}========================================${NC}"
 
 # Function to show usage
 show_usage() {
-    echo -e "${YELLOW}Usage:${NC} sudo $0 [command] [service]"
+    echo -e "${YELLOW}Usage:${NC} $0 [command] [service]"
     echo -e "${YELLOW}Commands:${NC}"
     echo "  start   - Start the service(s)"
     echo "  stop    - Stop the service(s)"
@@ -84,14 +85,15 @@ show_usage() {
     echo "  main    - DRX Main Script"
     echo "  web     - DRX Web Interface"
     echo "  drx     - drx.log (special log)"
-    echo "  all     - Both services (not valid with 'view' command)"
+    echo "  wx      - NWS SAME Alert Monitor"
+    echo "  all     - All services (not valid with 'view' command)"
     echo ""
     echo -e "${YELLOW}Examples:${NC}"
-    echo "  sudo $0 start all     # Start both services"
-    echo "  sudo $0 view main     # View main status screen"
-    echo "  sudo $0 rotate main   # Rotate logs for main service and drx.log"
-    echo "  sudo $0 rotate drx    # Only rotate drx.log"
-    echo "  sudo $0 config        # Configure log cleanup and rotate interval"
+    echo "  $0 start all     # Start all services"
+    echo "  $0 view main     # View main status screen"
+    echo "  $0 rotate main   # Rotate logs for main service and drx.log"
+    echo "  $0 rotate drx    # Only rotate drx.log"
+    echo "  $0 config        # Configure log cleanup and rotate interval"
 }
 
 # Function to check if tmux is installed
@@ -107,12 +109,27 @@ check_tmux() {
 view_in_tmux() {
     local script_type=$1
     local session_name="drx_${script_type}_$(date +%s)"
-    local script_path="$DRX_HOME/drx_${script_type}.py"
+    local script_path=""
+    local working_dir="$DRX_HOME"
 
     check_tmux
 
-    echo -e "${YELLOW}Stopping drx_${script_type} service to run in view mode...${NC}"
-    sudo systemctl stop drx_${script_type}
+    if [ "$script_type" = "main" ]; then
+        script_path="$DRX_HOME/drx_main.py"
+        working_dir="$DRX_HOME"
+        sudo systemctl stop drx_main
+    elif [ "$script_type" = "web" ]; then
+        script_path="$DRX_HOME/drx_web.py"
+        working_dir="$DRX_HOME"
+        sudo systemctl stop drx_web
+    elif [ "$script_type" = "wx" ]; then
+        script_path="$WX_DIR/wx_same.py"
+        working_dir="$WX_DIR"
+        systemctl stop drx_wx
+    else
+        echo -e "${RED}Unknown script type for tmux view: $script_type${NC}"
+        exit 1
+    fi
 
     echo -e "${YELLOW}Starting ${script_type} in tmux session...${NC}"
 
@@ -126,16 +143,30 @@ view_in_tmux() {
     echo -e "${GREEN}Starting DRX ${script_type} status screen in 3 seconds...${NC}"
     sleep 3
 
-    sudo tmux new-session -d -s $session_name "cd $DRX_HOME && sudo python3 ${script_path}"
-    sudo tmux attach -t $session_name
-    sudo tmux kill-session -t $session_name 2>/dev/null
+    if [ "$script_type" = "wx" ]; then
+        # Run as user drx, not sudo
+        tmux new-session -d -s $session_name "cd $working_dir && python3 ${script_path}"
+    else
+        sudo tmux new-session -d -s $session_name "cd $working_dir && sudo python3 ${script_path}"
+    fi
+    tmux attach -t $session_name
+    tmux kill-session -t $session_name 2>/dev/null
 
     echo -e "${YELLOW}Tmux session ended. Automatically restarting service...${NC}"
-    sudo systemctl start drx_${script_type}
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Successfully restarted drx_${script_type} service${NC}"
+    if [ "$script_type" = "wx" ]; then
+        systemctl start drx_wx
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}Successfully restarted drx_wx service${NC}"
+        else
+            echo -e "${RED}Failed to restart drx_wx service${NC}"
+        fi
     else
-        echo -e "${RED}Failed to restart drx_${script_type} service${NC}"
+        sudo systemctl start drx_${script_type}
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}Successfully restarted drx_${script_type} service${NC}"
+        else
+            echo -e "${RED}Failed to restart drx_${script_type} service${NC}"
+        fi
     fi
 }
 
@@ -151,6 +182,18 @@ show_logs() {
         else
             echo -e "${RED}drx.log not found.${NC}"
         fi
+    elif [ "$svc" = "wx" ]; then
+        local log_file="$WX_DIR/wx_alerts"
+        echo -e "${YELLOW}Recent wx SAME alert log:${NC}"
+        if [ -f "$log_file" ]; then
+            echo -e "${BLUE}=== File Log (${log_file}) ===${NC}"
+            tail -n 50 "$log_file"
+        else
+            echo -e "${RED}${log_file} not found.${NC}"
+        fi
+        # Optionally, show systemd journal for drx_wx
+        echo -e "\n${BLUE}=== System Journal ===${NC}"
+        journalctl -u drx_wx -n 50 --no-pager
     else
         local log_file="$LOGS_DIR/drx_${svc}_service.log"
         echo -e "${YELLOW}Recent logs for drx_${svc}:${NC}"
@@ -185,7 +228,11 @@ service_control() {
     case $cmd in
         start|stop|restart)
             echo -e "${YELLOW}${actioning} ${service_name}...${NC}"
-            sudo systemctl $cmd $service_name
+            if [ "$svc" = "wx" ]; then
+                systemctl $cmd $service_name
+            else
+                sudo systemctl $cmd $service_name
+            fi
             if [ $? -eq 0 ]; then
                 echo -e "${GREEN}Successfully ${actioned} ${service_name}${NC}"
             else
@@ -194,7 +241,11 @@ service_control() {
             ;;
         status)
             echo -e "${YELLOW}Status of ${service_name}:${NC}"
-            sudo systemctl status $service_name
+            if [ "$svc" = "wx" ]; then
+                systemctl status $service_name
+            else
+                sudo systemctl status $service_name
+            fi
             ;;
         view)
             view_in_tmux $svc
@@ -273,10 +324,23 @@ rotate_logs() {
     dateext
     dateformat -%Y-%m-%d
 }" > "$tmp_conf"
+    elif [ "$logtype" = "wx" ]; then
+        echo "/home/drx/DRX/wx/wx_alerts {
+    su drx drx
+    daily
+    rotate 30
+    missingok
+    notifempty
+    copytruncate
+    create 644 drx drx
+    dateext
+    dateformat -%Y-%m-%d
+}" > "$tmp_conf"
     else # all
         echo "/home/drx/DRX/logs/drx_main_service.log
 /home/drx/DRX/logs/drx_web_service.log
-/home/drx/DRX/logs/drx.log {
+/home/drx/DRX/logs/drx.log
+/home/drx/DRX/wx/wx_alerts {
     su drx drx
     daily
     rotate 30
@@ -300,13 +364,6 @@ rotate_logs() {
     fi
 }
 
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-    echo -e "${RED}Please run as root (use sudo).${NC}"
-    echo -e "${YELLOW}Example: sudo $0 $command $service${NC}"
-    exit 1
-fi
-
 command=$1
 service=$2
 
@@ -327,6 +384,9 @@ case $service in
     web)
         service_control $command "web"
         ;;
+    wx)
+        service_control $command "wx"
+        ;;
     drx)
         case $command in
             rotate)
@@ -344,11 +404,12 @@ case $service in
         ;;
     all)
         if [[ "$command" = "view" ]]; then
-            echo -e "${RED}Cannot view both services at once. Please specify 'main' or 'web'.${NC}"
+            echo -e "${RED}Cannot view all services at once. Please specify 'main', 'web', or 'wx'.${NC}"
             exit 1
         fi
         service_control $command "main"
         service_control $command "web"
+        service_control $command "wx"
         ;;
     *)
         echo -e "${RED}Invalid service: ${service}${NC}"

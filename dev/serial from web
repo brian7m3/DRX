@@ -1,0 +1,43 @@
+import re
+import time
+import serial
+
+SPECIAL_CODES = {
+    r'(?i)<esc>': chr(27),
+    r'(?i)<cr>': chr(13),
+    r'(?i)<lf>': chr(10),
+    r'(?i)<tab>': chr(9),
+}
+
+@app.route("/send_serial_data", methods=["POST"])
+@require_login
+def send_serial_data():
+    serial_data = request.form.get("serial_data", "").strip()
+    if serial_data:
+        try:
+            # Replace special codes
+            for pattern, replacement in SPECIAL_CODES.items():
+                serial_data = re.sub(pattern, replacement, serial_data)
+            
+            with serial.Serial(SERIAL_PORT, SERIAL_BAUDRATE, timeout=1) as ser:
+                lines = serial_data.splitlines()
+                for line in lines:
+                    for char in line:
+                        ser.write(char.encode('ascii', errors='replace'))
+                        time.sleep(0.006)
+                    ser.write(b'\r\n')
+                    time.sleep(0.050)
+            flash("Serial command sent successfully!", "success")
+        except Exception as e:
+            flash(f"Error sending serial data: {e}", "error")
+    else:
+        flash("Serial command cannot be empty.", "error")
+    return redirect(url_for('dashboard'))
+	
+	
+Usage Examples (web entry box):
+
+<ESC>ABC<CR> — Sends ESC, A, B, C, CR (then CRLF for the line ending)
+foo<LF>bar — Sends "foo", LF, "bar"
+123<TAB>456 — Sends "123", TAB, "456"	
+	

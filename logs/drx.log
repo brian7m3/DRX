@@ -174,3 +174,88 @@
 2025-07-14 19:02:59.700: Play: 5619-CT.wav [interruptible] - successful
 2025-07-14 19:03:12.506: Play: 5185-TM R2 ARES Net 7:45.wav [interruptible] - successful
 2025-07-14 19:03:14.218: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-14 19:16:01.685: Play requested: 50 (web input box)
+2025-07-14 19:16:31.216: Play requested: 50 (web input box)
+2025-07-14 19:16:41.977: Play requested: *50* (web input box)
+2025-07-14 19:17:25.154: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-14 19:17:26.770: Play: 5655-CT.wav [interruptible] - successful
+2025-07-14 19:17:38.536: Play: 5185-TM R2 ARES Net 7:45.wav [interruptible] - successful
+2025-07-14 19:17:40.247: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-14 19:18:03.306: Play requested: *50* (web input box)
+2025-07-14 19:59:57.709: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 19:59:57.710: WX Report: {'observations': 'Light Rain', 'temperature': '74 degrees', 'humidity': '99 percent', 'winddir': 'SE', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '30.07', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-14 20:10:06.711: Configuration reload requested from web
+2025-07-14 20:10:35.238: Configuration reload requested from web
+2025-07-14 20:12:34.727: WX Alert: Flash Flood Watch
+2025-07-14 20:33:54.074: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-14 20:59:19.364: Play requested: 50 (web input box)
+2025-07-14 20:59:38.883: Play requested: 50* (web input box)
+2025-07-14 21:00:00.655: Play requested: *50* (web input box)
+2025-07-14 21:02:22.004: Play requested: 50 (web input box)
+2025-07-14 21:02:31.262: Play requested: 50* (web input box)
+2025-07-14 21:06:33.684: Play requested: 50 (web input box)
+2025-07-14 21:34:36.502: Configuration reload requested from web
+2025-07-14 21:34:44.510: Play requested: P5300 (web input box)
+2025-07-14 21:35:04.472: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-14 21:36:55.881: Configuration reload requested from web
+2025-07-14 21:37:04.890: Configuration reload requested from web
+2025-07-14 22:22:17.027: Play requested: P5300 (web input box)
+2025-07-14 22:22:27.478: Play: 5303-IID Sense of Humor.wav [normal] - successful
+2025-07-14 22:26:10.479: WX Alert: Flash Flood Watch
+2025-07-14 22:26:43.507: Configuration reload requested from web
+2025-07-14 22:26:58.403: Play: 5645-CT.wav [interruptible] - successful
+2025-07-14 22:27:03.026: Configuration reload requested from web
+2025-07-14 22:27:08.955: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-14 22:27:24.549: Play requested: P5300 (web input box)
+2025-07-14 22:27:35.140: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-14 22:27:48.073: Play requested: P5300 (web input box)
+2025-07-14 22:28:08.032: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-14 22:30:50.968: Interrupt: 5504-PID(N) Shake It Up played without COS, did not switch to 6000
+2025-07-14 22:32:05.831: Play requested: P5300 (web input box)
+2025-07-14 22:32:16.325: Play: 5303-IID Sense of Humor.wav [normal] - successful
+2025-07-14 22:36:50.280: Play requested: P5300 (web input box)
+2025-07-14 22:37:00.884: Play: 5304-IID Speed of Light.wav [normal] - successful
+2025-07-14 22:39:44.169: Play requested: P5300 (web input box)
+2025-07-14 22:39:51.427: Play requested: P5300 (web input box)
+2025-07-14 22:39:51.927: Play requested: P5300 (web input box)
+2025-07-14 22:39:52.428: Play requested: P5300 (web input box)
+2025-07-14 22:39:52.929: Play requested: P5300 (web input box)
+2025-07-14 22:39:53.430: Play requested: P5300 (web input box)
+2025-07-14 22:39:53.763: Play: 5305-IID Breaking New Ground.wav [normal] - successful
+2025-07-14 22:40:15.270: Play: 5306-IID 505 Zone.wav [normal] - successful
+2025-07-14 22:40:34.880: Play: 5307-IID All New 505.wav [normal] - successful
+2025-07-14 22:40:44.372: Play: 5308-IID We Have the Technology.wav [normal] - successful
+2025-07-14 22:40:49.959: Play: 5309-IID That's going to be Trouble.wav [normal] - successful
+2025-07-14 22:41:01.703: Play: 5310-IID Silly Thing in Reverse.wav [normal] - successful
+2025-07-14 22:41:43.291: Play requested: P5300 (web input box)
+2025-07-14 22:41:54.289: Play: 5311-IID Reach Out and Touch Someone.wav [normal] - successful
+2025-07-14 22:59:57.747: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-14 22:59:57.748: WX Report: {'observations': 'Light Rain', 'temperature': '72 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.07', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.02'}
+2025-07-14 23:18:40.947: WX Alert: Severe Thunderstorm Warning
+2025-07-14 23:19:59.271: WX Alert: Severe Thunderstorm Warning
+2025-07-14 23:25:31.215: WX Alert: Tornado Warning
+2025-07-14 23:26:42.109: Play: 5312-IID I like that!.wav [normal] - successful
+2025-07-14 23:26:42.366: CT Override 5602-CT -> 5095.
+2025-07-14 23:26:43.074: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:27:05.676: WX Alert: Tornado Warning
+2025-07-14 23:27:46.048: CT Override 5602-CT -> 5095.
+2025-07-14 23:27:46.757: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:27:57.813: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-14 23:29:38.408: CT Override 5602-CT -> 5095.
+2025-07-14 23:29:39.116: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:36:26.452: Interrupt: 5505-PID(N) All Nite Long played without COS, did not switch to 6000
+2025-07-14 23:41:39.565: CT Override 5607-CT -> 5095.
+2025-07-14 23:41:40.272: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:41:43.896: CT Override 5607-CT -> 5095.
+2025-07-14 23:41:44.602: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:41:51.230: CT Override 5607-CT -> 5095.
+2025-07-14 23:41:51.886: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:42:02.933: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-14 23:42:50.268: CT Override 5607-CT -> 5095.
+2025-07-14 23:42:50.975: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-14 23:44:25.906: WX Alert: Winter Storm Warning
+2025-07-14 23:45:47.309: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
+2025-07-14 23:47:07.637: WX Alert: Tsunami Warning, Tropical Storm Warning
+2025-07-14 23:48:24.317: WX Alert: Tsunami Warning
+2025-07-14 23:49:14.545: WX Alert: Tsunami Warning Tropical Storm Warning
+2025-07-14 23:50:01.262: WX Alert: Tropical Storm Warning

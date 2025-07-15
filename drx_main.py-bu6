@@ -4176,39 +4176,85 @@ def speak_wx_alerts(*args, **kwargs):
         # 1. Start with wx_alert.wav
         wavs.append("wx_alert.wav")
         
-        # 2. Build description WAVs robustly (ALWAYS try all words; handle multiple comma-separated descriptions)
+        # 2. Build description WAVs with improved lookup logic
         description_wavs = []
-        for desc_part in description.split(','):
-            desc_part = desc_part.strip()
-            if not desc_part:
-                continue
-            desc_part_lower = desc_part.lower()
-            words = desc_part_lower.split()
-
-            # Try full phrase first
-            full_desc_wav = f"{desc_part_lower.replace(' ', '_')}.wav"
-            full_desc_path = os.path.join(EXTRA_SOUND_DIR, full_desc_wav)
-            if os.path.exists(full_desc_path):
-                description_wavs.append(full_desc_wav)
-                debug_log(f"Found full description WAV: {full_desc_wav}")
-            else:
-                # Always fall back to individual words, regardless of length
-                for word in words:
-                    word_wav = f"{word}.wav"
-                    word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
-                    if os.path.exists(word_path):
-                        description_wavs.append(word_wav)
+        description_lower = description.lower()
+        words = description_lower.split()
+        
+        # First try full description with underscores
+        full_desc_wav = f"{description_lower.replace(' ', '_')}.wav"
+        full_desc_path = os.path.join(EXTRA_SOUND_DIR, full_desc_wav)
+        
+        if os.path.exists(full_desc_path):
+            description_wavs.append(full_desc_wav)
+            debug_log(f"Found full description WAV: {full_desc_wav}")
+        else:
+            debug_log(f"Full description not found: {full_desc_wav}, trying combinations")
+            
+            # For multi-word descriptions, try various combinations
+            if len(words) > 1:
+                # Try different combinations for 3-word descriptions
+                if len(words) == 3:
+                    # Try first two words joined
+                    two_word_wav = f"{words[0]}_{words[1]}.wav"
+                    two_word_path = os.path.join(EXTRA_SOUND_DIR, two_word_wav)
+                    if os.path.exists(two_word_path):
+                        description_wavs.append(two_word_wav)
+                        # Then add third word separately
+                        third_wav = f"{words[2]}.wav"
+                        third_path = os.path.join(EXTRA_SOUND_DIR, third_wav)
+                        if os.path.exists(third_path):
+                            description_wavs.append(third_wav)
+                        else:
+                            debug_log(f"Third word not found: {third_wav}")
                     else:
-                        debug_log(f"Warning: Word not found: {word_wav}")
-            # After each description part, say "in_effect"
-            description_wavs.append("in_effect.wav")
+                        # Try last two words joined
+                        two_word_wav = f"{words[1]}_{words[2]}.wav"
+                        two_word_path = os.path.join(EXTRA_SOUND_DIR, two_word_wav)
+                        if os.path.exists(two_word_path):
+                            # Add first word separately
+                            first_wav = f"{words[0]}.wav"
+                            first_path = os.path.join(EXTRA_SOUND_DIR, first_wav)
+                            if os.path.exists(first_path):
+                                description_wavs.append(first_wav)
+                            description_wavs.append(two_word_wav)
+                        else:
+                            # Fall back to individual words
+                            debug_log("No two-word combinations found, using individual words")
+                            for word in words:
+                                word_wav = f"{word}.wav"
+                                word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
+                                if os.path.exists(word_path):
+                                    description_wavs.append(word_wav)
+                                else:
+                                    debug_log(f"Warning: Word not found: {word}")
+                
+                # For 2-word descriptions, try joined then individual
+                elif len(words) == 2:
+                    for word in words:
+                        word_wav = f"{word}.wav"
+                        word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
+                        if os.path.exists(word_path):
+                            description_wavs.append(word_wav)
+                        else:
+                            debug_log(f"Warning: Word not found: {word}")
+            else:
+                # Single word description
+                word_wav = f"{words[0]}.wav"
+                word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
+                if os.path.exists(word_path):
+                    description_wavs.append(word_wav)
+                else:
+                    debug_log(f"Warning: Word not found: {words[0]}")
         
         # Add description WAVs to main sequence
         wavs.extend(description_wavs)
+        wavs.append("in_effect.wav")
         
         # Add repeating.wav and description again
         wavs.append("repeating.wav")
         wavs.extend(description_wavs)
+        wavs.append("in_effect.wav")
         
         # 3. Speak issued time
         wavs.append("wx_issued.wav")

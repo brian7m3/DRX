@@ -4023,28 +4023,22 @@ def wx_alert_action(config, debug_log=None):
 
 def wx_alert_monitor(config, debug_log=None):
     """
-    Monitor for weather alerts at the specified interval (now in seconds).
+    Monitor for weather alerts every 5 seconds (interval is hard-coded).
     This function runs in a separate thread.
-    
-    Args:
-        config: ConfigParser object containing the configuration
-        debug_log: Debug logging function (optional)
     """
     try:
-        # Get the check interval from config (default to 300 seconds)
-        interval_seconds = config.getint('WX', 'interval', fallback=300)
+        interval_seconds = 5  # Hard-coded interval
         
-        debug_log(f"Weather alert monitoring started. Checking every {interval_seconds} seconds.")
+        debug_log and debug_log(f"Weather alert monitoring started. Checking every {interval_seconds} seconds.")
         
         while True:
             if wx_alert_check(config, debug_log):
                 wx_alert_action(config, debug_log)
             
-            # Wait for the specified interval
             time.sleep(interval_seconds)
             
     except Exception as e:
-        debug_log(f"Error in weather alert monitor: {e}")
+        debug_log and debug_log(f"Error in weather alert monitor: {e}")
 
 def start_wx_alert_monitoring(config, debug_log=None):
     """

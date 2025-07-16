@@ -1,11 +1,11 @@
 [Unit]
-Description=DRX WX SAME NWS Alert Monitor
+Description=DRX WX SAME NWS Alert and Conditions Monitor
 After=network.target
 
 [Service]
 Type=simple
 User=drx
-ExecStart=/usr/bin/python3 /home/drx/DRX/wx/wx_same.py
+ExecStart=/usr/bin/python3 /home/drx/DRX/wx/drx_wx.py
 WorkingDirectory=/home/drx/DRX/wx
 Restart=always
 

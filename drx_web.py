@@ -20,6 +20,7 @@ WEB_PORT = int(config.get("Web", "port", fallback="8080"))
 WEB_USER = config.get("WebAuth", "username", fallback="admin")
 WEB_PASS = config.get("WebAuth", "password", fallback="drxpass")
 DTMF_LOG_FILE = os.path.join(script_dir, "logs", "dtmf.log")
+WX_CONFIG_PATH = os.path.join(script_dir, 'wx', 'wx_config.ini')
 
 STATE_FILE = os.path.join(script_dir, 'drx_state.json')  # NOTE: No longer used - kept for debug endpoint only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
@@ -1583,21 +1584,25 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             <!-- Weather Alert Settings -->
             <div class="config-section">
-                    <h3>Weather (WX) Settings</h3>
-                    <div class="form-group checkbox">
-                        <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
-                        <label for="wx_alerts">Enable Alerts</label>
-                    </div>
+                <h3>Weather (WX) Settings</h3>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
+                    <label for="wx_alerts">Enable Alerts</label>
+                </div>
                 <div class="form-group">
-                    <label for="wx_interval">Alert Interval (seconds):</label>
-                    <input type="number" id="wx_interval" name="wx_interval" min="1" max="3600" value="{{ config.get('WX', 'interval', fallback='30') }}">
+                    <label for="same_alerts_polling_time">Alerts Polling (secs):</label>
+                    <input type="number" id="same_alerts_polling_time" name="same_alerts_polling_time" min="60" max="3600" value="{{ same_alerts_polling_time }}">
+                </div>
+                <div class="form-group">
+                    <label for="same_alerts_zip_code">SAME Alerts Zip Code:</label>
+                    <input type="text" id="same_alerts_zip_code" name="same_alerts_zip_code" value="{{ same_alerts_zip_code }}">
                 </div>
                 <div class="form-group">
                     <label for="wx_ctone">Override C-Tone:</label>
                     <input type="number" id="wx_ctone" name="wx_ctone"
                             min="0" max="9999" value="{{ config.get('WX', 'ctone', fallback='') }}"
                             placeholder="0000" pattern="\d{0,4}">
-                    <small class="help-text">Leave blank for none, or enter 4-digit tone (0000–9999)</small>
+                    <small class="help-text">Leave blank for none, or enter 4-digit track</small>
                 </div>
                 <div class="form-group">
                     <label for="wx_ctone_time">C-Tone Time (minutes):</label>
@@ -1620,6 +1625,11 @@ document.addEventListener("DOMContentLoaded", function() {
                             onchange="toggleCtoneTime()"
                     >
                     <label for="use_expired_time">Use Alert Exp Instead</label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="weather_polling_time">Weather Polling (mins):</label>
+                    <input type="number" id="weather_polling_time" name="weather_polling_time" min="5" max="1440" value="{{ weather_polling_time }}">
                 </div>
                 
                 <script>
@@ -2358,6 +2368,11 @@ def dashboard():
     state = read_state()
     wx_alert_active = state.get("wx_alert_active", False)
     state_blocks_html = render_template_string(STATE_BLOCKS_TEMPLATE, state=state)
+    wx_config = read_wx_config()
+    same_alerts_polling_time = wx_config.get('SAME Alerts', 'polling_time', fallback='300')
+    same_alerts_zip_code = wx_config.get('SAME Alerts', 'zip_code', fallback='06492')
+    weather_polling_time = wx_config.get('weather', 'polling_time', fallback='15')
+
     
     # --- Weather System Status ---
     weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
@@ -2381,7 +2396,10 @@ def dashboard():
         weather_class=weather_class,
         weather_color=weather_color,
         version=state.get("version", "Unknown"),
-        web_version="2.01.00"
+        web_version="2.01.00",
+        same_alerts_polling_time=same_alerts_polling_time,
+        same_alerts_zip_code=same_alerts_zip_code,
+        weather_polling_time=weather_polling_time
     )
     
 def is_cos_active():
@@ -2629,6 +2647,25 @@ def edit_config_structured():
     # Write to file
     with open(config_file_path, 'w') as configfile:
         existing_config.write(configfile)
+
+    # --- Update /DRX/wx/wx_config.ini with new fields ---
+    wx_config_path = os.path.join(script_dir, "wx", "wx_config.ini")
+    wx_config = configparser.ConfigParser()
+    wx_config.read(wx_config_path)
+
+    # SAME Alerts: polling_time (seconds) and zip_code
+    if 'SAME Alerts' not in wx_config:
+        wx_config['SAME Alerts'] = {}
+    wx_config['SAME Alerts']['polling_time'] = form_data.get('same_alerts_polling_time', '300')
+    wx_config['SAME Alerts']['zip_code'] = form_data.get('same_alerts_zip_code', '')
+
+    # weather: polling_time (minutes)
+    if 'weather' not in wx_config:
+        wx_config['weather'] = {}
+    wx_config['weather']['polling_time'] = form_data.get('weather_polling_time', '15')
+
+    with open(wx_config_path, 'w') as wx_file:
+        wx_config.write(wx_file)
     
     # Use the simpler approach for telling DRX to reload
     write_webcmd({"type": "reload_config"})
@@ -2796,7 +2833,6 @@ def api_dtmf_log():
         {% endfor %}
     ''', dtmf_log=lines)
 
-# ... all your existing code above ...
 
 @app.route("/download_dtmf_log")
 @require_login
@@ -2961,6 +2997,15 @@ def process_serial_command_for_tot(command):
         return True  # State changed
     
     return False  # No state change
+
+def read_wx_config():
+    wx_config = configparser.ConfigParser()
+    wx_config.read(WX_CONFIG_PATH)
+    return wx_config
+
+def write_wx_config(wx_config):
+    with open(WX_CONFIG_PATH, 'w') as f:
+        wx_config.write(f)
 
 @app.route("/api/base_configurator", methods=["GET"])
 def api_base_configurator():

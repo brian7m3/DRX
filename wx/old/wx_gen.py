@@ -1,0 +1,200 @@
+import os
+import requests
+import json
+import re
+import configparser
+import time
+import shutil
+from bs4 import BeautifulSoup
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(SCRIPT_DIR, "wx_config.ini")
+
+# Read configuration
+config = configparser.ConfigParser()
+config.read(CONFIG_FILE)
+directory = config["weather"]["directory"]
+wx_data_url = config["weather"]["wx_data_url"]
+wx_day_url = config["weather"]["wx_day_url"]
+nws_url = config["weather"]["nws_url"]
+
+os.makedirs(directory, exist_ok=True)
+output_file = os.path.join(directory, "wx_data")
+
+# --- File backup logic for wx_data_previous every 2 hours ---
+backup_file = os.path.join(directory, "wx_data_previous")
+timestamp_file = os.path.join(directory, "wx_data_previous_time")
+current_time = time.time()
+backup_needed = True
+
+if os.path.exists(output_file):
+    if os.path.exists(timestamp_file):
+        with open(timestamp_file, "r") as tf:
+            last_backup_time = float(tf.read().strip())
+        if current_time - last_backup_time < 7200:
+            backup_needed = False
+    if backup_needed:
+        shutil.copy2(output_file, backup_file)
+        with open(timestamp_file, "w") as tf:
+            tf.write(str(current_time))
+
+# --- Fetch and extract from NWS page (for conditions & visibility) ---
+
+def fetch_nws_conditions_and_visibility(url):
+    resp = requests.get(url)
+    resp.raise_for_status()
+    html = resp.text
+    soup = BeautifulSoup(html, "html.parser")
+    text_lines = soup.get_text('\n').splitlines()
+    text_lines = [line.strip() for line in text_lines if line.strip()]
+    conditions = "Unknown"
+    visibility = "Unknown"
+    for i, line in enumerate(text_lines):
+        if "°F" in line or "&deg;F" in line:
+            if i > 0:
+                conditions = text_lines[i-1].strip()
+            break
+    for i, line in enumerate(text_lines):
+        if "Visibility" in line:
+            if i+1 < len(text_lines):
+                vis_line = text_lines[i+1]
+                match = re.search(r'([0-9.]+)\s*m', vis_line)
+                if match:
+                    visibility = match.group(1)
+            break
+    return conditions, visibility
+
+nws_conditions, nws_visibility = fetch_nws_conditions_and_visibility(nws_url)
+
+# --- Fetch Weather.com JSONs as before ---
+def get_json(url):
+    resp = requests.get(url)
+    resp.raise_for_status()
+    return resp.json()
+
+wx_data_json = get_json(wx_data_url)
+wx_day_json = get_json(wx_day_url)
+
+def get_nested(data, keys, default=None):
+    for key in keys:
+        if isinstance(data, list):
+            if not data:
+                return default
+            data = data[-1]
+        data = data.get(key) if isinstance(data, dict) else default
+        if data is None:
+            return default
+    return data
+
+observations = wx_day_json.get("observations", [])
+last_obs = observations[-1] if observations else {}
+
+temperature = get_nested(last_obs, ["imperial", "tempAvg"])
+humidity = get_nested(last_obs, ["humidityAvg"])
+winddir_deg = get_nested(last_obs, ["winddirAvg"])
+wind_speed = get_nested(last_obs, ["imperial", "windspeedAvg"])
+wind_gust = get_nested(last_obs, ["imperial", "windgustAvg"])
+pressure = get_nested(last_obs, ["imperial", "pressureMax"])
+# visibility is now only from NWS
+
+# Extract precipRate from wx_data_json's first observation
+if wx_data_json.get("observations"):
+    obs0 = wx_data_json["observations"][0]
+    precip_rate = obs0.get("imperial", {}).get("precipRate")
+else:
+    precip_rate = None
+
+# Wind direction text
+def degrees_to_direction(degrees):
+    try:
+        deg = int(degrees)
+    except (ValueError, TypeError):
+        return "Unknown"
+    if 0 <= deg < 11 or 349 <= deg <= 360:
+        return "N"
+    elif 11 <= deg < 34:
+        return "NNE"
+    elif 34 <= deg < 56:
+        return "NE"
+    elif 56 <= deg < 79:
+        return "ENE"
+    elif 79 <= deg < 101:
+        return "E"
+    elif 101 <= deg < 124:
+        return "ESE"
+    elif 124 <= deg < 146:
+        return "SE"
+    elif 146 <= deg < 169:
+        return "SSE"
+    elif 169 <= deg < 191:
+        return "S"
+    elif 191 <= deg < 214:
+        return "SSW"
+    elif 214 <= deg < 236:
+        return "SW"
+    elif 236 <= deg < 259:
+        return "WSW"
+    elif 259 <= deg < 281:
+        return "W"
+    elif 281 <= deg < 304:
+        return "WNW"
+    elif 304 <= deg < 326:
+        return "NW"
+    elif 326 <= deg < 349:
+        return "NNW"
+    else:
+        return "Invalid"
+
+winddir = degrees_to_direction(winddir_deg)
+
+# --- Read pressure from wx_data_previous file ---
+def read_pressure_from_file(filepath):
+    if not os.path.exists(filepath):
+        return None
+    with open(filepath, "r") as f:
+        for line in f:
+            if line.startswith("pressure: "):
+                try:
+                    value = line.split(":", 1)[1].strip().split()[0]
+                    return float(value)
+                except Exception:
+                    return None
+    return None
+
+previous_pressure = read_pressure_from_file(backup_file)
+new_pressure = pressure
+
+# --- Determine baro_status using previous and current pressure ---
+baro_status = "unknown"
+if previous_pressure is not None and new_pressure is not None:
+    try:
+        if float(previous_pressure) > float(new_pressure):
+            baro_status = "falling"
+        elif float(previous_pressure) < float(new_pressure):
+            baro_status = "rising"
+        else:
+            baro_status = "steady"
+    except Exception:
+        baro_status = "unknown"
+
+# Compose output dictionary
+output_data = {
+    "observations": nws_conditions,
+    "temperature": f"{temperature} degrees" if temperature is not None else "Unknown",
+    "humidity": f"{humidity} percent" if humidity is not None else "Unknown",
+    "winddir": winddir,
+    "wind_speed": f"{wind_speed}" if wind_speed is not None else "Unknown",
+    "wind_gust": f"{wind_gust}" if wind_gust is not None else "Unknown",
+    "pressure": f"{pressure}" if pressure is not None else "Unknown",
+    "pressure_status": baro_status,
+    "visibility": f"{nws_visibility} miles" if nws_visibility != "Unknown" else "Unknown",
+    "precipRate": f"{precip_rate:.2f}" if precip_rate is not None else "Unknown"
+}
+
+with open(output_file, "w") as f:
+    for key, val in output_data.items():
+        f.write(f"{key}: {val}\n")
+
+os.chmod(output_file, 0o666)
+
+print(f"Weather data written to {output_file}")

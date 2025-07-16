@@ -1,0 +1,10 @@
+#!/bin/bash
+# Download Piper
+wget https://github.com/rhasspy/piper/releases/latest/download/piper_linux_x86_64.tar.gz
+tar xvf piper_linux_x86_64.tar.gz
+# Download a model (example: en_US-lessac-medium)
+wget https://github.com/rhasspy/piper/releases/latest/download/en_US-lessac-medium.onnx
+# Run Piper
+./piper --model en_US-lessac-medium.onnx --output_file hello.wav --text "Hello, this is a high-quality TTS voice on Linux."
+# Play result (with aplay)
+aplay hello.wav

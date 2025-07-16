@@ -231,18 +231,41 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
                 # Get description from CSV file based on code
                 description = get_description_from_code(eas_code, eas_descriptions, properties)
                 
-                issued = parse_nws_date(properties.get('effective'))
+                # Extract additional fields
+                event = properties.get('event', 'N/A')
+                same = eas_code
+                headline = properties.get('headline', 'N/A')
+                status = properties.get('status', 'N/A')
+                severity = properties.get('severity', 'N/A')
+                message_type = properties.get('messageType', 'N/A')
+                nws_headline = properties.get('parameters', {}).get('NWSheadline', ['N/A'])
+                if isinstance(nws_headline, list):
+                    nws_headline = nws_headline[0]
+                onset = parse_nws_date(properties.get('onset'))
+                effective = parse_nws_date(properties.get('effective'))
+                ends = parse_nws_date(properties.get('ends'))
                 expires = parse_nws_date(properties.get('expires'))
                 location = properties.get('areaDesc', 'N/A')
 
-                # Format alert text
+                # Get the API's description field
+                nws_description = properties.get('description', 'N/A')
+                
                 alert_text = f"""
-  EAS Code:    {eas_code}
-  Description: {description}
-  Issued:      {issued}
-  Expires:     {expires}
-  Location:    {location}
-  Monitored:   ZIP Code {zip_code}
+  Event:          {event}
+  SAME:           {same}
+  Headline:       {headline}
+  NWSheadline:    {nws_headline}
+  Status:         {status}
+  Severity:       {severity}
+  MessageType:    {message_type}
+  Onset:          {onset}
+  Effective:      {effective}
+  Ends:           {ends}
+  Expires:        {expires}
+  Location:       {location}
+  Description:    {description}
+  NWS_Description:{nws_description}
+  Monitored:      ZIP Code {zip_code}
 """
                 output_lines.append(alert_text)
             

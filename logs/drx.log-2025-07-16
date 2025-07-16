@@ -1,0 +1,145 @@
+2025-07-15 15:59:57.815: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 15:59:57.816: WX Report: {'observations': 'Fair', 'temperature': '87 degrees', 'humidity': '70 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.06', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 16:04:00.346: WX Alert: Tsunami Warning, Tropical Storm Warning
+2025-07-15 16:07:14.087: WX Alert: Tsunami Warning, Tropical Storm Warning
+2025-07-15 16:24:49.633: WX Alert: Heat Advisory
+2025-07-15 16:59:57.787: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 16:59:57.787: WX Report: {'observations': 'Fair', 'temperature': '86 degrees', 'humidity': '71 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '6', 'pressure': '30.05', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 17:05:03.683: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
+2025-07-15 17:57:25.686: WX Alert: Heat Advisory
+2025-07-15 17:59:57.829: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 17:59:57.830: WX Report: {'observations': 'Fair', 'temperature': '85 degrees', 'humidity': '75 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.05', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 18:01:01.203: WX Alert: Heat Advisory
+2025-07-15 18:07:17.118: WX Alert: Heat Advisory
+2025-07-15 18:11:05.884: WX Alert: Heat Advisory
+2025-07-15 18:59:57.845: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 18:59:57.845: WX Report: {'observations': 'Fair', 'temperature': '83 degrees', 'humidity': '79 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '7', 'pressure': '30.06', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 19:59:57.833: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 19:59:57.834: WX Report: {'observations': 'Fair', 'temperature': '80 degrees', 'humidity': '85 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.07', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 20:18:28.093: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-15 20:18:28.298: CT Override 5622-CT -> 5095.
+2025-07-15 20:18:29.006: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 20:18:40.045: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-15 20:24:15.054: CT Override 5622-CT -> 5095.
+2025-07-15 20:24:15.759: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 20:24:35.889: CT Override 5622-CT -> 5095.
+2025-07-15 20:24:36.596: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 20:27:54.516: Interrupt: 5501-PID(N) Light Up Night played without COS, did not switch to 6000
+2025-07-15 21:00:02.302: Play: 5129-Msg 9 PM Don't Give a Damn.wav [wait_for_cos] - successful
+2025-07-15 21:00:03.258: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 21:00:03.258: WX Report: {'observations': 'Fair', 'temperature': '77 degrees', 'humidity': '91 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.08', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 21:52:36.860: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-15 21:52:37.058: CT Override 5630-CT -> 5095.
+2025-07-15 21:52:37.764: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 21:52:48.811: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-15 21:54:28.927: CT Override 5630-CT -> 5095.
+2025-07-15 21:54:29.632: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 21:55:32.871: CT Override 5630-CT -> 5095.
+2025-07-15 21:55:33.578: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 21:56:01.616: CT Override 5630-CT -> 5095.
+2025-07-15 21:56:02.323: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 21:56:06.051: CT Override 5630-CT -> 5095.
+2025-07-15 21:56:06.757: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 21:56:19.923: CT Override 5630-CT -> 5095.
+2025-07-15 21:56:20.629: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 21:59:57.849: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 21:59:57.849: WX Report: {'observations': 'Fair', 'temperature': '76 degrees', 'humidity': '94 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.07', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-15 22:00:36.879: CT Override 5630-CT -> 5095.
+2025-07-15 22:00:37.586: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:00:48.246: CT Override 5630-CT -> 5095.
+2025-07-15 22:00:48.952: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:01:36.856: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-15 22:01:37.077: CT Override 5630-CT -> 5095.
+2025-07-15 22:01:37.785: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:02:07.919: CT Override 5630-CT -> 5095.
+2025-07-15 22:02:08.627: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:08:52.376: CT Override 5649-CT -> 5095.
+2025-07-15 22:08:53.084: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:09:04.130: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-15 22:09:23.823: CT Override 5649-CT -> 5095.
+2025-07-15 22:09:24.481: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:11:14.421: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
+2025-07-15 22:25:28.399: WX Alert: Heat Advisory
+2025-07-15 22:27:27.519: WX Alert: Heat Advisory, I love it!
+2025-07-15 22:28:38.135: WX Alert: Meltdown Advisory
+2025-07-15 22:31:15.847: WX Alert: Meltdown Advisory
+2025-07-15 22:32:03.556: WX Alert: Heat Advisory
+2025-07-15 22:33:55.236: Configuration reload requested from web
+2025-07-15 22:34:04.910: WX Alert: Heat Advisory
+2025-07-15 22:37:14.172: WX Alert: Meltdown Advisory
+2025-07-15 22:40:02.215: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-15 22:40:02.406: CT Override 5629-CT -> 5095.
+2025-07-15 22:40:03.149: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:40:14.210: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-15 22:41:16.305: CT Override 5629-CT -> 5095.
+2025-07-15 22:41:16.985: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:44:07.730: CT Override 5629-CT -> 5095.
+2025-07-15 22:44:08.460: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:45:17.828: CT Override 5629-CT -> 5095.
+2025-07-15 22:45:18.562: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:48:19.681: CT Override 5629-CT -> 5095.
+2025-07-15 22:48:20.365: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:49:19.226: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-15 22:49:19.422: CT Override 5629-CT -> 5095.
+2025-07-15 22:49:20.111: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:50:00.668: CT Override 5629-CT -> 5095.
+2025-07-15 22:50:01.408: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:50:07.949: CT Override 5614-CT -> 5095.
+2025-07-15 22:50:08.686: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:50:19.486: CT Override 5614-CT -> 5095.
+2025-07-15 22:50:20.240: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:50:31.253: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-15 22:58:56.106: Interrupt: 5504-PID(N) Shake It Up played without COS, did not switch to 6000
+2025-07-15 22:59:46.568: CT Override 5614-CT -> 5095.
+2025-07-15 22:59:47.316: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:59:54.846: CT Override 5614-CT -> 5095.
+2025-07-15 22:59:55.594: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 22:59:56.991: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-15 22:59:57.813: Temperature Report: Current temperature is 74 degrees
+2025-07-15 22:59:59.533: CT Override 5614-CT -> 5095.
+2025-07-15 22:59:59.630: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:00:05.158: CT Override 5614-CT -> 5095.
+2025-07-15 23:00:05.902: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:00:54.565: CT Override 5601-CT -> 5095.
+2025-07-15 23:00:55.309: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:01:06.618: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-15 23:02:16.255: CT Override 5601-CT -> 5095.
+2025-07-15 23:02:17.010: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:03:19.524: CT Override 5601-CT -> 5095.
+2025-07-15 23:03:20.278: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:08:26.435: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
+2025-07-15 23:08:34.596: CT Override 5601-CT -> 5095.
+2025-07-15 23:08:34.812: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:08:54.873: CT Override 5601-CT -> 5095.
+2025-07-15 23:08:55.767: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:10:19.057: WX Alert: Meltdown Advisory
+2025-07-15 23:16:23.228: CT Override 5631-CT -> 5095.
+2025-07-15 23:16:23.934: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:16:35.044: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-15 23:17:53.531: Interrupt: 5501-PID(N) Light Up Night played without COS, did not switch to 6000
+2025-07-15 23:18:02.815: CT Override 5631-CT -> 5095.
+2025-07-15 23:18:03.576: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:18:27.173: CT Override 5631-CT -> 5095.
+2025-07-15 23:18:27.918: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:19:16.035: CT Override 5631-CT -> 5095.
+2025-07-15 23:19:16.795: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:21:07.783: CT Override 5631-CT -> 5095.
+2025-07-15 23:21:08.542: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:21:58.182: CT Override 5631-CT -> 5095.
+2025-07-15 23:21:58.892: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:23:26.691: CT Override 5631-CT -> 5095.
+2025-07-15 23:23:27.451: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:24:45.930: CT Override 5631-CT -> 5095.
+2025-07-15 23:24:46.647: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:25:03.469: CT Override 5631-CT -> 5095.
+2025-07-15 23:25:04.184: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-15 23:27:35.568: Interrupt: 5505-PID(N) All Nite Long played without COS, did not switch to 6000
+2025-07-15 23:31:35.554: WX Alert: Meltdown Advisory
+2025-07-15 23:34:43.325: WX Alert: Meltdown Advisory
+2025-07-15 23:34:55.772: WX Alert: Meltdown Advisory
+2025-07-15 23:40:10.630: WX Alert: Meltdown Advisory
+2025-07-15 23:41:32.386: WX Alert: Meltdown Advisory
+2025-07-15 23:43:05.478: WX Alert: Heat Advisory
+2025-07-15 23:59:56.536: Activity Report: Today so far (2025-07-15) has 0 minutes of activity
+2025-07-16 00:00:07.036: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-16 00:00:07.065: WX Report: {'observations': 'Fair', 'temperature': '73 degrees', 'humidity': '99 percent', 'winddir': 'N', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '30.07', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}

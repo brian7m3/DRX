@@ -1594,7 +1594,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <input type="number" id="same_alerts_polling_time" name="same_alerts_polling_time" min="60" max="3600" value="{{ same_alerts_polling_time }}">
                 </div>
                 <div class="form-group">
-                    <label for="same_alerts_zip_code">SAME Alerts Zip Code:</label>
+                    <label for="same_alerts_zip_code">SAME Alerts Zip Codes:</label>
                     <input type="text" id="same_alerts_zip_code" name="same_alerts_zip_code" value="{{ same_alerts_zip_code }}">
                 </div>
                 <div class="form-group">
@@ -1624,7 +1624,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             {% if config.get('WX', 'use_expired_time', fallback='true').lower() == 'true' %}checked{% endif %}
                             onchange="toggleCtoneTime()"
                     >
-                    <label for="use_expired_time">Use Alert Exp Instead</label>
+                    <label for="use_expired_time">Use Alert Time Instead</label>
                 </div>
                 <br>
                 <div class="form-group">
@@ -2848,11 +2848,11 @@ def download_dtmf_log():
 
 def get_weather_system_status(wx_alert_active=False):
     wx_dir = os.path.join(os.path.dirname(__file__), "wx")
-    wx_gen = os.path.join(wx_dir, "wx_gen.py")
+    drx_wx = os.path.join(wx_dir, "drx_wx.py")
     wx_data = os.path.join(wx_dir, "wx_data")
     if wx_alert_active:
         return ("Alert", "weather-alert", "#ff2222")
-    if not os.path.exists(wx_gen):
+    if not os.path.exists(drx_wx):
         return ("Not Installed", "weather-warn", "#888")
     if not os.path.exists(wx_data):
         return ("Inactive", "weather-inactive", "#d32f2f")

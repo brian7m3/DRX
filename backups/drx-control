@@ -123,7 +123,7 @@ view_in_tmux() {
         working_dir="$DRX_HOME"
         sudo systemctl stop drx_web
     elif [ "$script_type" = "wx" ]; then
-        script_path="$WX_DIR/wx_same.py"
+        script_path="$WX_DIR/drx_wx.py"
         working_dir="$WX_DIR"
         systemctl stop drx_wx
     else

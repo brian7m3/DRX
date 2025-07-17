@@ -25,7 +25,6 @@ def load_config():
     config.read(CONFIG_FILE)
     # WEATHER SECTION
     wx_cfg = config['weather']
-    wx_directory = wx_cfg.get('directory', '/tmp/')
     wx_polling_time = int(wx_cfg.get('polling_time', '15')) * 60 # minutes to seconds
     wx_data_url = wx_cfg.get('wx_data_url', '')
     wx_day_url = wx_cfg.get('wx_day_url', '')
@@ -34,9 +33,10 @@ def load_config():
     same_cfg = config['SAME Alerts']
     same_zip = same_cfg.get('zip_code', '').strip()
     same_polling_time = int(same_cfg.get('polling_time', '300')) # seconds
+    same_user_agent = same_cfg.get('user_agent', 'WX-SAME-Script')
     return {
         "wx": {
-            "directory": wx_directory,
+            "directory": "/home/drx/DRX/wx/",
             "polling_time": wx_polling_time,
             "wx_data_url": wx_data_url,
             "wx_day_url": wx_day_url,
@@ -44,7 +44,8 @@ def load_config():
         },
         "same": {
             "zip_code": same_zip,
-            "polling_time": same_polling_time
+            "polling_time": same_polling_time,
+            "user_agent": same_user_agent
         }
     }
 
@@ -266,12 +267,13 @@ def get_nws_zone_from_zip(zip_code, user_agent):
     try:
         with urlopen(Request(points_url, headers=headers), timeout=10) as response:
             points_data = json.load(response)
-            zone_url = points_data.get('properties', {}).get('forecastZone')
-            if zone_url:
-                zone_id = zone_url.split('/')[-1]
+            # Use county for SAME/EAS, not forecastZone
+            county_url = points_data.get('properties', {}).get('county')
+            if county_url:
+                zone_id = county_url.split('/')[-1]
                 return zone_id, None
             else:
-                return None, "Could not determine NWS forecast zone from API response."
+                return None, "Could not determine NWS county zone from API response."
     except (HTTPError, URLError) as e:
         return None, f"Could not contact NWS API for zone info. Reason: {e}"
     except KeyError:
@@ -291,6 +293,21 @@ def extract_same_code(properties):
     elif isinstance(event_code, str):
         all_codes.append(event_code)
     return ', '.join(all_codes) if all_codes else 'N/A'
+
+def get_original_same_code(alert, all_alerts):
+    """Find the original SAME code if this is a follow-up/statement alert"""
+    properties = alert.get('properties', {})
+    refs = properties.get('references', [])
+    if not refs:
+        return None
+    ref_ids = {ref.get('identifier') for ref in refs}
+    for other_alert in all_alerts:
+        other_id = other_alert.get('properties', {}).get('id')
+        if other_id in ref_ids:
+            orig_code = extract_same_code(other_alert.get('properties', {}))
+            if orig_code:
+                return orig_code
+    return None
 
 def get_description_from_code(code, eas_descriptions, properties):
     first_code = code.split(',')[0].strip()
@@ -329,6 +346,36 @@ def handle_no_alerts():
         except Exception as e:
             print(f"Warning: Could not rename wx_alerts file: {e}")
 
+def load_same_codes():
+    codes = set()
+    try:
+        with open(SAME_CSV, 'r') as f:
+            for line in f:
+                # Skip header, blank, and description lines
+                lstripped = line.lstrip().lower()
+                if not line.strip() or lstripped.startswith("eas event") or ',' not in line:
+                    continue
+                parts = line.strip().split(',')
+                if len(parts) >= 2:
+                    code = parts[1].strip().upper()
+                    if len(code) == 3 and code.isalpha():
+                        codes.add(code)
+    except Exception as e:
+        print(f"Warning: Error reading same.csv for codes: {e}")
+    return codes
+
+def get_eas_only_option():
+    config = configparser.ConfigParser()
+    config.read(CONFIG_FILE)
+    try:
+        eas_only = config.getboolean('SAME Alerts', 'EAS_Only', fallback=False)
+    except Exception:
+        eas_only = False
+    return eas_only
+
+EAS_ONLY = get_eas_only_option()
+SAME_CODES = load_same_codes() if EAS_ONLY else set()
+
 def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
     alerts_url = f"https://api.weather.gov/alerts/active?zone={zone_id}"
     headers = {'User-Agent': user_agent}
@@ -346,8 +393,20 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
             for alert in active_alerts:
                 properties = alert.get('properties', {})
                 eas_code = extract_same_code(properties)
-                description = get_description_from_code(eas_code, eas_descriptions, properties)
                 event = properties.get('event', 'N/A')
+
+                # --- EAS_ONLY FILTER ---
+                # Use only the first code if there are multiple (split by comma)
+                first_eas_code = eas_code.split(',')[0].strip() if eas_code else ''
+                if EAS_ONLY and (not first_eas_code or first_eas_code not in SAME_CODES):
+                    continue
+
+                # --- SKIP SVS Severe Thunderstorm Warning updates/statements ---
+                if eas_code == 'SVS' and event == 'Severe Thunderstorm Warning':
+                    continue
+
+                # ... (the rest of your output logic remains unchanged)
+                description = get_description_from_code(eas_code, eas_descriptions, properties)
                 same = eas_code
                 headline = properties.get('headline', 'N/A')
                 status = properties.get('status', 'N/A')
@@ -365,6 +424,7 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
                 alert_text = f"""
   Event:          {event}
   SAME:           {same}
+  EAS Code:       {same}
   Headline:       {headline}
   NWSheadline:    {nws_headline}
   Status:         {status}
@@ -376,9 +436,32 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
   Expires:        {expires}
   Location:       {location}
   Description:    {description}
-  NWS_Description:{nws_description}
-  Monitored:      ZIP Code {zip_code}
 """
+
+                # Gather extra fields not in main list
+                shown_fields = {
+                    'event', 'same', 'eas code', 'headline', 'nwsheadline', 'status', 'severity',
+                    'messagetype', 'onset', 'effective', 'ends', 'expires', 'location', 'description'
+                }
+                # areaDesc is mapped to Location, so treat as covered
+                mapped_fields = {'areaDesc', 'Event', 'Headline', 'NWSheadline', 'Status', 'Severity',
+                                 'MessageType', 'Onset', 'Effective', 'Ends', 'Expires', 'Location', 'Description'}
+                extra_lines = []
+                for key, value in properties.items():
+                    key_label = key
+                    if key == "areaDesc":
+                        key_label = "Location"
+                    if key_label.lower() in shown_fields or key in mapped_fields:
+                        continue
+                    if isinstance(value, list):
+                        value = "; ".join(str(v) for v in value)
+                    extra_lines.append(f"  {key_label}:       {value}")
+
+                # Add extra fields if present
+                if extra_lines:
+                    alert_text += "\n" + "\n".join(extra_lines)
+
+                # Add any fields not listed at the end, then append and finish as before
                 output_lines.append(alert_text)
             output_lines.append("-" * 50)
             full_output = '\n'.join(output_lines)
@@ -387,14 +470,10 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
     except (HTTPError, URLError) as e:
         print(f"An error occurred while checking for alerts: {e}")
 
-def same_worker(same_cfg):
-    zip_code = same_cfg["zip_code"]
-    polling_time = same_cfg["polling_time"]
-    USER_AGENT = "WX-SAME-Script (brian7m3@example.com)"
-    eas_descriptions = load_eas_descriptions()
+def same_worker_single(zip_code, polling_time, eas_descriptions, user_agent):
     # Get NWS zone from zip
     if zip_code and zip_code.isdigit() and len(zip_code) == 5:
-        zone, error_msg = get_nws_zone_from_zip(zip_code, USER_AGENT)
+        zone, error_msg = get_nws_zone_from_zip(zip_code, user_agent)
         if error_msg:
             print(f"[SAME] Error: {error_msg}")
             return
@@ -403,8 +482,23 @@ def same_worker(same_cfg):
         print(f"[SAME] Invalid ZIP code: {zip_code}. Skipping SAME monitoring.")
         return
     while True:
-        check_for_active_alerts(zone, zip_code, USER_AGENT, eas_descriptions)
+        check_for_active_alerts(zone, zip_code, user_agent, eas_descriptions)
         time.sleep(polling_time)
+
+def same_worker(same_cfg):
+    zip_code_field = same_cfg["zip_code"]
+    polling_time = same_cfg["polling_time"]
+    user_agent = same_cfg["user_agent"]
+    eas_descriptions = load_eas_descriptions()
+    zip_codes = [z.strip() for z in zip_code_field.split(",") if z.strip()]
+    threads = []
+    for zip_code in zip_codes:
+        t = threading.Thread(target=same_worker_single, args=(zip_code, polling_time, eas_descriptions, user_agent), daemon=True)
+        t.start()
+        threads.append(t)
+    # Wait for all threads (infinite loop, since .join() will never return)
+    for t in threads:
+        t.join()
 
 # ---- MAIN ----
 

@@ -3927,7 +3927,7 @@ def speak_wx_conditions():
 def wx_alert_check(config, debug_log=None):
     """
     Check if weather alerts are enabled and if the alerts file exists.
-    Compare the latest issued time to see if it's a new alert.
+    Compare the latest effective time to see if it's a new alert.
     
     Args:
         config: ConfigParser object containing the configuration
@@ -3944,31 +3944,31 @@ def wx_alert_check(config, debug_log=None):
             # Check if the wx_alerts file exists
             wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
             if os.path.exists(wx_alerts_path):
-                # Read the file and check for latest issued time
+                # Read the file and check for latest effective time
                 with open(wx_alerts_path, 'r') as f:
                     content = f.read()
                 
-                # Find all instances of "Issued:" pattern and get the last one
-                # Pattern matches "  Issued:      2025-07-13 07:04:00" with flexible spacing
-                issued_pattern = r'Issued:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})'
-                matches = re.findall(issued_pattern, content)
+                # Find all instances of "Effective:" pattern and get the last one
+                # Pattern matches "  Effective:      2025-07-13 07:04:00" with flexible spacing
+                effective_pattern = r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})'
+                matches = re.findall(effective_pattern, content)
                 
                 if matches:
-                    # Get the last (most recent) issued time
-                    latest_issued_time = matches[-1]
+                    # Get the last (most recent) effective time
+                    latest_effective_time = matches[-1]
                     
-                    debug_log(f"Latest alert issued time: {latest_issued_time}")
+                    debug_log(f"Latest alert effective time: {latest_effective_time}")
                     
                     # Check if this is a new alert
-                    if latest_issued_time != last_alert_time:
-                        last_alert_time = latest_issued_time
-                        debug_log(f"New weather alert detected: {latest_issued_time}")
+                    if latest_effective_time != last_alert_time:
+                        last_alert_time = latest_effective_time
+                        debug_log(f"New weather alert detected: {latest_effective_time}")
                         return True
                     else:
-                        debug_log(f"Alert already processed: {latest_issued_time}")
+                        debug_log(f"Alert already processed: {latest_effective_time}")
                         return False
                 else:
-                    debug_log("No 'Issued:' timestamp found in wx_alerts file")
+                    debug_log("No 'Effective:' timestamp found in wx_alerts file")
                     
     except Exception as e:
         debug_log(f"Error checking weather alerts: {e}")
@@ -4112,14 +4112,109 @@ def synthesize_and_play_with_piper(text, debug_log=None):
         debug_log and debug_log(f"Failed to synthesize '{text}' with piper: {e}")
         return False
 
+def append_datetime_wavs(dt, sequence):
+    """
+    Appends WAV file sequence for a datetime object in the same style as speak_wx_conditions.
+    - dt: datetime object
+    - sequence: list to append to (modifies in place)
+    """
+    # Hour
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.hour)]
+    # Minutes and "hours"
+    if dt.minute == 0:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+    else:
+        if dt.minute < 10:
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.minute)]
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
+    # Month and Day (always say as numbers)
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.month)]
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.day)]
+    # Year (say "20", then "oh" if needed, then last two digits)
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
+    year_last_two = dt.year % 100
+    if year_last_two < 10:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
+    else:
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
+    return sequence
+
+def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
+    """
+    Given a description (string), return a list of wavs/tts in order,
+    using the longest matching WAVs in extra_dir.
+    """
+    import os
+    words = description.lower().split()
+    n = len(words)
+    sequence = []
+    i = 0
+    while i < n:
+        # Try longest match first, down to single word
+        found = False
+        for j in range(n, i, -1):
+            phrase = words[i:j]
+            wav_name = "_".join(phrase) + ".wav"
+            wav_path = os.path.join(extra_dir, wav_name)
+            if os.path.exists(wav_path):
+                sequence.append({"wav": wav_path})
+                if debug_log:
+                    debug_log(f"Matched WAV: {wav_name}")
+                i = j  # skip all consumed words
+                found = True
+                break
+        if not found:
+            # Try single word
+            wav_name = words[i] + ".wav"
+            wav_path = os.path.join(extra_dir, wav_name)
+            if os.path.exists(wav_path):
+                sequence.append({"wav": wav_path})
+                if debug_log:
+                    debug_log(f"Matched single-word WAV: {wav_name}")
+            else:
+                # Fallback to TTS for this word
+                sequence.append({"synthesize": words[i]})
+                if debug_log:
+                    debug_log(f"Fallback to synthesis: {words[i]}")
+            i += 1
+    return sequence
+
 def speak_wx_alerts(*args, **kwargs):
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
+
+    def append_datetime_wavs(dt, sequence):
+        # Hour
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.hour)]
+        # Minutes and "hours"
+        if dt.minute == 0:
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+        else:
+            if dt.minute < 10:
+                sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+            sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.minute)]
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
+        # Month and Day
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.month)]
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.day)]
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
+        year_last_two = dt.year % 100
+        if year_last_two < 10:
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
+        else:
+            sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
+        return sequence
 
     try:
         debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
-        # COS debounce logic (from speak_activity_minutes_for_previous_day)
         if is_cos_active():
             status_manager.set_weather_report("Waiting for channel to clear", "")
             while True:
@@ -4159,21 +4254,21 @@ def speak_wx_alerts(*args, **kwargs):
 
         alert_blocks = re.split(r'-{10,}', alert_content)
         description = None
-        issued_time = None
+        effective_time = None
         expires_time = None
 
         for block in reversed(alert_blocks):
-            if 'EAS Code:' in block and 'Issued:' in block:
+            if 'EAS Code:' in block and 'Effective:' in block:
                 desc_match = re.search(r'Description:\s+(.+)', block)
-                issued_match = re.search(r'Issued:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+                effective_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
                 expires_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
                 if desc_match:
                     description = desc_match.group(1).strip()
-                if issued_match:
-                    issued_time = issued_match.group(1)
+                if effective_match:
+                    effective_time = effective_match.group(1)
                 if expires_match:
                     expires_time = expires_match.group(1)
-                if description and issued_time and expires_time:
+                if description and effective_time and expires_time:
                     break
 
         if not description:
@@ -4189,7 +4284,7 @@ def speak_wx_alerts(*args, **kwargs):
             status_manager.set_idle()
             return
 
-        debug_log(f"Speaking weather alert - Description: {description}, Issued: {issued_time}, Expires: {expires_time}")
+        debug_log(f"Speaking weather alert - Description: {description}, effective: {effective_time}, Expires: {expires_time}")
         log_recent(f"WX Alert: {description}")
         status_manager.set_weather_report("WX Alert Report", f"Alert: {description}")
 
@@ -4203,34 +4298,14 @@ def speak_wx_alerts(*args, **kwargs):
         else:
             sequence.append({"synthesize": "weather alert"})
 
-        # 2. Description WAVs (with fallback to synthesize)
-        for desc_part in description.split(','):
-            desc_part = desc_part.strip()
-            if not desc_part:
-                continue
-            desc_part_lower = desc_part.lower()
-            words = desc_part_lower.split()
-            # Try full phrase first
-            full_desc_wav = f"{desc_part_lower.replace(' ', '_')}.wav"
-            full_desc_path = os.path.join(EXTRA_SOUND_DIR, full_desc_wav)
-            if os.path.exists(full_desc_path):
-                sequence.append({"wav": full_desc_path})
-                debug_log(f"Found full description WAV: {full_desc_wav}")
-            else:
-                for word in words:
-                    word_wav = f"{word}.wav"
-                    word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
-                    if os.path.exists(word_path):
-                        sequence.append({"wav": word_path})
-                    else:
-                        debug_log(f"Warning: Word not found: {word_wav}")
-                        sequence.append({"synthesize": word})
-            # After each description part, say "in_effect"
-            in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
-            if os.path.exists(in_effect_wav):
-                sequence.append({"wav": in_effect_wav})
-            else:
-                sequence.append({"synthesize": "in effect"})
+        # 2. Description (greedy multi-word matching, no repeats)
+        sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+        # Add "in effect"
+        in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+        if os.path.exists(in_effect_wav):
+            sequence.append({"wav": in_effect_wav})
+        else:
+            sequence.append({"synthesize": "in effect"})
 
         # 3. repeating.wav and description again
         repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
@@ -4238,66 +4313,22 @@ def speak_wx_alerts(*args, **kwargs):
             sequence.append({"wav": repeating_wav})
         else:
             sequence.append({"synthesize": "repeating"})
-        # Repeat description again
-        for desc_part in description.split(','):
-            desc_part = desc_part.strip()
-            if not desc_part:
-                continue
-            desc_part_lower = desc_part.lower()
-            words = desc_part_lower.split()
-            full_desc_wav = f"{desc_part_lower.replace(' ', '_')}.wav"
-            full_desc_path = os.path.join(EXTRA_SOUND_DIR, full_desc_wav)
-            if os.path.exists(full_desc_path):
-                sequence.append({"wav": full_desc_path})
-            else:
-                for word in words:
-                    word_wav = f"{word}.wav"
-                    word_path = os.path.join(EXTRA_SOUND_DIR, word_wav)
-                    if os.path.exists(word_path):
-                        sequence.append({"wav": word_path})
-                    else:
-                        sequence.append({"synthesize": word})
-            in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
-            if os.path.exists(in_effect_wav):
-                sequence.append({"wav": in_effect_wav})
-            else:
-                sequence.append({"synthesize": "in effect"})
+        sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+        in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+        if os.path.exists(in_effect_wav):
+            sequence.append({"wav": in_effect_wav})
+        else:
+            sequence.append({"synthesize": "in effect"})
 
-        # 4. wx_issued.wav
-        wx_issued_wav = os.path.join(EXTRA_SOUND_DIR, "wx_issued.wav")
-        if os.path.exists(wx_issued_wav):
-            sequence.append({"wav": wx_issued_wav})
+        # 4. wx_effective.wav
+        wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
+        if os.path.exists(wx_effective_wav):
+            sequence.append({"wav": wx_effective_wav})
         else:
-            sequence.append({"synthesize": "weather alert issued"})
+            sequence.append({"synthesize": "weather alert effective"})
 
-        issued_dt = datetime.strptime(issued_time, "%Y-%m-%d %H:%M:%S")
-        # Hour
-        hour = issued_dt.hour
-        if hour == 0:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "0.wav")})
-        else:
-            sequence += build_number_sequence(hour)
-        # Minutes and "hours"
-        if issued_dt.minute == 0:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "100.wav")})
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-        else:
-            if issued_dt.minute < 10:
-                sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-                sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{issued_dt.minute}.wav")})
-            else:
-                sequence += build_number_sequence(issued_dt.minute)
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
-        sequence += build_number_sequence(issued_dt.month)
-        sequence += build_number_sequence(issued_dt.day)
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
-        year_last_two = issued_dt.year % 100
-        if year_last_two < 10:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
-        else:
-            sequence += build_number_sequence(year_last_two)
+        effective_dt = datetime.strptime(effective_time, "%Y-%m-%d %H:%M:%S")
+        sequence = append_datetime_wavs(effective_dt, sequence)
 
         # 5. wx_expired.wav
         wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
@@ -4308,32 +4339,7 @@ def speak_wx_alerts(*args, **kwargs):
 
         expires_dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
         sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
-        # Hour
-        hour = expires_dt.hour
-        if hour == 0:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "0.wav")})
-        else:
-            sequence += build_number_sequence(hour)
-        if expires_dt.minute == 0:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-        else:
-            if expires_dt.minute < 10:
-                sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-                sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{expires_dt.minute}.wav")})
-            else:
-                sequence += build_number_sequence(expires_dt.minute)
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
-        sequence += build_number_sequence(expires_dt.month)
-        sequence += build_number_sequence(expires_dt.day)
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
-        year_last_two = expires_dt.year % 100
-        if year_last_two < 10:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
-        else:
-            sequence += build_number_sequence(year_last_two)
+        sequence = append_datetime_wavs(expires_dt, sequence)
 
         play_sequence(sequence, debug_log)
         debug_log("W3 ALERTS: Alert report completed")
@@ -4355,6 +4361,37 @@ def build_number_sequence(number):
         wavs.append({"wav": wav_path})
     return wavs
 
+def find_best_wav_for_words(words, extra_dir):
+    """
+    Try to find the best-matching WAV for a sequence of words.
+    - First, try all words as one phrase (underscored, no space).
+    - Then try all files that contain all words (in order) in their name.
+    - If not found, return None.
+    """
+    import os
+    candidates = []
+    joined = "_".join(words) + ".wav"
+    joined_nospace = "".join(words) + ".wav"
+    for f in os.listdir(extra_dir):
+        base = os.path.splitext(f)[0].lower()
+        if base == "_".join(words):
+            return os.path.join(extra_dir, f)
+        if base == "".join(words):
+            return os.path.join(extra_dir, f)
+        if joined in f.lower() or joined_nospace in f.lower():
+            return os.path.join(extra_dir, f)
+        # all words as substring in order
+        idx = 0
+        for w in words:
+            idx = base.find(w, idx)
+            if idx == -1:
+                break
+        else:
+            candidates.append(os.path.join(extra_dir, f))
+    if candidates:
+        return candidates[0]
+    return None
+
 def play_sequence(sequence, debug_log=None):
     # Play each item in sequence; synthesize if WAV is missing
     for item in sequence:
@@ -4366,12 +4403,24 @@ def play_sequence(sequence, debug_log=None):
             else:
                 # Synthesize the base name if WAV missing
                 word = os.path.splitext(os.path.basename(wav_path))[0].replace('_', ' ')
-                debug_log and debug_log(f"W3 ALERTS: WAV file not found: {wav_path}, synthesizing '{word}' with piper")
-                synthesize_and_play_with_piper(word, debug_log)
+                words = word.split()
+                found_wav = find_best_wav_for_words(words, EXTRA_SOUND_DIR)
+                if found_wav and os.path.exists(found_wav):
+                    debug_log and debug_log(f"Found best WAV: {found_wav} for '{word}'")
+                    play_single_wav(found_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+                else:
+                    debug_log and debug_log(f"W3 ALERTS: WAV file not found: {wav_path}, synthesizing '{word}' with piper")
+                    synthesize_and_play_with_piper(word, debug_log)
         elif "synthesize" in item:
             word = item["synthesize"]
-            debug_log and debug_log(f"W3 ALERTS: Synthesizing '{word}' with piper")
-            synthesize_and_play_with_piper(word, debug_log)
+            words = word.split()
+            found_wav = find_best_wav_for_words(words, EXTRA_SOUND_DIR)
+            if found_wav and os.path.exists(found_wav):
+                debug_log and debug_log(f"Found best WAV: {found_wav} for '{word}'")
+                play_single_wav(found_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            else:
+                debug_log and debug_log(f"W3 ALERTS: Synthesizing '{word}' with piper")
+                synthesize_and_play_with_piper(word, debug_log)
         
 def check_wav_exists(wav_file, debug_log=None):
     """

@@ -87,3 +87,21 @@
 2025-07-17 16:42:30.917: WX Alert: Severe Weather Statement
 2025-07-17 16:59:58.064: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-17 16:59:58.064: WX Report: {'observations': 'This Afternoon', 'temperature': '88 degrees', 'humidity': '69 percent', 'winddir': 'S', 'wind_speed': '5', 'wind_gust': '11', 'pressure': '29.77', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-17 17:05:03.935: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
+2025-07-17 17:12:03.941: WX Alert: Unknown alert (SVS)
+2025-07-17 17:13:32.861: WX Alert: Unknown alert (SVS)
+2025-07-17 17:18:59.075: WX Alert: Special Weather Statement
+2025-07-17 17:19:50.323: WX Alert: Unknown alert (TSW)
+2025-07-17 17:21:01.416: WX Alert: Unknown alert (TSW)
+2025-07-17 17:23:32.607: WX Alert: Unknown alert (TSW)
+2025-07-17 17:24:56.812: WX Alert: Unknown alert (TSW)
+2025-07-17 17:28:45.207: Configuration reload requested from web
+2025-07-17 17:28:51.787: WX Alert: Unknown alert (TSW)
+2025-07-17 17:32:51.865: WX Alert: Unknown alert (TSW)
+2025-07-17 17:35:37.255: WX Alert: Tsunami Warning
+2025-07-17 17:36:57.276: WX Alert: Tsunami Warning
+2025-07-17 17:37:42.295: WX Alert: Child Abduction Emergency
+2025-07-17 17:43:16.923: WX Alert: Child Abduction Emergency
+2025-07-17 17:44:08.174: WX Alert: Tsunami Warning
+2025-07-17 17:44:54.630: WX Alert: Tsunami Warning
+2025-07-17 17:45:27.942: WX Alert: Tsunami Warning

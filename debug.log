@@ -1,0 +1,203 @@
+[2025-07-17 17:46:07] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-17 17:46:07] W3 ALERTS: Setting REMOTE_BUSY to inactive
+[2025-07-17 17:46:07] W3 ALERTS: Alert report completed
+[2025-07-17 17:46:06] play_single_wav: filename=/home/drx/DRX/sounds/extra/5.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:06] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/5.wav
+[2025-07-17 17:46:06] play_single_wav: filename=/home/drx/DRX/sounds/extra/20.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:06] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/20.wav
+[2025-07-17 17:46:05] play_single_wav: filename=/home/drx/DRX/sounds/extra/20.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:05] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/20.wav
+[2025-07-17 17:46:04] play_single_wav: filename=/home/drx/DRX/sounds/extra/17.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:04] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/17.wav
+[2025-07-17 17:46:03] play_single_wav: filename=/home/drx/DRX/sounds/extra/7.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:03] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/7.wav
+[2025-07-17 17:46:02] play_single_wav: filename=/home/drx/DRX/sounds/extra/on.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:02] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/on.wav
+[2025-07-17 17:46:02] play_single_wav: filename=/home/drx/DRX/sounds/extra/hours.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:02] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/hours.wav
+[2025-07-17 17:46:01] play_single_wav: filename=/home/drx/DRX/sounds/extra/hundred.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:01] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/hundred.wav
+[2025-07-17 17:46:00] play_single_wav: filename=/home/drx/DRX/sounds/extra/17.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:46:00] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/17.wav
+[2025-07-17 17:45:59] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:59] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-17 17:45:58] play_single_wav: filename=/home/drx/DRX/sounds/extra/wx_expired.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:58] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wx_expired.wav
+[2025-07-17 17:45:57] play_single_wav: filename=/home/drx/DRX/sounds/extra/5.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:57] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/5.wav
+[2025-07-17 17:45:56] play_single_wav: filename=/home/drx/DRX/sounds/extra/20.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:56] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/20.wav
+[2025-07-17 17:45:55] play_single_wav: filename=/home/drx/DRX/sounds/extra/20.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:55] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/20.wav
+[2025-07-17 17:45:54] play_single_wav: filename=/home/drx/DRX/sounds/extra/17.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:54] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/17.wav
+[2025-07-17 17:45:53] play_single_wav: filename=/home/drx/DRX/sounds/extra/7.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:53] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/7.wav
+[2025-07-17 17:45:53] play_single_wav: filename=/home/drx/DRX/sounds/extra/on.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:53] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/on.wav
+[2025-07-17 17:45:52] play_single_wav: filename=/home/drx/DRX/sounds/extra/hours.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:52] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/hours.wav
+[2025-07-17 17:45:51] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:51] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-17 17:45:51] play_single_wav: filename=/home/drx/DRX/sounds/extra/oh.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:51] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/oh.wav
+[2025-07-17 17:45:49] play_single_wav: filename=/home/drx/DRX/sounds/extra/14.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:49] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/14.wav
+[2025-07-17 17:45:48] play_single_wav: filename=/home/drx/DRX/sounds/extra/wx_effective.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:48] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wx_effective.wav
+[2025-07-17 17:45:47] play_single_wav: filename=/home/drx/DRX/sounds/extra/in_effect.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:47] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/in_effect.wav
+[2025-07-17 17:45:46] play_single_wav: filename=/home/drx/DRX/sounds/extra/warning.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:46] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/warning.wav
+[2025-07-17 17:45:45] play_single_wav: filename=/home/drx/DRX/sounds/extra/tsunami.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:45] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tsunami.wav
+[2025-07-17 17:45:44] play_single_wav: filename=/home/drx/DRX/sounds/extra/repeating.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:44] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/repeating.wav
+[2025-07-17 17:45:43] play_single_wav: filename=/home/drx/DRX/sounds/extra/in_effect.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:43] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/in_effect.wav
+[2025-07-17 17:45:42] play_single_wav: filename=/home/drx/DRX/sounds/extra/warning.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:42] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/warning.wav
+[2025-07-17 17:45:41] play_single_wav: filename=/home/drx/DRX/sounds/extra/tsunami.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:41] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tsunami.wav
+[2025-07-17 17:45:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/wx_alert.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:27] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wx_alert.wav
+[2025-07-17 17:45:27] Matched WAV: warning.wav
+[2025-07-17 17:45:27] Matched WAV: tsunami.wav
+[2025-07-17 17:45:27] Matched WAV: warning.wav
+[2025-07-17 17:45:27] Matched WAV: tsunami.wav
+[2025-07-17 17:45:27] Speaking weather alert - SAME code: TSW, Description: Tsunami Warning, effective: 2025-07-17 14:01:00, Expires: 2025-07-17 17:00:00
+[2025-07-17 17:45:27] W3 ALERTS: Final description for SAME code 'TSW': 'Tsunami Warning'
+[2025-07-17 17:45:27] MATCH: 'TSW' -> 'Tsunami Warning'
+[2025-07-17 17:45:27] Comparing: 'TSW' (desc: 'Tsunami Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'TSA' (desc: 'Tsunami Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'TRW' (desc: 'Tropical Storm Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'TRA' (desc: 'Tropical Storm Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'TOR' (desc: 'Tornado Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'TOA' (desc: 'Tornado Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SSW' (desc: 'Storm Surge Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SSA' (desc: 'Storm Surge Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SPS' (desc: 'Special Weather Statement') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SMW' (desc: 'Special Marine Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SQW 2' (desc: 'Snow Squall Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SVS' (desc: 'Severe Weather Statement') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SVR' (desc: 'Severe Thunderstorm Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'SVA' (desc: 'Severe Thunderstorm Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'HLS' (desc: 'Hurricane Statement') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'HUW' (desc: 'Hurricane Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'HUA' (desc: 'Hurricane Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'HWW' (desc: 'High Wind Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'HWA' (desc: 'High Wind Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'FLS' (desc: 'Flood Statement') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'FLW' (desc: 'Flood Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'FLA' (desc: 'Flood Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'FFS' (desc: 'Flash Flood Statement') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'FFW' (desc: 'Flash Flood Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'FFA' (desc: 'Flash Flood Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'EWW' (desc: 'Extreme Wind Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'DSW' (desc: 'Dust Storm Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'CFW' (desc: 'Coastal Flood Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'CFA' (desc: 'Coastal Flood Watch') <-> 'TSW'
+[2025-07-17 17:45:27] Comparing: 'BZW' (desc: 'Blizzard Warning') <-> 'TSW'
+[2025-07-17 17:45:27] Reading SAME CSV from: /home/drx/DRX/wx/same.csv
+[2025-07-17 17:45:27] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-17 17:45:27] Serial connection established successfully
+mediately
+[2025-07-17 17:45:27] [CTONE PATCH] Expires: missing or invalid, fallback to ctone_time 120 minutes
+[2025-07-17 17:45:27] Weather alert action triggered
+[2025-07-17 17:45:27] New weather alert detected: 2025-07-17 14:01:00
+[2025-07-17 17:45:27] Worker 3d5d0b2c: starting
+e: 2025-07-17 14:01:00
+[2025-07-17 17:45:27] Attempting to connect to serial port /dev/ttyUSB0...
+[2025-07-17 17:45:27] Weather alert monitoring thread started.
+[2025-07-17 17:45:27] Loaded activity state: 0 minutes for 2025-07-17
+[2025-07-17 17:45:27] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-17 17:45:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/17.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:26] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/17.wav
+[2025-07-17 17:45:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:26] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-17 17:45:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/wx_expired.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:24] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wx_expired.wav
+[2025-07-17 17:45:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/5.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/5.wav
+[2025-07-17 17:45:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/20.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/20.wav
+[2025-07-17 17:45:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/20.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:22] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/20.wav
+[2025-07-17 17:45:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/17.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:21] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/17.wav
+[2025-07-17 17:45:20] play_single_wav: filename=/home/drx/DRX/sounds/extra/7.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:20] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/7.wav
+[2025-07-17 17:45:20] play_single_wav: filename=/home/drx/DRX/sounds/extra/on.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:20] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/on.wav
+[2025-07-17 17:45:19] play_single_wav: filename=/home/drx/DRX/sounds/extra/hours.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:19] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/hours.wav
+[2025-07-17 17:45:18] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:18] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-17 17:45:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/oh.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:17] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/oh.wav
+[2025-07-17 17:45:16] play_single_wav: filename=/home/drx/DRX/sounds/extra/14.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:16] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/14.wav
+[2025-07-17 17:45:14] play_single_wav: filename=/home/drx/DRX/sounds/extra/wx_effective.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:14] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wx_effective.wav
+[2025-07-17 17:45:14] play_single_wav: filename=/home/drx/DRX/sounds/extra/in_effect.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:14] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/in_effect.wav
+[2025-07-17 17:45:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/warning.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:13] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/warning.wav
+[2025-07-17 17:45:12] play_single_wav: filename=/home/drx/DRX/sounds/extra/tsunami.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:12] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tsunami.wav
+[2025-07-17 17:45:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/repeating.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/repeating.wav
+[2025-07-17 17:45:10] play_single_wav: filename=/home/drx/DRX/sounds/extra/in_effect.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:10] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/in_effect.wav
+[2025-07-17 17:45:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/warning.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:09] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/warning.wav
+[2025-07-17 17:45:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/tsunami.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:45:08] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tsunami.wav
+[2025-07-17 17:44:54] play_single_wav: filename=/home/drx/DRX/sounds/extra/wx_alert.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-17 17:44:54] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wx_alert.wav
+[2025-07-17 17:44:54] Matched WAV: warning.wav
+[2025-07-17 17:44:54] Matched WAV: tsunami.wav
+[2025-07-17 17:44:54] Matched WAV: warning.wav
+[2025-07-17 17:44:54] Matched WAV: tsunami.wav
+[2025-07-17 17:44:54] Speaking weather alert - SAME code: TSW, Description: Tsunami Warning, effective: 2025-07-17 14:01:00, Expires: 2025-07-17 17:00:00
+[2025-07-17 17:44:54] W3 ALERTS: Final description for SAME code 'TSW': 'Tsunami Warning'
+[2025-07-17 17:44:54] MATCH: 'TSW' -> 'Tsunami Warning'
+[2025-07-17 17:44:54] Comparing: 'TSW' (desc: 'Tsunami Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'TSA' (desc: 'Tsunami Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'TRW' (desc: 'Tropical Storm Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'TRA' (desc: 'Tropical Storm Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'TOR' (desc: 'Tornado Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'TOA' (desc: 'Tornado Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SSW' (desc: 'Storm Surge Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SSA' (desc: 'Storm Surge Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SPS' (desc: 'Special Weather Statement') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SMW' (desc: 'Special Marine Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SQW 2' (desc: 'Snow Squall Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SVS' (desc: 'Severe Weather Statement') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SVR' (desc: 'Severe Thunderstorm Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'SVA' (desc: 'Severe Thunderstorm Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'HLS' (desc: 'Hurricane Statement') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'HUW' (desc: 'Hurricane Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'HUA' (desc: 'Hurricane Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'HWW' (desc: 'High Wind Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'HWA' (desc: 'High Wind Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'FLS' (desc: 'Flood Statement') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'FLW' (desc: 'Flood Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'FLA' (desc: 'Flood Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'FFS' (desc: 'Flash Flood Statement') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'FFW' (desc: 'Flash Flood Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'FFA' (desc: 'Flash Flood Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'EWW' (desc: 'Extreme Wind Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'DSW' (desc: 'Dust Storm Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'CFW' (desc: 'Coastal Flood Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'CFA' (desc: 'Coastal Flood Watch') <-> 'TSW'
+[2025-07-17 17:44:54] Comparing: 'BZW' (desc: 'Blizzard Warning') <-> 'TSW'
+[2025-07-17 17:44:54] Reading SAME CSV from: /home/drx/DRX/wx/same.csv
+[2025-07-17 17:44:54] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-17 17:44:54] W3 ALERTS: Setting REMOTE_BUSY to active immediately
+[2025-07-17 17:44:54] [CTONE PATCH] Expires: missing or invalid, fallback to ctone_time 120 minutes
+[2025-07-17 17:44:54] Weather alert action triggered
+[2025-07-17 17:44:54] New weather alert detected: 2025-07-17 14:01:00
+[2025-07-17 17:44:54] Worker 2ca5a728: starting
+e: 2025-07-17 14:01:00
+025-07-17 14:01:00

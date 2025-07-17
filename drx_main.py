@@ -4183,8 +4183,37 @@ def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
             i += 1
     return sequence
 
+def get_same_description_from_code(same_code, same_csv_path):
+    import csv
+    debug_log(f"Reading SAME CSV from: {same_csv_path}")
+    if not os.path.exists(same_csv_path):
+        debug_log(f"SAME CSV not found at {same_csv_path}")
+        return None
+    try:
+        with open(same_csv_path, "r", encoding="utf-8") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if len(row) < 2:
+                    continue
+                desc_raw, code_raw = row[0], row[1]
+                description = "".join((desc_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                code = "".join((code_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                desc_lower = description.lower()
+                code_lower = code.lower()
+                if not code or "code" in code_lower or "event" in code_lower or "status" in code_lower:
+                    continue
+                if not description or "event" in desc_lower or "code" in desc_lower or "status" in desc_lower:
+                    continue
+                debug_log(f"Comparing: '{code.upper()}' (desc: '{description}') <-> '{same_code.upper()}'")
+                if code.upper() == same_code.upper():
+                    debug_log(f"MATCH: '{code.upper()}' -> '{description}'")
+                    return description
+    except Exception as e:
+        debug_log(f"Failed to read SAME CSV: {e}")
+    debug_log(f"No match for code '{same_code}' in SAME CSV.")
+    return None
+
 def speak_wx_alerts(*args, **kwargs):
-    global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
 
     def append_datetime_wavs(dt, sequence):
         # Hour
@@ -4210,6 +4239,40 @@ def speak_wx_alerts(*args, **kwargs):
         else:
             sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
         return sequence
+
+    def get_same_description_from_code(same_code, same_csv_path):
+        import csv
+        debug_log(f"Reading SAME CSV from: {same_csv_path}")
+        if not os.path.exists(same_csv_path):
+            debug_log(f"SAME CSV not found at {same_csv_path}")
+            return None
+        try:
+            with open(same_csv_path, "r", encoding="utf-8") as csvfile:
+                reader = csv.reader(csvfile)
+                for row in reader:
+                    if len(row) < 2:
+                        continue  # skip header, empty, and partial rows
+                    desc_raw, code_raw = row[0], row[1]
+                    # Normalize ALL spaces, including non-breaking, and strip both code and desc
+                    description = "".join((desc_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                    code = "".join((code_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                    # Lowercase for header/section detection
+                    desc_lower = description.lower()
+                    code_lower = code.lower()
+                    # Skip headers, footers, sections, and lines that aren't valid codes
+                    if not code or "code" in code_lower or "event" in code_lower or "status" in code_lower:
+                        continue
+                    if not description or "event" in desc_lower or "code" in desc_lower or "status" in desc_lower:
+                        continue
+                    # Log what is being compared
+                    debug_log(f"Comparing: '{code.upper()}' (desc: '{description}') <-> '{same_code.upper()}'")
+                    if code.upper() == same_code.upper():
+                        debug_log(f"MATCH: '{code.upper()}' -> '{description}'")
+                        return description
+        except Exception as e:
+            debug_log(f"Failed to read SAME CSV: {e}")
+        debug_log(f"No match for code '{same_code}' in SAME CSV.")
+        return None
 
     try:
         debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
@@ -4253,26 +4316,38 @@ def speak_wx_alerts(*args, **kwargs):
             alert_content = f.read()
 
         alert_blocks = re.split(r'-{10,}', alert_content)
-        description = None
+        same_code = None
         effective_time = None
         expires_time = None
 
         for block in reversed(alert_blocks):
             if 'EAS Code:' in block and 'Effective:' in block:
-                desc_match = re.search(r'Description:\s+(.+)', block)
+                code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
                 effective_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
                 expires_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
-                if desc_match:
-                    description = desc_match.group(1).strip()
+                if code_match:
+                    same_code = code_match.group(1).strip()
                 if effective_match:
                     effective_time = effective_match.group(1)
                 if expires_match:
                     expires_time = expires_match.group(1)
-                if description and effective_time and expires_time:
+                if same_code and effective_time and expires_time:
                     break
 
+        # Use a robust path for the SAME CSV file (always next to drx_main.py)
+        same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+        description = None
+        if same_code:
+            description = get_same_description_from_code(same_code, same_csv_path)
         if not description:
-            debug_log("No valid alert found in wx_alerts file")
+            if same_code and same_code.upper() == "SVS":
+                description = "Special Weather Statement"
+            else:
+                description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
+        debug_log(f"W3 ALERTS: Final description for SAME code '{same_code}': '{description}'")
+
+        if not effective_time or not expires_time:
+            debug_log("No valid effective or expires time found in wx_alerts file")
             status_manager.set_weather_report("WX Alert Report", "No valid alerts")
             wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
             sequence = []
@@ -4284,30 +4359,26 @@ def speak_wx_alerts(*args, **kwargs):
             status_manager.set_idle()
             return
 
-        debug_log(f"Speaking weather alert - Description: {description}, effective: {effective_time}, Expires: {expires_time}")
+        debug_log(f"Speaking weather alert - SAME code: {same_code}, Description: {description}, effective: {effective_time}, Expires: {expires_time}")
         log_recent(f"WX Alert: {description}")
         status_manager.set_weather_report("WX Alert Report", f"Alert: {description}")
 
         # Build playback sequence
         sequence = []
 
-        # 1. wx_alert.wav
         wx_alert_wav = os.path.join(EXTRA_SOUND_DIR, "wx_alert.wav")
         if os.path.exists(wx_alert_wav):
             sequence.append({"wav": wx_alert_wav})
         else:
             sequence.append({"synthesize": "weather alert"})
 
-        # 2. Description (greedy multi-word matching, no repeats)
         sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
-        # Add "in effect"
         in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
         if os.path.exists(in_effect_wav):
             sequence.append({"wav": in_effect_wav})
         else:
             sequence.append({"synthesize": "in effect"})
 
-        # 3. repeating.wav and description again
         repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
         if os.path.exists(repeating_wav):
             sequence.append({"wav": repeating_wav})
@@ -4320,7 +4391,6 @@ def speak_wx_alerts(*args, **kwargs):
         else:
             sequence.append({"synthesize": "in effect"})
 
-        # 4. wx_effective.wav
         wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
         if os.path.exists(wx_effective_wav):
             sequence.append({"wav": wx_effective_wav})
@@ -4330,7 +4400,6 @@ def speak_wx_alerts(*args, **kwargs):
         effective_dt = datetime.strptime(effective_time, "%Y-%m-%d %H:%M:%S")
         sequence = append_datetime_wavs(effective_dt, sequence)
 
-        # 5. wx_expired.wav
         wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
         if os.path.exists(wx_expired_wav):
             sequence.append({"wav": wx_expired_wav})

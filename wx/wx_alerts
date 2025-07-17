@@ -100,17 +100,3 @@
 --- Active Alerts for ZIP 06492 at 2025-07-17 16:40:47 ---
 --------------------------------------------------
 
-  Event:          Severe Thunderstorm Warning
-  SAME:           TOE
-  EAS Code:       SVS
-  Headline:       Severe Thunderstorm Warning issued July 17 at 2:05PM EDT until July 17 at 3:00PM EDT by NWS Blacksburg VA
-  NWSheadline:    A SEVERE THUNDERSTORM WARNING REMAINS IN EFFECT UNTIL 300 PM EDT FOR SOUTHERN PITTSYLVANIA...SOUTHWESTERN HALIFAX AND SOUTHEASTERN HENRY COUNTIES AND THE CITY OF DANVILLE
-  Status:         Actual
-  Severity:       Severe
-  MessageType:    Update
-  Onset:          2025-07-17 14:05:00
-  Effective:      2025-07-17 14:03:00
-  Ends:           2025-07-17 17:00:00
-  Expires:        2025-07-17 17:00:00
-  Location:       Halifax, VA; Henry, VA; Pittsylvania, VA; City of Danville, VA
-  Description:    Severe Weather Statement

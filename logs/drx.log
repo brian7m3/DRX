@@ -1,107 +1,95 @@
-# Log rotated on Thu 17 Jul 00:00:05 EDT 2025
-2025-07-17 00:00:06.953: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 00:00:06.953: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '77 degrees', 'humidity': '96 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 00:59:57.978: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 00:59:57.978: WX Report: {'observations': 'Overcast', 'temperature': '77 degrees', 'humidity': '98 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.94', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 01:59:57.959: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 01:59:57.959: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '76 degrees', 'humidity': '99 percent', 'winddir': 'SW', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '29.93', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 02:59:57.958: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 02:59:57.959: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '76 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '29.92', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 03:59:57.979: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 03:59:57.979: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '75 degrees', 'humidity': '99 percent', 'winddir': 'WNW', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.9', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 04:59:57.981: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 04:59:57.981: WX Report: {'observations': 'A Few Clouds', 'temperature': '75 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 05:59:58.019: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 05:59:58.019: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '76 degrees', 'humidity': '99 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.89', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 06:59:57.975: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 06:59:57.975: WX Report: {'observations': 'Partly Cloudy', 'temperature': '77 degrees', 'humidity': '99 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.89', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 07:59:57.994: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 07:59:57.995: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '79 degrees', 'humidity': '93 percent', 'winddir': 'SSW', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.89', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 08:59:58.007: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 08:59:58.008: WX Report: {'observations': 'A Few Clouds', 'temperature': '78 degrees', 'humidity': '85 percent', 'winddir': 'SE', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 09:18:49.218: Play requested: W3 (web input box)
-2025-07-17 09:18:49.228: WX Alert: Heat Advisory
-2025-07-17 09:59:58.037: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 09:59:58.037: WX Report: {'observations': 'A Few Clouds', 'temperature': '79 degrees', 'humidity': '83 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '8', 'pressure': '29.88', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 10:55:55.731: WX Alert: Heat Advisory
-2025-07-17 10:59:58.005: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 10:59:58.006: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '77 degrees', 'humidity': '88 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '7', 'pressure': '29.88', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 11:06:33.672: Play requested: W3 (web input box)
-2025-07-17 11:07:58.454: WX Alert: Heat Advisory
-2025-07-17 11:17:16.971: WX Alert: Heat Advisory
-2025-07-17 11:33:23.543: WX Alert: Heat Advisory
-2025-07-17 11:37:05.289: WX Alert: Heat Advisory
-2025-07-17 11:38:30.130: WX Alert: Heat Advisory
-2025-07-17 11:39:15.212: WX Alert: Heat Advisory
-2025-07-17 11:40:10.048: WX Alert: Heat Advisory
-2025-07-17 11:40:56.973: WX Alert: Heat Advisory
-2025-07-17 11:42:01.995: WX Alert: Heat Advisory
-2025-07-17 11:42:46.668: WX Alert: Earthquake Total Destruction
-2025-07-17 11:53:02.610: WX Alert: Heat Advisory
-2025-07-17 11:53:52.426: WX Alert: Heat Advisory
-2025-07-17 11:54:37.197: WX Alert: Heat Advisory
-2025-07-17 11:59:58.043: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 11:59:58.044: WX Report: {'observations': 'Light Rain', 'temperature': '78 degrees', 'humidity': '91 percent', 'winddir': 'SSE', 'wind_speed': '5', 'wind_gust': '9', 'pressure': '29.86', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 12:15:56.455: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
-2025-07-17 12:15:56.654: CT Override 5641-CT -> 5095.
-2025-07-17 12:15:57.312: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
-2025-07-17 12:16:08.363: Play: 5171-TM PL 77.wav [interruptible] - successful
-2025-07-17 12:59:58.030: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 12:59:58.031: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '79 degrees', 'humidity': '87 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '7', 'pressure': '29.86', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 13:55:24.646: Configuration reload requested from web
-2025-07-17 13:58:43.311: Configuration reload requested from web
-2025-07-17 13:59:58.030: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 13:59:58.030: WX Report: {'observations': 'Overcast', 'temperature': '84 degrees', 'humidity': '79 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '9', 'pressure': '29.83', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 14:00:04.388: Configuration reload requested from web
-2025-07-17 14:03:18.783: Configuration reload requested from web
-2025-07-17 14:06:25.433: Configuration reload requested from web
-2025-07-17 14:06:33.094: WX Alert: Heat Advisory
-2025-07-17 14:08:38.555: Configuration reload requested from web
-2025-07-17 14:12:31.982: Play requested: 23301 (web input box)
-2025-07-17 14:12:46.246: Configuration reload requested from web
-2025-07-17 14:15:13.360: Configuration reload requested from web
-2025-07-17 14:20:47.087: WX Alert: Severe Weather Statement
-2025-07-17 14:25:04.508: Configuration reload requested from web
-2025-07-17 14:47:22.991: WX Alert: Severe Thunderstorm Warning
-2025-07-17 14:49:42.635: WX Alert: Severe Thunderstorm Warning
-2025-07-17 14:51:17.387: WX Alert: Severe Thunderstorm Warning
-2025-07-17 14:59:58.020: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 14:59:58.020: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '85 degrees', 'humidity': '78 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '29.81', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 15:03:29.333: Configuration reload requested from web
-2025-07-17 15:05:27.939: Configuration reload requested from web
-2025-07-17 15:19:40.321: WX Alert: Severe Weather Statement
-2025-07-17 15:27:49.095: Configuration reload requested from web
-2025-07-17 15:28:24.131: Configuration reload requested from web
-2025-07-17 15:28:32.670: WX Alert: Heat Advisory
-2025-07-17 15:46:32.516: WX Alert: Severe Weather Statement
-2025-07-17 15:49:25.561: WX Alert: Severe Weather Statement
-2025-07-17 15:58:00.801: WX Alert: Severe Weather Statement
-2025-07-17 15:59:58.052: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 15:59:58.052: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '89 degrees', 'humidity': '67 percent', 'winddir': 'SW', 'wind_speed': '5', 'wind_gust': '9', 'pressure': '29.8', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 16:05:35.607: WX Alert: Severe Weather Statement
-2025-07-17 16:08:47.499: Configuration reload requested from web
-2025-07-17 16:08:57.507: Configuration reload requested from web
-2025-07-17 16:12:31.632: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
-2025-07-17 16:12:32.634: Play: 5657-CT.wav [interruptible] - successful
-2025-07-17 16:12:43.532: Play: 5171-TM PL 77.wav [interruptible] - successful
-2025-07-17 16:42:30.917: WX Alert: Severe Weather Statement
-2025-07-17 16:59:58.064: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-17 16:59:58.064: WX Report: {'observations': 'This Afternoon', 'temperature': '88 degrees', 'humidity': '69 percent', 'winddir': 'S', 'wind_speed': '5', 'wind_gust': '11', 'pressure': '29.77', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
-2025-07-17 17:05:03.935: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
-2025-07-17 17:12:03.941: WX Alert: Unknown alert (SVS)
-2025-07-17 17:13:32.861: WX Alert: Unknown alert (SVS)
-2025-07-17 17:18:59.075: WX Alert: Special Weather Statement
-2025-07-17 17:19:50.323: WX Alert: Unknown alert (TSW)
-2025-07-17 17:21:01.416: WX Alert: Unknown alert (TSW)
-2025-07-17 17:23:32.607: WX Alert: Unknown alert (TSW)
-2025-07-17 17:24:56.812: WX Alert: Unknown alert (TSW)
-2025-07-17 17:28:45.207: Configuration reload requested from web
-2025-07-17 17:28:51.787: WX Alert: Unknown alert (TSW)
-2025-07-17 17:32:51.865: WX Alert: Unknown alert (TSW)
-2025-07-17 17:35:37.255: WX Alert: Tsunami Warning
-2025-07-17 17:36:57.276: WX Alert: Tsunami Warning
-2025-07-17 17:37:42.295: WX Alert: Child Abduction Emergency
-2025-07-17 17:43:16.923: WX Alert: Child Abduction Emergency
-2025-07-17 17:44:08.174: WX Alert: Tsunami Warning
-2025-07-17 17:44:54.630: WX Alert: Tsunami Warning
-2025-07-17 17:45:27.942: WX Alert: Tsunami Warning
+# Log rotated on Sun 20 Jul 00:00:26 EDT 2025
+2025-07-20 00:59:57.282: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 00:59:57.282: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '86 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.99', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 01:46:28.922: Play: 5317-IID Gigitty.wav [normal] - successful
+2025-07-20 01:46:31.023: Play: 5656-CT.wav [interruptible] - successful
+2025-07-20 01:46:40.870: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 01:59:57.274: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 01:59:57.274: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '87 percent', 'winddir': 'SE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.95', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 02:36:49.758: Play: 5318-IID Start Me Up.wav [normal] - successful
+2025-07-20 02:36:51.006: Play: 5654-CT.wav [interruptible] - successful
+2025-07-20 02:37:01.957: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-20 02:59:57.284: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 02:59:57.285: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '90 percent', 'winddir': 'S', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.94', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 03:59:57.315: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 03:59:57.315: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '94 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.92', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 04:59:57.315: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 04:59:57.315: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.91', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 05:59:57.320: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 05:59:57.320: WX Report: {'observations': 'Overcast', 'temperature': '71 degrees', 'humidity': '98 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.91', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 06:59:57.290: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 06:59:57.291: WX Report: {'observations': 'Overcast', 'temperature': '71 degrees', 'humidity': '98 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.9', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 07:59:57.298: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 07:59:57.299: WX Report: {'observations': 'Overcast', 'temperature': '72 degrees', 'humidity': '97 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 08:16:24.962: Play: 5319-IID Dave's Not Here.wav [normal] - successful
+2025-07-20 08:16:25.711: Play: 5651-CT.wav [interruptible] - successful
+2025-07-20 08:16:36.909: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 08:49:59.067: Play: 5320-IID The UnRepeater.wav [normal] - successful
+2025-07-20 08:50:01.327: Play: 5639-CT.wav [interruptible] - successful
+2025-07-20 08:50:11.026: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 08:59:57.298: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 08:59:57.298: WX Report: {'observations': 'Overcast', 'temperature': '74 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.88', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 09:11:56.459: Play: 5321-IID Expect the unexpected.wav [normal] - successful
+2025-07-20 09:11:57.515: Play: 5603-CT.wav [interruptible] - successful
+2025-07-20 09:12:08.656: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-20 09:19:52.260: Play: 5603-CT.wav [interruptible] - successful
+2025-07-20 09:21:26.210: Play: 5416-PID Andy Griffith whistle.wav [normal] - successful
+2025-07-20 09:59:32.574: Play: 5322-IID Good clean wholesome fun!.wav [normal] - successful
+2025-07-20 09:59:34.629: Play: 5637-CT.wav [interruptible] - successful
+2025-07-20 09:59:44.523: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 09:59:57.291: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 09:59:57.291: WX Report: {'observations': 'Overcast', 'temperature': '76 degrees', 'humidity': '91 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.87', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 10:11:49.783: Play: 5323-IID Rock Your Radio.wav [normal] - successful
+2025-07-20 10:11:50.788: Play: 5634-CT.wav [interruptible] - successful
+2025-07-20 10:12:01.936: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-20 10:59:57.328: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 10:59:57.328: WX Report: {'observations': 'Partly Cloudy', 'temperature': '78 degrees', 'humidity': '87 percent', 'winddir': 'SSW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.85', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 11:59:57.301: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 11:59:57.301: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '81 degrees', 'humidity': '79 percent', 'winddir': 'SSW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.83', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 12:55:34.143: Play: 5324-IID It's mine, all mine!.wav [normal] - successful
+2025-07-20 12:55:34.719: Play: 5627-CT.wav [interruptible] - successful
+2025-07-20 12:55:46.096: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 12:59:57.338: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 12:59:57.338: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '83 degrees', 'humidity': '74 percent', 'winddir': 'S', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.79', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 13:40:15.803: Play: 5380-IID ST 147 point 505 7 of 9.wav [normal] - successful
+2025-07-20 13:40:16.675: Play: 5056-CT Star Trek.wav [interruptible] - successful
+2025-07-20 13:40:27.772: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 13:49:58.326: Play: 5381-IID ST It's Star Trek Sunday - Risky Move.wav [normal] - successful
+2025-07-20 13:49:59.153: Play: 5056-CT Star Trek.wav [interruptible] - successful
+2025-07-20 13:59:57.323: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 13:59:57.323: WX Report: {'observations': 'This Afternoon', 'temperature': '85 degrees', 'humidity': '71 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.79', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 14:59:57.352: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 14:59:57.352: WX Report: {'observations': 'This Afternoon', 'temperature': '85 degrees', 'humidity': '71 percent', 'winddir': 'WSW', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.76', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 15:59:57.323: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 15:59:57.324: WX Report: {'observations': 'This Afternoon', 'temperature': '87 degrees', 'humidity': '69 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '8', 'pressure': '29.74', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 16:12:45.868: WX Alert: Severe Thunderstorm Watch
+2025-07-20 16:59:57.326: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 16:59:57.326: WX Report: {'observations': 'This Afternoon', 'temperature': '85 degrees', 'humidity': '72 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '8', 'pressure': '29.72', 'pressure_status': 'falling', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 17:45:20.248: Play: 5382-IID ST Beam Me Up.wav [normal] - successful
+2025-07-20 17:45:20.416: CT Override 5053-CT Star Trek -> 5095.
+2025-07-20 17:45:21.074: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-20 17:45:32.221: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 17:47:49.885: Play requested: W3 (web input box)
+2025-07-20 17:47:49.890: WX Alert: Severe Thunderstorm Watch
+2025-07-20 17:59:57.353: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 17:59:57.354: WX Report: {'observations': 'This Afternoon', 'temperature': '83 degrees', 'humidity': '75 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.73', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 18:59:57.365: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 18:59:57.366: WX Report: {'observations': 'Tonight', 'temperature': '82 degrees', 'humidity': '76 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '4', 'pressure': '29.72', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 19:07:54.775: Play: 5325-IID It's far out man.wav [normal] - successful
+2025-07-20 19:07:54.971: CT Override 5620-CT -> 5095.
+2025-07-20 19:07:55.678: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-20 19:08:06.731: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 19:47:39.369: Play: 5326-IID Keeps Going and Going.wav [normal] - successful
+2025-07-20 19:47:39.563: CT Override 5626-CT -> 5095.
+2025-07-20 19:47:40.220: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-20 19:47:51.520: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-20 19:52:54.146: Play requested: W1 (web input box)
+2025-07-20 19:52:54.146: WX Report: {'observations': 'Tonight', 'temperature': '75 degrees', 'humidity': '89 percent', 'winddir': 'S', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '29.75', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-20 19:57:15.125: Play requested: W1 (web input box)
+2025-07-20 19:57:15.125: WX Report: {'observations': 'Tonight', 'temperature': '74 degrees', 'humidity': '91 percent', 'winddir': 'E', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.76', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.21'}
+2025-07-20 19:59:29.660: Play: 5327-IID Look out below - Kaabooom.wav [normal] - successful
+2025-07-20 19:59:29.868: CT Override 5601-CT -> 5095.
+2025-07-20 19:59:30.525: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-20 19:59:41.629: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-20 19:59:57.357: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-20 19:59:57.358: WX Report: {'observations': 'Tonight', 'temperature': '74 degrees', 'humidity': '91 percent', 'winddir': 'E', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '29.76', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.21'}

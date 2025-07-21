@@ -4214,66 +4214,7 @@ def get_same_description_from_code(same_code, same_csv_path):
     return None
 
 def speak_wx_alerts(*args, **kwargs):
-
-    def append_datetime_wavs(dt, sequence):
-        # Hour
-        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.hour)]
-        # Minutes and "hours"
-        if dt.minute == 0:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-        else:
-            if dt.minute < 10:
-                sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-            sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.minute)]
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
-        # Month and Day
-        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.month)]
-        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.day)]
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
-        year_last_two = dt.year % 100
-        if year_last_two < 10:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
-        else:
-            sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
-        return sequence
-
-    def get_same_description_from_code(same_code, same_csv_path):
-        import csv
-        debug_log(f"Reading SAME CSV from: {same_csv_path}")
-        if not os.path.exists(same_csv_path):
-            debug_log(f"SAME CSV not found at {same_csv_path}")
-            return None
-        try:
-            with open(same_csv_path, "r", encoding="utf-8") as csvfile:
-                reader = csv.reader(csvfile)
-                for row in reader:
-                    if len(row) < 2:
-                        continue  # skip header, empty, and partial rows
-                    desc_raw, code_raw = row[0], row[1]
-                    # Normalize ALL spaces, including non-breaking, and strip both code and desc
-                    description = "".join((desc_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
-                    code = "".join((code_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
-                    # Lowercase for header/section detection
-                    desc_lower = description.lower()
-                    code_lower = code.lower()
-                    # Skip headers, footers, sections, and lines that aren't valid codes
-                    if not code or "code" in code_lower or "event" in code_lower or "status" in code_lower:
-                        continue
-                    if not description or "event" in desc_lower or "code" in desc_lower or "status" in desc_lower:
-                        continue
-                    # Log what is being compared
-                    debug_log(f"Comparing: '{code.upper()}' (desc: '{description}') <-> '{same_code.upper()}'")
-                    if code.upper() == same_code.upper():
-                        debug_log(f"MATCH: '{code.upper()}' -> '{description}'")
-                        return description
-        except Exception as e:
-            debug_log(f"Failed to read SAME CSV: {e}")
-        debug_log(f"No match for code '{same_code}' in SAME CSV.")
-        return None
-
+    # Assumes all imports and globals are already defined at top of script.
     try:
         debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
@@ -4319,6 +4260,7 @@ def speak_wx_alerts(*args, **kwargs):
         same_code = None
         effective_time = None
         expires_time = None
+        block_with_alert = None
 
         for block in reversed(alert_blocks):
             if 'EAS Code:' in block and 'Effective:' in block:
@@ -4332,13 +4274,23 @@ def speak_wx_alerts(*args, **kwargs):
                 if expires_match:
                     expires_time = expires_match.group(1)
                 if same_code and effective_time and expires_time:
+                    block_with_alert = block
                     break
 
-        # Use a robust path for the SAME CSV file (always next to drx_main.py)
         same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
         description = None
-        if same_code:
+
+        # --- NWS special handling ---
+        if same_code and same_code.upper() == "NWS":
+            # Try to extract Description: ... from the alert block
+            desc_match = re.search(r'Description:\s*(.+)', block_with_alert or "")
+            if desc_match:
+                description = desc_match.group(1).strip()
+            else:
+                description = "National Weather Service Message"
+        elif same_code:
             description = get_same_description_from_code(same_code, same_csv_path)
+
         if not description:
             if same_code and same_code.upper() == "SVS":
                 description = "Special Weather Statement"
@@ -4420,6 +4372,67 @@ def speak_wx_alerts(*args, **kwargs):
         status_manager.set_idle()
         debug_log("W3 ALERTS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
+
+
+def append_datetime_wavs(dt, sequence):
+    # Hour
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.hour)]
+    # Minutes and "hours"
+    if dt.minute == 0:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+    else:
+        if dt.minute < 10:
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.minute)]
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
+    # Month and Day
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.month)]
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.day)]
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
+    year_last_two = dt.year % 100
+    if year_last_two < 10:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
+    else:
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
+    return sequence
+
+
+def get_same_description_from_code(same_code, same_csv_path):
+    import csv
+    debug_log(f"Reading SAME CSV from: {same_csv_path}")
+    if not os.path.exists(same_csv_path):
+        debug_log(f"SAME CSV not found at {same_csv_path}")
+        return None
+    try:
+        with open(same_csv_path, "r", encoding="utf-8") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if len(row) < 2:
+                    continue  # skip header, empty, and partial rows
+                desc_raw, code_raw = row[0], row[1]
+                # Normalize ALL spaces, including non-breaking, and strip both code and desc
+                description = "".join((desc_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                code = "".join((code_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                # Lowercase for header/section detection
+                desc_lower = description.lower()
+                code_lower = code.lower()
+                # Skip headers, footers, sections, and lines that aren't valid codes
+                if not code or "code" in code_lower or "event" in code_lower or "status" in code_lower:
+                    continue
+                if not description or "event" in desc_lower or "code" in desc_lower or "status" in desc_lower:
+                    continue
+                # Log what is being compared
+                debug_log(f"Comparing: '{code.upper()}' (desc: '{description}') <-> '{same_code.upper()}'")
+                if code.upper() == same_code.upper():
+                    debug_log(f"MATCH: '{code.upper()}' -> '{description}'")
+                    return description
+    except Exception as e:
+        debug_log(f"Failed to read SAME CSV: {e}")
+    debug_log(f"No match for code '{same_code}' in SAME CSV.")
+    return None
 
 def build_number_sequence(number):
     # Returns a list of {"wav": wav_path} for the number, split into digits if needed

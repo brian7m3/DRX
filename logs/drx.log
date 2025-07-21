@@ -624,3 +624,68 @@
 2025-07-21 13:06:57.024: Play: 5171-TM PL 77.wav [interruptible] - successful
 2025-07-21 13:10:00.866: Play: 5426-PID Greedy Ham Radio Operator.wav [normal] - successful
 2025-07-21 13:11:55.797: Configuration reload requested from web
+2025-07-21 13:37:19.561: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-21 13:37:21.414: Play: 5635-CT.wav [interruptible] - successful
+2025-07-21 13:37:31.415: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 13:58:39.053: Play requested: W3 (web input box)
+2025-07-21 13:59:57.447: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 13:59:57.447: WX Report: {'observations': 'This Afternoon', 'temperature': '80 degrees', 'humidity': '53 percent', 'winddir': 'NNW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.91', 'pressure_status': 'unknown', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-21 14:10:52.747: Play requested: W3x (web input box)
+2025-07-21 14:10:54.749: Play requested: W3x (web input box)
+2025-07-21 14:10:59.754: Play requested: W3x (web input box)
+2025-07-21 14:12:12.998: Play requested: W3x (web input box)
+2025-07-21 14:12:15.000: Play requested: W3x (web input box)
+2025-07-21 14:13:45.819: Configuration reload requested from web
+2025-07-21 14:13:55.329: Play requested: W3x (web input box)
+2025-07-21 14:15:00.257: Play requested: W3x (web input box)
+2025-07-21 14:16:17.060: Play requested: W3x (web input box)
+2025-07-21 14:18:11.637: Play requested: W3X (web input box)
+2025-07-21 14:18:51.381: Play requested: W3x (web input box)
+2025-07-21 14:18:57.637: Play requested: W3X (web input box)
+2025-07-21 14:22:53.377: Play requested: W3x (web input box)
+2025-07-21 14:22:56.129: Play requested: W3x (web input box)
+2025-07-21 14:23:00.883: Play requested: W3X (web input box)
+2025-07-21 14:23:02.135: Play requested: W3X (web input box)
+2025-07-21 14:24:57.777: Play requested: W3x (web input box)
+2025-07-21 14:24:58.027: Play requested: W3x (web input box)
+2025-07-21 14:24:59.529: Play requested: W3x (web input box)
+2025-07-21 14:25:04.284: Play requested: W3X (web input box)
+2025-07-21 14:26:34.560: Play requested: W3x (web input box)
+2025-07-21 14:26:36.312: Play requested: W3x (web input box)
+2025-07-21 14:26:36.813: Play requested: W3x (web input box)
+2025-07-21 14:26:50.346: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-21 14:26:51.119: Play: 5651-CT.wav [interruptible] - successful
+2025-07-21 14:26:52.077: Play requested: W3x (web input box)
+2025-07-21 14:26:52.828: Play requested: W3x (web input box)
+2025-07-21 14:26:53.329: Play requested: W3x (web input box)
+2025-07-21 14:26:57.583: Play requested: W3X (web input box)
+2025-07-21 14:26:58.084: Play requested: W3X (web input box)
+2025-07-21 14:27:02.292: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 14:29:04.292: Play requested: W3x (web input box)
+2025-07-21 14:29:06.295: Play requested: W3x (web input box)
+2025-07-21 14:29:08.047: Play requested: W3x (web input box)
+2025-07-21 14:29:09.298: Play requested: W3x (web input box)
+2025-07-21 14:29:13.637: Play: 5668-CT.wav [interruptible] - successful
+2025-07-21 14:29:14.303: Play requested: W3x (web input box)
+2025-07-21 14:29:14.804: Play requested: W3x (web input box)
+2025-07-21 14:29:15.054: Play requested: W3x (web input box)
+2025-07-21 14:29:20.059: Play requested: W3X (web input box)
+2025-07-21 14:29:20.810: Play requested: W3X (web input box)
+2025-07-21 14:29:24.922: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 14:34:13.415: Play requested: W3x (web input box)
+2025-07-21 14:34:46.328: Play requested: W3x (web input box)
+2025-07-21 14:34:47.830: Play requested: W3x (web input box)
+2025-07-21 14:34:51.834: Play requested: W3X (web input box)
+2025-07-21 14:34:52.835: Play requested: W3X (web input box)
+2025-07-21 14:35:41.788: Play requested: W3x (web input box)
+2025-07-21 14:35:48.794: Play requested: W3X (web input box)
+2025-07-21 14:36:15.677: Play: 5401-PID Have It Your Way.wav [normal] - successful
+2025-07-21 14:39:36.831: Play: 5601-CT.wav [interruptible] - successful
+2025-07-21 14:39:47.768: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 14:40:11.732: Configuration reload requested from web
+2025-07-21 14:45:54.881: Play: 5431-PID Meyer - It Walks, It Talks.wav [normal] - successful
+2025-07-21 14:46:05.027: CT Override 5645-CT -> 5095.
+2025-07-21 14:46:05.735: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 14:46:19.982: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 14:46:21.693: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 14:55:21.996: Play: 5402-PID Press Your PTT.wav [normal] - successful

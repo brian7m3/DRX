@@ -899,7 +899,8 @@ def process_command(command, defer_message_timer_update=False):
             handle_top_command()
             return
 
-        cmd = command.strip().upper()
+        #cmd = command.strip().upper()
+        cmd = command.strip()
 
         # --- Repeater Activity A1 Command: Speak previous day's activity minutes ---
         if cmd == "A1":
@@ -936,6 +937,13 @@ def process_command(command, defer_message_timer_update=False):
             cancel_rate_limited_timer()
             debug_log("W3 command - Weather alerts")
             speak_wx_alerts()
+            return
+            
+        # --- WX Alerts W3x Command ---  
+        if cmd == "W3x":
+            cancel_rate_limited_timer()
+            debug_log("W3x command - Weather alerts brief")
+            handle_w3x()
             return
          
         # --- Repeater Activity Reset Command: ARST (example) ---
@@ -3980,7 +3988,7 @@ def speak_wx_alerts_single(alert, debug_log=None):
 def wx_alert_monitor(config, debug_log=None):
     global active_alerts, last_active_alerts, ctone_override_expire, announced_alert_ids
     normal_interval_seconds = 5
-    idle_interval_seconds = 300  # 5 minutes
+    idle_cleanup_seconds = 300  # 5 minutes
 
     use_expired_time = config.getboolean('WX', 'use_expired_time', fallback=False)
     ctone_time = config.getint('WX', 'ctone_time', fallback=0)
@@ -4018,14 +4026,12 @@ def wx_alert_monitor(config, debug_log=None):
             last_active_alerts = current_alerts
             announced_alert_ids &= current_ids
 
-        # Clean up expired WAV if needed
-        if current_alerts and ctone_override_expire and now < ctone_override_expire:
-            interval_seconds = normal_interval_seconds
-        else:
-            # No active alerts
-            interval_seconds = idle_interval_seconds
-            # Only run cleanup every 5 min when no active alerts
-            if now - last_cleanup_time >= idle_interval_seconds:
+        # Always poll for alerts every 5 seconds
+        interval_seconds = normal_interval_seconds
+
+        # When idle (no active alerts), run cleanup every 5 minutes
+        if not current_alerts:
+            if now - last_cleanup_time >= idle_cleanup_seconds:
                 cleanup_wx_alert_wav()
                 last_cleanup_time = now
 
@@ -4342,6 +4348,59 @@ def build_wx_alert_sequence_minimal(debug_log=None):
         sequence.append({"synthesize": "in effect"})
 
     return sequence
+
+def handle_w3x():
+    """
+    Handles the W3x command: plays 9995-WX Alert.wav if it exists,
+    otherwise plays no_wx_alerts.wav, otherwise synthesizes speech.
+    """
+    WX_ALERT_WAV = "/home/drx/DRX/sounds/9995-WX Alert.wav"
+    NO_WX_ALERTS_WAV = "/home/drx/DRX/sounds/extra/no_wx_alerts.wav"
+    debug_log("handle_w3x called")
+    set_remote_busy(True)
+    try:
+        # Wait for COS to clear before speaking (same as W3)
+        if is_cos_active():
+            status_manager.set_weather_report("Waiting for channel to clear", "")
+            while True:
+                if is_cos_active():
+                    debug_log("W3x: Waiting for COS to become inactive")
+                    while is_cos_active():
+                        time.sleep(0.1)
+                    debug_log("W3x: COS has become inactive, starting debounce timer")
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        debug_log("W3x: COS became active again during debounce period, restarting wait process")
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    debug_log(f"W3x: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
+                    break
+        status_manager.set_weather_report("WX Alert Brief", "Playing minimal alert")
+
+        # Try to play 9995-WX Alert.wav
+        if os.path.exists(WX_ALERT_WAV):
+            debug_log(f"W3x: Playing {WX_ALERT_WAV}")
+            play_single_wav(WX_ALERT_WAV, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            return
+
+        # Fallback: play no_wx_alerts.wav if present
+        if os.path.exists(NO_WX_ALERTS_WAV):
+            debug_log(f"W3x: Playing {NO_WX_ALERTS_WAV}")
+            play_single_wav(NO_WX_ALERTS_WAV, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            return
+
+        # Final fallback: synthesize
+        debug_log("W3x: Synthesizing 'No active weather alerts'")
+        synthesize_and_play_with_piper("No active weather alerts", debug_log)
+    except Exception as e:
+        debug_log(f"Exception in handle_w3x: {e}")
+        log_exception("handle_w3x")
+    finally:
+        status_manager.set_idle()
+        debug_log("W3x: Setting REMOTE_BUSY to inactive")
+        set_remote_busy(False)
 
 def build_multi_alert_combined_wav(alerts, debug_log=None):
     """

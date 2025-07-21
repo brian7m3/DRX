@@ -1391,19 +1391,32 @@ document.addEventListener("DOMContentLoaded", function() {
               All tracks must start with an R and end with &#92;n).
               <br>
               <br>
-                  <li><b>Re</b> Brings up an "Echo Test" to record and playback user - Re9999 (where 9999 is the track to record).  The recorded track does not get overwritten until called again, so you can have multiple commands to store different tracks.  Track recording stops automatically after 1 minute if COS doesn't become inactive prior.  If recording doesn't start within 5 seconds, Echo Test aborts (echo-to.wav). Required files are "echo-start.wav", "echo-to.wav", and optional "echo-end.wav".  Place them in the "sounds" directory.  Set COS debounce time in config for fluttering signals. *</li>
+                  <li><b>Re</b> Brings up an "Echo Test" to record and playback user - Re9999 (where 9999 is the track to record).  The recorded track does not get overwritten until called again, 
+                  so you can have multiple commands to store different tracks.  Track recording stops automatically after 1 minute if COS doesn't become inactive prior.  
+                  If recording doesn't start within 5 seconds, Echo Test aborts (echo-to.wav). Required files are "echo-start.wav", "echo-to.wav", and optional "echo-end.wav".  
+                  Place them in the "sounds" directory.  Set COS debounce time in config for fluttering signals. *</li>
               <h3>Special Functions:</h3>
                   <li><b>S:</b> Scripts - Can call a 4 digit script number in the DRX/scripts folder -> S1001 &#92;n.</li>
                   <li><b>W1:</b> Weather Conditions, if cos was active in the last 10 seconds, jumps to W2 -> W1 &#92;n. **</li>
                   <li><b>W1F:</b> Weather Conditions Forced, same as W1 but doesn't have the cos rule -> W1F &#92;n. **</li>
                   <li><b>W2:</b> Temperature -> W2 &#92;n. **</li>
-                  <li><b>W3:</b> WX Alerts -> W3 &#92;n to manually call up any active alert.. If you do not check Enable Alerts, you will not get automaticall WX Alerts and your tone will not change.  If you enter a track in the Override CTone section, your current courtesty tone will be overriden by the alert one (CW letter W or WX for example).  For this to work, your tones must be in the following format nnnn-CT desciption, 5601-CT.wav or 5601-CT doorbell.wav. If you leave this blank, your tone will not change upon receiving on automated wx alert.  Enter the amount of time your would like the alert to be valid for in the C-Tone Time section.  To cancel an alert in progress, uncheck the Enable Alert box.  You can re-enable it you want.  Setting the ctone time for less than the remaining time will set the alert timer to the new value.**</li>
+                  <li><b>W3:</b> WX Alerts -> W3 &#92;n to manually call up any active alert.. If you do not check Enable Alerts, you will not get automatic WX Alerts and your tone will not change.  
+                  If you enter a track in the Override CTone section, your current courtesy tone will be overriden by the alert one (CW letter W or WX for example).  
+                  For this to work, your tones must be in the following format nnnn-CT description, 5601-CT.wav or 5601-CT doorbell.wav. 
+                  If you leave this blank, your tone will not change upon receiving an automated wx alert.  Enter the amount of time your would like the alert to be valid for in the C-Tone Time section.  
+                  To cancel an alert in progress, uncheck save and recheck and save the Enable Alert box. Setting the ctone time for less than the remaining time will set the alert timer to the new value.  
+                  Active alerts will generate a 9995-WX Alert.wav file in your sounds directory.  This will continuously update as multiple alerts are received or expire.
+                  DRX keeps track of all active alerts.  When all alerts expire, the wav will be deleted.  The wav is meant to be used possibility in a tail message.  
+                  You could have "P9995RMJ5170IM" which would play alerts first in repeat mode, if they exist, and then your regular tail message base interruptable - 5170.  
+                  You could also allow a user to call up 9995 to check for active alerts. **</li>
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
                   <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
                   <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
-                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
+                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the 
+                  DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
               <h3>Bases:</h3> 
-                  A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  This will continue and loop back to 4201.
+                  A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  
+                  This will continue and loop back to 4201.
                   <br>
                   Enter in controller as P<base> &#92;n - P5300&#92;n
                   <br>

@@ -1,0 +1,982 @@
+[2025-07-21 10:31:02] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:31:02] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:31:02] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:31:02] aplay error: Playing WAVE '/home/drx/DRX/sounds/5172-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:31:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:31:01] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:31:01] NORMAL MODE ACTIVE
+[2025-07-21 10:31:01] play_sound: filename=/home/drx/DRX/sounds/5172-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:31:01] play_sound: exists? True
+[2025-07-21 10:31:01] play_sound: absolute filename to play: /home/drx/DRX/sounds/5172-TM PL 77.wav
+[2025-07-21 10:31:01] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5172-TM PL 77.wav, display_name=5172-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:31:01] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108261.166511
+[2025-07-21 10:31:01] RAW process_command input: 'P5170'
+[2025-07-21 10:31:01] process_command reached
+[2025-07-21 10:31:01] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:31:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:31:01] RAW process_command input: 'P9995MJ5170'
+[2025-07-21 10:31:01] process_command reached
+[2025-07-21 10:31:01] Worker ddfcdeca: Processing command: P9995MJ5170
+[2025-07-21 10:30:51] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:30:51] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:30:51] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:30:51] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:30:51] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:30:51] process_command reached
+[2025-07-21 10:30:51] Worker ddfcdeca: Processing command: P9995MJ5170M
+[2025-07-21 10:30:44] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:30:44] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:30:44] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:30:44] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:30:44] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:30:44] process_command reached
+[2025-07-21 10:30:44] Worker ddfcdeca: Processing command: P9995MJ5170M
+[2025-07-21 10:30:42] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:30:42] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:30:42] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:30:42] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:30:40] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:30:40] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:30:40] NORMAL MODE ACTIVE
+[2025-07-21 10:30:40] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:30:40] play_sound: exists? True
+[2025-07-21 10:30:40] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-21 10:30:40] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=5171-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:30:40] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108240.8016982
+[2025-07-21 10:30:40] RAW process_command input: 'P5170M'
+[2025-07-21 10:30:40] process_command reached
+[2025-07-21 10:30:40] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:30:40] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:30:40] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:30:37] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:30:37] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:30:37] NORMAL MODE ACTIVE
+[2025-07-21 10:30:37] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:30:37] play_sound: exists? True
+[2025-07-21 10:30:37] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:30:37] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:30:37] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:30:37] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108237.8901112
+[2025-07-21 10:30:37] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:30:37] RAW process_command input: 'P9995M'
+[2025-07-21 10:30:37] process_command reached
+[2025-07-21 10:30:37] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:30:37] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:30:37] process_command reached
+[2025-07-21 10:30:37] Worker ddfcdeca: Processing command: P9995MJ5170M
+[2025-07-21 10:30:22] Serial connection established successfully
+[2025-07-21 10:30:22] Worker ddfcdeca: starting
+erial port /dev/ttyUSB0...
+[2025-07-21 10:30:22] Loaded activity state: 0 minutes for 2025-07-21
+[2025-07-21 10:30:22] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:19] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:19] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:19] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:19] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:19] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:19] process_command reached
+[2025-07-21 10:29:19] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:17] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:17] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:17] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:17] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:17] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:17] process_command reached
+[2025-07-21 10:29:17] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:16] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:16] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:16] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:16] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:16] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:16] process_command reached
+[2025-07-21 10:29:16] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:12] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:12] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:12] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:12] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:12] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:12] process_command reached
+[2025-07-21 10:29:12] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:10] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:10] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:10] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:10] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:10] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:10] process_command reached
+[2025-07-21 10:29:10] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:10] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:10] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:10] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:10] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:10] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:10] process_command reached
+[2025-07-21 10:29:10] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:09] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:09] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:09] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:09] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:09] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:09] process_command reached
+[2025-07-21 10:29:09] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:08] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:08] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:08] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:08] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:08] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:08] process_command reached
+[2025-07-21 10:29:08] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:29:06] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:29:06] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:29:06] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:29:06] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:29:06] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:29:06] process_command reached
+[2025-07-21 10:29:06] Worker d775918d: Processing command: P9995MJ5170M
+[2025-07-21 10:28:49] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:28:49] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:28:49] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:28:49] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:28:49] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:28:49] process_command reached
+[2025-07-21 10:28:49] Worker d775918d: Processing command: P9995RMJ5170IM
+-21 10:28:49] DTMF match: False
+[2025-07-21 10:28:49] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:28:49] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:28:49] Raw serial bytes: b'IM\n'
+[2025-07-21 10:28:49] Line buffer: 'P9995RMJ5170'
+[2025-07-21 10:28:49] Raw serial bytes: b'70'
+[2025-07-21 10:28:49] Line buffer: 'P9995RMJ51'
+[2025-07-21 10:28:49] Raw serial bytes: b'P9995RMJ51'
+[2025-07-21 10:28:39] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:28:39] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:28:39] aplay error: Playing WAVE '/home/drx/DRX/sounds/5619-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:28:39] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:28:39] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:28:39] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:28:39] play_sound: filename=/home/drx/DRX/sounds/5619-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:28:39] play_sound: exists? True
+[2025-07-21 10:28:39] play_sound: absolute filename to play: /home/drx/DRX/sounds/5619-CT.wav
+[2025-07-21 10:28:39] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5619-CT.wav, display_name=5619-CT from SudoRandom Base 5600
+[2025-07-21 10:28:39] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108119.5467353
+[2025-07-21 10:28:39] RAW process_command input: 'P5600I'
+[2025-07-21 10:28:39] process_command reached
+[2025-07-21 10:28:39] Worker d775918d: Processing command: P5600I
+[2025-07-21 10:28:39] is_cos_active: False
+[2025-07-21 10:28:39] DTMF match: False
+[2025-07-21 10:28:39] Got serial line: 'P5600I'
+[2025-07-21 10:28:39] Line buffer: 'P5600I\n'
+[2025-07-21 10:28:39] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:28:37] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:28:37] Increment block running
+[2025-07-21 10:28:37] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:28:37] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:28:37] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:28:37] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:28:35] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:28:35] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:28:35] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:28:35] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:28:35] play_sound: exists? True
+[2025-07-21 10:28:35] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-21 10:28:35] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=5171-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:28:35] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108115.4174876
+[2025-07-21 10:28:35] RAW process_command input: 'P5170IM'
+[2025-07-21 10:28:35] process_command reached
+[2025-07-21 10:28:35] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:28:35] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:28:35] WAV played all the way through, ending repeat mode.
+[2025-07-21 10:28:35] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:28:32] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:28:32] Setting REMOTE_BUSY to True (repeat - play)
+[2025-07-21 10:28:32] REPEAT MODE ACTIVE
+[2025-07-21 10:28:32] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=True wait_for_cos=False
+[2025-07-21 10:28:32] play_sound: exists? True
+[2025-07-21 10:28:32] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:28:32] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:28:32] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:28:32] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108112.5529034
+[2025-07-21 10:28:32] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:28:32] RAW process_command input: 'P9995RM'
+[2025-07-21 10:28:32] process_command reached
+[2025-07-21 10:28:32] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:28:32] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:28:32] process_command reached
+[2025-07-21 10:28:32] Worker d775918d: Processing command: P9995RMJ5170IM
+[2025-07-21 10:28:32] is_cos_active: False
+[2025-07-21 10:28:32] DTMF match: False
+[2025-07-21 10:28:32] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:28:32] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:28:32] Raw serial bytes: b'IM\n'
+[2025-07-21 10:28:32] Line buffer: 'P9995RMJ5170'
+[2025-07-21 10:28:32] Raw serial bytes: b'P9995RMJ5170'
+[2025-07-21 10:28:22] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:28:22] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:28:22] aplay error: Playing WAVE '/home/drx/DRX/sounds/5619-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:28:22] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:28:22] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:28:22] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:28:22] play_sound: filename=/home/drx/DRX/sounds/5619-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:28:22] play_sound: exists? True
+[2025-07-21 10:28:22] play_sound: absolute filename to play: /home/drx/DRX/sounds/5619-CT.wav
+[2025-07-21 10:28:22] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5619-CT.wav, display_name=5619-CT from SudoRandom Base 5600
+[2025-07-21 10:28:22] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753108102.4988205
+[2025-07-21 10:28:22] RAW process_command input: 'P5600I'
+[2025-07-21 10:28:22] process_command reached
+[2025-07-21 10:28:22] Worker d775918d: Processing command: P5600I
+[2025-07-21 10:28:22] is_cos_active: False
+[2025-07-21 10:28:22] DTMF match: False
+[2025-07-21 10:28:22] Got serial line: 'P5600I'
+[2025-07-21 10:28:22] Line buffer: 'P5600I\n'
+[2025-07-21 10:28:22] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:28:20] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-21 10:28:20] prepend_or_replace_today_entry CALLED with 2025-07-21 and 0
+[2025-07-21 10:28:20] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-21 10:28:20] Called prepend_or_replace_today_entry(2025-07-21, 0)
+[2025-07-21 10:28:20] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-21 10:28:20] prepend_or_replace_today_entry called with 2025-07-21, 0
+[2025-07-21 10:28:20] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-21 10:28:20] minutes_rounded: 0, last_written_minutes: -1
+[2025-07-21 10:28:20] Increment block running
+[2025-07-21 10:28:19] Serial connection established successfully
+[2025-07-21 10:28:19] Attempting to connect to serial port /dev/ttyUSB0...
+[2025-07-21 10:28:19] Loaded activity state: 0 minutes for 2025-07-21
+[2025-07-21 10:28:19] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:24:54] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:24:54] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:24:54] aplay error: Playing WAVE '/home/drx/DRX/sounds/5426-PID Greedy Ham Radio Operator.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:24:44] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:24:44] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:24:44] NORMAL MODE ACTIVE
+[2025-07-21 10:24:44] play_sound: filename=/home/drx/DRX/sounds/5426-PID Greedy Ham Radio Operator.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:24:44] play_sound: exists? True
+[2025-07-21 10:24:44] play_sound: absolute filename to play: /home/drx/DRX/sounds/5426-PID Greedy Ham Radio Operator.wav
+[2025-07-21 10:24:44] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5426-PID Greedy Ham Radio Operator.wav, display_name=5426-PID Greedy Ham Radio Operator from Random Base 5400
+[2025-07-21 10:24:44] [CTONE PATCH] RANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107884.441157
+[2025-07-21 10:24:44] RAW process_command input: 'P5400'
+[2025-07-21 10:24:44] process_command reached
+[2025-07-21 10:24:44] Worker ce8a97d8: Processing command: P5400
+[2025-07-21 10:24:44] is_cos_active: False
+[2025-07-21 10:24:44] DTMF match: False
+[2025-07-21 10:24:44] Got serial line: 'P5400'
+[2025-07-21 10:24:44] Line buffer: 'P5400\n'
+[2025-07-21 10:24:44] Raw serial bytes: b'P5400\n'
+[2025-07-21 10:22:23] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:22:23] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:22:23] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:22:23] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:22:23] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:22:23] process_command reached
+[2025-07-21 10:22:23] Worker ce8a97d8: Processing command: P9995MJ5170M
+[2025-07-21 10:22:21] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:22:21] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:22:21] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:22:21] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:22:21] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:22:21] process_command reached
+[2025-07-21 10:22:21] Worker ce8a97d8: Processing command: P9995MJ5170M
+[2025-07-21 10:22:18] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:22:18] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:22:18] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:22:18] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:22:18] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:22:18] process_command reached
+[2025-07-21 10:22:18] Worker ce8a97d8: Processing command: P9995MJ5170M
+[2025-07-21 10:21:59] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:21:59] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:21:59] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:21:59] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:21:59] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:21:59] process_command reached
+[2025-07-21 10:21:59] Worker ce8a97d8: Processing command: P9995RMJ5170IM
+[2025-07-21 10:21:59] is_cos_active: False
+[2025-07-21 10:21:59] DTMF match: False
+[2025-07-21 10:21:59] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:21:59] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:21:59] Raw serial bytes: b'P9995RMJ5170IM\n'
+[2025-07-21 10:21:49] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:21:49] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:21:49] aplay error: Playing WAVE '/home/drx/DRX/sounds/5663-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:21:49] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:21:49] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:21:49] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:21:49] play_sound: filename=/home/drx/DRX/sounds/5663-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:21:49] play_sound: exists? True
+[2025-07-21 10:21:49] play_sound: absolute filename to play: /home/drx/DRX/sounds/5663-CT.wav
+[2025-07-21 10:21:49] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5663-CT.wav, display_name=5663-CT from SudoRandom Base 5600
+[2025-07-21 10:21:49] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107709.3937745
+[2025-07-21 10:21:49] RAW process_command input: 'P5600I'
+[2025-07-21 10:21:49] process_command reached
+[2025-07-21 10:21:49] Worker ce8a97d8: Processing command: P5600I
+[2025-07-21 10:21:49] is_cos_active: False
+[2025-07-21 10:21:49] DTMF match: False
+[2025-07-21 10:21:49] Got serial line: 'P5600I'
+[2025-07-21 10:21:49] Line buffer: 'P5600I\n'
+[2025-07-21 10:21:49] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:21:47] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:21:47] Increment block running
+[2025-07-21 10:21:41] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:21:41] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:21:41] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:21:41] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:21:39] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:21:39] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:21:39] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:21:39] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:21:39] play_sound: exists? True
+[2025-07-21 10:21:39] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-21 10:21:39] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=5171-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:21:39] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107699.880286
+[2025-07-21 10:21:39] RAW process_command input: 'P5170IM'
+[2025-07-21 10:21:39] process_command reached
+[2025-07-21 10:21:39] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:21:39] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:21:39] WAV played all the way through, ending repeat mode.
+[2025-07-21 10:21:39] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:21:37] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:21:37] Setting REMOTE_BUSY to True (repeat - play)
+[2025-07-21 10:21:37] REPEAT MODE ACTIVE
+[2025-07-21 10:21:37] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=True wait_for_cos=False
+[2025-07-21 10:21:37] play_sound: exists? True
+[2025-07-21 10:21:37] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:21:37] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:21:37] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:21:37] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107697.03868
+[2025-07-21 10:21:37] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:21:37] RAW process_command input: 'P9995RM'
+[2025-07-21 10:21:37] process_command reached
+[2025-07-21 10:21:37] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:21:37] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:21:37] process_command reached
+[2025-07-21 10:21:37] Worker ce8a97d8: Processing command: P9995RMJ5170IM
+[2025-07-21 10:21:37] is_cos_active: False
+[2025-07-21 10:21:37] DTMF match: False
+[2025-07-21 10:21:37] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:21:37] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:21:37] Raw serial bytes: b'P9995RMJ5170IM\n'
+[2025-07-21 10:21:27] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:21:27] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:21:27] aplay error: Playing WAVE '/home/drx/DRX/sounds/5663-CT.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:21:27] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:21:27] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:21:27] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:21:27] play_sound: filename=/home/drx/DRX/sounds/5663-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:21:27] play_sound: exists? True
+[2025-07-21 10:21:27] play_sound: absolute filename to play: /home/drx/DRX/sounds/5663-CT.wav
+[2025-07-21 10:21:27] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5663-CT.wav, display_name=5663-CT from SudoRandom Base 5600
+[2025-07-21 10:21:27] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107687.0680418
+[2025-07-21 10:21:26] RAW process_command input: 'P5600I'
+[2025-07-21 10:21:26] process_command reached
+[2025-07-21 10:21:26] Worker ce8a97d8: Processing command: P5600I
+-07-21 10:21:26] is_cos_active: False
+[2025-07-21 10:21:26] DTMF match: False
+[2025-07-21 10:21:26] Got serial line: 'P5600I'
+[2025-07-21 10:21:26] Line buffer: 'P5600I\n'
+[2025-07-21 10:21:26] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:21:25] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-21 10:21:25] prepend_or_replace_today_entry CALLED with 2025-07-21 and 0
+[2025-07-21 10:21:25] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-21 10:21:25] Called prepend_or_replace_today_entry(2025-07-21, 0)
+[2025-07-21 10:21:25] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-21 10:21:25] prepend_or_replace_today_entry called with 2025-07-21, 0
+[2025-07-21 10:21:25] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-21 10:21:25] minutes_rounded: 0, last_written_minutes: -1
+[2025-07-21 10:21:25] Increment block running
+[2025-07-21 10:21:22] Serial connection established successfully
+[2025-07-21 10:21:22] Worker ce8a97d8: starting
+erial port /dev/ttyUSB0...
+[2025-07-21 10:21:22] Loaded activity state: 0 minutes for 2025-07-21
+[2025-07-21 10:21:22] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:45] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:45] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:20:45] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:20:45] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:20:45] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:20:45] process_command reached
+[2025-07-21 10:20:45] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:20:45] is_cos_active: False
+[2025-07-21 10:20:45] DTMF match: False
+[2025-07-21 10:20:45] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:20:45] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:20:45] Raw serial bytes: b'P9995RMJ5170IM\n'
+[2025-07-21 10:20:37] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:37] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:20:37] aplay error: Playing WAVE '/home/drx/DRX/sounds/5635-CT.wav' : Signed 16 bit Little Endian, Rate 11025 Hz, Mono
+
+[2025-07-21 10:20:36] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:20:36] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:20:35] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:20:35] play_sound: filename=/home/drx/DRX/sounds/5635-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:20:35] play_sound: exists? True
+[2025-07-21 10:20:35] play_sound: absolute filename to play: /home/drx/DRX/sounds/5635-CT.wav
+[2025-07-21 10:20:35] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5635-CT.wav, display_name=5635-CT from SudoRandom Base 5600
+[2025-07-21 10:20:35] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107635.9855685
+[2025-07-21 10:20:35] RAW process_command input: 'P5600I'
+[2025-07-21 10:20:35] process_command reached
+[2025-07-21 10:20:35] Worker d7030e57: Processing command: P5600I
+[2025-07-21 10:20:35] is_cos_active: False
+[2025-07-21 10:20:35] DTMF match: False
+[2025-07-21 10:20:35] Got serial line: 'P5600I'
+[2025-07-21 10:20:35] Line buffer: 'P5600I\n'
+[2025-07-21 10:20:35] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:20:34] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:20:34] Increment block running
+[2025-07-21 10:20:33] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:33] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:33] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:20:33] aplay error: Playing WAVE '/home/drx/DRX/sounds/5172-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:20:31] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:20:31] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:20:31] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:20:31] play_sound: filename=/home/drx/DRX/sounds/5172-TM PL 77.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:20:31] play_sound: exists? True
+[2025-07-21 10:20:31] play_sound: absolute filename to play: /home/drx/DRX/sounds/5172-TM PL 77.wav
+[2025-07-21 10:20:31] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5172-TM PL 77.wav, display_name=5172-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:20:31] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107631.5878725
+[2025-07-21 10:20:31] RAW process_command input: 'P5170IM'
+[2025-07-21 10:20:31] process_command reached
+[2025-07-21 10:20:31] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:31] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:20:31] WAV played all the way through, ending repeat mode.
+[2025-07-21 10:20:31] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:20:28] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:20:28] Setting REMOTE_BUSY to True (repeat - play)
+[2025-07-21 10:20:28] REPEAT MODE ACTIVE
+[2025-07-21 10:20:28] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=True wait_for_cos=False
+[2025-07-21 10:20:28] play_sound: exists? True
+[2025-07-21 10:20:28] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:20:28] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:20:28] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:20:28] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107628.7455401
+[2025-07-21 10:20:28] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:20:28] RAW process_command input: 'P9995RM'
+[2025-07-21 10:20:28] process_command reached
+[2025-07-21 10:20:28] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:20:28] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:20:28] process_command reached
+[2025-07-21 10:20:28] Worker d7030e57: Processing command: P9995RMJ5170IM
+-07-21 10:20:28] is_cos_active: False
+[2025-07-21 10:20:28] DTMF match: False
+[2025-07-21 10:20:28] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:20:28] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:20:28] Raw serial bytes: b'IM\n'
+[2025-07-21 10:20:28] Line buffer: 'P9995RMJ5170'
+[2025-07-21 10:20:28] Raw serial bytes: b'P9995RMJ5170'
+[2025-07-21 10:20:20] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:20:20] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:20:20] aplay error: Playing WAVE '/home/drx/DRX/sounds/5635-CT.wav' : Signed 16 bit Little Endian, Rate 11025 Hz, Mono
+
+[2025-07-21 10:20:18] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:20:18] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:20:18] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:20:18] play_sound: filename=/home/drx/DRX/sounds/5635-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:20:18] play_sound: exists? True
+[2025-07-21 10:20:18] play_sound: absolute filename to play: /home/drx/DRX/sounds/5635-CT.wav
+[2025-07-21 10:20:18] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5635-CT.wav, display_name=5635-CT from SudoRandom Base 5600
+[2025-07-21 10:20:18] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107618.782445
+[2025-07-21 10:20:18] RAW process_command input: 'P5600I'
+[2025-07-21 10:20:18] process_command reached
+[2025-07-21 10:20:18] Worker d7030e57: Processing command: P5600I
+[2025-07-21 10:20:18] is_cos_active: False
+[2025-07-21 10:20:18] DTMF match: False
+[2025-07-21 10:20:18] Got serial line: 'P5600I'
+[2025-07-21 10:20:18] Line buffer: 'P5600I\n'
+[2025-07-21 10:20:18] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:20:16] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:20:16] Increment block running
+[2025-07-21 10:15:27] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:15:27] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:15:27] aplay error: Playing WAVE '/home/drx/DRX/sounds/5417-PID It's always good - Stick with it.wav' : Signed 16 bit Little Endian, Rate 11025 Hz, Mono
+
+[2025-07-21 10:15:14] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:15:14] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:15:14] NORMAL MODE ACTIVE
+[2025-07-21 10:15:14] play_sound: filename=/home/drx/DRX/sounds/5417-PID It's always good - Stick with it.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:15:14] play_sound: exists? True
+[2025-07-21 10:15:14] play_sound: absolute filename to play: /home/drx/DRX/sounds/5417-PID It's always good - Stick with it.wav
+[2025-07-21 10:15:14] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5417-PID It's always good - Stick with it.wav, display_name=5417-PID It's always good - Stick with it from Random Base 5400
+[2025-07-21 10:15:14] [CTONE PATCH] RANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107314.4323156
+[2025-07-21 10:15:14] RAW process_command input: 'P5400'
+[2025-07-21 10:15:14] process_command reached
+[2025-07-21 10:15:14] Worker d7030e57: Processing command: P5400
+[2025-07-21 10:15:14] is_cos_active: False
+[2025-07-21 10:15:14] DTMF match: False
+[2025-07-21 10:15:14] Got serial line: 'P5400'
+[2025-07-21 10:15:14] Line buffer: 'P5400\n'
+[2025-07-21 10:15:14] Raw serial bytes: b'P5400\n'
+[2025-07-21 10:14:11] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:14:11] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:14:11] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:14:11] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:14:11] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:14:11] process_command reached
+[2025-07-21 10:14:11] Worker d7030e57: Processing command: P9995MJ5170M
+[2025-07-21 10:14:05] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:14:05] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:14:05] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:14:05] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:14:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:14:04] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:14:04] NORMAL MODE ACTIVE
+[2025-07-21 10:14:04] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:14:04] play_sound: exists? True
+[2025-07-21 10:14:04] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-21 10:14:04] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=5171-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:14:04] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107244.2020707
+[2025-07-21 10:14:04] RAW process_command input: 'P5170'
+[2025-07-21 10:14:04] process_command reached
+[2025-07-21 10:14:04] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:14:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:14:04] RAW process_command input: 'P9995MJ5170'
+[2025-07-21 10:14:04] process_command reached
+[2025-07-21 10:14:04] Worker d7030e57: Processing command: P9995MJ5170
+[2025-07-21 10:14:00] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:14:00] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:14:00] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:14:00] aplay error: Playing WAVE '/home/drx/DRX/sounds/5174-TM sparc.us.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:13:58] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:58] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:13:58] NORMAL MODE ACTIVE
+[2025-07-21 10:13:58] play_sound: filename=/home/drx/DRX/sounds/5174-TM sparc.us.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:13:58] play_sound: exists? True
+[2025-07-21 10:13:58] play_sound: absolute filename to play: /home/drx/DRX/sounds/5174-TM sparc.us.wav
+[2025-07-21 10:13:58] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5174-TM sparc.us.wav, display_name=5174-TM sparc.us from Rotating Base 5170
+[2025-07-21 10:13:58] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107238.9470975
+[2025-07-21 10:13:58] RAW process_command input: 'P5170'
+[2025-07-21 10:13:58] process_command reached
+[2025-07-21 10:13:58] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:13:58] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:58] RAW process_command input: 'P9995MJ5170'
+[2025-07-21 10:13:58] process_command reached
+[2025-07-21 10:13:58] Worker d7030e57: Processing command: P9995MJ5170
+[2025-07-21 10:13:51] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:13:51] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:13:51] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:13:51] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:13:51] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:13:48] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:48] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:13:48] NORMAL MODE ACTIVE
+[2025-07-21 10:13:48] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:13:48] play_sound: exists? True
+[2025-07-21 10:13:48] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:13:48] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:13:48] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:13:48] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107228.679219
+[2025-07-21 10:13:48] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:13:48] RAW process_command input: 'P9995'
+[2025-07-21 10:13:48] process_command reached
+[2025-07-21 10:13:48] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:48] RAW process_command input: 'P9995J5170M'
+[2025-07-21 10:13:48] process_command reached
+[2025-07-21 10:13:48] Worker d7030e57: Processing command: P9995J5170M
+[2025-07-21 10:13:47] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:13:47] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:13:47] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:13:47] aplay error: Playing WAVE '/home/drx/DRX/sounds/5173-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:13:45] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:45] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:13:45] NORMAL MODE ACTIVE
+[2025-07-21 10:13:45] play_sound: filename=/home/drx/DRX/sounds/5173-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:13:45] play_sound: exists? True
+[2025-07-21 10:13:45] play_sound: absolute filename to play: /home/drx/DRX/sounds/5173-TM PL 77.wav
+[2025-07-21 10:13:45] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5173-TM PL 77.wav, display_name=5173-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:13:45] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107225.5152879
+[2025-07-21 10:13:45] RAW process_command input: 'P5170M'
+[2025-07-21 10:13:45] process_command reached
+[2025-07-21 10:13:45] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:13:45] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:13:45] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:13:42] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:42] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:13:42] NORMAL MODE ACTIVE
+[2025-07-21 10:13:42] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:13:42] play_sound: exists? True
+[2025-07-21 10:13:42] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:13:42] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:13:42] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:13:42] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107222.674947
+[2025-07-21 10:13:42] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:13:42] RAW process_command input: 'P9995'
+[2025-07-21 10:13:42] process_command reached
+[2025-07-21 10:13:42] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:13:42] RAW process_command input: 'P9995J5170M'
+[2025-07-21 10:13:42] process_command reached
+[2025-07-21 10:13:42] Worker d7030e57: Processing command: P9995J5170M
+[2025-07-21 10:11:03] RAW process_command input: 'P5170M'
+[2025-07-21 10:11:03] process_command reached
+[2025-07-21 10:11:03] Worker d7030e57: Processing command: P5170M
+[2025-07-21 10:10:38] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:38] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:10:38] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:10:38] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:38] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:38] process_command reached
+[2025-07-21 10:10:38] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:10:25] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:25] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:10:25] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:10:25] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:25] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:25] process_command reached
+[2025-07-21 10:10:25] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:10:21] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:21] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:10:21] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:10:21] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:21] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:21] process_command reached
+[2025-07-21 10:10:21] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:10:21] is_cos_active: False
+[2025-07-21 10:10:21] DTMF match: False
+[2025-07-21 10:10:21] Got serial line: 'P9995RMJ5170IM'
+[2025-07-21 10:10:21] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-21 10:10:21] Raw serial bytes: b'P9995RMJ5170IM\n'
+[2025-07-21 10:10:19] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:19] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:10:19] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:10:19] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:19] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:19] process_command reached
+[2025-07-21 10:10:19] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:10:16] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:16] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:10:16] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:10:16] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:16] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:16] process_command reached
+[2025-07-21 10:10:16] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:10:13] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:13] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-21 10:10:13] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-21 10:10:13] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:13] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:13] process_command reached
+[2025-07-21 10:10:13] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:10:12] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:12] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:10:12] aplay error: Playing WAVE '/home/drx/DRX/sounds/5615-CT.wav' : Signed 16 bit Little Endian, Rate 11025 Hz, Mono
+
+[2025-07-21 10:10:11] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:11] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:10:11] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:10:11] play_sound: filename=/home/drx/DRX/sounds/5615-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:10:11] play_sound: exists? True
+[2025-07-21 10:10:11] play_sound: absolute filename to play: /home/drx/DRX/sounds/5615-CT.wav
+[2025-07-21 10:10:11] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5615-CT.wav, display_name=5615-CT from SudoRandom Base 5600
+[2025-07-21 10:10:11] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107011.0286047
+[2025-07-21 10:10:10] RAW process_command input: 'P5600I'
+[2025-07-21 10:10:10] process_command reached
+[2025-07-21 10:10:10] Worker d7030e57: Processing command: P5600I
+-07-21 10:10:10] is_cos_active: False
+[2025-07-21 10:10:10] DTMF match: False
+[2025-07-21 10:10:10] Got serial line: 'P5600I'
+[2025-07-21 10:10:10] Line buffer: 'P5600I\n'
+[2025-07-21 10:10:10] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:10:09] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:10:09] Increment block running
+[2025-07-21 10:10:09] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:09] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:10:09] aplay error: Playing WAVE '/home/drx/DRX/sounds/5615-CT.wav' : Signed 16 bit Little Endian, Rate 11025 Hz, Mono
+Aborted by signal Terminated...
+
+[2025-07-21 10:10:09] INTERRUPTIBLE MODE: COS became ACTIVE, interrupting playback
+[2025-07-21 10:10:09] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:09] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:10:09] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:10:09] play_sound: filename=/home/drx/DRX/sounds/5615-CT.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:10:09] play_sound: exists? True
+[2025-07-21 10:10:09] play_sound: absolute filename to play: /home/drx/DRX/sounds/5615-CT.wav
+[2025-07-21 10:10:09] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5615-CT.wav, display_name=5615-CT from SudoRandom Base 5600
+[2025-07-21 10:10:09] [CTONE PATCH] SUDORANDOM WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107009.1547077
+[2025-07-21 10:10:09] RAW process_command input: 'P5600I'
+[2025-07-21 10:10:09] process_command reached
+[2025-07-21 10:10:09] Worker d7030e57: Processing command: P5600I
+[2025-07-21 10:10:09] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:09] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:09] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:10:09] aplay error: Playing WAVE '/home/drx/DRX/sounds/5172-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+Aborted by signal Terminated...
+aplay: pcm_write:2127: write error: Interrupted system call
+
+[2025-07-21 10:10:08] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:10:08] Increment block running
+[2025-07-21 10:10:08] INTERRUPTIBLE MODE: COS became ACTIVE, interrupting playback
+[2025-07-21 10:10:08] [SERIAL LOOP] Queued command: 'P5600I'
+[2025-07-21 10:10:08] is_cos_active: False
+[2025-07-21 10:10:08] DTMF match: False
+[2025-07-21 10:10:08] Got serial line: 'P5600I'
+[2025-07-21 10:10:08] Line buffer: 'P5600I\n'
+[2025-07-21 10:10:08] Raw serial bytes: b'P5600I\n'
+[2025-07-21 10:10:08] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:08] Setting REMOTE_BUSY to True (interruptible - play)
+[2025-07-21 10:10:08] INTERRUPTIBLE MODE ACTIVE
+[2025-07-21 10:10:08] play_sound: filename=/home/drx/DRX/sounds/5172-TM PL 77.wav interruptible=True pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:10:08] play_sound: exists? True
+[2025-07-21 10:10:08] play_sound: absolute filename to play: /home/drx/DRX/sounds/5172-TM PL 77.wav
+[2025-07-21 10:10:08] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5172-TM PL 77.wav, display_name=5172-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:10:08] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107008.1642544
+[2025-07-21 10:10:08] RAW process_command input: 'P5170IM'
+[2025-07-21 10:10:08] process_command reached
+[2025-07-21 10:10:08] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:10:08] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:10:08] WAV played all the way through, ending repeat mode.
+[2025-07-21 10:10:08] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - play)
+[2025-07-21 10:10:05] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:10:05] Increment block running
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:05] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:04] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:04] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+Aborted by signal Terminated...
+aplay: pcm_write:2127: write error: Interrupted system call
+
+[2025-07-21 10:10:04] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:10:04] Increment block running
+[2025-07-21 10:10:04] COS active: stopping and will repeat
+[2025-07-21 10:10:04] Repeat mode: COS interruptions so far: 2
+[2025-07-21 10:10:03] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:03] Setting REMOTE_BUSY to True (repeat - play)
+[2025-07-21 10:10:03] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:03] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:03] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:03] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:03] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:03] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:03] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:03] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:03] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:03] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:10:02] Increment block running
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:02] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:02] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] minutes_rounded: 0, last_written_minutes: 0
+[2025-07-21 10:10:01] Increment block running
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:01] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:00] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:00] Setting REMOTE_BUSY to True (repeat - pending)
+[2025-07-21 10:10:00] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+Aborted by signal Terminated...
+aplay: pcm_write:2127: write error: Interrupted system call
+
+[2025-07-21 10:10:00] COS active: stopping and will repeat
+[2025-07-21 10:10:00] Repeat mode: COS interruptions so far: 1
+[2025-07-21 10:10:00] ACTIVITY_FILE is /home/drx/DRX/logs/activity.log
+[2025-07-21 10:10:00] prepend_or_replace_today_entry CALLED with 2025-07-21 and 0
+[2025-07-21 10:10:00] ACTIVITY_FILE=/home/drx/DRX/logs/activity.log
+[2025-07-21 10:10:00] Called prepend_or_replace_today_entry(2025-07-21, 0)
+[2025-07-21 10:10:00] Writing activity to: /home/drx/DRX/logs/activity.log
+[2025-07-21 10:10:00] prepend_or_replace_today_entry called with 2025-07-21, 0
+[2025-07-21 10:10:00] Minutes changed, will call prepend_or_replace_today_entry
+[2025-07-21 10:10:00] minutes_rounded: 0, last_written_minutes: -1
+[2025-07-21 10:10:00] Increment block running
+[2025-07-21 10:10:00] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:00] Setting REMOTE_BUSY to True (repeat - play)
+[2025-07-21 10:10:00] REPEAT MODE ACTIVE
+[2025-07-21 10:10:00] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=True wait_for_cos=False
+[2025-07-21 10:10:00] play_sound: exists? True
+[2025-07-21 10:10:00] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:10:00] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:10:00] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:10:00] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753107000.7430627
+[2025-07-21 10:10:00] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=True, wait_for_cos=False
+[2025-07-21 10:10:00] RAW process_command input: 'P9995RM'
+[2025-07-21 10:10:00] process_command reached
+[2025-07-21 10:10:00] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:10:00] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-21 10:10:00] process_command reached
+[2025-07-21 10:10:00] Worker d7030e57: Processing command: P9995RMJ5170IM
+[2025-07-21 10:09:13] [CTONE PATCH] WX override deactivated due to new config (alerts off, ctone blank, or ctone_time zero)
+[2025-07-21 10:09:13] REMOTE_BUSY_ACTIVE_LEVEL (from config): True
+[2025-07-21 10:08:59] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:08:59] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:08:59] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:08:59] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:08:59] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:08:59] process_command reached
+[2025-07-21 10:08:59] Worker d7030e57: Processing command: P9995MJ5170M
+[2025-07-21 10:08:57] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:08:57] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:08:57] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:08:57] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:08:57] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:08:57] process_command reached
+[2025-07-21 10:08:57] Worker d7030e57: Processing command: P9995MJ5170M
+[2025-07-21 10:08:54] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:08:54] handle_join_series: Skipping P5170M due to message timer running
+[2025-07-21 10:08:54] handle_join_series: Skipping P9995M due to message timer running
+[2025-07-21 10:08:54] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:08:54] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:08:54] process_command reached
+[2025-07-21 10:08:54] Worker d7030e57: Processing command: P9995MJ5170M
+[2025-07-21 10:08:52] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:08:52] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:08:52] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:08:52] aplay error: Playing WAVE '/home/drx/DRX/sounds/5171-TM PL 77.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-21 10:08:50] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:08:50] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:08:50] NORMAL MODE ACTIVE
+[2025-07-21 10:08:50] play_sound: filename=/home/drx/DRX/sounds/5171-TM PL 77.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:08:50] play_sound: exists? True
+[2025-07-21 10:08:50] play_sound: absolute filename to play: /home/drx/DRX/sounds/5171-TM PL 77.wav
+[2025-07-21 10:08:50] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/5171-TM PL 77.wav, display_name=5171-TM PL 77 from Rotating Base 5170
+[2025-07-21 10:08:50] [CTONE PATCH] ROTATING WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753106930.5002894
+[2025-07-21 10:08:50] RAW process_command input: 'P5170M'
+[2025-07-21 10:08:50] process_command reached
+[2025-07-21 10:08:50] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:08:50] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-21 10:08:50] aplay error: Playing WAVE '/home/drx/DRX/sounds/9995-WX Alert.wav' : Signed 16 bit Little Endian, Rate 22000 Hz, Mono
+
+[2025-07-21 10:08:47] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:08:47] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-21 10:08:47] NORMAL MODE ACTIVE
+[2025-07-21 10:08:47] play_sound: filename=/home/drx/DRX/sounds/9995-WX Alert.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-21 10:08:47] play_sound: exists? True
+[2025-07-21 10:08:47] play_sound: absolute filename to play: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-21 10:08:47] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9995-WX Alert.wav, display_name=9995-WX Alert
+[2025-07-21 10:08:47] play_direct_track: resolved filename=/home/drx/DRX/sounds/9995-WX Alert.wav, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:08:47] [CTONE PATCH] DIRECT WX_ALERTS: False, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753106927.6687398
+[2025-07-21 10:08:47] play_direct_track: code_str=9995, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-21 10:08:47] RAW process_command input: 'P9995M'
+[2025-07-21 10:08:47] process_command reached
+[2025-07-21 10:08:47] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-21 10:08:47] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:08:47] process_command reached
+[2025-07-21 10:08:47] Worker d7030e57: Processing command: P9995MJ5170M
+[2025-07-21 10:08:26] Serial connection established successfully
+[2025-07-21 10:08:26] Worker d7030e57: starting
+[2025-07-21 10:08:26] Attempting to connect to serial port /dev/ttyUSB0...
+[2025-07-21 10:08:26] Loaded activity state: 0 minutes for 2025-07-21
+[2025-07-21 10:08:26] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-21 10:06:43] RAW process_command input: 'P9995MJ5170M'
+[2025-07-21 10:06:43] process_command reached
+[2025-07-21 10:06:43] Worker 7257f1ea: Processing command: P9995MJ5170M

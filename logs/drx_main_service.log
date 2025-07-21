@@ -1,1 +1,203 @@
-# Log rotated on Sun 20 Jul 00:00:26 EDT 2025
+# Log rotated on Mon 21 Jul 00:00:22 EDT 2025
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+  File "/home/drx/DRX/drx_main.py", line 978
+    if cmd_stripped.lower() == "w3t":
+IndentationError: expected an indented block after 'else' statement on line 973
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+Exception in thread Thread-6 (command_processor_loop):
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.11/threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/drx/DRX/drx_main.py", line 666, in command_processor_loop
+    process_command(cmd)
+  File "/home/drx/DRX/drx_main.py", line 927, in process_command
+    played = play_track_by_number(digits, suffixes)
+             ^^^^^^^^^^^^^^^^^^^^
+NameError: name 'play_track_by_number' is not defined
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  File "/home/drx/DRX/drx_main.py", line 976
+    max_repeats =   # or get from config
+                    ^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+sox WARN rate: rate clipped 15 samples; decrease volume?
+sox WARN dither: dither clipped 13 samples; decrease volume?
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+sox WARN rate: rate clipped 2 samples; decrease volume?
+sox WARN dither: dither clipped 2 samples; decrease volume?
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+sox WARN rate: rate clipped 2 samples; decrease volume?
+sox WARN dither: dither clipped 2 samples; decrease volume?
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+sox WARN rate: rate clipped 2 samples; decrease volume?
+sox WARN dither: dither clipped 1 samples; decrease volume?
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+sox WARN rate: rate clipped 2 samples; decrease volume?
+sox WARN dither: dither clipped 2 samples; decrease volume?
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.

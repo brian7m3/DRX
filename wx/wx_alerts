@@ -10043,3 +10043,3305 @@ southern Connecticut.
   web:       http://www.weather.gov
   eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
 --------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:04:12 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:05:12 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:06:13 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:07:13 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:08:14 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:09:14 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:10:14 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:11:15 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:12:15 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:13:15 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:14:16 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:15:16 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:16:16 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:17:17 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:18:17 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:19:17 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:20:18 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:21:18 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:22:18 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:23:19 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:24:19 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:25:19 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:26:20 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:27:20 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:28:20 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:29:20 ---
+
+  Event:          Special Weather Statement
+  SAME:           SPS
+  EAS Code:       SPS
+  Headline:       Special Weather Statement issued July 20 at 7:38PM EDT by NWS Upton NY
+  NWSheadline:    A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT
+  Status:         Actual
+  Severity:       Moderate
+  MessageType:    Alert
+  Onset:          2025-07-20 19:38:00
+  Effective:      2025-07-20 19:38:00
+  Ends:           N/A
+  Expires:        2025-07-20 20:30:00
+  Location:       Northern Middlesex; Southern New Haven; Southern Middlesex
+  Description:    Special Weather Statement
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.bc025aa6280dc4b78146ba1c7818120c9bb7529d.001.1
+  geocode:       {'SAME': ['009007', '009009'], 'UGC': ['CTZ007', 'CTZ010', 'CTZ011']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011
+  references:       
+  sent:       2025-07-20T19:38:00-04:00
+  category:       Met
+  certainty:       Observed
+  urgency:       Expected
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       If outdoors, consider seeking shelter inside a building.
+
+This storm may intensify, so be certain to monitor local radio
+stations and available television stations for additional information
+and possible warnings from the National Weather Service.
+
+A Severe Thunderstorm Watch remains in effect until 900 PM EDT for
+southern Connecticut.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['SPSOKX'], 'WMOidentifier': ['WWUS81 KOKX 202338'], 'NWSheadline': ['A STRONG THUNDERSTORM WILL IMPACT SOUTHERN MIDDLESEX AND EAST CENTRAL NEW HAVEN COUNTIES THROUGH 830 PM EDT'], 'eventMotionDescription': ['2025-07-20T23:37:00-00:00...storm...309DEG...20KT...41.43,-72.69'], 'maxWindGust': ['30 MPH'], 'maxHailSize': ['0.50'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SPS'], 'NationalWeatherService': ['SPS']}
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:30:21 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:31:21 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:32:22 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:33:22 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:34:22 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:35:23 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:36:23 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:37:23 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:38:24 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:39:24 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:40:25 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:41:25 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:42:25 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 4:11PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Alert
+  Onset:          2025-07-20 16:11:00
+  Effective:      2025-07-20 16:11:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:00:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       
+  sent:       2025-07-20T16:11:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 202011'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.NEW.KOKX.SV.A.0530.250720T2011Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:43:26 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:44:26 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:45:27 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:46:27 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:47:27 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:48:28 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:49:28 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:50:28 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:51:29 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:52:29 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:53:29 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:54:30 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:55:30 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:56:31 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:57:31 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:58:31 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:59:32 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           SVA
+  EAS Code:       SVA
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-20 20:42:00
+  Effective:      2025-07-20 20:42:00
+  Ends:           2025-07-20 21:00:00
+  Expires:        2025-07-20 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+  eventCode:       {'SAME': ['SVA'], 'NationalWeatherService': ['SVA']}
+--------------------------------------------------

@@ -25,6 +25,9 @@ from datetime import datetime, timedelta
 from flask import Flask, jsonify
 from typing import Optional, Callable, Dict, Any
 import pytz
+import tempfile
+import shutil
+import getpass
 
 
 class PlaybackStatusManager:
@@ -785,86 +788,79 @@ def handle_alternate_series_new(command):
 
 def parse_join_series(cmd):
     """
-    Parse a Join-series command, e.g. P1001JR2002IM or P1001J2002J3003M
+    Parse a Join-series command, e.g. P1001JR2002IM or P1001J2002J3003M or P1001JM2002
     Returns:
         bases:     list of int base codes (e.g., [1001, 2002])
         suffixes:  list of str suffixes per base (e.g., ['R', 'IM'])
-        overall_m: bool, True if trailing M after last code (removed from suffix)
+        overall_m: bool, True if trailing M after last code (not attached to a code)
         is_join:   True if detected
-    Rules:
-        - J (uppercase) is the separator
-        - Only M can be an overall suffix (after the last code/suffix)
-        - All other suffixes (R, I, P, W, etc) after a code apply only to that code
     """
     cmd = cmd.strip()
-    # Only process Join if uppercase J present
     if not re.search(r'J', cmd):
         return [], [], False, False
 
-    # Remove leading P if present
     if cmd.startswith('P'):
         cmd = cmd[1:]
 
-    # Split by uppercase J
+    # Check for overall trailing M (not attached to a code)
+    overall_m = False
+    if cmd.endswith('M'):
+        # If there is only one trailing M not attached to code
+        parts = re.split(r'J', cmd)
+        last_part = parts[-1]
+        m = re.match(r'^(\d{4})([A-Z]*)$', last_part, re.IGNORECASE)
+        if m and m.group(2) == '':
+            # Last code had no suffix, so the M is overall
+            overall_m = True
+            cmd = cmd[:-1]  # Remove trailing M
+
+    # Split again after removing possible overall M
     parts = re.split(r'J', cmd)
     bases = []
     suffixes = []
 
-    # For each part: digits then suffixes
     for part in parts:
         m = re.match(r'^(\d{4})([A-Z]*)$', part, re.IGNORECASE)
         if m:
             bases.append(int(m.group(1)))
             suffixes.append(m.group(2) or "")
         else:
-            # malformed, not a J series
             return [], [], False, False
-
-    # Check for trailing M after the last suffix
-    last_suffix = suffixes[-1]
-    overall_m = False
-    if last_suffix.upper().endswith('M'):
-        overall_m = True
-        suffixes[-1] = last_suffix[:-1]  # Remove the M from last code's suffix
 
     return bases, suffixes, overall_m, True
 
 def handle_join_series(bases, suffixes, overall_m):
-    """
-    Sequentially play a list of wavs/sections with per-base suffixes, holding REMOTE_BUSY active.
-    If overall_m is True, treat as one message for timer logic.
-    Section bases (Random, Rotation, SudoRandom) are played using play_any_section_by_type.
-    Direct base codes use play_direct_track.
-
-    This version processes each base+suffix as an individual DRX command, ensuring
-    suffixes (R, P, I, M, etc.) are respected per segment, and message timer logic applies per-segment.
-    """
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
     global message_timer_last_played, message_timer_value
 
-    # If overall_m is set (M at the end of the join), enforce message timer for the whole series
-    if overall_m:
-        should_play = should_allow_message_timer_play(True, message_timer_value, message_timer_last_played)
-        if not should_play:
-            set_message_rate_limited()
-            return
-        else:
-            # Set timer as used
-            message_timer_last_played = time.time()
+    played_any_m = False
 
     try:
         cancel_rate_limited_timer()
         set_remote_busy(True)
         status_manager.set_join_series(bases)
 
-        # For each base+suffix, build the DRX command and process individually
+        # <-- Your main segment loop goes here!
         for i, base in enumerate(bases):
             suf = suffixes[i].upper() if i < len(suffixes) and suffixes[i] else ""
             cmd = f"P{base:04d}{suf}"
-            process_command(cmd)
-            # Do not clear REMOTE_BUSY here; keep it active for the entire series
+            message_mode = "M" in suf
 
-        status_manager.set_idle()
+            if message_mode:
+                should_play_message = should_allow_message_timer_play(
+                    True, message_timer_value, message_timer_last_played
+                )
+                if not should_play_message:
+                    debug_log(f"handle_join_series: Skipping {cmd} due to message timer running")
+                    set_message_rate_limited()
+                    continue  # Skip this segment
+                played_any_m = True
+            process_command(cmd, defer_message_timer_update=True)
+
+        # Handle message timer update only if a segment with M played, or overall_m is set
+        if played_any_m or overall_m:
+            message_timer_last_played = time.time()
+
     finally:
         set_remote_busy(False)
 
@@ -878,7 +874,7 @@ def get_duration_wav(filename):
     except Exception:
         return 0
 
-def process_command(command):
+def process_command(command, defer_message_timer_update=False):
     global playback_interrupt, currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     global message_timer_last_played, message_timer_value
     global cos_today_seconds, cos_today_date
@@ -936,7 +932,7 @@ def process_command(command):
             debug_log("W3 command - Weather alerts")
             speak_wx_alerts()
             return
-
+         
         # --- Repeater Activity Reset Command: ARST (example) ---
         if command.strip().upper() == "ARST":
             cancel_rate_limited_timer()
@@ -1035,7 +1031,8 @@ def process_command(command):
             set_message_rate_limited()
             return
 
-        if message_mode and should_play_message:
+        # PATCH: only update timer if not deferring (i.e. not in join/alternate series)
+        if message_mode and should_play_message and not defer_message_timer_update:
             message_timer_last_played = time.time()
 
         # COS-i logic (interrupt to another code)
@@ -4012,11 +4009,18 @@ def wx_alert_action(config, debug_log=None):
             if debug_log:
                 debug_log(f"[CTONE PATCH] ctone_override_expire cleared or not set. WX: {wx_alerts} ctone: '{ctone}' time: {ctone_time}")
 
-        # Call speak_wx_alerts to announce the alert
+        # Call speak_wx_alerts to announce the alert (live playback, full version)
         speak_wx_alerts()
-        
-        # Additional actions can be added here
-        
+
+        # --- Generate minimal combined WX Alert wav file for future playback ---
+        try:
+            sequence = build_wx_alert_sequence_minimal(debug_log)
+            combined_wav_path = "/home/drx/DRX/sounds/9995-WX Alert.wav"
+            create_combined_wav(sequence, combined_wav_path, debug_log)
+        except Exception as e:
+            if debug_log:
+                debug_log(f"Failed to create combined WX Alert wav: {e}")
+
     except Exception as e:
         if debug_log:
             debug_log(f"Error in wx_alert_action: {e}")
@@ -4183,79 +4187,230 @@ def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
             i += 1
     return sequence
 
-def get_same_description_from_code(same_code, same_csv_path):
-    import csv
-    debug_log(f"Reading SAME CSV from: {same_csv_path}")
-    if not os.path.exists(same_csv_path):
-        debug_log(f"SAME CSV not found at {same_csv_path}")
-        return None
-    try:
-        with open(same_csv_path, "r", encoding="utf-8") as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                if len(row) < 2:
-                    continue
-                desc_raw, code_raw = row[0], row[1]
-                description = "".join((desc_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
-                code = "".join((code_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
-                desc_lower = description.lower()
-                code_lower = code.lower()
-                if not code or "code" in code_lower or "event" in code_lower or "status" in code_lower:
-                    continue
-                if not description or "event" in desc_lower or "code" in desc_lower or "status" in desc_lower:
-                    continue
-                debug_log(f"Comparing: '{code.upper()}' (desc: '{description}') <-> '{same_code.upper()}'")
-                if code.upper() == same_code.upper():
-                    debug_log(f"MATCH: '{code.upper()}' -> '{description}'")
-                    return description
-    except Exception as e:
-        debug_log(f"Failed to read SAME CSV: {e}")
-    debug_log(f"No match for code '{same_code}' in SAME CSV.")
-    return None
+def build_wx_alert_sequence_full(debug_log=None):
+    """
+    Build the FULL WX alert sequence as used by speak_wx_alerts (the long/verbose version).
+    """
+    sequence = []
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+        if os.path.exists(wav_path):
+            sequence.append({"wav": wav_path})
+        else:
+            sequence.append({"synthesize": "No active weather alerts"})
+        return sequence
+
+    with open(wx_alerts_path, 'r') as f:
+        alert_content = f.read()
+
+    alert_blocks = re.split(r'-{10,}', alert_content)
+    same_code = None
+    effective_time = None
+    expires_time = None
+    block_with_alert = None
+
+    for block in reversed(alert_blocks):
+        if 'EAS Code:' in block and 'Effective:' in block:
+            code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
+            effective_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+            expires_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+            if code_match:
+                same_code = code_match.group(1).strip()
+            if effective_match:
+                effective_time = effective_match.group(1)
+            if expires_match:
+                expires_time = expires_match.group(1)
+            if same_code and effective_time and expires_time:
+                block_with_alert = block
+                break
+
+    same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+    description = None
+
+    # --- NWS special handling ---
+    if same_code and same_code.upper() == "NWS":
+        desc_match = re.search(r'Description:\s*(.+)', block_with_alert or "")
+        if desc_match:
+            description = desc_match.group(1).strip()
+        else:
+            description = "National Weather Service Message"
+    elif same_code:
+        description = get_same_description_from_code(same_code, same_csv_path)
+
+    if not description:
+        if same_code and same_code.upper() == "SVS":
+            description = "Special Weather Statement"
+        else:
+            description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
+
+    if not effective_time or not expires_time:
+        wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+        if os.path.exists(wav_path):
+            sequence.append({"wav": wav_path})
+        else:
+            sequence.append({"synthesize": "No valid weather alerts"})
+        return sequence
+
+    wx_alert_wav = os.path.join(EXTRA_SOUND_DIR, "wx_alert.wav")
+    if os.path.exists(wx_alert_wav):
+        sequence.append({"wav": wx_alert_wav})
+    else:
+        sequence.append({"synthesize": "weather alert"})
+
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
+    if os.path.exists(repeating_wav):
+        sequence.append({"wav": repeating_wav})
+    else:
+        sequence.append({"synthesize": "repeating"})
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
+    if os.path.exists(wx_effective_wav):
+        sequence.append({"wav": wx_effective_wav})
+    else:
+        sequence.append({"synthesize": "weather alert effective"})
+
+    effective_dt = datetime.strptime(effective_time, "%Y-%m-%d %H:%M:%S")
+    sequence = append_datetime_wavs(effective_dt, sequence)
+
+    wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
+    if os.path.exists(wx_expired_wav):
+        sequence.append({"wav": wx_expired_wav})
+    else:
+        sequence.append({"synthesize": "weather alert expires"})
+
+    expires_dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
+    sequence = append_datetime_wavs(expires_dt, sequence)
+
+    return sequence
+
+
+def build_wx_alert_sequence_minimal(debug_log=None):
+    """
+    Build the MINIMAL WX alert sequence for the combined WAV:
+    [spoken description] + [in_effect.wav]
+    """
+    sequence = []
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        return [{"synthesize": "No active weather alerts"}]
+
+    with open(wx_alerts_path, 'r') as f:
+        alert_content = f.read()
+
+    alert_blocks = re.split(r'-{10,}', alert_content)
+    same_code = None
+    block_with_alert = None
+
+    for block in reversed(alert_blocks):
+        if 'EAS Code:' in block and 'Effective:' in block:
+            code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
+            if code_match:
+                same_code = code_match.group(1).strip()
+            if same_code:
+                block_with_alert = block
+                break
+
+    same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+    description = None
+
+    # --- NWS special handling ---
+    if same_code and same_code.upper() == "NWS":
+        desc_match = re.search(r'Description:\s*(.+)', block_with_alert or "")
+        if desc_match:
+            description = desc_match.group(1).strip()
+        else:
+            description = "National Weather Service Message"
+    elif same_code:
+        description = get_same_description_from_code(same_code, same_csv_path)
+
+    if not description:
+        if same_code and same_code.upper() == "SVS":
+            description = "Special Weather Statement"
+        else:
+            description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
+
+    # --- Only description and in_effect.wav go in the sequence ---
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    return sequence
 
 def speak_wx_alerts(*args, **kwargs):
-    # Assumes all imports and globals are already defined at top of script.
+    debug_log = kwargs.get('debug_log', None)
+
     try:
-        debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
+        if debug_log:
+            debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
         if is_cos_active():
             status_manager.set_weather_report("Waiting for channel to clear", "")
             while True:
                 if is_cos_active():
-                    debug_log("W3 ALERTS: Waiting for COS to become inactive")
+                    if debug_log:
+                        debug_log("W3 ALERTS: Waiting for COS to become inactive")
                     while is_cos_active():
                         time.sleep(0.1)
-                    debug_log("W3 ALERTS: COS has become inactive, starting debounce timer")
+                    if debug_log:
+                        debug_log("W3 ALERTS: COS has become inactive, starting debounce timer")
                 debounce_start = time.time()
                 while time.time() - debounce_start < COS_DEBOUNCE_TIME:
                     if is_cos_active():
-                        debug_log("W3 ALERTS: COS became active again during debounce period, restarting wait process")
+                        if debug_log:
+                            debug_log("W3 ALERTS: COS became active again during debounce period, restarting wait process")
                         break
                     time.sleep(0.1)
                 if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
-                    debug_log(f"W3 ALERTS: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
+                    if debug_log:
+                        debug_log(f"W3 ALERTS: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
                     break
         else:
             status_manager.set_weather_report("WX Alert Report", "Playing Alert")
 
-        wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
-        if not os.path.exists(wx_alerts_path):
-            debug_log("No wx_alerts file found")
+        # --- Build WX Alert sequence for playback ---
+        sequence = build_wx_alert_sequence_full(debug_log)
+
+        # If the first item is "no_wx_alerts" or "no valid weather alerts", set status accordingly and return after play
+        if sequence and (
+            (sequence[0].get("wav") and "no_wx_alerts" in sequence[0]["wav"]) or 
+            (sequence[0].get("synthesize") and "no active weather alerts" in sequence[0]["synthesize"].lower()) or
+            (sequence[0].get("synthesize") and "no valid weather alerts" in sequence[0]["synthesize"].lower())
+        ):
+            if debug_log:
+                debug_log("No WX alert sequence to play (no valid alerts)")
             status_manager.set_weather_report("WX Alert Report", "No active alerts")
-            wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
-            sequence = []
-            if os.path.exists(wav_path):
-                sequence.append({"wav": wav_path})
-            else:
-                sequence.append({"synthesize": "No active weather alerts"})
             play_sequence(sequence, debug_log)
             status_manager.set_idle()
             return
 
+        # --- For logging and display, try to extract description and times for status messages ---
+        wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
         with open(wx_alerts_path, 'r') as f:
             alert_content = f.read()
-
+        import re
+        from datetime import datetime
         alert_blocks = re.split(r'-{10,}', alert_content)
         same_code = None
         effective_time = None
@@ -4296,81 +4451,27 @@ def speak_wx_alerts(*args, **kwargs):
                 description = "Special Weather Statement"
             else:
                 description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
-        debug_log(f"W3 ALERTS: Final description for SAME code '{same_code}': '{description}'")
+        if debug_log:
+            debug_log(f"W3 ALERTS: Final description for SAME code '{same_code}': '{description}'")
 
-        if not effective_time or not expires_time:
-            debug_log("No valid effective or expires time found in wx_alerts file")
-            status_manager.set_weather_report("WX Alert Report", "No valid alerts")
-            wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
-            sequence = []
-            if os.path.exists(wav_path):
-                sequence.append({"wav": wav_path})
-            else:
-                sequence.append({"synthesize": "No valid weather alerts"})
-            play_sequence(sequence, debug_log)
-            status_manager.set_idle()
-            return
-
-        debug_log(f"Speaking weather alert - SAME code: {same_code}, Description: {description}, effective: {effective_time}, Expires: {expires_time}")
-        log_recent(f"WX Alert: {description}")
-        status_manager.set_weather_report("WX Alert Report", f"Alert: {description}")
-
-        # Build playback sequence
-        sequence = []
-
-        wx_alert_wav = os.path.join(EXTRA_SOUND_DIR, "wx_alert.wav")
-        if os.path.exists(wx_alert_wav):
-            sequence.append({"wav": wx_alert_wav})
-        else:
-            sequence.append({"synthesize": "weather alert"})
-
-        sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
-        in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
-        if os.path.exists(in_effect_wav):
-            sequence.append({"wav": in_effect_wav})
-        else:
-            sequence.append({"synthesize": "in effect"})
-
-        repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
-        if os.path.exists(repeating_wav):
-            sequence.append({"wav": repeating_wav})
-        else:
-            sequence.append({"synthesize": "repeating"})
-        sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
-        in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
-        if os.path.exists(in_effect_wav):
-            sequence.append({"wav": in_effect_wav})
-        else:
-            sequence.append({"synthesize": "in effect"})
-
-        wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
-        if os.path.exists(wx_effective_wav):
-            sequence.append({"wav": wx_effective_wav})
-        else:
-            sequence.append({"synthesize": "weather alert effective"})
-
-        effective_dt = datetime.strptime(effective_time, "%Y-%m-%d %H:%M:%S")
-        sequence = append_datetime_wavs(effective_dt, sequence)
-
-        wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
-        if os.path.exists(wx_expired_wav):
-            sequence.append({"wav": wx_expired_wav})
-        else:
-            sequence.append({"synthesize": "weather alert expires"})
-
-        expires_dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
-        sequence = append_datetime_wavs(expires_dt, sequence)
+        if effective_time and expires_time:
+            if debug_log:
+                debug_log(f"Speaking weather alert - SAME code: {same_code}, Description: {description}, effective: {effective_time}, Expires: {expires_time}")
+            log_recent(f"WX Alert: {description}")
+            status_manager.set_weather_report("WX Alert Report", f"Alert: {description}")
 
         play_sequence(sequence, debug_log)
-        debug_log("W3 ALERTS: Alert report completed")
+        if debug_log:
+            debug_log("W3 ALERTS: Alert report completed")
 
     except Exception as e:
-        debug_log(f"W3 ALERTS: Exception in speak_wx_alerts: {e}")
+        if debug_log:
+            debug_log(f"W3 ALERTS: Exception in speak_wx_alerts: {e}")
         log_exception("speak_wx_alerts")
     finally:
         status_manager.set_idle()
-        debug_log("W3 ALERTS: Setting REMOTE_BUSY to inactive")
+        if debug_log:
+            debug_log("W3 ALERTS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 
 
@@ -4635,6 +4736,74 @@ def get_last_expires_time_from_wx_alerts():
         except Exception:
             return None
     return None
+    
+def create_combined_wav(sequence, outfile, debug_log=None):
+    """
+    Given a sequence of {"wav": path} and/or {"synthesize": text}, create a single .wav file.
+    Output: 16-bit, 22000 Hz, mono, signed PCM.
+    """
+    sox_cmd = [
+        "sox",  # Requires sox to be installed!
+        "-V1",  # Less verbose
+        "-M"
+    ]
+    tempfiles = []
+    try:
+        for i, item in enumerate(sequence):
+            if "wav" in item:
+                tempfiles.append(item["wav"])
+            elif "synthesize" in item:
+                # Synthesize to temp wav using Piper
+                tempfd, tempname = tempfile.mkstemp(suffix=".wav")
+                os.close(tempfd)
+                # Synthesize to raw, then convert to 22000Hz/mono wav using sox
+                tempraw = tempname.replace(".wav", ".raw")
+                synthesize_cmd = [
+                    PIPER_BINARY,
+                    "--model", PIPER_MODEL,
+                    "--output_raw"
+                ]
+                with open(tempraw, "wb") as rawf:
+                    proc = subprocess.Popen(
+                        synthesize_cmd,
+                        stdin=subprocess.PIPE,
+                        stdout=rawf,
+                        stderr=subprocess.PIPE,
+                        env={"LD_LIBRARY_PATH": f"{PIPER_DIR}:{os.environ.get('LD_LIBRARY_PATH', '')}"}
+                    )
+                    proc.stdin.write(item["synthesize"].encode("utf-8"))
+                    proc.stdin.close()
+                    proc.wait()
+                # Convert raw to 22000Hz/mono WAV
+                subprocess.run([
+                    "sox", "-t", "raw", "-r", "22050", "-e", "signed-integer", "-b", "16", "-c", "1", tempraw, tempname
+                ], check=True)
+                tempfiles.append(tempname)
+                os.remove(tempraw)
+        # Now combine all files into one
+        # sox -V1 file1.wav file2.wav ... output.wav rate 22000 channels 1
+        sox_combine = ["sox"] + tempfiles + [
+            "-r", "22000", "-c", "1", "-b", "16", outfile, "rate", "22000"
+        ]
+        subprocess.run(sox_combine, check=True)
+        os.chmod(outfile, 0o777)
+        try:
+            import pwd
+            shutil.chown(outfile, user="drx")
+        except Exception:
+            # If running unprivileged, chown may fail, ignore
+            pass
+        debug_log and debug_log(f"Combined WAV created at {outfile}")
+    except Exception as e:
+        debug_log and debug_log(f"create_combined_wav failed: {e}")
+    finally:
+        # Clean up temp files
+        for tf in tempfiles:
+            if tf.startswith(tempfile.gettempdir()):
+                try:
+                    os.remove(tf)
+                except Exception:
+                    pass    
 
 # END OF WX ALERT SECTION
 

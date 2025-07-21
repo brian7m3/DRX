@@ -4025,24 +4025,35 @@ def wx_alert_action(config, debug_log=None):
         if debug_log:
             debug_log(f"Error in wx_alert_action: {e}")
 
-def wx_alert_monitor(config, debug_log=None):
-    """
-    Monitor for weather alerts every 5 seconds (interval is hard-coded).
-    This function runs in a separate thread.
-    """
+def cleanup_wx_alert_wav():
+    wx_alert_wav = "/home/drx/DRX/sounds/9995-WX Alert.wav"
     try:
-        interval_seconds = 5  # Hard-coded interval
-        
-        debug_log and debug_log(f"Weather alert monitoring started. Checking every {interval_seconds} seconds.")
-        
+        debug_log(f"[CLEANUP] Entered cleanup_wx_alert_wav()")
+        if os.path.exists(wx_alert_wav):
+            debug_log(f"[CLEANUP] File exists, attempting to remove: {wx_alert_wav}")
+            os.remove(wx_alert_wav)
+            debug_log(f"[CLEANUP] Deleted {wx_alert_wav}")
+        else:
+            debug_log(f"[CLEANUP] File does not exist: {wx_alert_wav}")
+    except Exception as e:
+        debug_log(f"[CLEANUP] Exception: {e}")
+
+def wx_alert_monitor(config, debug_log=None):
+    try:
+        interval_seconds = 5
+        debug_log and debug_log(f"Weather alert monitoring started.")
         while True:
             if wx_alert_check(config, debug_log):
                 wx_alert_action(config, debug_log)
-            
+            global ctone_override_expire
+            now = time.time()
+            debug_log and debug_log(f"[MONITOR] ctone_override_expire={ctone_override_expire} now={now} (type: {type(ctone_override_expire)})")
+            if not (ctone_override_expire and now < ctone_override_expire):
+                debug_log and debug_log("[MONITOR] Calling cleanup_wx_alert_wav()")
+                cleanup_wx_alert_wav()
             time.sleep(interval_seconds)
-            
     except Exception as e:
-        debug_log and debug_log(f"Error in weather alert monitor: {e}")
+        debug_log and debug_log(f"Error in weather alert monitor: {e}")       
 
 def start_wx_alert_monitoring(config, debug_log=None):
     """

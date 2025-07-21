@@ -513,3 +513,36 @@
 2025-07-21 10:30:51.131: Play requested: P9995MJ5170M (web input box)
 2025-07-21 10:31:01.140: Play requested: P9995MJ5170 (web input box)
 2025-07-21 10:31:02.908: Play: 5172-TM PL 77.wav [normal] - successful
+2025-07-21 10:34:24.213: Play: 5406-PID Trip to Europe.wav [normal] - successful
+2025-07-21 10:39:13.843: Play: 5627-CT.wav [interruptible] - successful
+2025-07-21 10:39:26.197: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 10:39:27.945: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 10:40:32.428: Play: 5627-CT.wav [interruptible] - successful
+2025-07-21 10:40:44.784: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 10:40:46.536: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 10:43:50.327: Play: 5416-PID Andy Griffith whistle.wav [normal] - successful
+2025-07-21 10:57:39.620: Configuration reload requested from web
+2025-07-21 11:00:02.523: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-21 11:00:03.503: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 11:00:03.512: WX Report: {'observations': 'Fair', 'temperature': '76 degrees', 'humidity': '70 percent', 'winddir': 'NNW', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.9', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-21 11:00:33.285: Play: 5668-CT.wav [interruptible] - successful
+2025-07-21 11:00:35.030: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:00:43.083: Play: 5668-CT.wav [interruptible] - successful
+2025-07-21 11:01:14.706: Play: 5668-CT.wav [interruptible] - successful
+2025-07-21 11:01:36.885: Play: 5668-CT.wav [interruptible] - successful
+2025-07-21 11:01:48.279: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:03:06.845: WX Alert: Severe Thunderstorm Watch
+2025-07-21 11:03:53.045: CT Override 5668-CT -> 5095.
+2025-07-21 11:03:53.778: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 11:04:05.918: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 11:04:07.657: Play: 5173-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:04:10.874: CT Override 5668-CT -> 5095.
+2025-07-21 11:04:11.615: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 11:05:33.900: Configuration reload requested from web
+2025-07-21 11:05:40.434: CT Override 5668-CT -> 5095.
+2025-07-21 11:05:41.179: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 11:05:53.248: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 11:05:55.192: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-21 11:06:48.834: Play: 5668-CT.wav [interruptible] - successful
+2025-07-21 11:07:00.129: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:07:08.998: Configuration reload requested from web

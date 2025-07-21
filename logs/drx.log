@@ -546,3 +546,81 @@
 2025-07-21 11:06:48.834: Play: 5668-CT.wav [interruptible] - successful
 2025-07-21 11:07:00.129: Play: 5171-TM PL 77.wav [interruptible] - successful
 2025-07-21 11:07:08.998: Configuration reload requested from web
+2025-07-21 11:09:35.273: Play: 5408-PID Quicker Keyer Uppers.wav [normal] - successful
+2025-07-21 11:39:59.525: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-21 11:40:00.927: Play: 5632-CT.wav [interruptible] - successful
+2025-07-21 11:40:11.547: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:45:01.100: CT Override 5617-CT -> 5095.
+2025-07-21 11:45:01.941: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 11:45:14.012: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 11:45:15.799: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:47:10.522: CT Override 5617-CT -> 5095.
+2025-07-21 11:47:11.320: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 11:47:25.558: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 11:47:27.354: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:49:38.911: Play: 5419-PID Bigger Boat.wav [normal] - successful
+2025-07-21 11:52:39.515: Play requested: W3 (web input box)
+2025-07-21 11:58:32.011: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-21 11:58:32.219: CT Override 5664-CT -> 5095.
+2025-07-21 11:58:32.960: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 11:58:47.147: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 11:58:48.891: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 11:59:20.326: Play: 5664-CT.wav [interruptible] - successful
+2025-07-21 11:59:51.072: Play: 5664-CT.wav [interruptible] - successful
+2025-07-21 11:59:57.484: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 11:59:58.304: Temperature Report: Current temperature is 77 degrees
+2025-07-21 12:00:05.446: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:01:59.418: CT Override 5664-CT -> 5095.
+2025-07-21 12:02:00.174: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 12:02:14.459: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 12:02:16.209: Play: 5173-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:03:01.449: CT Override 5664-CT -> 5095.
+2025-07-21 12:03:02.205: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 12:03:21.396: CT Override 5664-CT -> 5095.
+2025-07-21 12:03:22.106: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 12:03:33.746: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 12:03:35.889: Play: 5174-TM sparc.us.wav [interruptible] - successful
+2025-07-21 12:08:14.913: Play: 5428-PID Shorting Out My Circuits.wav [normal] - successful
+2025-07-21 12:14:05.711: CT Override 5618-CT -> 5095.
+2025-07-21 12:14:06.528: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 12:14:18.098: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 12:14:19.917: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:17:49.060: Play: 5419-PID Bigger Boat.wav [normal] - successful
+2025-07-21 12:20:03.915: Configuration reload requested from web
+2025-07-21 12:22:05.276: Configuration reload requested from web
+2025-07-21 12:31:25.739: Configuration reload requested from web
+2025-07-21 12:31:37.751: Configuration reload requested from web
+2025-07-21 12:32:01.671: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-21 12:32:01.906: CT Override 5621-CT -> 5095.
+2025-07-21 12:32:02.626: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 12:32:16.881: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 12:32:18.679: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:36:05.931: Configuration reload requested from web
+2025-07-21 12:36:19.695: Configuration reload requested from web
+2025-07-21 12:38:08.029: CT Override 5669-CT -> 5095.
+2025-07-21 12:38:08.332: Play: 5095-CT(CW) W 500.wav [interruptible] - interrupted
+2025-07-21 12:39:58.195: Play: 5669-CT.wav [interruptible] - successful
+2025-07-21 12:40:08.386: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:40:27.650: System reboot requested from web
+2025-07-21 12:42:05.222: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-21 12:42:07.334: Play: 5638-CT.wav [interruptible] - successful
+2025-07-21 12:42:17.155: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:44:21.165: Play: 5638-CT.wav [interruptible] - successful
+2025-07-21 12:44:31.041: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:48:04.617: Play: 5638-CT.wav [interruptible] - successful
+2025-07-21 12:48:14.447: Play: 5173-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:51:08.274: Play: 5422-PID SPARC Simplex Net.wav [normal] - successful
+2025-07-21 12:57:01.158: Play: 5643-CT.wav [interruptible] - successful
+2025-07-21 12:57:11.502: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:57:37.420: Play: 5643-CT.wav [interruptible] - successful
+2025-07-21 12:59:42.280: CT Override 5643-CT -> 5095.
+2025-07-21 12:59:43.052: Play: 5095-CT(CW) W 500.wav [interruptible] - successful
+2025-07-21 12:59:54.616: Play: 9995-WX Alert.wav [repeat] - successful
+2025-07-21 12:59:56.393: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 12:59:57.526: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 12:59:57.544: WX Report: {'observations': 'This Afternoon', 'temperature': '80 degrees', 'humidity': '53 percent', 'winddir': 'NNW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.91', 'pressure_status': 'unknown', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-21 13:00:28.291: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
+2025-07-21 13:06:46.542: Play: 5646-CT.wav [interruptible] - successful
+2025-07-21 13:06:57.024: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 13:10:00.866: Play: 5426-PID Greedy Ham Radio Operator.wav [normal] - successful
+2025-07-21 13:11:55.797: Configuration reload requested from web

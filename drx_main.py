@@ -309,6 +309,10 @@ ctone_override_expire = 0
 PIPER_DIR = "/home/drx/DRX/sounds/extra/piper"
 PIPER_BINARY = os.path.join(PIPER_DIR, "piper")
 PIPER_MODEL = os.path.join(PIPER_DIR, "en_US-amy-medium.onnx")
+active_alerts = []
+last_active_alerts = []
+announced_alerts = set()  # set of effective datetime strings (or hashes)
+announced_alert_ids = set()
 
 # --- In-Memory State for REST API ---
 current_state_memory = {}
@@ -327,6 +331,7 @@ DIRECT_ENABLED = True
 currently_playing_info_timestamp = 0
 rate_limited_set_time = None
 rate_limited_timer = None
+
 
 # --- Status Manager ---
 status_manager = None  # Will be initialized in main()
@@ -1331,10 +1336,13 @@ def play_sound(
                             proc.wait(timeout=2)
                         except Exception:
                             pass
-                if proc and proc.stderr:
-                    err = proc.stderr.read()
-                    if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                    if proc and proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            if proc.returncode and proc.returncode != 0:
+                                debug_log(f"aplay error: {err.decode(errors='replace')}")
+                            else:
+                                debug_log(f"aplay info: {err.decode(errors='replace')}")
         elif repeating:
             status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
             debug_log("REPEAT MODE ACTIVE")
@@ -1406,7 +1414,10 @@ def play_sound(
                 if proc.stderr:
                     err = proc.stderr.read()
                     if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                        if proc.returncode and proc.returncode != 0:
+                            debug_log(f"aplay error: {err.decode(errors='replace')}")
+                        else:
+                            debug_log(f"aplay info: {err.decode(errors='replace')}")
                 if ignore_cos:
                     debug_log("WAV played all the way through (final allowed play), ending repeat mode.")
                     success = True
@@ -1557,10 +1568,13 @@ def play_sound(
                             proc.wait(timeout=2)
                         except Exception:
                             pass
-                if proc and proc.stderr:
-                    err = proc.stderr.read()
-                    if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                    if proc and proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            if proc.returncode and proc.returncode != 0:
+                                debug_log(f"aplay error: {err.decode(errors='replace')}")
+                            else:
+                                debug_log(f"aplay info: {err.decode(errors='replace')}")
         else:
             status_manager.set_status("Playing (Normal Mode)", playing_name, None, section_context)
             debug_log("NORMAL MODE ACTIVE")
@@ -1605,10 +1619,13 @@ def play_sound(
                             proc.wait(timeout=2)
                         except Exception:
                             pass
-                if proc and proc.stderr:
-                    err = proc.stderr.read()
-                    if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                    if proc and proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            if proc.returncode and proc.returncode != 0:
+                                debug_log(f"aplay error: {err.decode(errors='replace')}")
+                            else:
+                                debug_log(f"aplay info: {err.decode(errors='replace')}")
     finally:
         status_manager.set_idle()
         debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
@@ -3921,110 +3938,6 @@ def speak_wx_conditions():
 
 # START OF WX ALERT SECTION
 
-def wx_alert_check(config, debug_log=None):
-    """
-    Check if weather alerts are enabled and if the alerts file exists.
-    Compare the latest effective time to see if it's a new alert.
-    
-    Args:
-        config: ConfigParser object containing the configuration
-        debug_log: Debug logging function (optional)
-        
-    Returns:
-        bool: True if alerts are enabled and a NEW alert exists, False otherwise
-    """
-    global last_alert_time
-    
-    try:
-        # Check if weather alerts are enabled in config
-        if config.has_section('WX') and config.getboolean('WX', 'alerts', fallback=False):
-            # Check if the wx_alerts file exists
-            wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
-            if os.path.exists(wx_alerts_path):
-                # Read the file and check for latest effective time
-                with open(wx_alerts_path, 'r') as f:
-                    content = f.read()
-                
-                # Find all instances of "Effective:" pattern and get the last one
-                # Pattern matches "  Effective:      2025-07-13 07:04:00" with flexible spacing
-                effective_pattern = r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})'
-                matches = re.findall(effective_pattern, content)
-                
-                if matches:
-                    # Get the last (most recent) effective time
-                    latest_effective_time = matches[-1]
-                    
-                    debug_log(f"Latest alert effective time: {latest_effective_time}")
-                    
-                    # Check if this is a new alert
-                    if latest_effective_time != last_alert_time:
-                        last_alert_time = latest_effective_time
-                        debug_log(f"New weather alert detected: {latest_effective_time}")
-                        return True
-                    else:
-                        debug_log(f"Alert already processed: {latest_effective_time}")
-                        return False
-                else:
-                    debug_log("No 'Effective:' timestamp found in wx_alerts file")
-                    
-    except Exception as e:
-        debug_log(f"Error checking weather alerts: {e}")
-    
-    return False
-
-def wx_alert_action(config, debug_log=None):
-    """
-    Perform actions when weather alert is detected.
-    This function is called when wx_alerts file contains a new alert.
-    """
-    try:
-        if debug_log:
-            debug_log("Weather alert action triggered")
-        
-        # --- CTONE OVERRIDE PATCH with use_expired_time support ---
-        global ctone_override_expire
-        wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
-        ctone = config.get('WX', 'ctone', fallback='').strip()
-        ctone_time = config.getint('WX', 'ctone_time', fallback=0)
-        use_expired_time = config.getboolean('WX', 'use_expired_time', fallback=False)
-
-        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4:
-            if use_expired_time:
-                expires_epoch = get_last_expires_time_from_wx_alerts()
-                now = time.time()
-                if expires_epoch and expires_epoch > now:
-                    ctone_override_expire = expires_epoch
-                    if debug_log:
-                        debug_log(f"[CTONE PATCH] Set ctone_override_expire to {ctone_override_expire} (from Expires: in wx_alerts)")
-                else:
-                    ctone_override_expire = now + ctone_time * 60
-                    if debug_log:
-                        debug_log(f"[CTONE PATCH] Expires: missing or invalid, fallback to ctone_time {ctone_time} minutes")
-            else:
-                ctone_override_expire = time.time() + ctone_time * 60
-                if debug_log:
-                    debug_log(f"[CTONE PATCH] Set ctone_override_expire to {ctone_override_expire} for {ctone_time} minutes (now={time.time()})")
-        else:
-            ctone_override_expire = 0
-            if debug_log:
-                debug_log(f"[CTONE PATCH] ctone_override_expire cleared or not set. WX: {wx_alerts} ctone: '{ctone}' time: {ctone_time}")
-
-        # Call speak_wx_alerts to announce the alert (live playback, full version)
-        speak_wx_alerts()
-
-        # --- Generate minimal combined WX Alert wav file for future playback ---
-        try:
-            sequence = build_wx_alert_sequence_minimal(debug_log)
-            combined_wav_path = "/home/drx/DRX/sounds/9995-WX Alert.wav"
-            create_combined_wav(sequence, combined_wav_path, debug_log)
-        except Exception as e:
-            if debug_log:
-                debug_log(f"Failed to create combined WX Alert wav: {e}")
-
-    except Exception as e:
-        if debug_log:
-            debug_log(f"Error in wx_alert_action: {e}")
-
 def cleanup_wx_alert_wav():
     wx_alert_wav = "/home/drx/DRX/sounds/9995-WX Alert.wav"
     try:
@@ -4038,22 +3951,85 @@ def cleanup_wx_alert_wav():
     except Exception as e:
         debug_log(f"[CLEANUP] Exception: {e}")
 
-def wx_alert_monitor(config, debug_log=None):
+def speak_wx_alerts_single(alert, debug_log=None):
     try:
-        interval_seconds = 5
-        debug_log and debug_log(f"Weather alert monitoring started.")
-        while True:
-            if wx_alert_check(config, debug_log):
-                wx_alert_action(config, debug_log)
-            global ctone_override_expire
-            now = time.time()
-            debug_log and debug_log(f"[MONITOR] ctone_override_expire={ctone_override_expire} now={now} (type: {type(ctone_override_expire)})")
-            if not (ctone_override_expire and now < ctone_override_expire):
-                debug_log and debug_log("[MONITOR] Calling cleanup_wx_alert_wav()")
-                cleanup_wx_alert_wav()
-            time.sleep(interval_seconds)
+        set_remote_busy(True)
+        # Wait for COS to clear, debounce, as in speak_wx_alerts
+        if is_cos_active():
+            while True:
+                if is_cos_active():
+                    while is_cos_active():
+                        time.sleep(0.1)
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    break
+        status_manager.set_weather_report("WX Alert Report", f"Alert: {alert['description']}")
+        sequence = build_wx_alert_sequence_full_for_alert(alert, debug_log)
+        play_sequence(sequence, debug_log)
     except Exception as e:
-        debug_log and debug_log(f"Error in weather alert monitor: {e}")       
+        debug_log and debug_log(f"Exception in speak_wx_alerts_single: {e}")
+        log_exception("speak_wx_alerts_single")
+    finally:
+        status_manager.set_idle()
+        set_remote_busy(False)
+
+def wx_alert_monitor(config, debug_log=None):
+    global active_alerts, last_active_alerts, ctone_override_expire, announced_alert_ids
+    normal_interval_seconds = 5
+    idle_interval_seconds = 300  # 5 minutes
+
+    use_expired_time = config.getboolean('WX', 'use_expired_time', fallback=False)
+    ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+
+    last_cleanup_time = 0
+
+    while True:
+        current_alerts = parse_all_active_wx_alerts(debug_log)
+        def alert_id(a):
+            return f"{a['effective_time'].strftime('%Y-%m-%d %H:%M:%S')}|{a['description']}"
+        current_ids = set(alert_id(a) for a in current_alerts)
+        new_alerts = [a for a in current_alerts if alert_id(a) not in announced_alert_ids]
+
+        now = time.time()
+
+        if current_alerts != last_active_alerts:
+            if current_alerts:
+                build_multi_alert_combined_wav(current_alerts, debug_log)
+                if use_expired_time:
+                    max_expiry = max(a["expires_time"].timestamp() for a in current_alerts)
+                    ctone_override_expire = max_expiry
+                    if debug_log:
+                        debug_log(f"[MONITOR] ctone_override_expire set to Expires: {ctone_override_expire}")
+                else:
+                    ctone_override_expire = now + (ctone_time * 60)
+                    if debug_log:
+                        debug_log(f"[MONITOR] ctone_override_expire set to now+ctone_time: {ctone_override_expire}")
+                for alert in new_alerts:
+                    speak_wx_alerts_single(alert, debug_log=debug_log)
+                    announced_alert_ids.add(alert_id(alert))
+            else:
+                cleanup_wx_alert_wav()
+                last_cleanup_time = now
+                ctone_override_expire = 0
+            last_active_alerts = current_alerts
+            announced_alert_ids &= current_ids
+
+        # Clean up expired WAV if needed
+        if current_alerts and ctone_override_expire and now < ctone_override_expire:
+            interval_seconds = normal_interval_seconds
+        else:
+            # No active alerts
+            interval_seconds = idle_interval_seconds
+            # Only run cleanup every 5 min when no active alerts
+            if now - last_cleanup_time >= idle_interval_seconds:
+                cleanup_wx_alert_wav()
+                last_cleanup_time = now
+
+        time.sleep(interval_seconds)
 
 def start_wx_alert_monitoring(config, debug_log=None):
     """
@@ -4310,7 +4286,6 @@ def build_wx_alert_sequence_full(debug_log=None):
 
     return sequence
 
-
 def build_wx_alert_sequence_minimal(debug_log=None):
     """
     Build the MINIMAL WX alert sequence for the combined WAV:
@@ -4368,14 +4343,34 @@ def build_wx_alert_sequence_minimal(debug_log=None):
 
     return sequence
 
+def build_multi_alert_combined_wav(alerts, debug_log=None):
+    """
+    Given a list of alert dicts (from parse_all_active_wx_alerts), build a combined minimal WAV.
+    Newest alert is first.
+    """
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+    sequence = []
+    for alert in alerts:
+        # Use your build_greedy_wav_sequence for description
+        desc_seq = build_greedy_wav_sequence(alert["description"], EXTRA_SOUND_DIR, debug_log)
+        sequence += desc_seq
+        in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+        if os.path.exists(in_effect_wav):
+            sequence.append({"wav": in_effect_wav})
+        else:
+            sequence.append({"synthesize": "in effect"})
+    combined_wav_path = "/home/drx/DRX/sounds/9995-WX Alert.wav"
+    create_combined_wav(sequence, combined_wav_path, debug_log)
+    debug_log and debug_log(f"[MONITOR] Combined WX Alert wav regenerated for {len(alerts)} alerts.")
+
 def speak_wx_alerts(*args, **kwargs):
     debug_log = kwargs.get('debug_log', None)
-
     try:
         if debug_log:
             debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
         set_remote_busy(True)
 
+        # Wait for COS to clear before speaking (as before)
         if is_cos_active():
             status_manager.set_weather_report("Waiting for channel to clear", "")
             while True:
@@ -4400,80 +4395,33 @@ def speak_wx_alerts(*args, **kwargs):
         else:
             status_manager.set_weather_report("WX Alert Report", "Playing Alert")
 
-        # --- Build WX Alert sequence for playback ---
-        sequence = build_wx_alert_sequence_full(debug_log)
-
-        # If the first item is "no_wx_alerts" or "no valid weather alerts", set status accordingly and return after play
-        if sequence and (
-            (sequence[0].get("wav") and "no_wx_alerts" in sequence[0]["wav"]) or 
-            (sequence[0].get("synthesize") and "no active weather alerts" in sequence[0]["synthesize"].lower()) or
-            (sequence[0].get("synthesize") and "no valid weather alerts" in sequence[0]["synthesize"].lower())
-        ):
-            if debug_log:
-                debug_log("No WX alert sequence to play (no valid alerts)")
+        # --- Multi-alert: get all currently active alerts, newest first ---
+        active_alerts = parse_all_active_wx_alerts(debug_log)
+        if not active_alerts:
+            # No active alerts, play "no alerts" message
+            EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+            no_alert_wav = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+            if os.path.exists(no_alert_wav):
+                play_single_wav(no_alert_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            else:
+                synthesize_and_play_with_piper("No active weather alerts", debug_log)
             status_manager.set_weather_report("WX Alert Report", "No active alerts")
-            play_sequence(sequence, debug_log)
             status_manager.set_idle()
+            set_remote_busy(False)
             return
 
-        # --- For logging and display, try to extract description and times for status messages ---
-        wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
-        with open(wx_alerts_path, 'r') as f:
-            alert_content = f.read()
-        import re
-        from datetime import datetime
-        alert_blocks = re.split(r'-{10,}', alert_content)
-        same_code = None
-        effective_time = None
-        expires_time = None
-        block_with_alert = None
+        # Announce each alert (full version), newest first
+        for alert in active_alerts:
+            # Build the full sequence for this alert only
+            sequence = build_wx_alert_sequence_full_for_alert(alert, debug_log)
+            # Optionally, set status to the description for user feedback
+            status_manager.set_weather_report("WX Alert Report", f"Alert: {alert['description']}")
+            play_sequence(sequence, debug_log)
+            # Optional: brief pause between alerts for clarity
+            time.sleep(0.3)
 
-        for block in reversed(alert_blocks):
-            if 'EAS Code:' in block and 'Effective:' in block:
-                code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
-                effective_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
-                expires_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
-                if code_match:
-                    same_code = code_match.group(1).strip()
-                if effective_match:
-                    effective_time = effective_match.group(1)
-                if expires_match:
-                    expires_time = expires_match.group(1)
-                if same_code and effective_time and expires_time:
-                    block_with_alert = block
-                    break
-
-        same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
-        description = None
-
-        # --- NWS special handling ---
-        if same_code and same_code.upper() == "NWS":
-            # Try to extract Description: ... from the alert block
-            desc_match = re.search(r'Description:\s*(.+)', block_with_alert or "")
-            if desc_match:
-                description = desc_match.group(1).strip()
-            else:
-                description = "National Weather Service Message"
-        elif same_code:
-            description = get_same_description_from_code(same_code, same_csv_path)
-
-        if not description:
-            if same_code and same_code.upper() == "SVS":
-                description = "Special Weather Statement"
-            else:
-                description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
         if debug_log:
-            debug_log(f"W3 ALERTS: Final description for SAME code '{same_code}': '{description}'")
-
-        if effective_time and expires_time:
-            if debug_log:
-                debug_log(f"Speaking weather alert - SAME code: {same_code}, Description: {description}, effective: {effective_time}, Expires: {expires_time}")
-            log_recent(f"WX Alert: {description}")
-            status_manager.set_weather_report("WX Alert Report", f"Alert: {description}")
-
-        play_sequence(sequence, debug_log)
-        if debug_log:
-            debug_log("W3 ALERTS: Alert report completed")
+            debug_log("W3 ALERTS: All alert reports completed")
 
     except Exception as e:
         if debug_log:
@@ -4485,6 +4433,66 @@ def speak_wx_alerts(*args, **kwargs):
             debug_log("W3 ALERTS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
 
+# Helper: Build full sequence for a single alert block
+def build_wx_alert_sequence_full_for_alert(alert, debug_log=None):
+    """
+    Build the full sequence for a single alert (dict from parse_all_active_wx_alerts).
+    """
+    sequence = []
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+    # Use the same code as build_wx_alert_sequence_full, but for just this alert
+    same_code = alert.get("code") or ""
+    effective_time = alert.get("effective_time")
+    expires_time = alert.get("expires_time")
+    description = alert.get("description") or ""
+    block = alert.get("block") or ""
+
+    # Start with WX alert preamble
+    wx_alert_wav = os.path.join(EXTRA_SOUND_DIR, "wx_alert.wav")
+    if os.path.exists(wx_alert_wav):
+        sequence.append({"wav": wx_alert_wav})
+    else:
+        sequence.append({"synthesize": "weather alert"})
+
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
+    if os.path.exists(repeating_wav):
+        sequence.append({"wav": repeating_wav})
+    else:
+        sequence.append({"synthesize": "repeating"})
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
+    if os.path.exists(wx_effective_wav):
+        sequence.append({"wav": wx_effective_wav})
+    else:
+        sequence.append({"synthesize": "weather alert effective"})
+
+    if effective_time:
+        sequence = append_datetime_wavs(effective_time, sequence)
+
+    wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
+    if os.path.exists(wx_expired_wav):
+        sequence.append({"wav": wx_expired_wav})
+    else:
+        sequence.append({"synthesize": "weather alert expires"})
+
+    if expires_time:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
+        sequence = append_datetime_wavs(expires_time, sequence)
+
+    return sequence
 
 def append_datetime_wavs(dt, sequence):
     # Hour
@@ -4510,7 +4518,6 @@ def append_datetime_wavs(dt, sequence):
     else:
         sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
     return sequence
-
 
 def get_same_description_from_code(same_code, same_csv_path):
     import csv
@@ -4751,7 +4758,7 @@ def get_last_expires_time_from_wx_alerts():
 def create_combined_wav(sequence, outfile, debug_log=None):
     """
     Given a sequence of {"wav": path} and/or {"synthesize": text}, create a single .wav file.
-    Output: 16-bit, 22000 Hz, mono, signed PCM.
+    Output: 16-bit, 22050 Hz, mono, signed PCM.
     """
     sox_cmd = [
         "sox",  # Requires sox to be installed!
@@ -4767,7 +4774,7 @@ def create_combined_wav(sequence, outfile, debug_log=None):
                 # Synthesize to temp wav using Piper
                 tempfd, tempname = tempfile.mkstemp(suffix=".wav")
                 os.close(tempfd)
-                # Synthesize to raw, then convert to 22000Hz/mono wav using sox
+                # Synthesize to raw, then convert to 22050Hz/mono wav using sox
                 tempraw = tempname.replace(".wav", ".raw")
                 synthesize_cmd = [
                     PIPER_BINARY,
@@ -4785,16 +4792,16 @@ def create_combined_wav(sequence, outfile, debug_log=None):
                     proc.stdin.write(item["synthesize"].encode("utf-8"))
                     proc.stdin.close()
                     proc.wait()
-                # Convert raw to 22000Hz/mono WAV
+                # Convert raw to 22050Hz/mono WAV
                 subprocess.run([
                     "sox", "-t", "raw", "-r", "22050", "-e", "signed-integer", "-b", "16", "-c", "1", tempraw, tempname
                 ], check=True)
                 tempfiles.append(tempname)
                 os.remove(tempraw)
         # Now combine all files into one
-        # sox -V1 file1.wav file2.wav ... output.wav rate 22000 channels 1
+        # sox -V1 file1.wav file2.wav ... output.wav rate 22050 channels 1
         sox_combine = ["sox"] + tempfiles + [
-            "-r", "22000", "-c", "1", "-b", "16", outfile, "rate", "22000"
+            "-r", "22050", "-c", "1", "-b", "16", outfile, "rate", "22050"
         ]
         subprocess.run(sox_combine, check=True)
         os.chmod(outfile, 0o777)
@@ -4815,6 +4822,63 @@ def create_combined_wav(sequence, outfile, debug_log=None):
                     os.remove(tf)
                 except Exception:
                     pass    
+
+def parse_all_active_wx_alerts(debug_log=None):
+    """
+    Parse wx_alerts and return a list of dicts for all alerts that have not expired.
+    Each dict has: description, effective_time (datetime), expires_time (datetime), block
+    Alerts are sorted newest first (latest effective_time first).
+    """
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        return []
+
+    now = datetime.now()
+    with open(wx_alerts_path, 'r') as f:
+        content = f.read()
+
+    alert_blocks = re.split(r'-{10,}', content)
+    alerts = []
+    for block in alert_blocks:
+        code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
+        eff_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+        exp_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+        if code_match and eff_match and exp_match:
+            try:
+                eff_dt = datetime.strptime(eff_match.group(1), "%Y-%m-%d %H:%M:%S")
+                exp_dt = datetime.strptime(exp_match.group(1), "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                continue
+            if exp_dt > now:
+                # Description extraction (reuse your build_wx_alert_sequence_minimal logic)
+                code = code_match.group(1).strip()
+                desc = None
+                if code.upper() == "NWS":
+                    desc_match = re.search(r'Description:\s*(.+)', block)
+                    if desc_match:
+                        desc = desc_match.group(1).strip()
+                    else:
+                        desc = "National Weather Service Message"
+                else:
+                    same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+                    desc = get_same_description_from_code(code, same_csv_path)
+                if not desc:
+                    if code.upper() == "SVS":
+                        desc = "Special Weather Statement"
+                    else:
+                        desc = f"Unknown alert ({code})"
+                alerts.append({
+                    "description": desc,
+                    "effective_time": eff_dt,
+                    "expires_time": exp_dt,
+                    "block": block,
+                    "code": code
+                })
+    # Sort newest first (latest effective_time first)
+    alerts.sort(key=lambda a: a["effective_time"], reverse=True)
+    if debug_log:
+        debug_log(f"parse_all_active_wx_alerts: found {len(alerts)} active alerts")
+    return alerts
 
 # END OF WX ALERT SECTION
 

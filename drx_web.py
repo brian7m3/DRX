@@ -1407,8 +1407,8 @@ document.addEventListener("DOMContentLoaded", function() {
                   To cancel an alert in progress, uncheck save and recheck and save the Enable Alert box. Setting the ctone time for less than the remaining time will set the alert timer to the new value.  
                   Active alerts will generate a 9995-WX Alert.wav file in your sounds directory.  This will continuously update as multiple alerts are received or expire.
                   DRX keeps track of all active alerts.  When all alerts expire, the wav will be deleted.  The wav is meant to be used possibility in a tail message.  
-                  You could have "P9995RMJ5170IM" which would play alerts first in repeat mode, if they exist, and then your regular tail message base interruptable - 5170.  
-                  You could also allow a user to call up 9995 to check for active alerts. **</li>
+                  You could have "P9995RMJ5170IM" which would play alerts first in repeat mode, if they exist, and then your regular tail message base interruptable - 5170.  **</li>
+                  <li><b>W3x:</b> User function to see if Wx Alerts or play before Wx Conditions.  Gives brief alert descriptions or says no active wx alerts. </li>
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
                   <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
                   <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
@@ -1607,9 +1607,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     <input type="number" id="same_alerts_polling_time" name="same_alerts_polling_time" min="60" max="3600" value="{{ same_alerts_polling_time }}">
                 </div>
                 <div class="form-group">
-                    <label for="same_alerts_zip_code">SAME Alerts Zip Codes:</label>
-                    <input type="text" id="same_alerts_zip_code" name="same_alerts_zip_code" value="{{ same_alerts_zip_code }}">
-                </div>
+                    <label for="same_alerts_zip_code">
+                        <a href="https://www.weather.gov/pimar/PubZone" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+                            NWS Zones
+                        </a> or
+                        <a href="https://tools.usps.com/zip-code-lookup.htm" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+                            Zip Codes
+                        </a>:
+                    </label>
+                    <input type="text" id="same_alerts_zip_code" name="same_alerts_zip_code" value="{{ same_alerts_zip_code }} "
+                    placeholder="02673,MAZ017">
+                </div>  
                 <div class="form-group">
                     <label for="wx_ctone">Override C-Tone:</label>
                     <input type="number" id="wx_ctone" name="wx_ctone"

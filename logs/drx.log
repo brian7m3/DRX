@@ -689,3 +689,24 @@
 2025-07-21 14:46:19.982: Play: 9995-WX Alert.wav [repeat] - successful
 2025-07-21 14:46:21.693: Play: 5171-TM PL 77.wav [interruptible] - successful
 2025-07-21 14:55:21.996: Play: 5402-PID Press Your PTT.wav [normal] - successful
+2025-07-21 14:59:57.415: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 14:59:57.415: WX Report: {'observations': 'This Afternoon', 'temperature': '82 degrees', 'humidity': '45 percent', 'winddir': 'NW', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.92', 'pressure_status': 'rising', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-21 15:00:37.326: Play: 5652-CT.wav [interruptible] - successful
+2025-07-21 15:00:48.101: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-21 15:02:07.785: Configuration reload requested from web
+2025-07-21 15:04:49.517: Play: 5425-PID Don't Leave Home Without Them.wav [normal] - successful
+2025-07-21 15:59:57.445: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 15:59:57.445: WX Report: {'observations': 'Tonight', 'temperature': '81 degrees', 'humidity': '48 percent', 'winddir': 'NW', 'wind_speed': '4', 'wind_gust': '7', 'pressure': '29.91', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-21 16:02:24.931: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-21 16:02:26.134: Play: 5654-CT.wav [interruptible] - successful
+2025-07-21 16:02:36.784: Play: 5172-TM PL 77.wav [interruptible] - successful
+2025-07-21 16:22:54.520: Play: 5302-IID Number You Have Reached.wav [normal] - successful
+2025-07-21 16:22:55.633: Play: 5621-CT.wav [interruptible] - successful
+2025-07-21 16:23:06.378: Play: 5173-TM PL 77.wav [interruptible] - successful
+2025-07-21 16:44:35.860: Configuration reload requested from web
+2025-07-21 16:50:35.872: Configuration reload requested from web
+2025-07-21 16:51:15.660: Configuration reload requested from web
+2025-07-21 16:52:00.208: Configuration reload requested from web
+2025-07-21 16:59:57.434: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-21 16:59:57.435: WX Report: {'observations': 'Tonight', 'temperature': '82 degrees', 'humidity': '46 percent', 'winddir': 'NNW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '29.91', 'pressure_status': 'steady', 'visibility': '10.00 miles', 'precipRate': '0.00'}
+2025-07-21 17:05:03.312: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful

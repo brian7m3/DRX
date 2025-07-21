@@ -267,13 +267,13 @@ def get_nws_zone_from_zip(zip_code, user_agent):
     try:
         with urlopen(Request(points_url, headers=headers), timeout=10) as response:
             points_data = json.load(response)
-            # Use county for SAME/EAS, not forecastZone
-            county_url = points_data.get('properties', {}).get('county')
-            if county_url:
-                zone_id = county_url.split('/')[-1]
+            # Use forecastZone for SAME/EAS, not county
+            forecast_zone_url = points_data.get('properties', {}).get('forecastZone')
+            if forecast_zone_url:
+                zone_id = forecast_zone_url.split('/')[-1]
                 return zone_id, None
             else:
-                return None, "Could not determine NWS county zone from API response."
+                return None, "Could not determine NWS forecast zone from API response."
     except (HTTPError, URLError) as e:
         return None, f"Could not contact NWS API for zone info. Reason: {e}"
     except KeyError:
@@ -376,6 +376,42 @@ def get_eas_only_option():
 EAS_ONLY = get_eas_only_option()
 SAME_CODES = load_same_codes() if EAS_ONLY else set()
 
+def same_worker_single(zone_or_zip, polling_time, eas_descriptions, user_agent):
+    # If 5 digits, treat as ZIP code, else if 6 chars, treat as zone id
+    zone = None
+    zip_code_display = zone_or_zip
+    # If 5 digits (ZIP code)
+    if zone_or_zip.isdigit() and len(zone_or_zip) == 5:
+        zone, error_msg = get_nws_zone_from_zip(zone_or_zip, user_agent)
+        if error_msg:
+            print(f"[SAME] Error: {error_msg}")
+            return
+        print(f"[SAME] Monitoring NWS Zone: {zone} for ZIP {zone_or_zip}...")
+    # If 6 characters (zone id), allow any 6-char code (e.g. CTC006, CTC009, etc.)
+    elif len(zone_or_zip) == 6 and re.match(r"^[A-Z]{2}[A-Z0-9]{4}$", zone_or_zip.upper()):
+        zone = zone_or_zip.upper()
+        print(f"[SAME] Monitoring NWS Zone: {zone} (direct) ...")
+    else:
+        print(f"[SAME] Invalid zone or ZIP code: {zone_or_zip}. Skipping SAME monitoring.")
+        return
+    while True:
+        check_for_active_alerts(zone, zip_code_display, user_agent, eas_descriptions)
+        time.sleep(polling_time)
+
+def same_worker(same_cfg):
+    zip_code_field = same_cfg["zip_code"]
+    polling_time = same_cfg["polling_time"]
+    user_agent = same_cfg["user_agent"]
+    eas_descriptions = load_eas_descriptions()
+    zone_or_zips = [z.strip() for z in zip_code_field.split(",") if z.strip()]
+    threads = []
+    for zone_or_zip in zone_or_zips:
+        t = threading.Thread(target=same_worker_single, args=(zone_or_zip, polling_time, eas_descriptions, user_agent), daemon=True)
+        t.start()
+        threads.append(t)
+    for t in threads:
+        t.join()
+
 def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
     alerts_url = f"https://api.weather.gov/alerts/active?zone={zone_id}"
     headers = {'User-Agent': user_agent}
@@ -405,7 +441,6 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
                 if eas_code == 'SVS' and event == 'Severe Thunderstorm Warning':
                     continue
 
-                # ... (the rest of your output logic remains unchanged)
                 description = get_description_from_code(eas_code, eas_descriptions, properties)
                 same = eas_code
                 headline = properties.get('headline', 'N/A')
@@ -443,7 +478,6 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
                     'event', 'same', 'eas code', 'headline', 'nwsheadline', 'status', 'severity',
                     'messagetype', 'onset', 'effective', 'ends', 'expires', 'location', 'description'
                 }
-                # areaDesc is mapped to Location, so treat as covered
                 mapped_fields = {'areaDesc', 'Event', 'Headline', 'NWSheadline', 'Status', 'Severity',
                                  'MessageType', 'Onset', 'Effective', 'Ends', 'Expires', 'Location', 'Description'}
                 extra_lines = []
@@ -457,11 +491,9 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
                         value = "; ".join(str(v) for v in value)
                     extra_lines.append(f"  {key_label}:       {value}")
 
-                # Add extra fields if present
                 if extra_lines:
                     alert_text += "\n" + "\n".join(extra_lines)
 
-                # Add any fields not listed at the end, then append and finish as before
                 output_lines.append(alert_text)
             output_lines.append("-" * 50)
             full_output = '\n'.join(output_lines)
@@ -469,36 +501,6 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
             write_alerts_to_file(full_output + '\n')
     except (HTTPError, URLError) as e:
         print(f"An error occurred while checking for alerts: {e}")
-
-def same_worker_single(zip_code, polling_time, eas_descriptions, user_agent):
-    # Get NWS zone from zip
-    if zip_code and zip_code.isdigit() and len(zip_code) == 5:
-        zone, error_msg = get_nws_zone_from_zip(zip_code, user_agent)
-        if error_msg:
-            print(f"[SAME] Error: {error_msg}")
-            return
-        print(f"[SAME] Monitoring NWS Zone: {zone} for ZIP {zip_code}...")
-    else:
-        print(f"[SAME] Invalid ZIP code: {zip_code}. Skipping SAME monitoring.")
-        return
-    while True:
-        check_for_active_alerts(zone, zip_code, user_agent, eas_descriptions)
-        time.sleep(polling_time)
-
-def same_worker(same_cfg):
-    zip_code_field = same_cfg["zip_code"]
-    polling_time = same_cfg["polling_time"]
-    user_agent = same_cfg["user_agent"]
-    eas_descriptions = load_eas_descriptions()
-    zip_codes = [z.strip() for z in zip_code_field.split(",") if z.strip()]
-    threads = []
-    for zip_code in zip_codes:
-        t = threading.Thread(target=same_worker_single, args=(zip_code, polling_time, eas_descriptions, user_agent), daemon=True)
-        t.start()
-        threads.append(t)
-    # Wait for all threads (infinite loop, since .join() will never return)
-    for t in threads:
-        t.join()
 
 # ---- MAIN ----
 

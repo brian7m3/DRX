@@ -23,24 +23,30 @@ SAME_CSV = os.path.join(SCRIPT_DIR, "same.csv")
 def load_config():
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE)
-    # WEATHER SECTION
+
     wx_cfg = config['weather']
-    wx_polling_time = int(wx_cfg.get('polling_time', '15')) * 60 # minutes to seconds
+    wx_polling_time = int(wx_cfg.get('polling_time', '15')) * 60
     wx_data_url = wx_cfg.get('wx_data_url', '')
     wx_day_url = wx_cfg.get('wx_day_url', '')
     nws_url = wx_cfg.get('nws_url', '')
-    # SAME SECTION
+    nws_url_fallback = wx_cfg.get('nws_url_fallback', '')
+    wx_directory = wx_cfg.get("directory", "/home/drx/DRX/wx/")
+    use_nws_only = wx_cfg.get('use_nws_only', 'false').lower() == 'true'
+
     same_cfg = config['SAME Alerts']
     same_zip = same_cfg.get('zip_code', '').strip()
-    same_polling_time = int(same_cfg.get('polling_time', '300')) # seconds
+    same_polling_time = int(same_cfg.get('polling_time', '300'))
     same_user_agent = same_cfg.get('user_agent', 'WX-SAME-Script')
+
     return {
         "wx": {
-            "directory": "/home/drx/DRX/wx/",
+            "directory": wx_directory,
             "polling_time": wx_polling_time,
             "wx_data_url": wx_data_url,
             "wx_day_url": wx_day_url,
-            "nws_url": nws_url
+            "nws_url": nws_url,
+            "nws_url_fallback": nws_url_fallback,
+            "use_nws_only": use_nws_only,
         },
         "same": {
             "zip_code": same_zip,
@@ -50,34 +56,6 @@ def load_config():
     }
 
 # ---- WEATHER LOGIC ----
-
-def fetch_nws_conditions_and_visibility(url):
-    try:
-        resp = requests.get(url, timeout=15)
-        resp.raise_for_status()
-        html = resp.text
-        soup = BeautifulSoup(html, "html.parser")
-        text_lines = soup.get_text('\n').splitlines()
-        text_lines = [line.strip() for line in text_lines if line.strip()]
-        conditions = "Unknown"
-        visibility = "Unknown"
-        for i, line in enumerate(text_lines):
-            if "°F" in line or "&deg;F" in line:
-                if i > 0:
-                    conditions = text_lines[i-1].strip()
-                break
-        for i, line in enumerate(text_lines):
-            if "Visibility" in line:
-                if i+1 < len(text_lines):
-                    vis_line = text_lines[i+1]
-                    match = re.search(r'([0-9.]+)\s*m', vis_line)
-                    if match:
-                        visibility = match.group(1)
-                break
-        return conditions, visibility
-    except Exception as e:
-        print(f"[weather] Error fetching NWS conditions/visibility: {e}", file=sys.stderr)
-        return "Unknown", "Unknown"
 
 def get_json(url):
     try:
@@ -129,12 +107,123 @@ def read_pressure_from_file(filepath):
                     return None
     return None
 
+def fetch_nws_obhistory_all_fields(obhistory_url, fallback_url):
+    import requests
+    import sys
+    import re
+    from bs4 import BeautifulSoup
+
+    result = {
+        "observations": "Unknown",
+        "temperature": "Unknown",
+        "humidity": "Unknown",
+        "winddir": "Unknown",
+        "wind_speed": "Unknown",
+        "wind_gust": "Unknown",
+        "pressure": "Unknown",
+        "pressure_status": "unknown",
+        "visibility": "Unknown",
+        "precipRate": "Unknown"
+    }
+
+    try:
+        resp = requests.get(obhistory_url, timeout=15)
+        resp.raise_for_status()
+        html = resp.text
+        soup = BeautifulSoup(html, "html.parser")
+        table = soup.find("table")
+        if not table:
+            raise Exception("Could not find table in NWS obhistory page.")
+        rows = table.find_all("tr")
+        if len(rows) < 2:
+            raise Exception("Not enough rows in obhistory table.")
+
+        header_cells = [cell.get_text(strip=True) for cell in rows[0].find_all(["th", "td"])]
+        print("[DEBUG] obhistory header:", header_cells)
+        data_row = None
+        for row in rows[1:]:
+            data_cells = [cell.get_text(strip=True) for cell in row.find_all("td")]
+            if data_cells and len(data_cells) >= 4:
+                while len(data_cells) < len(header_cells):
+                    data_cells.append("Unknown")
+                data_row = data_cells
+                break
+        print("[DEBUG] obhistory first data row:", data_row)
+        if not data_row:
+            raise Exception("No data rows found in obhistory table.")
+
+        # Map header to value using indexes
+        row_map = {header: val for header, val in zip(header_cells, data_row)}
+
+        # Wind parsing
+        wind_val = row_map.get("Wind (mph)", "Unknown")
+        winddir = "Unknown"
+        wind_speed = "Unknown"
+        if wind_val != "Unknown":
+            wind_match = re.match(r"([A-Za-z]+)?\s*(\d+)?", wind_val.replace('\n', ' ').strip())
+            if wind_match:
+                winddir = wind_match.group(1) if wind_match.group(1) else "Unknown"
+                wind_speed = wind_match.group(2) if wind_match.group(2) else "Unknown"
+            else:
+                winddir = wind_val
+                wind_speed = wind_val
+
+        # Humidity: look for percent in "Pressure" column
+        humidity = row_map.get("Pressure", "Unknown")
+        if "%" not in humidity:
+            for cell in data_row:
+                if "%" in cell:
+                    humidity = cell
+                    break
+
+        if humidity != "Unknown":
+            humidity = humidity.replace("%", "").strip() + " percent"
+
+        # Pressure: find first cell after "Precipitation (in)" that matches 29.xx or 30.xx
+        pressure = "Unknown"
+        try:
+            precip_idx = header_cells.index("Precipitation (in)")
+            for cell in data_row[precip_idx+1:]:
+                if re.match(r'^(2[8-9]|3[0-2])\.\d{2}$', cell.strip()):
+                    pressure = cell.strip()
+                    break
+        except Exception:
+            for cell in data_row:
+                if re.match(r'^(2[8-9]|3[0-2])\.\d{2}$', cell.strip()):
+                    pressure = cell.strip()
+                    break
+
+        result.update({
+            "observations": row_map.get("Weather", "Unknown"),
+            "temperature": row_map.get("Temperature (ºF)", "Unknown"),
+            "humidity": humidity,
+            "winddir": winddir,
+            "wind_speed": wind_speed,
+            "pressure": pressure,
+            "visibility": row_map.get("Vis. (mi.)", "Unknown"),
+            "precipRate": row_map.get("Precipitation (in)", "Unknown"),
+        })
+
+        return result
+    except Exception as e:
+        print(f"[weather] Error fetching NWS obhistory (table): {e}", file=sys.stderr)
+        print("[weather] Falling back to MapClick parser...", file=sys.stderr)
+        return result
+
 def weather_worker(wx_cfg):
+    import os
+    import sys
+    import time
+    import shutil
+    import requests
+
     directory = wx_cfg["directory"]
+    nws_url = wx_cfg["nws_url"]
+    nws_url_fallback = wx_cfg.get("nws_url_fallback", "")
     wx_data_url = wx_cfg["wx_data_url"]
     wx_day_url = wx_cfg["wx_day_url"]
-    nws_url = wx_cfg["nws_url"]
     polling_time = wx_cfg["polling_time"]
+    use_nws_only = wx_cfg.get("use_nws_only", False)
     output_file = os.path.join(directory, "wx_data")
     backup_file = os.path.join(directory, "wx_data_previous")
     timestamp_file = os.path.join(directory, "wx_data_previous_time")
@@ -142,7 +231,6 @@ def weather_worker(wx_cfg):
     os.makedirs(directory, exist_ok=True)
 
     while True:
-        # Backup every 2 hrs
         current_time = time.time()
         backup_needed = True
         if os.path.exists(output_file):
@@ -162,55 +250,80 @@ def weather_worker(wx_cfg):
                 except Exception as e:
                     print(f"[weather] Backup error: {e}", file=sys.stderr)
 
-        nws_conditions, nws_visibility = fetch_nws_conditions_and_visibility(nws_url)
-        wx_data_json = get_json(wx_data_url)
-        wx_day_json = get_json(wx_day_url)
-
-        observations = wx_day_json.get("observations", [])
-        last_obs = observations[-1] if observations else {}
-
-        temperature = get_nested(last_obs, ["imperial", "tempAvg"])
-        humidity = get_nested(last_obs, ["humidityAvg"])
-        winddir_deg = get_nested(last_obs, ["winddirAvg"])
-        wind_speed = get_nested(last_obs, ["imperial", "windspeedAvg"])
-        wind_gust = get_nested(last_obs, ["imperial", "windgustAvg"])
-        pressure = get_nested(last_obs, ["imperial", "pressureMax"])
-
-        precip_rate = None
-        if wx_data_json.get("observations"):
-            obs0 = wx_data_json["observations"][0]
-            precip_rate = obs0.get("imperial", {}).get("precipRate")
-
-        winddir = degrees_to_direction(winddir_deg)
-
-        previous_pressure = read_pressure_from_file(backup_file)
-        new_pressure = pressure
-        baro_status = "unknown"
-        if previous_pressure is not None and new_pressure is not None:
+        if use_nws_only:
+            obhistory_result = fetch_nws_obhistory_all_fields(nws_url, nws_url_fallback)
+            # Calculate pressure_status
+            previous_pressure = read_pressure_from_file(backup_file)
+            new_pressure = obhistory_result.get("pressure")
+            baro_status = "unknown"
             try:
-                previous_pressure = float(previous_pressure)
-                new_pressure = float(new_pressure)
-                if previous_pressure > new_pressure:
-                    baro_status = "falling"
-                elif previous_pressure < new_pressure:
-                    baro_status = "rising"
-                else:
-                    baro_status = "steady"
+                prev = float(previous_pressure) if previous_pressure is not None else None
+                new = float(new_pressure) if new_pressure not in (None, "Unknown") else None
+                if prev is not None and new is not None:
+                    if prev > new:
+                        baro_status = "falling"
+                    elif prev < new:
+                        baro_status = "rising"
+                    else:
+                        baro_status = "steady"
             except Exception:
                 baro_status = "unknown"
 
-        output_data = {
-            "observations": nws_conditions,
-            "temperature": f"{temperature} degrees" if temperature is not None else "Unknown",
-            "humidity": f"{humidity} percent" if humidity is not None else "Unknown",
-            "winddir": winddir,
-            "wind_speed": f"{wind_speed}" if wind_speed is not None else "Unknown",
-            "wind_gust": f"{wind_gust}" if wind_gust is not None else "Unknown",
-            "pressure": f"{pressure}" if pressure is not None else "Unknown",
-            "pressure_status": baro_status,
-            "visibility": f"{nws_visibility} miles" if nws_visibility != "Unknown" else "Unknown",
-            "precipRate": f"{precip_rate:.2f}" if precip_rate is not None else "Unknown"
-        }
+            output_data = {}
+            for key in [
+                "observations", "temperature", "humidity", "winddir", "wind_speed",
+                "wind_gust", "pressure", "visibility", "precipRate"
+            ]:
+                val = obhistory_result.get(key, "Unknown")
+                output_data[key] = val
+            output_data["pressure_status"] = baro_status
+        else:
+            obhistory_result = fetch_nws_obhistory_all_fields(nws_url, nws_url_fallback)
+            wx_data_json = get_json(wx_data_url)
+            wx_day_json = get_json(wx_day_url)
+            observations = wx_day_json.get("observations", [])
+            last_obs = observations[-1] if observations else {}
+
+            temperature = get_nested(last_obs, ["imperial", "tempAvg"])
+            humidity = get_nested(last_obs, ["humidityAvg"])
+            winddir_deg = get_nested(last_obs, ["winddirAvg"])
+            wind_speed = get_nested(last_obs, ["imperial", "windspeedAvg"])
+            wind_gust = get_nested(last_obs, ["imperial", "windgustAvg"])
+            pressure = get_nested(last_obs, ["imperial", "pressureMax"])
+
+            precip_rate = None
+            if wx_data_json.get("observations"):
+                obs0 = wx_data_json["observations"][0]
+                precip_rate = obs0.get("imperial", {}).get("precipRate")
+            winddir = degrees_to_direction(winddir_deg)
+            previous_pressure = read_pressure_from_file(backup_file)
+            new_pressure = pressure
+            baro_status = "unknown"
+            if previous_pressure is not None and new_pressure is not None:
+                try:
+                    previous_pressure = float(previous_pressure)
+                    new_pressure = float(new_pressure)
+                    if previous_pressure > new_pressure:
+                        baro_status = "falling"
+                    elif previous_pressure < new_pressure:
+                        baro_status = "rising"
+                    else:
+                        baro_status = "steady"
+                except Exception:
+                    baro_status = "unknown"
+
+            output_data = {
+                "observations": obhistory_result.get("observations", "Unknown"),
+                "temperature": f"{temperature} degrees" if temperature is not None else obhistory_result.get("temperature", "Unknown"),
+                "humidity": f"{humidity} percent" if humidity is not None else obhistory_result.get("humidity", "Unknown"),
+                "winddir": winddir if winddir != "Unknown" else obhistory_result.get("winddir", "Unknown"),
+                "wind_speed": f"{wind_speed}" if wind_speed is not None else obhistory_result.get("wind_speed", "Unknown"),
+                "wind_gust": f"{wind_gust}" if wind_gust is not None else obhistory_result.get("wind_gust", "Unknown"),
+                "pressure": f"{pressure}" if pressure is not None else obhistory_result.get("pressure", "Unknown"),
+                "pressure_status": baro_status,
+                "visibility": obhistory_result.get("visibility", "Unknown"),
+                "precipRate": f"{precip_rate:.2f}" if precip_rate is not None else obhistory_result.get("precipRate", "Unknown")
+            }
 
         try:
             with open(output_file, "w") as f:

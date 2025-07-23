@@ -1,54 +1,22 @@
-# Log rotated on Tue 22 Jul 00:00:12 EDT 2025
-2025-07-22 00:02:47.379: WX Report: {'observations': 'Overcast', 'temperature': '70', 'humidity': '55 percent', 'winddir': 'N', 'wind_speed': '6', 'wind_gust': 'Unknown', 'pressure': '30.04', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': ''}
-2025-07-22 00:03:14.904: Play: 5657-CT.wav [interruptible] - successful
-2025-07-22 00:03:21.135: Play: 5199-AID Nicole.wav [wait_for_cos] - successful
-2025-07-22 00:37:49.038: Play: 5308-IID We Have the Technology.wav [normal] - successful
-2025-07-22 00:37:51.302: Play: 5639-CT.wav [interruptible] - successful
-2025-07-22 00:38:00.948: Play: 5171-TM PL 77.wav [interruptible] - successful
-2025-07-22 00:59:57.476: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 00:59:57.476: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '63 degrees', 'humidity': '65 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.05', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 01:59:57.473: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 01:59:57.474: WX Report: {'observations': 'Fair', 'temperature': '58 degrees', 'humidity': '77 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '30.07', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 02:59:57.460: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 02:59:57.460: WX Report: {'observations': 'Partly Cloudy', 'temperature': '56 degrees', 'humidity': '85 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.07', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 03:59:57.499: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 03:59:57.500: WX Report: {'observations': 'Fair', 'temperature': '55 degrees', 'humidity': '91 percent', 'winddir': 'ESE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.08', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 04:59:57.465: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 04:59:57.466: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '54 degrees', 'humidity': '95 percent', 'winddir': 'E', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.08', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 05:59:57.505: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 05:59:57.505: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '54 degrees', 'humidity': '95 percent', 'winddir': 'ESE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.1', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 06:59:57.486: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 06:59:57.487: WX Report: {'observations': 'A Few Clouds', 'temperature': '56 degrees', 'humidity': '93 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.12', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 07:32:51.489: Play: 5309-IID That's going to be Trouble.wav [normal] - successful
-2025-07-22 07:32:52.891: Play: 5645-CT.wav [interruptible] - successful
-2025-07-22 07:33:03.392: Play: 5172-TM PL 77.wav [interruptible] - successful
-2025-07-22 07:59:57.467: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 07:59:57.467: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '64 degrees', 'humidity': '75 percent', 'winddir': 'ENE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.13', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 08:59:57.500: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 08:59:57.501: WX Report: {'observations': 'Fair', 'temperature': '68 degrees', 'humidity': '65 percent', 'winddir': 'NW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.15', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 09:59:57.464: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 09:59:57.464: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '62 percent', 'winddir': 'NNW', 'wind_speed': '1', 'wind_gust': '4', 'pressure': '30.15', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 10:59:57.485: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 10:59:57.486: WX Report: {'observations': 'Fair', 'temperature': '73 degrees', 'humidity': '53 percent', 'winddir': 'NW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.16', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 11:59:57.505: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 11:59:57.505: WX Report: {'observations': 'A Few Clouds', 'temperature': '75 degrees', 'humidity': '48 percent', 'winddir': 'W', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.15', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 12:59:57.498: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 12:59:57.499: WX Report: {'observations': 'Fair', 'temperature': '77 degrees', 'humidity': '47 percent', 'winddir': 'N', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.14', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 13:59:57.498: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 13:59:57.498: WX Report: {'observations': 'Fair', 'temperature': '78 degrees', 'humidity': '44 percent', 'winddir': 'NNE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 14:59:57.507: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 14:59:57.507: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '77 degrees', 'humidity': '46 percent', 'winddir': 'W', 'wind_speed': '3', 'wind_gust': '4', 'pressure': '30.13', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 15:59:57.434: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 15:59:57.435: WX Report: {'observations': 'Partly Cloudy', 'temperature': '80 degrees', 'humidity': '42 percent', 'winddir': 'SE', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.12', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 16:59:57.543: Play: 9980-cond_tone.wav [normal] - successful
-2025-07-22 16:59:57.543: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '79 degrees', 'humidity': '46 percent', 'winddir': 'NNE', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '30.12', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-22 17:05:03.439: Play: 5120-Msg Its 505 Yabba Dabba Do.wav [wait_for_cos] - successful
-2025-07-22 17:08:25.205: Play: 5310-IID Silly Thing in Reverse.wav [normal] - successful
-2025-07-22 17:08:27.258: Play: 5647-CT.wav [interruptible] - successful
-2025-07-22 17:08:37.102: Play: 5173-TM PL 77.wav [interruptible] - successful
-2025-07-22 17:08:46.285: Play: 5647-CT.wav [interruptible] - successful
-2025-07-22 17:08:52.740: Play: 5647-CT.wav [interruptible] - successful
-2025-07-22 17:14:34.036: Play requested: P5300W (web input box)
-2025-07-22 17:14:54.344: Play: 5311-IID Reach Out and Touch Someone.wav [wait_for_cos] - successful
-2025-07-22 17:14:56.232: Play: 5647-CT.wav [interruptible] - successful
-2025-07-22 17:17:57.962: Play: 5431-PID Meyer - It Walks, It Talks.wav [normal] - successful
+# Log rotated on Wed 23 Jul 00:00:11 EDT 2025
+2025-07-23 00:04:20.450: Configuration reload requested from web
+2025-07-23 00:05:25.254: Configuration reload requested from web
+2025-07-23 00:59:57.519: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 00:59:57.519: WX Report: {'observations': 'Fair', 'temperature': '59 degrees', 'humidity': '98 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.2', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 01:59:57.557: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 01:59:57.557: WX Report: {'observations': 'Partly Cloudy', 'temperature': '59 degrees', 'humidity': '99 percent', 'winddir': 'ENE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.21', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 02:59:57.527: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 02:59:57.527: WX Report: {'observations': 'A Few Clouds', 'temperature': '58 degrees', 'humidity': '99 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.22', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 03:59:57.538: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 03:59:57.538: WX Report: {'observations': 'A Few Clouds', 'temperature': '58 degrees', 'humidity': '99 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.22', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 04:59:57.546: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 04:59:57.546: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '57 degrees', 'humidity': '99 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.22', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 05:59:57.566: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 05:59:57.566: WX Report: {'observations': 'Fair', 'temperature': '56 degrees', 'humidity': '99 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '30.24', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 06:59:57.545: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 06:59:57.545: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '57 degrees', 'humidity': '99 percent', 'winddir': 'S', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '30.25', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 07:18:36.774: Play: 5301-IID Welcome to the Machine.wav [normal] - successful
+2025-07-23 07:18:37.678: Play: 5609-CT.wav [interruptible] - successful
+2025-07-23 07:18:48.672: Play: 5171-TM PL 77.wav [interruptible] - successful
+2025-07-23 07:59:57.559: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 07:59:57.560: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '64 degrees', 'humidity': '99 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '30.25', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}

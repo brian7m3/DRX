@@ -153,59 +153,78 @@ DASHBOARD_TEMPLATE = '''
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-    #play-local-modal .modal-content {
-        background: #272b38;
-        color: #eee;
-        border-color: #555;
-    }
-    
-    /* Dark mode error styles - add these new styles */
-    .base-error {
-        border: 2px solid #ff7777 !important;
-        background-color: rgba(255, 119, 119, 0.25) !important;
-    }
-    
-    .validation-error {
-        color: #ff7777;
-        background-color: rgba(255, 119, 119, 0.15);
-        border: 1px solid #ff7777;
-    }
-    
-    #base-configurator-validation-summary {
-        background-color: rgba(255, 119, 119, 0.15);
-        border: 1px solid #ff7777;
-        color: #ff7777;
-    }
-    
-    /* Improve select element visibility */
-    select {
-        background-color: #2d333b; /* Dark background */
-        color: #e6edf3; /* Light text */
-        border: 1px solid #444c56;
-    }
-    
-    /* Improve dropdown options visibility */
-    select option {
-        background-color: #2d333b; /* Dark background */
-        color: #e6edf3; /* Light text */
-    }
-    
-    /* Ensure the selected option is visible */
-    select option:checked {
-        background-color: #347d39; /* GitHub-style green */
-        color: white;
-    }
-.status-last-played {
-  font-size: .75em !important;
-  /* Optional extras: */
-  font-weight: bold;
-  /* color: #1976d2 !important; /* optional blue color for visibility */ 
-}
-#playback-status {
-  font-size: .75em !important;
-  /* Optional extras: */
-  font-weight: bold;
-  /* color: #1976d2 !important; optional blue color for visibility */ */
+  /* Modal overlay */
+  #url-modal {
+    background: rgba(0,0,0,0.75) !important; /* darker overlay */
+  }
+  /* Modal content box */
+  #url-modal > div {
+    background: #23272b !important;           /* dark modal box */
+    color: #eee !important;
+    border: 1.5px solid #444 !important;
+    box-shadow: 0 2px 24px #000c !important;
+  }
+  /* Label inside modal */
+  #url-modal label {
+    color: #90a4ff !important;                /* blue label */
+  }
+  /* Input inside modal */
+  #url-modal input[type="text"],
+  #url-modal input[type="text"].form-control {
+    background: #1a1d22 !important;
+    color: #fff !important;
+    border: 1.5px solid #444 !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  #url-modal input[type="text"]:focus,
+  #url-modal input[type="text"].form-control:focus {
+    border: 1.5px solid #90a4ff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px #335 !important;
+  }
+
+  /* Dark mode error styles */
+  .base-error {
+    border: 2px solid #ff7777 !important;
+    background-color: rgba(255, 119, 119, 0.25) !important;
+  }
+  .validation-error {
+    color: #ff7777;
+    background-color: rgba(255, 119, 119, 0.15);
+    border: 1px solid #ff7777;
+  }
+  #base-configurator-validation-summary {
+    background-color: rgba(255, 119, 119, 0.15);
+    border: 1px solid #ff7777;
+    color: #ff7777;
+  }
+
+  /* Improve select element visibility */
+  select {
+    background-color: #2d333b;
+    color: #e6edf3;
+    border: 1px solid #444c56;
+  }
+  select option {
+    background-color: #2d333b;
+    color: #e6edf3;
+  }
+  select option:checked {
+    background-color: #347d39;
+    color: white;
+  }
+
+  .status-last-played {
+    font-size: .75em !important;
+    font-weight: bold;
+    /* color: #1976d2 !important;  optional blue color for visibility */
+  }
+  #playback-status {
+    font-size: .75em !important;
+    font-weight: bold;
+    /* color: #1976d2 !important; optional blue color for visibility */
+  }
 }
 
 /* Optional: Make sure the grid auto-rows are tall enough */
@@ -1597,11 +1616,12 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             <!-- Weather Alert Settings -->
             <div class="config-section">
-                <h3>Weather (WX) Settings</h3>
+                <h3>WX Alert Settings</h3>
                 <div class="form-group checkbox">
                     <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
                     <label for="wx_alerts">Enable Alerts</label>
                 </div>
+                <br>
                 <div class="form-group">
                     <label for="same_alerts_polling_time">Alerts Polling (secs):</label>
                     <input type="number" id="same_alerts_polling_time" name="same_alerts_polling_time" min="60" max="3600" value="{{ same_alerts_polling_time }}">
@@ -1615,9 +1635,17 @@ document.addEventListener("DOMContentLoaded", function() {
                             Zip Codes
                         </a>:
                     </label>
-                    <input type="text" id="same_alerts_zip_code" name="same_alerts_zip_code" value="{{ same_alerts_zip_code }} "
-                    placeholder="02673,MAZ017">
-                </div>  
+                    <input
+                        type="text"
+                        id="same_alerts_zip_code"
+                        name="same_alerts_zip_code"
+                        class="modal-url-trigger"
+                        data-label="NWS Zones or Zip Codes"
+                        value="{{ same_alerts_zip_code|default('') }}"
+                        placeholder="02673,MAZ017"
+                        readonly
+                    >
+                </div>             
                 <div class="form-group">
                     <label for="wx_ctone">Override C-Tone:</label>
                     <input type="number" id="wx_ctone" name="wx_ctone"
@@ -1647,12 +1675,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     >
                     <label for="use_expired_time">Use Alert Time Instead</label>
                 </div>
-                <br>
-                <div class="form-group">
-                    <label for="weather_polling_time">Weather Polling (mins):</label>
-                    <input type="number" id="weather_polling_time" name="weather_polling_time" min="5" max="1440" value="{{ weather_polling_time }}">
-                </div>
-                
                 <script>
                 function toggleCtoneTime() {
                     var useExp = document.getElementById('use_expired_time').checked;
@@ -1663,6 +1685,69 @@ document.addEventListener("DOMContentLoaded", function() {
                 };
                 </script>
             </div>
+            <!-- WX Condition Settings (NEW CARD) -->
+            <div class="config-section">
+                <h3>WX Conds. Settings</h3>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="use_nws_only" name="use_nws_only" {% if use_nws_only|lower == 'true' %}checked{% endif %}>
+                    <label for="use_nws_only">Use NWS Only</label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="weather_polling_time">Weather Polling (mins):</label>
+                    <input type="number" id="weather_polling_time" name="weather_polling_time" min="5" max="1440" value="{{ weather_polling_time }}">
+                </div>
+                <div class="form-group">
+                    <label for="wx_data_url">WU Data URL:</label>
+                    <input
+                        type="text"
+                        id="wx_data_url"
+                        name="wx_data_url"
+                        class="modal-url-trigger"
+                        data-label="WX Data URL"
+                        value="{{ wx_data_url|default('') }}"
+                        readonly
+                    >
+                    <small class="help-text">WX Underground data source URL</small>
+                </div>
+                <div class="form-group">
+                    <label for="wx_day_url">WU Day URL:</label>
+                    <input
+                        type="text"
+                        id="wx_day_url"
+                        name="wx_day_url"
+                        class="modal-url-trigger"
+                        data-label="WX Day URL"
+                        value="{{ wx_day_url|default('') }}"
+                        readonly
+                    >
+                    <small class="help-text">WX Underground day source URL</small>
+                </div>
+                <div class="form-group">
+                    <label for="nws_url">NWS URL:</label>
+                    <input
+                        type="text"
+                        id="nws_url"
+                        name="nws_url"
+                        class="modal-url-trigger"
+                        data-label="NWS URL"
+                        value="{{ nws_url|default('') }}"
+                        readonly
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="nws_url_fallback">NWS URL Fallback:</label>
+                    <input
+                        type="text"
+                        id="nws_url_fallback"
+                        name="nws_url_fallback"
+                        class="modal-url-trigger"
+                        data-label="NWS URL Fallback"
+                        value="{{ nws_url_fallback|default('') }}"
+                        readonly
+                    >
+                </div>
+            </div>            
             <!-- GPIO Settings -->
             <div class="config-section gpio-settings">
                 <h3>GPIO Settings</h3>
@@ -1699,6 +1784,18 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </form>
 </div>
+<script>
+function expandTextarea(el) {
+    el.rows = 6;
+    el.style.minHeight = "6em";
+}
+function shrinkTextarea(el) {
+    if (!el.value || el.value.length < 120) {
+        el.rows = 1;
+        el.style.minHeight = "2em";
+    }
+}
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var select = document.querySelector('select[name="track_dropdown"]');
@@ -2215,6 +2312,67 @@ function refreshWeatherBadge() {
 setInterval(refreshWeatherBadge, 1000);
 document.addEventListener('DOMContentLoaded', refreshWeatherBadge);
 </script>
+<!-- Place this at the end of your DASHBOARD_TEMPLATE, before </body> -->
+<div id="url-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:32px 24px; border-radius:14px; box-shadow:0 2px 14px #3338; max-width:900px; width:80vw; min-width:400px; display:flex; flex-direction:column; align-items:stretch;">
+    <label id="url-modal-label" style="font-weight:bold; margin-bottom:8px;"></label>
+    <input type="text" id="url-modal-input" style="font-size:1.2em; padding:10px; border-radius:6px; border:1.5px solid #888; width:100%;" />
+  </div>
+</div>
+<script>
+// Modal logic for URL/Zone fields
+document.addEventListener("DOMContentLoaded", function() {
+  let currentTarget = null;
+  const modal = document.getElementById('url-modal');
+  const modalInput = document.getElementById('url-modal-input');
+  const modalLabel = document.getElementById('url-modal-label');
+
+  // Click triggers for all relevant fields
+  document.querySelectorAll('.modal-url-trigger').forEach(function(field) {
+    field.addEventListener('click', function() {
+      currentTarget = this;
+      modalInput.value = this.value;
+      modalLabel.textContent = this.getAttribute('data-label') || '';
+      modal.style.display = 'flex';
+      setTimeout(() => modalInput.focus(), 50);
+    });
+  });
+
+  // On modal input change, update field value
+  modalInput.addEventListener('input', function() {
+    if (currentTarget) {
+      currentTarget.value = this.value;
+    }
+  });
+
+  // On blur (but not due to clicking on modal input itself), close
+  modalInput.addEventListener('blur', function() {
+    modal.style.display = 'none';
+    currentTarget = null;
+  });
+
+  // On Escape, close modal
+  modalInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      modal.style.display = 'none';
+      if (currentTarget) currentTarget.blur();
+      currentTarget = null;
+    }
+  });
+
+  // Prevent modal close if clicking inside modal content
+  modal.querySelector('div').addEventListener('mousedown', function(e) {
+    e.stopPropagation();
+  });
+
+  // Click outside modal closes it
+  modal.addEventListener('mousedown', function() {
+    if (modalInput === document.activeElement) modalInput.blur();
+    modal.style.display = 'none';
+    currentTarget = null;
+  });
+});
+</script>
 </body>
 </html>
 '''
@@ -2394,7 +2552,13 @@ def dashboard():
     same_alerts_zip_code = wx_config.get('SAME Alerts', 'zip_code', fallback='06492')
     weather_polling_time = wx_config.get('weather', 'polling_time', fallback='15')
 
-    
+    # WX Condition Settings fields
+    use_nws_only = wx_config.get('weather', 'use_nws_only', fallback='false')
+    wx_data_url = wx_config.get('weather', 'wx_data_url', fallback='')
+    wx_day_url = wx_config.get('weather', 'wx_day_url', fallback='')
+    nws_url = wx_config.get('weather', 'nws_url', fallback='')
+    nws_url_fallback = wx_config.get('weather', 'nws_url_fallback', fallback='')
+
     # --- Weather System Status ---
     weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
     
@@ -2409,7 +2573,7 @@ def dashboard():
         state=state,
         web_log=load_recent_web_log(10)[::-1],
         all_files=get_all_sound_files(),
-        config=config,  # This will now be the freshly loaded config
+        config=config,
         session=session,
         state_blocks_html=state_blocks_html,
         drx_uptime=get_drx_uptime(),
@@ -2420,7 +2584,12 @@ def dashboard():
         web_version="2.01.00",
         same_alerts_polling_time=same_alerts_polling_time,
         same_alerts_zip_code=same_alerts_zip_code,
-        weather_polling_time=weather_polling_time
+        weather_polling_time=weather_polling_time,
+        use_nws_only=use_nws_only,
+        wx_data_url=wx_data_url,
+        wx_day_url=wx_day_url,
+        nws_url=nws_url,
+        nws_url_fallback=nws_url_fallback
     )
     
 def is_cos_active():
@@ -2680,10 +2849,15 @@ def edit_config_structured():
     wx_config['SAME Alerts']['polling_time'] = form_data.get('same_alerts_polling_time', '300')
     wx_config['SAME Alerts']['zip_code'] = form_data.get('same_alerts_zip_code', '')
 
-    # weather: polling_time (minutes)
+    # --- WX Condition Settings ---
     if 'weather' not in wx_config:
         wx_config['weather'] = {}
     wx_config['weather']['polling_time'] = form_data.get('weather_polling_time', '15')
+    wx_config['weather']['use_nws_only'] = 'true' if form_data.get('use_nws_only') else 'false'
+    wx_config['weather']['wx_data_url'] = form_data.get('wx_data_url', '')
+    wx_config['weather']['wx_day_url'] = form_data.get('wx_day_url', '')
+    wx_config['weather']['nws_url'] = form_data.get('nws_url', '')
+    wx_config['weather']['nws_url_fallback'] = form_data.get('nws_url_fallback', '')
 
     with open(wx_config_path, 'w') as wx_file:
         wx_config.write(wx_file)

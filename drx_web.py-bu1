@@ -20,6 +20,7 @@ WEB_PORT = int(config.get("Web", "port", fallback="8080"))
 WEB_USER = config.get("WebAuth", "username", fallback="admin")
 WEB_PASS = config.get("WebAuth", "password", fallback="drxpass")
 DTMF_LOG_FILE = os.path.join(script_dir, "logs", "dtmf.log")
+WX_CONFIG_PATH = os.path.join(script_dir, 'wx', 'wx_config.ini')
 
 STATE_FILE = os.path.join(script_dir, 'drx_state.json')  # NOTE: No longer used - kept for debug endpoint only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
@@ -1390,19 +1391,32 @@ document.addEventListener("DOMContentLoaded", function() {
               All tracks must start with an R and end with &#92;n).
               <br>
               <br>
-                  <li><b>Re</b> Brings up an "Echo Test" to record and playback user - Re9999 (where 9999 is the track to record).  The recorded track does not get overwritten until called again, so you can have multiple commands to store different tracks.  Track recording stops automatically after 1 minute if COS doesn't become inactive prior.  If recording doesn't start within 5 seconds, Echo Test aborts (echo-to.wav). Required files are "echo-start.wav", "echo-to.wav", and optional "echo-end.wav".  Place them in the "sounds" directory.  Set COS debounce time in config for fluttering signals. *</li>
+                  <li><b>Re</b> Brings up an "Echo Test" to record and playback user - Re9999 (where 9999 is the track to record).  The recorded track does not get overwritten until called again, 
+                  so you can have multiple commands to store different tracks.  Track recording stops automatically after 1 minute if COS doesn't become inactive prior.  
+                  If recording doesn't start within 5 seconds, Echo Test aborts (echo-to.wav). Required files are "echo-start.wav", "echo-to.wav", and optional "echo-end.wav".  
+                  Place them in the "sounds" directory.  Set COS debounce time in config for fluttering signals. *</li>
               <h3>Special Functions:</h3>
                   <li><b>S:</b> Scripts - Can call a 4 digit script number in the DRX/scripts folder -> S1001 &#92;n.</li>
                   <li><b>W1:</b> Weather Conditions, if cos was active in the last 10 seconds, jumps to W2 -> W1 &#92;n. **</li>
                   <li><b>W1F:</b> Weather Conditions Forced, same as W1 but doesn't have the cos rule -> W1F &#92;n. **</li>
                   <li><b>W2:</b> Temperature -> W2 &#92;n. **</li>
-                  <li><b>W3:</b> WX Alerts -> W3 &#92;n to manually call up any active alert.. If you do not check Enable Alerts, you will not get automaticall WX Alerts and your tone will not change.  If you enter a track in the Override CTone section, your current courtesty tone will be overriden by the alert one (CW letter W or WX for example).  For this to work, your tones must be in the following format nnnn-CT desciption, 5601-CT.wav or 5601-CT doorbell.wav. If you leave this blank, your tone will not change upon receiving on automated wx alert.  Enter the amount of time your would like the alert to be valid for in the C-Tone Time section.  To cancel an alert in progress, uncheck the Enable Alert box.  You can re-enable it you want.  Setting the ctone time for less than the remaining time will set the alert timer to the new value.**</li>
+                  <li><b>W3:</b> WX Alerts -> W3 &#92;n to manually call up any active alert.. If you do not check Enable Alerts, you will not get automatic WX Alerts and your tone will not change.  
+                  If you enter a track in the Override CTone section, your current courtesy tone will be overriden by the alert one (CW letter W or WX for example).  
+                  For this to work, your tones must be in the following format nnnn-CT description, 5601-CT.wav or 5601-CT doorbell.wav. 
+                  If you leave this blank, your tone will not change upon receiving an automated wx alert.  Enter the amount of time your would like the alert to be valid for in the C-Tone Time section.  
+                  To cancel an alert in progress, uncheck save and recheck and save the Enable Alert box. Setting the ctone time for less than the remaining time will set the alert timer to the new value.  
+                  Active alerts will generate a 9995-WX Alert.wav file in your sounds directory.  This will continuously update as multiple alerts are received or expire.
+                  DRX keeps track of all active alerts.  When all alerts expire, the wav will be deleted.  The wav is meant to be used possibility in a tail message.  
+                  You could have "P9995RMJ5170IM" which would play alerts first in repeat mode, if they exist, and then your regular tail message base interruptable - 5170.  **</li>
+                  <li><b>W3x:</b> User function to see if Wx Alerts or play before Wx Conditions.  Gives brief alert descriptions or says no active wx alerts. </li>
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
                   <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
                   <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
-                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
+                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the 
+                  DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
               <h3>Bases:</h3> 
-                  A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  This will continue and loop back to 4201.
+                  A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  
+                  This will continue and loop back to 4201.
                   <br>
                   Enter in controller as P<base> &#92;n - P5300&#92;n
                   <br>
@@ -1583,21 +1597,33 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             <!-- Weather Alert Settings -->
             <div class="config-section">
-                    <h3>Weather (WX) Settings</h3>
-                    <div class="form-group checkbox">
-                        <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
-                        <label for="wx_alerts">Enable Alerts</label>
-                    </div>
-                <div class="form-group">
-                    <label for="wx_interval">Alert Interval (seconds):</label>
-                    <input type="number" id="wx_interval" name="wx_interval" min="1" max="3600" value="{{ config.get('WX', 'interval', fallback='30') }}">
+                <h3>Weather (WX) Settings</h3>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
+                    <label for="wx_alerts">Enable Alerts</label>
                 </div>
+                <div class="form-group">
+                    <label for="same_alerts_polling_time">Alerts Polling (secs):</label>
+                    <input type="number" id="same_alerts_polling_time" name="same_alerts_polling_time" min="60" max="3600" value="{{ same_alerts_polling_time }}">
+                </div>
+                <div class="form-group">
+                    <label for="same_alerts_zip_code">
+                        <a href="https://www.weather.gov/pimar/PubZone" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+                            NWS Zones
+                        </a> or
+                        <a href="https://tools.usps.com/zip-code-lookup.htm" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+                            Zip Codes
+                        </a>:
+                    </label>
+                    <input type="text" id="same_alerts_zip_code" name="same_alerts_zip_code" value="{{ same_alerts_zip_code }} "
+                    placeholder="02673,MAZ017">
+                </div>  
                 <div class="form-group">
                     <label for="wx_ctone">Override C-Tone:</label>
                     <input type="number" id="wx_ctone" name="wx_ctone"
                             min="0" max="9999" value="{{ config.get('WX', 'ctone', fallback='') }}"
                             placeholder="0000" pattern="\d{0,4}">
-                    <small class="help-text">Leave blank for none, or enter 4-digit tone (0000–9999)</small>
+                    <small class="help-text">Leave blank for none, or enter 4-digit track</small>
                 </div>
                 <div class="form-group">
                     <label for="wx_ctone_time">C-Tone Time (minutes):</label>
@@ -1619,7 +1645,12 @@ document.addEventListener("DOMContentLoaded", function() {
                             {% if config.get('WX', 'use_expired_time', fallback='true').lower() == 'true' %}checked{% endif %}
                             onchange="toggleCtoneTime()"
                     >
-                    <label for="use_expired_time">Use Alert Exp Instead</label>
+                    <label for="use_expired_time">Use Alert Time Instead</label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="weather_polling_time">Weather Polling (mins):</label>
+                    <input type="number" id="weather_polling_time" name="weather_polling_time" min="5" max="1440" value="{{ weather_polling_time }}">
                 </div>
                 
                 <script>
@@ -2358,6 +2389,11 @@ def dashboard():
     state = read_state()
     wx_alert_active = state.get("wx_alert_active", False)
     state_blocks_html = render_template_string(STATE_BLOCKS_TEMPLATE, state=state)
+    wx_config = read_wx_config()
+    same_alerts_polling_time = wx_config.get('SAME Alerts', 'polling_time', fallback='300')
+    same_alerts_zip_code = wx_config.get('SAME Alerts', 'zip_code', fallback='06492')
+    weather_polling_time = wx_config.get('weather', 'polling_time', fallback='15')
+
     
     # --- Weather System Status ---
     weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
@@ -2381,7 +2417,10 @@ def dashboard():
         weather_class=weather_class,
         weather_color=weather_color,
         version=state.get("version", "Unknown"),
-        web_version="2.01.00"
+        web_version="2.01.00",
+        same_alerts_polling_time=same_alerts_polling_time,
+        same_alerts_zip_code=same_alerts_zip_code,
+        weather_polling_time=weather_polling_time
     )
     
 def is_cos_active():
@@ -2629,6 +2668,25 @@ def edit_config_structured():
     # Write to file
     with open(config_file_path, 'w') as configfile:
         existing_config.write(configfile)
+
+    # --- Update /DRX/wx/wx_config.ini with new fields ---
+    wx_config_path = os.path.join(script_dir, "wx", "wx_config.ini")
+    wx_config = configparser.ConfigParser()
+    wx_config.read(wx_config_path)
+
+    # SAME Alerts: polling_time (seconds) and zip_code
+    if 'SAME Alerts' not in wx_config:
+        wx_config['SAME Alerts'] = {}
+    wx_config['SAME Alerts']['polling_time'] = form_data.get('same_alerts_polling_time', '300')
+    wx_config['SAME Alerts']['zip_code'] = form_data.get('same_alerts_zip_code', '')
+
+    # weather: polling_time (minutes)
+    if 'weather' not in wx_config:
+        wx_config['weather'] = {}
+    wx_config['weather']['polling_time'] = form_data.get('weather_polling_time', '15')
+
+    with open(wx_config_path, 'w') as wx_file:
+        wx_config.write(wx_file)
     
     # Use the simpler approach for telling DRX to reload
     write_webcmd({"type": "reload_config"})
@@ -2796,7 +2854,6 @@ def api_dtmf_log():
         {% endfor %}
     ''', dtmf_log=lines)
 
-# ... all your existing code above ...
 
 @app.route("/download_dtmf_log")
 @require_login
@@ -2812,11 +2869,11 @@ def download_dtmf_log():
 
 def get_weather_system_status(wx_alert_active=False):
     wx_dir = os.path.join(os.path.dirname(__file__), "wx")
-    wx_gen = os.path.join(wx_dir, "wx_gen.py")
+    drx_wx = os.path.join(wx_dir, "drx_wx.py")
     wx_data = os.path.join(wx_dir, "wx_data")
     if wx_alert_active:
         return ("Alert", "weather-alert", "#ff2222")
-    if not os.path.exists(wx_gen):
+    if not os.path.exists(drx_wx):
         return ("Not Installed", "weather-warn", "#888")
     if not os.path.exists(wx_data):
         return ("Inactive", "weather-inactive", "#d32f2f")
@@ -2961,6 +3018,15 @@ def process_serial_command_for_tot(command):
         return True  # State changed
     
     return False  # No state change
+
+def read_wx_config():
+    wx_config = configparser.ConfigParser()
+    wx_config.read(WX_CONFIG_PATH)
+    return wx_config
+
+def write_wx_config(wx_config):
+    with open(WX_CONFIG_PATH, 'w') as f:
+        wx_config.write(f)
 
 @app.route("/api/base_configurator", methods=["GET"])
 def api_base_configurator():

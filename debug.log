@@ -1,0 +1,604 @@
+[2025-07-22 18:13:55] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 18:13:55] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 18:08:55] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 18:08:55] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 18:03:55] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 18:03:55] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 18:03:31] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 18:03:31] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 18:03:31] W1 CONDITIONS: WX report completed
+[2025-07-22 18:03:30] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:30] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-22 18:03:29] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:29] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-22 18:03:28] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:28] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-22 18:03:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/steady.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:27] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/steady.wav
+[2025-07-22 18:03:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:26] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-22 18:03:25] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:25] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 18:03:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:24] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 18:03:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:24] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-22 18:03:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-22 18:03:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:22] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 18:03:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:21] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-22 18:03:20] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:20] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 18:03:19] play_single_wav: filename=/home/drx/DRX/sounds/extra/5.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:19] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/5.wav
+[2025-07-22 18:03:18] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:18] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-22 18:03:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/NW.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:17] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/NW.wav
+[2025-07-22 18:03:16] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:16] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-22 18:03:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:15] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-22 18:03:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/9.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:15] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/9.wav
+[2025-07-22 18:03:14] play_single_wav: filename=/home/drx/DRX/sounds/extra/30.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:14] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/30.wav
+[2025-07-22 18:03:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:13] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-22 18:03:12] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:12] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-22 18:03:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/8.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/8.wav
+[2025-07-22 18:03:10] play_single_wav: filename=/home/drx/DRX/sounds/extra/70.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:10] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/70.wav
+[2025-07-22 18:03:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:09] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-22 18:03:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/Fair.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:08] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/Fair.wav
+[2025-07-22 18:03:04] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:03:04] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-22 18:03:04] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 18:03:04] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 18:03:04] RAW process_command input: 'W1'
+[2025-07-22 18:03:04] process_command reached
+[2025-07-22 18:03:04] Worker 613c1e30: Processing command: W1
+[2025-07-22 18:00:48] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 18:00:48] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 18:00:48] W1 CONDITIONS: WX report completed
+[2025-07-22 18:00:47] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:47] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-22 18:00:46] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:46] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-22 18:00:45] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:45] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-22 18:00:44] play_single_wav: filename=/home/drx/DRX/sounds/extra/rising.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:44] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/rising.wav
+[2025-07-22 18:00:43] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:43] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-22 18:00:42] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:42] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 18:00:42] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:42] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 18:00:41] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:41] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-22 18:00:40] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:40] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-22 18:00:39] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:39] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 18:00:38] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:38] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-22 18:00:37] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:37] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 18:00:36] play_single_wav: filename=/home/drx/DRX/sounds/extra/4.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:36] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/4.wav
+[2025-07-22 18:00:35] play_single_wav: filename=/home/drx/DRX/sounds/extra/guststo.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:35] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/guststo.wav
+[2025-07-22 18:00:33] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:33] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 18:00:33] play_single_wav: filename=/home/drx/DRX/sounds/extra/2.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:33] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/2.wav
+[2025-07-22 18:00:32] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:32] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-22 18:00:31] play_single_wav: filename=/home/drx/DRX/sounds/extra/WNW.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:31] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/WNW.wav
+[2025-07-22 18:00:29] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:29] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-22 18:00:29] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:29] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-22 18:00:28] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:28] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 18:00:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/40.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:27] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/40.wav
+[2025-07-22 18:00:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:26] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-22 18:00:25] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:25] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-22 18:00:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:24] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 18:00:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/80.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/80.wav
+[2025-07-22 18:00:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:22] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-22 18:00:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/PartlyCloudy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:21] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/PartlyCloudy.wav
+[2025-07-22 18:00:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:17] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-22 18:00:17] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 18:00:17] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 18:00:17] RAW process_command input: 'W1'
+[2025-07-22 18:00:17] process_command reached
+[2025-07-22 18:00:17] Worker 613c1e30: Processing command: W1
+[2025-07-22 18:00:17] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 18:00:17] Clearing REMOTE_BUSY to 0 (finally block)
+[2025-07-22 18:00:17] aplay info: Playing WAVE '/home/drx/DRX/sounds/9980-cond_tone.wav' : Signed 16 bit Little Endian, Rate 22050 Hz, Mono
+
+[2025-07-22 18:00:16] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 18:00:16] Setting REMOTE_BUSY to True (normal - play)
+[2025-07-22 18:00:16] NORMAL MODE ACTIVE
+[2025-07-22 18:00:16] play_sound: filename=/home/drx/DRX/sounds/9980-cond_tone.wav interruptible=False pausing=False repeating=False wait_for_cos=False
+[2025-07-22 18:00:16] play_sound: exists? True
+[2025-07-22 18:00:16] play_sound: absolute filename to play: /home/drx/DRX/sounds/9980-cond_tone.wav
+[2025-07-22 18:00:16] [PLAY_SOUND DEBUG] filename=/home/drx/DRX/sounds/9980-cond_tone.wav, display_name=9980-cond_tone
+[2025-07-22 18:00:16] play_direct_track: resolved filename=/home/drx/DRX/sounds/9980-cond_tone.wav, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-22 18:00:16] [CTONE PATCH] DIRECT WX_ALERTS: True, CTONE: '5095', OVERRIDE_EXPIRE: 0, NOW: 1753221616.5519636
+[2025-07-22 18:00:16] play_direct_track: code_str=9980, interruptible=False, pausing=False, repeat=False, wait_for_cos=False
+[2025-07-22 18:00:16] RAW process_command input: 'P9980'
+[2025-07-22 18:00:16] process_command reached
+[2025-07-22 18:00:16] Worker 613c1e30: Processing command: P9980
+[2025-07-22 18:00:16] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 18:00:16] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 18:00:16] W1 CONDITIONS: WX report completed
+[2025-07-22 18:00:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:15] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-22 18:00:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:15] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-22 18:00:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:13] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-22 18:00:12] play_single_wav: filename=/home/drx/DRX/sounds/extra/rising.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:12] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/rising.wav
+[2025-07-22 18:00:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-22 18:00:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 18:00:10] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:10] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 18:00:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:09] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-22 18:00:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:08] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-22 18:00:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:08] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 18:00:07] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:07] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-22 18:00:05] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:05] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 18:00:04] play_single_wav: filename=/home/drx/DRX/sounds/extra/4.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:04] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/4.wav
+[2025-07-22 18:00:03] play_single_wav: filename=/home/drx/DRX/sounds/extra/guststo.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:03] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/guststo.wav
+[2025-07-22 18:00:02] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:02] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 18:00:01] play_single_wav: filename=/home/drx/DRX/sounds/extra/2.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:01] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/2.wav
+[2025-07-22 18:00:00] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 18:00:00] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-22 17:59:59] play_single_wav: filename=/home/drx/DRX/sounds/extra/WNW.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:59] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/WNW.wav
+[2025-07-22 17:59:58] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:58] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-22 17:59:57] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:57] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-22 17:59:56] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:56] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:59:56] [SERIAL LOOP] Queued command: 'W1'
+[2025-07-22 17:59:56] is_cos_active: False
+[2025-07-22 17:59:56] DTMF match: False
+[2025-07-22 17:59:56] Got serial line: 'W1'
+[2025-07-22 17:59:56] [SERIAL LOOP] Queued command: 'P9980'
+[2025-07-22 17:59:56] is_cos_active: False
+[2025-07-22 17:59:56] DTMF match: False
+[2025-07-22 17:59:56] Got serial line: 'P9980'
+[2025-07-22 17:59:56] Line buffer: 'P9980\nW1\n'
+[2025-07-22 17:59:56] Raw serial bytes: b'P9980\nW1\n'
+[2025-07-22 17:59:55] play_single_wav: filename=/home/drx/DRX/sounds/extra/40.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:55] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/40.wav
+[2025-07-22 17:59:54] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:54] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-22 17:59:53] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:53] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-22 17:59:52] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:52] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:59:52] play_single_wav: filename=/home/drx/DRX/sounds/extra/80.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:52] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/80.wav
+[2025-07-22 17:59:50] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:50] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-22 17:59:49] play_single_wav: filename=/home/drx/DRX/sounds/extra/PartlyCloudy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:49] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/PartlyCloudy.wav
+[2025-07-22 17:59:45] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:59:45] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-22 17:59:45] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:59:45] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:59:45] RAW process_command input: 'W1'
+[2025-07-22 17:59:45] process_command reached
+[2025-07-22 17:59:45] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:58:55] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 17:58:55] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 17:58:34] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:58:34] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:58:34] W1 CONDITIONS: WX report completed
+[2025-07-22 17:58:33] Piper synthesize: 'miles'
+[2025-07-22 17:58:33] W3 ALERTS: Synthesizing 'miles' with piper
+[2025-07-22 17:58:31] Piper synthesize: '10'
+[2025-07-22 17:58:31] W3 ALERTS: Synthesizing '10' with piper
+[2025-07-22 17:58:29] Piper synthesize: 'visibility is'
+[2025-07-22 17:58:29] W3 ALERTS: Synthesizing 'visibility is' with piper
+[2025-07-22 17:58:28] Piper synthesize: 'rising'
+[2025-07-22 17:58:28] W3 ALERTS: Synthesizing 'rising' with piper
+[2025-07-22 17:58:26] Piper synthesize: 'inches'
+[2025-07-22 17:58:26] W3 ALERTS: Synthesizing 'inches' with piper
+[2025-07-22 17:58:25] Piper synthesize: '3'
+[2025-07-22 17:58:25] W3 ALERTS: Synthesizing '3' with piper
+[2025-07-22 17:58:24] Piper synthesize: '1'
+[2025-07-22 17:58:24] W3 ALERTS: Synthesizing '1' with piper
+[2025-07-22 17:58:22] Piper synthesize: 'point'
+[2025-07-22 17:58:22] W3 ALERTS: Synthesizing 'point' with piper
+[2025-07-22 17:58:21] Piper synthesize: '0'
+[2025-07-22 17:58:21] W3 ALERTS: Synthesizing '0' with piper
+[2025-07-22 17:58:20] Piper synthesize: '3'
+[2025-07-22 17:58:20] W3 ALERTS: Synthesizing '3' with piper
+[2025-07-22 17:58:18] Piper synthesize: 'pressure is'
+[2025-07-22 17:58:18] W3 ALERTS: Synthesizing 'pressure is' with piper
+[2025-07-22 17:58:16] Piper synthesize: 'mph'
+[2025-07-22 17:58:16] W3 ALERTS: Synthesizing 'mph' with piper
+[2025-07-22 17:58:15] Piper synthesize: '4'
+[2025-07-22 17:58:15] W3 ALERTS: Synthesizing '4' with piper
+[2025-07-22 17:58:13] Piper synthesize: 'guststo'
+[2025-07-22 17:58:13] W3 ALERTS: Synthesizing 'guststo' with piper
+[2025-07-22 17:58:12] Piper synthesize: 'mph'
+[2025-07-22 17:58:12] W3 ALERTS: Synthesizing 'mph' with piper
+[2025-07-22 17:58:10] Piper synthesize: '2'
+[2025-07-22 17:58:10] W3 ALERTS: Synthesizing '2' with piper
+[2025-07-22 17:58:09] Piper synthesize: 'at'
+[2025-07-22 17:58:09] W3 ALERTS: Synthesizing 'at' with piper
+[2025-07-22 17:58:07] Piper synthesize: 'WNW'
+[2025-07-22 17:58:07] W3 ALERTS: Synthesizing 'WNW' with piper
+[2025-07-22 17:58:05] Piper synthesize: 'wind is'
+[2025-07-22 17:58:05] W3 ALERTS: Synthesizing 'wind is' with piper
+[2025-07-22 17:58:04] Piper synthesize: 'percent'
+[2025-07-22 17:58:04] W3 ALERTS: Synthesizing 'percent' with piper
+[2025-07-22 17:58:03] Piper synthesize: '1'
+[2025-07-22 17:58:03] W3 ALERTS: Synthesizing '1' with piper
+[2025-07-22 17:58:01] Piper synthesize: '40'
+[2025-07-22 17:58:01] W3 ALERTS: Synthesizing '40' with piper
+[2025-07-22 17:57:59] Piper synthesize: 'humidity is'
+[2025-07-22 17:57:59] W3 ALERTS: Synthesizing 'humidity is' with piper
+[2025-07-22 17:57:58] Piper synthesize: 'degrees'
+[2025-07-22 17:57:58] W3 ALERTS: Synthesizing 'degrees' with piper
+[2025-07-22 17:57:56] Piper synthesize: '1'
+[2025-07-22 17:57:56] W3 ALERTS: Synthesizing '1' with piper
+[2025-07-22 17:57:55] Piper synthesize: '80'
+[2025-07-22 17:57:55] W3 ALERTS: Synthesizing '80' with piper
+[2025-07-22 17:57:54] Piper synthesize: 'tempis'
+[2025-07-22 17:57:54] W3 ALERTS: Synthesizing 'tempis' with piper
+[2025-07-22 17:57:52] Piper synthesize: 'PartlyCloudy'
+[2025-07-22 17:57:52] W3 ALERTS: Synthesizing 'PartlyCloudy' with piper
+[2025-07-22 17:57:50] Piper synthesize: 'HereAre'
+[2025-07-22 17:57:50] W3 ALERTS: Synthesizing 'HereAre' with piper
+[2025-07-22 17:57:50] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:57:50] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:57:50] RAW process_command input: 'W1'
+[2025-07-22 17:57:50] process_command reached
+[2025-07-22 17:57:50] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:57:45] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:57:45] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:57:45] W1 CONDITIONS: WX report completed
+[2025-07-22 17:57:44] Piper synthesize: 'miles'
+[2025-07-22 17:57:44] W3 ALERTS: Synthesizing 'miles' with piper
+[2025-07-22 17:57:42] Piper synthesize: '10'
+[2025-07-22 17:57:42] W3 ALERTS: Synthesizing '10' with piper
+[2025-07-22 17:57:40] Piper synthesize: 'visibility is'
+[2025-07-22 17:57:40] W3 ALERTS: Synthesizing 'visibility is' with piper
+[2025-07-22 17:57:39] Piper synthesize: 'rising'
+[2025-07-22 17:57:39] W3 ALERTS: Synthesizing 'rising' with piper
+[2025-07-22 17:57:37] Piper synthesize: 'inches'
+[2025-07-22 17:57:37] W3 ALERTS: Synthesizing 'inches' with piper
+[2025-07-22 17:57:36] Piper synthesize: '3'
+[2025-07-22 17:57:36] W3 ALERTS: Synthesizing '3' with piper
+[2025-07-22 17:57:34] Piper synthesize: '1'
+[2025-07-22 17:57:34] W3 ALERTS: Synthesizing '1' with piper
+[2025-07-22 17:57:33] Piper synthesize: 'point'
+[2025-07-22 17:57:33] W3 ALERTS: Synthesizing 'point' with piper
+[2025-07-22 17:57:32] Piper synthesize: '0'
+[2025-07-22 17:57:32] W3 ALERTS: Synthesizing '0' with piper
+[2025-07-22 17:57:30] Piper synthesize: '3'
+[2025-07-22 17:57:30] W3 ALERTS: Synthesizing '3' with piper
+[2025-07-22 17:57:29] Piper synthesize: 'pressure is'
+[2025-07-22 17:57:29] W3 ALERTS: Synthesizing 'pressure is' with piper
+[2025-07-22 17:57:27] Piper synthesize: 'mph'
+[2025-07-22 17:57:27] W3 ALERTS: Synthesizing 'mph' with piper
+[2025-07-22 17:57:26] Piper synthesize: '4'
+[2025-07-22 17:57:26] W3 ALERTS: Synthesizing '4' with piper
+[2025-07-22 17:57:24] Piper synthesize: 'guststo'
+[2025-07-22 17:57:24] W3 ALERTS: Synthesizing 'guststo' with piper
+[2025-07-22 17:57:22] Piper synthesize: 'mph'
+[2025-07-22 17:57:22] W3 ALERTS: Synthesizing 'mph' with piper
+[2025-07-22 17:57:21] Piper synthesize: '2'
+[2025-07-22 17:57:21] W3 ALERTS: Synthesizing '2' with piper
+[2025-07-22 17:57:20] Piper synthesize: 'at'
+[2025-07-22 17:57:20] W3 ALERTS: Synthesizing 'at' with piper
+[2025-07-22 17:57:18] Piper synthesize: 'WNW'
+[2025-07-22 17:57:18] W3 ALERTS: Synthesizing 'WNW' with piper
+[2025-07-22 17:57:16] Piper synthesize: 'wind is'
+[2025-07-22 17:57:16] W3 ALERTS: Synthesizing 'wind is' with piper
+[2025-07-22 17:57:15] Piper synthesize: 'percent'
+[2025-07-22 17:57:15] W3 ALERTS: Synthesizing 'percent' with piper
+[2025-07-22 17:57:13] Piper synthesize: '1'
+[2025-07-22 17:57:13] W3 ALERTS: Synthesizing '1' with piper
+[2025-07-22 17:57:12] Piper synthesize: '40'
+[2025-07-22 17:57:12] W3 ALERTS: Synthesizing '40' with piper
+[2025-07-22 17:57:10] Piper synthesize: 'humidity is'
+[2025-07-22 17:57:10] W3 ALERTS: Synthesizing 'humidity is' with piper
+[2025-07-22 17:57:09] Piper synthesize: 'degrees'
+[2025-07-22 17:57:09] W3 ALERTS: Synthesizing 'degrees' with piper
+[2025-07-22 17:57:07] Piper synthesize: '1'
+[2025-07-22 17:57:07] W3 ALERTS: Synthesizing '1' with piper
+[2025-07-22 17:57:06] Piper synthesize: '80'
+[2025-07-22 17:57:06] W3 ALERTS: Synthesizing '80' with piper
+[2025-07-22 17:57:05] Piper synthesize: 'tempis'
+[2025-07-22 17:57:05] W3 ALERTS: Synthesizing 'tempis' with piper
+[2025-07-22 17:57:03] Piper synthesize: 'PartlyCloudy'
+[2025-07-22 17:57:03] W3 ALERTS: Synthesizing 'PartlyCloudy' with piper
+[2025-07-22 17:57:01] Piper synthesize: 'HereAre'
+[2025-07-22 17:57:01] W3 ALERTS: Synthesizing 'HereAre' with piper
+[2025-07-22 17:57:01] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:57:01] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:57:01] RAW process_command input: 'W1'
+[2025-07-22 17:57:01] process_command reached
+[2025-07-22 17:57:01] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:55:10] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:55:10] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:55:10] W1 CONDITIONS: Exception in speak_wx_conditions: [Errno 2] No such file or directory: '/home/drx/DRX/sounds/extra'
+[2025-07-22 17:55:10] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:55:10] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:55:10] RAW process_command input: 'W1'
+[2025-07-22 17:55:10] process_command reached
+[2025-07-22 17:55:10] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:55:05] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:55:05] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:55:05] W1 CONDITIONS: Exception in speak_wx_conditions: [Errno 2] No such file or directory: '/home/drx/DRX/sounds/extra'
+[2025-07-22 17:55:05] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:55:05] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:55:05] RAW process_command input: 'W1'
+[2025-07-22 17:55:05] process_command reached
+[2025-07-22 17:55:05] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:54:59] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:54:59] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:54:59] W1 CONDITIONS: Exception in speak_wx_conditions: [Errno 2] No such file or directory: '/home/drx/DRX/sounds/extra'
+[2025-07-22 17:54:59] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:54:59] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:54:59] RAW process_command input: 'W1'
+[2025-07-22 17:54:59] process_command reached
+[2025-07-22 17:54:59] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:54:30] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:54:30] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:54:30] W1 CONDITIONS: WX report completed
+[2025-07-22 17:54:29] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:29] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-22 17:54:28] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:28] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-22 17:54:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:27] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-22 17:54:26] play_single_wav: filename=/home/drx/DRX/sounds/extra/rising.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:26] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/rising.wav
+[2025-07-22 17:54:25] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:25] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-22 17:54:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:24] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 17:54:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:54:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-22 17:54:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:22] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-22 17:54:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:21] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 17:54:20] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:20] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-22 17:54:19] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:19] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 17:54:18] play_single_wav: filename=/home/drx/DRX/sounds/extra/4.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:18] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/4.wav
+[2025-07-22 17:54:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/guststo.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:17] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/guststo.wav
+[2025-07-22 17:54:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:15] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 17:54:14] play_single_wav: filename=/home/drx/DRX/sounds/extra/2.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:14] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/2.wav
+[2025-07-22 17:54:14] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:14] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-22 17:54:12] play_single_wav: filename=/home/drx/DRX/sounds/extra/WNW.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:12] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/WNW.wav
+[2025-07-22 17:54:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-22 17:54:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-22 17:54:10] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:10] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:54:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/40.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:09] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/40.wav
+[2025-07-22 17:54:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:08] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-22 17:54:07] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:07] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-22 17:54:06] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:06] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:54:05] play_single_wav: filename=/home/drx/DRX/sounds/extra/80.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:05] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/80.wav
+[2025-07-22 17:54:04] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:04] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-22 17:54:03] play_single_wav: filename=/home/drx/DRX/sounds/extra/PartlyCloudy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:54:03] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/PartlyCloudy.wav
+[2025-07-22 17:53:59] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:53:59] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-22 17:53:59] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:53:59] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:53:59] RAW process_command input: 'W1'
+[2025-07-22 17:53:59] process_command reached
+[2025-07-22 17:53:59] Worker 613c1e30: Processing command: W1
+[2025-07-22 17:53:55] Serial connection established successfully
+[2025-07-22 17:53:55] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 17:53:55] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 17:53:55] Loaded activity state: 0 minutes for 2025-07-22
+[2025-07-22 17:53:55] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:51:20] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 17:51:20] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 17:46:56] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:46:56] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:46:56] W1 CONDITIONS: WX report completed
+[2025-07-22 17:46:55] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:55] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-22 17:46:54] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:54] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-22 17:46:53] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:53] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-22 17:46:52] play_single_wav: filename=/home/drx/DRX/sounds/extra/rising.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:52] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/rising.wav
+[2025-07-22 17:46:50] play_single_wav: filename=/home/drx/DRX/sounds/extra/MostlyCloudyandBreezy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:50] Found best WAV: /home/drx/DRX/sounds/extra/MostlyCloudyandBreezy.wav for 'and'
+[2025-07-22 17:46:49] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:49] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-22 17:46:48] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:48] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 17:46:48] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:48] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:46:47] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:47] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-22 17:46:46] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:46] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-22 17:46:46] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:46] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 17:46:44] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:44] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-22 17:46:43] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:43] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 17:46:42] play_single_wav: filename=/home/drx/DRX/sounds/extra/4.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:42] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/4.wav
+[2025-07-22 17:46:41] play_single_wav: filename=/home/drx/DRX/sounds/extra/guststo.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:41] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/guststo.wav
+[2025-07-22 17:46:40] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:40] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 17:46:39] play_single_wav: filename=/home/drx/DRX/sounds/extra/2.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:39] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/2.wav
+[2025-07-22 17:46:38] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:38] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-22 17:46:37] play_single_wav: filename=/home/drx/DRX/sounds/extra/WNW.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:37] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/WNW.wav
+[2025-07-22 17:46:36] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:36] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-22 17:46:35] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:35] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-22 17:46:34] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:34] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:46:33] play_single_wav: filename=/home/drx/DRX/sounds/extra/40.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:33] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/40.wav
+[2025-07-22 17:46:32] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:32] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-22 17:46:31] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:31] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-22 17:46:30] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:30] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:46:30] play_single_wav: filename=/home/drx/DRX/sounds/extra/80.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:30] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/80.wav
+[2025-07-22 17:46:28] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:28] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-22 17:46:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/PartlyCloudy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:27] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/PartlyCloudy.wav
+[2025-07-22 17:46:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:46:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-22 17:46:23] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:46:23] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:46:23] RAW process_command input: 'W1'
+[2025-07-22 17:46:23] process_command reached
+[2025-07-22 17:46:23] Worker fa8d6117: Processing command: W1
+[2025-07-22 17:46:20] Serial connection established successfully
+[2025-07-22 17:46:20] Worker fa8d6117: starting
+[2025-07-22 17:46:20] Attempting to connect to serial port /dev/ttyUSB0...
+995-WX Alert.wav
+[2025-07-22 17:46:20] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 17:46:20] Loaded activity state: 0 minutes for 2025-07-22
+[2025-07-22 17:46:19] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:44:03] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 17:44:03] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 17:39:03] [CLEANUP] File does not exist: /home/drx/DRX/sounds/9995-WX Alert.wav
+[2025-07-22 17:39:03] [CLEANUP] Entered cleanup_wx_alert_wav()
+[2025-07-22 17:38:31] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-22 17:38:31] W1 CONDITIONS: Setting REMOTE_BUSY to inactive
+[2025-07-22 17:38:31] W1 CONDITIONS: WX report completed
+[2025-07-22 17:38:30] play_single_wav: filename=/home/drx/DRX/sounds/extra/miles.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:30] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/miles.wav
+[2025-07-22 17:38:29] play_single_wav: filename=/home/drx/DRX/sounds/extra/10.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:29] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/10.wav
+[2025-07-22 17:38:28] play_single_wav: filename=/home/drx/DRX/sounds/extra/visibility_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:28] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/visibility_is.wav
+[2025-07-22 17:38:27] play_single_wav: filename=/home/drx/DRX/sounds/extra/rising.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:27] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/rising.wav
+[2025-07-22 17:38:24] Piper synthesize: 'call pressurestatus'
+[2025-07-22 17:38:24] W3 ALERTS: Synthesizing 'call pressurestatus' with piper
+[2025-07-22 17:38:24] play_single_wav: filename=/home/drx/DRX/sounds/extra/inches.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:24] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/inches.wav
+[2025-07-22 17:38:23] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:23] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 17:38:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:22] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:38:22] play_single_wav: filename=/home/drx/DRX/sounds/extra/point.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:22] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/point.wav
+[2025-07-22 17:38:21] play_single_wav: filename=/home/drx/DRX/sounds/extra/0.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:21] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/0.wav
+[2025-07-22 17:38:20] play_single_wav: filename=/home/drx/DRX/sounds/extra/3.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:20] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/3.wav
+[2025-07-22 17:38:19] play_single_wav: filename=/home/drx/DRX/sounds/extra/pressure_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:19] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/pressure_is.wav
+[2025-07-22 17:38:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:17] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 17:38:17] play_single_wav: filename=/home/drx/DRX/sounds/extra/4.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:17] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/4.wav
+[2025-07-22 17:38:15] play_single_wav: filename=/home/drx/DRX/sounds/extra/guststo.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:15] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/guststo.wav
+[2025-07-22 17:38:14] play_single_wav: filename=/home/drx/DRX/sounds/extra/mph.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:14] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/mph.wav
+[2025-07-22 17:38:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/2.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:13] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/2.wav
+[2025-07-22 17:38:13] play_single_wav: filename=/home/drx/DRX/sounds/extra/at.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:13] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/at.wav
+[2025-07-22 17:38:11] play_single_wav: filename=/home/drx/DRX/sounds/extra/WNW.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:11] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/WNW.wav
+[2025-07-22 17:38:10] play_single_wav: filename=/home/drx/DRX/sounds/extra/wind_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:10] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/wind_is.wav
+[2025-07-22 17:38:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/percent.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:09] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/percent.wav
+[2025-07-22 17:38:09] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:09] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:38:08] play_single_wav: filename=/home/drx/DRX/sounds/extra/40.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:08] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/40.wav
+[2025-07-22 17:38:06] play_single_wav: filename=/home/drx/DRX/sounds/extra/humidity_is.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:06] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/humidity_is.wav
+[2025-07-22 17:38:05] play_single_wav: filename=/home/drx/DRX/sounds/extra/degrees.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:05] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/degrees.wav
+[2025-07-22 17:38:04] play_single_wav: filename=/home/drx/DRX/sounds/extra/1.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:04] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/1.wav
+[2025-07-22 17:38:04] play_single_wav: filename=/home/drx/DRX/sounds/extra/80.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:04] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/80.wav
+[2025-07-22 17:38:02] play_single_wav: filename=/home/drx/DRX/sounds/extra/tempis.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:02] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/tempis.wav
+[2025-07-22 17:38:01] play_single_wav: filename=/home/drx/DRX/sounds/extra/PartlyCloudy.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:38:01] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/PartlyCloudy.wav
+[2025-07-22 17:37:58] play_single_wav: filename=/home/drx/DRX/sounds/extra/HereAre.wav, interrupt_on_cos=False, block_interrupt=True, wait_for_cos=False
+[2025-07-22 17:37:58] W3 ALERTS: Playing /home/drx/DRX/sounds/extra/HereAre.wav
+[2025-07-22 17:37:58] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-22 17:37:58] W1 CONDITIONS: Setting REMOTE_BUSY to active immediately
+[2025-07-22 17:37:58] RAW process_command input: 'W1'
+[2025-07-22 17:37:58] process_command reached
+[2025-07-22 17:37:58] Worker 61bd2e33: Processing command: W1
+[2025-07-22 17:37:42] REMOTE_BUSY_ACTIVE_LEVEL (from config): True

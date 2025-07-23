@@ -3774,10 +3774,7 @@ def speak_wx_conditions():
         wx_data = parse_wx_conditions_from_wx_data()
         log_recent(f"WX Report: {wx_data}")
 
-        # Build a summary for the status if you want (optional)
         summary = "Playing weather conditions"
-
-        # Set status ONCE at start of sequence
         status_manager.set_weather_report("WX Conditions Report", summary)
 
         wavs = []
@@ -3827,7 +3824,7 @@ def speak_wx_conditions():
                 else:
                     temp_num = int(float(temp_str))
                     wavs += get_wav_sequence_for_number(temp_num)
-                wavs.append("degrees.wav")  # Always add this after the number sequence
+                wavs.append("degrees.wav")
             except Exception:
                 pass
 
@@ -3850,11 +3847,9 @@ def speak_wx_conditions():
                 wind_speed = None
 
         if wind_speed == 0:
-            # Say "wind_is.wav calm.wav" and skip wind direction and speed
             wavs.append("wind_is.wav")
             wavs.append("Calm.wav")
         else:
-            # Only say wind direction and wind speed if wind is not calm/zero
             if wx_data.get("winddir"):
                 wavs.append("wind_is.wav")
                 wind_dir_wav = (
@@ -3872,7 +3867,7 @@ def speak_wx_conditions():
                 wavs += get_wav_sequence_for_number(wind_speed)
                 wavs.append("mph.wav")
 
-        # 7. Wind gust (play guststo.wav before wind_gust, mph.wav after, skip if 0)
+        # 7. Wind gust
         if wx_data.get("wind_gust"):
             try:
                 gust_num = int(float(wx_data["wind_gust"].split()[0]))
@@ -3883,7 +3878,7 @@ def speak_wx_conditions():
             except Exception:
                 pass
 
-        # 8. Pressure (play pressure_is.wav before pressure, say decimals, play inches.wav after)
+        # 8. Pressure
         if wx_data.get("pressure"):
             wavs.append("pressure_is.wav")
             try:
@@ -3901,7 +3896,6 @@ def speak_wx_conditions():
 
         # 9. Pressure status
         if wx_data.get("pressure_status"):
-            wavs.append("call_pressurestatus.wav")
             pres_status_wav = (
                 wx_data["pressure_status"]
                 .replace(" ", "")
@@ -3913,7 +3907,7 @@ def speak_wx_conditions():
             )
             wavs.append(pres_status_wav)
 
-        # 10. Visibility (play visibility_is.wav before value)
+        # 10. Visibility
         if wx_data.get("visibility"):
             wavs.append("visibility_is.wav")
             try:
@@ -3924,22 +3918,24 @@ def speak_wx_conditions():
             except Exception:
                 pass
 
-        # Play wav files, but do NOT update status during playback, only at start and end.
+        # --- PLAY LOGIC WITH PIPER BACKUP ---
+        sequence = []
         for wav in wavs:
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
-                debug_log(f"W1 CONDITIONS: Playing {wav_path}")
-                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+                sequence.append({"wav": wav_path})
             else:
-                debug_log(f"W1 CONDITIONS: WAV file not found: {wav_path}")
+                # Synthesize fallback: base name, underscores become spaces
+                word = os.path.splitext(wav)[0].replace('_', ' ')
+                sequence.append({"synthesize": word})
 
+        play_sequence(sequence, debug_log)
         debug_log("W1 CONDITIONS: WX report completed")
 
     except Exception as e:
         debug_log(f"W1 CONDITIONS: Exception in speak_wx_conditions: {e}")
         log_exception("speak_wx_conditions")
     finally:
-        # Set status to idle at the end of the sequence
         status_manager.set_idle()
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)

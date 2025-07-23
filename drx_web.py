@@ -155,20 +155,17 @@ DASHBOARD_TEMPLATE = '''
 @media (prefers-color-scheme: dark) {
   /* Modal overlay */
   #url-modal {
-    background: rgba(0,0,0,0.75) !important; /* darker overlay */
+    background: rgba(0,0,0,0.75) !important;
   }
-  /* Modal content box */
   #url-modal > div {
-    background: #23272b !important;           /* dark modal box */
+    background: #23272b !important;
     color: #eee !important;
     border: 1.5px solid #444 !important;
     box-shadow: 0 2px 24px #000c !important;
   }
-  /* Label inside modal */
   #url-modal label {
-    color: #90a4ff !important;                /* blue label */
+    color: #90a4ff !important;
   }
-  /* Input inside modal */
   #url-modal input[type="text"],
   #url-modal input[type="text"].form-control {
     background: #1a1d22 !important;
@@ -183,8 +180,6 @@ DASHBOARD_TEMPLATE = '''
     outline: none !important;
     box-shadow: 0 0 0 2px #335 !important;
   }
-
-  /* Dark mode error styles */
   .base-error {
     border: 2px solid #ff7777 !important;
     background-color: rgba(255, 119, 119, 0.25) !important;
@@ -199,8 +194,6 @@ DASHBOARD_TEMPLATE = '''
     border: 1px solid #ff7777;
     color: #ff7777;
   }
-
-  /* Improve select element visibility */
   select {
     background-color: #2d333b;
     color: #e6edf3;
@@ -214,47 +207,45 @@ DASHBOARD_TEMPLATE = '''
     background-color: #347d39;
     color: white;
   }
-
   .status-last-played {
     font-size: .75em !important;
     font-weight: bold;
-    /* color: #1976d2 !important;  optional blue color for visibility */
   }
   #playback-status {
     font-size: .75em !important;
     font-weight: bold;
-    /* color: #1976d2 !important; optional blue color for visibility */
   }
 }
 
-/* Optional: Make sure the grid auto-rows are tall enough */
+/* === CONFIG SECTION WIDTH PATCH === */
 .config-sections {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
     gap: 20px;
     margin-bottom: 20px;
-    grid-auto-rows: minmax(150px, auto); /* adjust as needed */
+    grid-auto-rows: minmax(150px, auto); /* consistent height */
 }
-
-/* Responsive: Stack full-width on small screens */
+.config-section {
+    background: var(--primary-light);
+    border-radius: 10px;
+    padding: 9px 8px 8px 8px;
+    margin-bottom: 7px;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.02);
+    box-sizing: border-box;
+    width: 100%;
+}
 @media (max-width: 1100px) {
     .config-sections {
         grid-template-columns: repeat(2, 1fr);
-    }
-    .config-section.gpio-settings {
-        grid-column: 1 / -1;
-        grid-row: auto / span 2;
     }
 }
 @media (max-width: 700px) {
     .config-sections {
         grid-template-columns: 1fr;
     }
-    .config-section.gpio-settings {
-        grid-column: 1 / -1;
-        grid-row: auto / span 2;
-    }
 }
+/* === END PATCH === */
+
 .split-vertical {
   display: flex;
   flex-direction: column;
@@ -264,7 +255,6 @@ DASHBOARD_TEMPLATE = '''
 
 .split-half {
   flex: 1 1 0;
-  /* Optional: Add a border or divider for clarity */
   padding-bottom: 8px;
   border-bottom: 1px solid #ddd;
 }
@@ -273,15 +263,6 @@ DASHBOARD_TEMPLATE = '''
   border-bottom: none;
   padding-bottom: 0;
 }
-/* Condense Configuration Settings area */
-.config-section {
-    background: var(--primary-light);
-    border-radius: 10px;
-    padding: 9px 8px 8px 8px;
-    margin-bottom: 7px;
-    box-shadow: 0 2px 7px rgba(0,0,0,0.02);
-}
-
 .config-section h3 {
     color: var(--primary);
     margin-top: 0;
@@ -291,13 +272,31 @@ DASHBOARD_TEMPLATE = '''
     padding-bottom: 3px;
 }
 
+/* --- HELP TEXT LAYOUT FIX --- */
 .form-group {
     margin-bottom: 7px;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+.form-group.checkbox {
     flex-direction: row;
     align-items: center;
+    margin-bottom: 4px;
     gap: 8px;
 }
+.help-text {
+    font-size: 0.78em;
+    color: #666;
+    margin-top: 2px;
+    margin-left: 0;
+    font-style: italic;
+    max-width: 100%;
+    line-height: 1.25;
+    display: block;
+}
+/* --- END HELP TEXT LAYOUT FIX --- */
 
 .form-group label {
     margin-bottom: 0;
@@ -314,7 +313,7 @@ DASHBOARD_TEMPLATE = '''
     font-size: 0.97em;
     border-radius: 4px;
     border: 1px solid #bbb;
-    width: 50px;
+    width: 100px;
     min-width: 40px;
     max-width: 150px;
     box-sizing: border-box;
@@ -329,25 +328,22 @@ DASHBOARD_TEMPLATE = '''
 #serial_timeout, #serial_line_timeout, #cos_debounce_time {
     width: 55px;
 }
-#web_username {
-    width: 110px;
+#wx_ctone, #wx_ctone_time, #web_port, #weather_polling_time, #message_timer, #same_alerts_polling_time {
+    width: 70px;
 }
-
-.form-group.checkbox {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 4px;
-    gap: 6px;
+#web_username, #web_password, #same_alerts_zip_code {
+    width: 150px;
 }
 
 .help-text {
     font-size: 0.78em;
     color: #666;
-    margin-top: 0;
-    margin-left: 4px;
+    margin-top: 2px;
+    margin-left: 0;
     font-style: italic;
-    max-width: 160px;
+    max-width: 100%;
     line-height: 1.25;
+    display: block;
 }
 #base-configurator-table input[type="text"] {
     box-sizing: border-box;
@@ -412,8 +408,6 @@ DASHBOARD_TEMPLATE = '''
     max-width: 90px;
     box-sizing: border-box;
 }
-</style>
-<style>
 :root {
   --primary: #3949ab;
   --primary-light: #e3e6f0;
@@ -463,7 +457,7 @@ h2 {
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
   margin: 24px auto;
   padding: 1.3em 1.6em;
-  max-width: 950px;   /* Or whatever width you like */
+  max-width: 950px;
   min-width: 280px;
   width: 100%;
   box-sizing: border-box;
@@ -508,15 +502,15 @@ button:hover, button:focus {
 .status-warn { color: var(--warning); font-weight: bold; }
 .status-bad { color: var(--danger); font-weight: bold; }
 .logs, .serials {
-  background: #212121; 
-  color: #ececec; 
+  background: #212121;
+  color: #ececec;
   font-family: 'Roboto Mono', monospace;
   font-size: 1em;
-  padding: 1.1em; 
-  border-radius: 9px; 
-  margin-top: 0.7em; 
-  margin-bottom: 1.2em; 
-  overflow-x: auto; 
+  padding: 1.1em;
+  border-radius: 9px;
+  margin-top: 0.7em;
+  margin-bottom: 1.2em;
+  overflow-x: auto;
   max-height: 220px;
 }
 pre.stateblock {
@@ -561,7 +555,6 @@ pre.stateblock {
   border-color: var(--danger);
   background: #ffeaea;
 }
-/* Modal styling */
 .modal {
   display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
   overflow: auto; background-color: rgba(0,0,0,0.33);
@@ -604,82 +597,12 @@ pre.stateblock {
   white-space: pre-line;
   box-shadow: 0 1px 4px 0 rgba(31,38,135,0.03);
 }
-.modal {
-  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
-  overflow: auto; background-color: rgba(0,0,0,0.33);
-}
-.modal-content {
-  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 1000px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
-  animation: popupIn 0.33s;
-}
-@keyframes popupIn {
-  from { transform: scale(0.95); opacity: 0;}
-  to   { transform: scale(1); opacity: 1;}
-}
-.close {
-  color: #3949ab; float: right; font-size: 2em; font-weight: bold; cursor: pointer;
-}
-.close:hover { color: #d32f2f; }
-.config-section {
-    background: var(--primary-light);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.config-section h3 {
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 8px;
-}
-.form-group {
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-}
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    font-size: 0.95em;
-}
-.form-group input[type="text"], 
-.form-group input[type="password"],
-.form-group input[type="number"],
-.form-group select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-.form-group.checkbox {
-    flex-direction: row;
-    align-items: center;
-}
-.form-group.checkbox input[type="checkbox"] {
-    margin-right: 8px;
-}
-.form-group.checkbox label {
-    margin-bottom: 0;
-}
-@media (max-width: 700px) {
-    .config-sections {
-        grid-template-columns: 1fr;
-    }
-}
-/* Config form styling */
-.config-sections {
+.your-card { margin-bottom: 0.8em; }
+.card-section.center-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-}
-.help-text {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 3px;
-    font-style: italic;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 0;
 }
 .button-row {
     display: flex;
@@ -700,9 +623,9 @@ pre.stateblock {
         width: 100%;
     }
 }
-.logs {
-  overflow-y: auto;
-  max-height: 220px;
+select[name="track_dropdown"] {
+    min-width: 100px;
+    max-width: 100%;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -734,8 +657,8 @@ pre.stateblock {
     color: #eee;
   }
   .stateblock {
-    background: #939393 !important; /* Change this to your preferred dark background color */
-    color: #000000 !important;      /* Optional: ensures text is readable in dark mode */
+    background: #939393 !important;
+    color: #000000 !important;
   }
   input, select, textarea {
     background: #23272b;
@@ -747,45 +670,32 @@ pre.stateblock {
     color: #eee;
   }
   #message-timer {
-    background: #23272b;         /* or var(--card) or a dark color */
-    color: var(--primary);       /* or #90a4ff for blue accent */
+    background: #23272b;
+    color: var(--primary);
     border: 2px solid var(--primary);
   }
   #message-timer.ready {
-    color: var(--success);       /* you can keep this or lighten it */
+    color: var(--success);
     border-color: var(--success);
-    background: #163021;         /* a dark green shade, or use var(--card) */
+    background: #163021;
   }
   #message-timer.running {
     color: var(--danger);
     border-color: var(--danger);
-    background: #3a2121;         /* a dark red shade, or var(--card) */
-  }  
+    background: #3a2121;
+  }
   #base-configurator-table th {
-    background: #2a2e3a !important;   /* A dark blue/gray */
-    color: #fff;           /* White text */  
+    background: #2a2e3a !important;
+    color: #fff;
   }
   .config-sections .config-section {
-    background: #011f4b; /* Warm dark brown/orange for dark mode, adjust as desired */
+    background: #011f4b;
   }
   #base-configurator-validation-summary {
     background-color: #3a2121;
     border: 1px solid #ff867f;
     color: #ff867f;
-  } 
-}
-.your-card { margin-bottom: 0.8em; }
-.card-section.center-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em 0;    /* ensures enough space for vertical centering */
-  /* or use height: 100px; if you want a fixed height */
-  /* or use padding for flexible height */
-}
-select[name="track_dropdown"] {
-    min-width: 100px;
-    max-width: 100%;
+  }
 }
 </style>
 <script>
@@ -1640,7 +1550,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         id="same_alerts_zip_code"
                         name="same_alerts_zip_code"
                         class="modal-url-trigger"
-                        data-label="NWS Zones or Zip Codes"
+                        data-label="NWS Zones or Zip Codes.  Comma separated values."
                         value="{{ same_alerts_zip_code|default('') }}"
                         placeholder="02673,MAZ017"
                         readonly
@@ -1704,7 +1614,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         id="wx_data_url"
                         name="wx_data_url"
                         class="modal-url-trigger"
-                        data-label="WX Data URL"
+                        data-label="Wunderground Data URL"
                         value="{{ wx_data_url|default('') }}"
                         readonly
                     >
@@ -1717,7 +1627,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         id="wx_day_url"
                         name="wx_day_url"
                         class="modal-url-trigger"
-                        data-label="WX Day URL"
+                        data-label="Wunderground Day URL"
                         value="{{ wx_day_url|default('') }}"
                         readonly
                     >
@@ -1759,7 +1669,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
                     <label for="remote_busy_activate_level">RDB Active High</label>
                 </div>
-                <hr style="background-color: blue;">
+                <br>
                 <div class="form-group">
                     <label for="cos_pin">COS Pin:</label>
                     <input type="number" id="cos_pin" name="cos_pin" min="0" value="{{ config.get('GPIO', 'cos_pin', fallback='16') }}">

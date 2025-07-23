@@ -1793,23 +1793,6 @@ def get_base_type_and_info(base):
             return typ, end, interval
     return None, None, None
 
-def auto_alternate_series(command, interval_per_base=60):
-    # interval_per_base should match the config for [Rotation] time in seconds
-    bases, _, is_alt = parse_alternate_series(command)
-    if not is_alt or not bases:
-        debug_log("Not a valid alternate series command.")
-        return
-
-    key = tuple(sorted(bases))
-    pointer = 0
-
-    while True:
-        current_base = bases[pointer]
-        command_queue.put(command)
-        debug_log(f"Played base {current_base}, waiting {interval_per_base} seconds before next base...")
-        time.sleep(interval_per_base)
-        pointer = (pointer + 1) % len(bases)
-
 def get_next_base_file(base_code):
     typ, end, interval = get_base_type_and_info(base_code)
     if typ == "Rotation":
@@ -3233,10 +3216,6 @@ def maybe_run_webcmd():
         except Exception:
             log_exception("maybe_run_webcmd")
 
-def is_terminal():
-    # Implementation here...
-    return sys.stdin.isatty()
-
 def status_screen(stdscr):
     global serial_buffer, serial_history, currently_playing, currently_playing_info
     global currently_playing_info_timestamp, playing_end_time, playback_status
@@ -3477,8 +3456,10 @@ def launch_status_screen():
     import curses
     curses.wrapper(status_screen)
 
+
 def get_previous_day():
     return (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
 
 def parse_minutes_from_activity_log(date_str):
     if not os.path.exists(ACTIVITY_FILE):
@@ -4112,37 +4093,6 @@ def synthesize_and_play_with_piper(text, debug_log=None):
         debug_log and debug_log(f"Failed to synthesize '{text}' with piper: {e}")
         return False
 
-def append_datetime_wavs(dt, sequence):
-    """
-    Appends WAV file sequence for a datetime object in the same style as speak_wx_conditions.
-    - dt: datetime object
-    - sequence: list to append to (modifies in place)
-    """
-    # Hour
-    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.hour)]
-    # Minutes and "hours"
-    if dt.minute == 0:
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-    else:
-        if dt.minute < 10:
-            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.minute)]
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
-    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
-    # Month and Day (always say as numbers)
-    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.month)]
-    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.day)]
-    # Year (say "20", then "oh" if needed, then last two digits)
-    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
-    year_last_two = dt.year % 100
-    if year_last_two < 10:
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
-    else:
-        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
-    return sequence
-
 def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
     """
     Given a description (string), return a list of wavs/tts in order,
@@ -4615,15 +4565,6 @@ def get_same_description_from_code(same_code, same_csv_path):
     debug_log(f"No match for code '{same_code}' in SAME CSV.")
     return None
 
-def build_number_sequence(number):
-    # Returns a list of {"wav": wav_path} for the number, split into digits if needed
-    wavs = []
-    digits = [int(d) for d in str(number)]
-    for d in digits:
-        wav_path = os.path.join(EXTRA_SOUND_DIR, f"{d}.wav")
-        wavs.append({"wav": wav_path})
-    return wavs
-
 def find_best_wav_for_words(words, extra_dir):
     """
     Try to find the best-matching WAV for a sequence of words.
@@ -4684,71 +4625,7 @@ def play_sequence(sequence, debug_log=None):
             else:
                 debug_log and debug_log(f"W3 ALERTS: Synthesizing '{word}' with piper")
                 synthesize_and_play_with_piper(word, debug_log)
-        
-def check_wav_exists(wav_file, debug_log=None):
-    """
-    Check if a WAV file exists in the sounds directory.
-    
-    Args:
-        wav_file: The WAV filename (can include subdirectory like 'extra/flash.wav')
-        debug_log: Debug logging function (optional)
-    
-    Returns:
-        bool: True if file exists, False otherwise
-    """
-    try:
-        # Construct the full path
-        if wav_file.startswith('extra/'):
-            full_path = f"/DRX/sounds/{wav_file}"
-        else:
-            full_path = f"/DRX/sounds/{wav_file}"
-        
-        exists = os.path.exists(full_path)
-        
-        if not exists and debug_log:
-            debug_log(f"WAV file not found: {full_path}")
-        
-        return exists
-        
-    except Exception as e:
-        if debug_log:
-            debug_log(f"Error checking WAV file existence: {e}")
-        return False
-
-def play_wav_file_with_check(wav_file, debug_log=None):
-    """
-    Wrapper function to play WAV file with existence check.
-    
-    Args:
-        wav_file: The WAV filename to play
-        debug_log: Debug logging function (optional)
-    
-    Returns:
-        bool: True if file was played, False if not found
-    """
-    if check_wav_exists(wav_file, debug_log):
-        play_wav_file(wav_file)
-        return True
-    else:
-        debug_log(f"Cannot play missing WAV file: {wav_file}")
-        return False
-    """
-    Wrapper function to play WAV file with existence check.
-    
-    Args:
-        wav_file: The WAV filename to play
-        debug_log: Debug logging function (optional)
-    
-    Returns:
-        bool: True if file was played, False if not found
-    """
-    if check_wav_exists(wav_file, debug_log):
-        play_wav_file(wav_file)
-        return True
-    else:
-        debug_log(f"Cannot play missing WAV file: {wav_file}")
-        return False
-
+  
 def activate_ctone_override_from_alert(config):
     """Call this from wx_alert_action or alert logic when alert triggers."""
     global ctone_override_expire
@@ -4779,15 +4656,7 @@ def ctone_override_check(code_str):
         debug_log(f"CTONE OVERRIDE: Substituting {code_str} with {new_code_str} (active)")
         return new_code_str
     return code_str
-    
-def is_wx_alert_active():
-    global ctone_override_expire
-    now = time.time()
-    try:
-        return (ctone_override_expire is not None and now < ctone_override_expire)
-    except Exception:
-        return False    
-
+ 
 def get_last_expires_time_from_wx_alerts():
     """
     Returns the timestamp (epoch) of the last 'Expires:' line in the wx_alerts file,

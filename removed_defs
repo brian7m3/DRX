@@ -1,0 +1,106 @@
+"""
+def auto_alternate_series(command, interval_per_base=60):
+    # interval_per_base should match the config for [Rotation] time in seconds
+    bases, _, is_alt = parse_alternate_series(command)
+    if not is_alt or not bases:
+        debug_log("Not a valid alternate series command.")
+        return
+
+    key = tuple(sorted(bases))
+    pointer = 0
+
+    while True:
+        current_base = bases[pointer]
+        command_queue.put(command)
+        debug_log(f"Played base {current_base}, waiting {interval_per_base} seconds before next base...")
+        time.sleep(interval_per_base)
+        pointer = (pointer + 1) % len(bases)
+"""
+
+"""
+def build_number_sequence(number):
+    # Returns a list of {"wav": wav_path} for the number, split into digits if needed
+    wavs = []
+    digits = [int(d) for d in str(number)]
+    for d in digits:
+        wav_path = os.path.join(EXTRA_SOUND_DIR, f"{d}.wav")
+        wavs.append({"wav": wav_path})
+    return wavs
+"""
+
+"""  
+def check_wav_exists(wav_file, debug_log=None):
+    """
+    Check if a WAV file exists in the sounds directory.
+    
+    Args:
+        wav_file: The WAV filename (can include subdirectory like 'extra/flash.wav')
+        debug_log: Debug logging function (optional)
+    
+    Returns:
+        bool: True if file exists, False otherwise
+    """
+    try:
+        # Construct the full path
+        if wav_file.startswith('extra/'):
+            full_path = f"/DRX/sounds/{wav_file}"
+        else:
+            full_path = f"/DRX/sounds/{wav_file}"
+        
+        exists = os.path.exists(full_path)
+        
+        if not exists and debug_log:
+            debug_log(f"WAV file not found: {full_path}")
+        
+        return exists
+        
+    except Exception as e:
+        if debug_log:
+            debug_log(f"Error checking WAV file existence: {e}")
+        return False
+
+def play_wav_file_with_check(wav_file, debug_log=None):
+    """
+    Wrapper function to play WAV file with existence check.
+    
+    Args:
+        wav_file: The WAV filename to play
+        debug_log: Debug logging function (optional)
+    
+    Returns:
+        bool: True if file was played, False if not found
+    """
+    if check_wav_exists(wav_file, debug_log):
+        play_wav_file(wav_file)
+        return True
+    else:
+        debug_log(f"Cannot play missing WAV file: {wav_file}")
+        return False
+    """
+    Wrapper function to play WAV file with existence check.
+    
+    Args:
+        wav_file: The WAV filename to play
+        debug_log: Debug logging function (optional)
+    
+    Returns:
+        bool: True if file was played, False if not found
+    """
+    if check_wav_exists(wav_file, debug_log):
+        play_wav_file(wav_file)
+        return True
+    else:
+        debug_log(f"Cannot play missing WAV file: {wav_file}")
+        return False
+"""
+
+""" 
+def is_wx_alert_active():
+    global ctone_override_expire
+    now = time.time()
+    try:
+        return (ctone_override_expire is not None and now < ctone_override_expire)
+    except Exception:
+        return False    
+"""
+

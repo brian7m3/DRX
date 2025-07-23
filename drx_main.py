@@ -1640,13 +1640,20 @@ def play_sound(
         set_remote_busy(False)
         if playback_interrupt.is_set():
             playback_interrupt.clear()
-        play_mode = 'repeat' if repeating else 'pause' if pausing else 'wait_for_cos' if wait_for_cos else 'interruptible' if interruptible else 'normal'
+        play_mode = (
+            'repeat' if repeating else
+            'pause' if pausing else
+            'wait_for_cos' if wait_for_cos else
+            'interruptible' if interruptible else
+            'normal'
+        )
+        log_name = display_name or playing_name or os.path.basename(filename)
         if success:
-            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - successful")
+            log_recent(f"Play: {log_name} [{play_mode}] - successful")
         elif interrupted:
-            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - interrupted")
+            log_recent(f"Play: {log_name} [{play_mode}] - interrupted")
         else:
-            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - playback error")
+            log_recent(f"Play: {log_name} [{play_mode}] - playback error")
 
 def play_single_wav(
     code,

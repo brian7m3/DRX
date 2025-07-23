@@ -538,6 +538,7 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
             handle_no_alerts()
         else:
             output_lines = []
+            shown_alerts = 0
             output_lines.append(f"\n--- Active Alerts for ZIP {zip_code} at {current_time} ---")
             for alert in active_alerts:
                 properties = alert.get('properties', {})
@@ -608,10 +609,12 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
                     alert_text += "\n" + "\n".join(extra_lines)
 
                 output_lines.append(alert_text)
+                shown_alerts += 1
             output_lines.append("-" * 50)
-            full_output = '\n'.join(output_lines)
-            print(full_output)
-            write_alerts_to_file(full_output + '\n')
+            if shown_alerts > 0:
+                full_output = '\n'.join(output_lines)
+                print(full_output)
+                write_alerts_to_file(full_output + '\n')
     except (HTTPError, URLError) as e:
         print(f"An error occurred while checking for alerts: {e}")
 

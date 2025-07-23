@@ -1829,7 +1829,6 @@ function validateRanges() {
         
         const baseNo = parseNumber(baseInput.value);
         const endNo = parseNumber(endInput.value);
-        const type = typeSelect.value;
         
         // 1. Validate that base and end numbers are 4 digits and not negative
         if (baseInput.value.trim() !== "") {
@@ -1853,7 +1852,9 @@ function validateRanges() {
         }
         
         // 2. Validate that type is selected
-        if (type === "") {
+        const type = (typeSelect.value || "").trim();
+        console.log('Validating type:', typeSelect.value, 'trimmed:', type);
+        if (type === "" || !["Rotating", "Random", "SudoRandom"].includes(type)) {
             typeSelect.classList.add('base-error');
             validationErrors.push(`Row ${index + 1}: Type must be selected`);
         }
@@ -1981,9 +1982,13 @@ function validateRanges() {
         ["", "Rotating", "Random", "SudoRandom"].forEach(optVal => {
             const opt = document.createElement("option");
             opt.value = optVal;
-            opt.textContent = optVal;
-            if (rowData.type === optVal) opt.selected = true;
+            opt.textContent = optVal === "" ? "--" : optVal;
+            if ((rowData.type || "").trim() === optVal) opt.selected = true;
             selectType.appendChild(opt);
+        });
+        // Critical: revalidate when user picks a type
+        selectType.addEventListener('change', function() {
+            setTimeout(validateRanges, 100);
         });
         tdType.appendChild(selectType);
 

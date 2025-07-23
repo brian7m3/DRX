@@ -32,3 +32,63 @@
 2025-07-23 12:59:57.538: WX Report: {'observations': 'Fair', 'temperature': '79 degrees', 'humidity': '57 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '30.24', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
 2025-07-23 13:59:57.578: Play: 9980-cond_tone.wav [normal] - successful
 2025-07-23 13:59:57.579: WX Report: {'observations': 'Partly Cloudy', 'temperature': '79 degrees', 'humidity': '58 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '10', 'pressure': '30.23', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 14:59:57.551: Play: 9980-cond_tone.wav [normal] - successful
+2025-07-23 14:59:57.552: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '81 degrees', 'humidity': '48 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '30.23', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 15:22:45.652: Configuration reload requested from web
+2025-07-23 15:23:15.930: Play requested: P5038 (web input box)
+2025-07-23 15:23:16.790: Play: 5040.wav [normal] - successful
+2025-07-23 15:23:48.960: Play requested: P5038 (web input box)
+2025-07-23 15:23:49.520: Play: 5041.wav [normal] - successful
+2025-07-23 15:23:51.462: Play requested: P5038 (web input box)
+2025-07-23 15:23:52.273: Play: 5042.wav [normal] - successful
+2025-07-23 15:23:53.965: Play requested: P5038 (web input box)
+2025-07-23 15:23:54.775: Play: 5040.wav [normal] - successful
+2025-07-23 15:23:57.219: Play requested: P5038 (web input box)
+2025-07-23 15:23:57.779: Play: 5041.wav [normal] - successful
+2025-07-23 15:24:21.493: Configuration reload requested from web
+2025-07-23 15:24:33.753: Play requested: P5037 (web input box)
+2025-07-23 15:24:33.960: Play: 5038.wav [normal] - successful
+2025-07-23 15:24:35.505: Play requested: P5037 (web input box)
+2025-07-23 15:24:36.313: Play: 5040.wav [normal] - successful
+2025-07-23 15:24:38.508: Play requested: P5037 (web input box)
+2025-07-23 15:24:39.069: Play: 5041.wav [normal] - successful
+2025-07-23 15:24:49.021: Play requested: P5037 (web input box)
+2025-07-23 15:24:49.878: Play: 5042.wav [normal] - successful
+2025-07-23 15:24:51.773: Play requested: P5037 (web input box)
+2025-07-23 15:24:51.980: Play: 5038.wav [normal] - successful
+2025-07-23 15:24:54.526: Play requested: P5037 (web input box)
+2025-07-23 15:24:55.337: Play: 5040.wav [normal] - successful
+2025-07-23 15:25:11.793: Play requested: P5041 (web input box)
+2025-07-23 15:25:12.351: Play: 5041.wav [normal] - successful
+2025-07-23 15:25:14.046: Play requested: P5041 (web input box)
+2025-07-23 15:25:14.603: Play: 5041.wav [normal] - successful
+2025-07-23 15:25:22.805: Play requested: P5041 (web input box)
+2025-07-23 15:25:23.362: Play: 5041.wav [normal] - successful
+2025-07-23 15:25:24.557: Play requested: P5041 (web input box)
+2025-07-23 15:25:25.115: Play: 5041.wav [normal] - successful
+2025-07-23 15:25:28.561: Play requested: P5041 (web input box)
+2025-07-23 15:25:29.118: Play: 5041.wav [normal] - successful
+2025-07-23 15:25:45.578: Play requested: P5037 (web input box)
+2025-07-23 15:25:46.138: Play: 5041.wav [normal] - successful
+2025-07-23 15:25:52.834: Play requested: P5037 (web input box)
+2025-07-23 15:25:53.645: Play: 5042.wav [normal] - successful
+2025-07-23 15:26:31.872: Play requested: P5037M (web input box)
+2025-07-23 15:26:32.079: Play: 5038.wav [normal] - successful
+2025-07-23 15:26:35.625: Play requested: P5037M (web input box)
+2025-07-23 15:26:40.883: Play requested: P5037M (web input box)
+2025-07-23 15:39:34.654: Play requested: P5307M (web input box)
+2025-07-23 15:39:54.242: Play: 5307-IID All New 505 [normal] - successful
+2025-07-23 15:40:03.182: Play requested: P5600 (web input box)
+2025-07-23 15:40:04.465: Play: 5641-CT from SudoRandom Base 5600 [normal] - successful
+2025-07-23 15:51:57.687: Configuration reload requested from web
+2025-07-23 15:59:57.542: Play: 9980-cond_tone [normal] - successful
+2025-07-23 15:59:57.543: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '82 degrees', 'humidity': '49 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '30.22', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 16:59:57.558: Play: 9980-cond_tone [normal] - successful
+2025-07-23 16:59:57.558: WX Report: {'observations': 'Partly Cloudy', 'temperature': '80 degrees', 'humidity': '55 percent', 'winddir': 'SW', 'wind_speed': '5', 'wind_gust': '10', 'pressure': '30.22', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 17:05:03.488: Play: 5120-Msg Its 505 Yabba Dabba Do [wait_for_cos] - successful
+2025-07-23 17:13:16.716: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-23 17:13:18.668: Play: 5638-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 17:13:28.569: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 17:29:49.413: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
+2025-07-23 17:29:51.369: Play: 5647-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 17:30:01.268: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful

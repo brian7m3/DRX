@@ -1,3 +1,50 @@
+[2025-07-23 21:30:57] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:52] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:47] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:42] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:37] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:32] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:27] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:22] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:17] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:12] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:10] set_remote_busy(False): wrote True, pin now reads 1
+[2025-07-23 21:30:10] handle_join_series: Skipping P5170IM due to message timer running
+[2025-07-23 21:30:10] handle_join_series: Skipping P9995RM due to message timer running
+[2025-07-23 21:30:10] set_remote_busy(True): wrote 0, pin now reads 0
+[2025-07-23 21:30:10] RAW process_command input: 'P9995RMJ5170IM'
+[2025-07-23 21:30:10] process_command reached
+[2025-07-23 21:30:10] Worker 6ed41b1e: Processing command: P9995RMJ5170IM
+[2025-07-23 21:30:10] is_cos_active: False
+[2025-07-23 21:30:10] DTMF match: False
+[2025-07-23 21:30:10] Got serial line: 'P9995RMJ5170IM'
+[2025-07-23 21:30:10] Line buffer: 'P9995RMJ5170IM\n'
+[2025-07-23 21:30:10] Raw serial bytes: b'IM\n'
+[2025-07-23 21:30:10] Line buffer: 'P9995RMJ5170'
+[2025-07-23 21:30:10] Raw serial bytes: b'P9995RMJ5170'
+[2025-07-23 21:30:07] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:30:02] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:57] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:52] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:47] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:42] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:37] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:32] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:27] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:22] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:17] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:12] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:07] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:29:02] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:57] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:52] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:47] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:42] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:37] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:32] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:27] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:22] parse_all_active_wx_alerts: found 0 active alerts
+[2025-07-23 21:28:17] parse_all_active_wx_alerts: found 0 active alerts
 [2025-07-23 21:28:12] parse_all_active_wx_alerts: found 0 active alerts
 [2025-07-23 21:28:07] parse_all_active_wx_alerts: found 0 active alerts
 [2025-07-23 21:28:02] parse_all_active_wx_alerts: found 0 active alerts

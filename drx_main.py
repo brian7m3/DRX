@@ -1573,7 +1573,6 @@ def play_sound(
     finally:
         status_manager.set_idle()
         debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
-        #set_remote_busy(False)
         if playback_interrupt.is_set():
             playback_interrupt.clear()
         play_mode = (

@@ -92,3 +92,86 @@
 2025-07-23 17:29:49.413: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
 2025-07-23 17:29:51.369: Play: 5647-CT from SudoRandom Base 5600 [interruptible] - successful
 2025-07-23 17:30:01.268: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 18:42:30.572: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-23 18:42:31.780: Play: 5667-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 18:42:42.435: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 18:50:25.700: Play: 5667-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 18:51:58.653: Play: 5423-PID Calling All Stations from Random Base 5400 [normal] - successful
+2025-07-23 18:59:57.594: Play: 9980-cond_tone [normal] - successful
+2025-07-23 18:59:57.594: WX Report: {'observations': 'Fair', 'temperature': '78 degrees', 'humidity': '59 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '7', 'pressure': '30.2', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 19:06:55.419: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
+2025-07-23 19:06:56.328: Play: 5606-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 19:07:07.322: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 19:56:20.973: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-23 19:56:23.091: Play: 5616-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 19:56:32.845: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 19:59:57.589: Play: 9980-cond_tone [normal] - successful
+2025-07-23 19:59:57.589: WX Report: {'observations': 'Fair', 'temperature': '75 degrees', 'humidity': '67 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.21', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 20:45:30.344: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
+2025-07-23 20:45:30.958: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:45:34.051: Play requested: P5422RMJ5420PJ5426W (web input box)
+2025-07-23 20:46:06.147: Play: 5422-PID SPARC Simplex Net [repeat] - successful
+2025-07-23 20:46:21.488: Play: 5420-PID Flight 505 [pause] - playback error
+2025-07-23 20:46:32.760: Play: 5426-PID Greedy Ham Radio Operator [wait_for_cos] - successful
+2025-07-23 20:46:33.295: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:46:33.849: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:46:39.367: Play requested: P5422RMJ5420PJ5426W (web input box)
+2025-07-23 20:46:55.762: Play: 5420-PID Flight 505 [pause] - interrupted
+2025-07-23 20:47:07.034: Play: 5426-PID Greedy Ham Radio Operator [wait_for_cos] - successful
+2025-07-23 20:47:07.571: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:47:08.073: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:47:08.577: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:47:23.658: Play requested: P5422RMJ5420PJ5426WA5200R (web input box)
+2025-07-23 20:47:35.641: Play: 5420-PID Flight 505 [pause] - playback error
+2025-07-23 20:47:46.867: Play: 5426-PID Greedy Ham Radio Operator [wait_for_cos] - successful
+2025-07-23 20:47:48.431: Play requested: P5422RMJ5420PJ5426WA5200R (web input box)
+2025-07-23 20:48:22.712: Play requested: P5422RMJ5420PJ5426WA5300R (web input box)
+2025-07-23 20:48:36.298: Play: 5420-PID Flight 505 [pause] - playback error
+2025-07-23 20:48:47.571: Play: 5426-PID Greedy Ham Radio Operator [wait_for_cos] - successful
+2025-07-23 20:48:48.108: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:48:49.987: Play requested: P5422RMJ5420PJ5426WA5300R (web input box)
+2025-07-23 20:49:03.475: Play: 5303-IID Sense of Humor from Rotating Base 5300 [repeat] - successful
+2025-07-23 20:49:04.087: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:49:28.772: Play requested: P5300R (web input box)
+2025-07-23 20:49:38.908: Play: 5304-IID Speed of Light from Rotating Base 5300 [repeat] - successful
+2025-07-23 20:49:39.306: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - interrupted
+2025-07-23 20:49:42.338: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:49:47.539: Play requested: P5300R (web input box)
+2025-07-23 20:50:04.274: Play: 5305-IID Breaking New Ground from Rotating Base 5300 [repeat] - successful
+2025-07-23 20:50:04.655: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - interrupted
+2025-07-23 20:50:08.692: Play: 5668-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:54:50.140: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
+2025-07-23 20:58:28.395: Play requested: P5300R (web input box)
+2025-07-23 20:58:38.290: Play: 5306-IID 505 Zone from Rotating Base 5300 [repeat] - successful
+2025-07-23 20:58:38.702: Play: 5634-CT from SudoRandom Base 5600 [interruptible] - interrupted
+2025-07-23 20:58:42.028: Play: 5634-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 20:58:52.953: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 21:00:02.011: Play: 5129-Msg 9 PM Don't Give a Damn [wait_for_cos] - successful
+2025-07-23 21:00:02.968: Play: 9980-cond_tone [normal] - successful
+2025-07-23 21:00:02.969: WX Report: {'observations': 'Fair', 'temperature': '72 degrees', 'humidity': '73 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.22', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-23 21:04:29.267: Interrupt: 5505-PID(N) All Nite Long played without COS, did not switch to 6000
+2025-07-23 21:06:50.631: Play requested: P5300R (web input box)
+2025-07-23 21:07:05.763: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [repeat] - successful
+2025-07-23 21:07:06.161: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
+2025-07-23 21:07:10.138: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 21:07:21.165: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 21:07:40.175: Configuration reload requested from web
+2025-07-23 21:08:01.945: Play requested: P5300R (web input box)
+2025-07-23 21:08:08.815: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [repeat] - successful
+2025-07-23 21:08:09.248: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
+2025-07-23 21:08:12.730: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 21:13:49.829: Interrupt: 5504-PID(N) Shake It Up played without COS, did not switch to 6000
+2025-07-23 21:15:27.291: Play requested: P5300R (web input box)
+2025-07-23 21:15:36.585: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [repeat] - successful
+2025-07-23 21:15:37.018: Play: 5601-CT from SudoRandom Base 5600 [interruptible] - interrupted
+2025-07-23 21:15:40.565: Play: 5601-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 21:15:51.510: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-23 21:21:58.396: Play requested: P5300R (web input box)
+2025-07-23 21:22:06.098: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [repeat] - successful
+2025-07-23 21:22:09.791: Play: 5626-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 21:25:53.814: Play requested: P5403R (web input box)
+2025-07-23 21:26:00.881: Play: 5403-PID Going Above and Beyond [repeat] - successful
+2025-07-23 21:26:01.297: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - interrupted
+2025-07-23 21:26:04.921: Play: 5199-AID Nicole [wait_for_cos] - successful
+2025-07-23 21:26:05.489: Play: 5626-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-23 21:26:06.068: Play: 5626-CT from SudoRandom Base 5600 [interruptible] - successful

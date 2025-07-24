@@ -26,7 +26,6 @@ from flask import Flask, jsonify
 from typing import Optional, Callable, Dict, Any
 import pytz
 import tempfile
-import shutil
 import getpass
 
 
@@ -200,7 +199,6 @@ class PlaybackStatusManager:
     def set_playing(self, filename: str, info: Optional[str] = None, 
                    section_context: Optional[str] = None):
         """Convenience method for setting playing status."""
-        import os
         playing_name = os.path.splitext(os.path.basename(filename))[0]
         self.set_status("Playing", playing_name, info or f"Playing {filename}", section_context)
     
@@ -1123,8 +1121,6 @@ def detect_section_context(filename):
     Detect if a filename belongs to a configured section and return appropriate context.
     Returns a string like "from Rotating Base 5300" or None if not a base track.
     """
-    import os
-    import re
 
     # Extract base track number from filename (handles e.g. "5308-Title.wav", "P5300A5400-Title.wav")
     basename = os.path.basename(filename)
@@ -1154,81 +1150,6 @@ def detect_section_context(filename):
 
     return None
 
-def handle_alternate_series(command):
-    bases, suffixes, is_alt = parse_alternate_series(command)
-    debug_log(f"ALTERNATE DEBUG: command={command}, bases={bases}, suffixes={suffixes}, is_alt={is_alt}")
-    if not is_alt or not bases:
-        debug_log("ALTERNATE DEBUG: Not an alternate command or no bases")
-        return False
-
-    key = tuple(bases)
-    if key not in alternate_series_pointers:
-        alternate_series_pointers[key] = 0
-
-    pointer = alternate_series_pointers[key]
-    base_to_play = bases[pointer]
-    base_suffix = suffixes[pointer] if pointer < len(suffixes) else ""
-    debug_log(f"ALTERNATE DEBUG: pointer={pointer}, base_to_play={base_to_play}, base_suffix={base_suffix}")
-
-    repeat = 'R' in base_suffix
-    pausing = 'P' in base_suffix
-    interruptible = 'I' in base_suffix
-    wait_for_cos = 'W' in base_suffix
-
-    code_str = f"{base_to_play:04d}"
-    debug_log(f"ALTERNATE DEBUG: code_str={code_str}, repeat={repeat}, pausing={pausing}, interruptible={interruptible}, wait_for_cos={wait_for_cos}")
-
-    debug_log("About to call play_direct_track")
-    # PATCH: Always pass a display_name with context for alternating series!
-    # Find the file we will play, extract track_num and title for formatting.
-    base_filename = get_next_base_file(base_to_play)
-    if base_filename:
-        import os
-        track_filename = os.path.basename(base_filename)
-        # Extract track_num and title
-        # Handles "5308-Title.wav" or "P5300A5400-Title.wav"
-        m = re.match(r'P?(\d+)', track_filename)
-        track_num = m.group(1) if m else ""
-        title = ""
-        if "-" in track_filename:
-            title = track_filename.split("-", 1)[1].rsplit(".", 1)[0]
-        # Detect section type for more accurate context
-        section_context = detect_section_context(base_filename)
-        # Guess base_type for display
-        base_type = ""
-        if section_context:
-            if "Rotating" in section_context:
-                base_type = "Rotating Base"
-            elif "Random" in section_context:
-                base_type = "Random Base"
-            elif "SudoRandom" in section_context:
-                base_type = "SudoRandom Base"
-            else:
-                base_type = section_context
-        else:
-            base_type = "Base"
-        base_num = base_to_play
-        def format_currently_playing(track_num, title, base_type, base_num):
-            if title:
-                return f"{track_num}-{title} from {base_type} {base_num}"
-            else:
-                return f"{track_num} from {base_type} {base_num}"
-        currently_playing_str = format_currently_playing(track_num, title, base_type, base_num)
-        play_sound(
-            filename=base_filename,
-            interruptible=interruptible,
-            pausing=pausing,
-            repeating=repeat,
-            wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
-        )
-        alternate_series_pointers[key] = (pointer + 1) % len(bases)
-        debug_log(f"ALTERNATE DEBUG: next pointer will be {alternate_series_pointers[key]}")
-        return True
-    else:
-        debug_log(f"ALTERNATE DEBUG: No base file found for {base_to_play}")
-        return False
-
 def play_sound(
     filename,
     interruptible=False,
@@ -1243,9 +1164,6 @@ def play_sound(
     All status_manager, debug_log, and modern DRX features retained.
     """
     debug_log(f"[PLAY_SOUND DEBUG] filename={filename}, display_name={display_name}")
-    import os
-    import time
-    import subprocess
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time
     global playback_interrupt, playback_status, sound_card_missing, current_playback_token, MAX_COS_INTERRUPTIONS
     global h
@@ -1356,6 +1274,8 @@ def play_sound(
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
             ignore_cos = False
+            # Flag to indicate we are in final playthrough (after MAX_COS_INTERRUPTIONS)
+            final_playthrough = False
             while True:
                 if not ignore_cos:
                     while is_cos_active() and not playback_interrupt.is_set():
@@ -1377,37 +1297,50 @@ def play_sound(
                     )
                 except Exception as e:
                     debug_log("Exception in REPEAT mode (Popen):", e)
-                    import traceback
                     traceback.print_exc()
                     break
 
                 was_interrupted = False
                 while proc.poll() is None:
-                    if playback_token is not None and playback_token != current_playback_token:
-                        proc.terminate()
-                        was_interrupted = True
-                        interrupted = True
-                        break
-                    if not ignore_cos and is_cos_active():
-                        cos_interruptions += 1
-                        debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
-                        if cos_interruptions >= MAX_COS_INTERRUPTIONS:
-                            debug_log("Repeat mode: max_cos_interruptions reached, will ignore COS from now on. Letting current playback continue.")
-                            ignore_cos = True
+                    if not ignore_cos:
+                        if playback_token is not None and playback_token != current_playback_token:
+                            proc.terminate()
+                            was_interrupted = True
+                            interrupted = True
                             break
-                        debug_log("COS active: stopping and will repeat")
-                        proc.terminate()
-                        time.sleep(0.1)
-                        if proc.poll() is None:
-                            proc.kill()
-                        was_interrupted = True
-                        interrupted = True
-                        break
-                    if playback_interrupt.is_set():
-                        proc.terminate()
-                        was_interrupted = True
-                        interrupted = True
-                        break
+                        if is_cos_active():
+                            cos_interruptions += 1
+                            debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
+                            if cos_interruptions >= MAX_COS_INTERRUPTIONS:
+                                debug_log("Repeat mode: max_cos_interruptions reached, will ignore COS from now on. Letting current playback continue.")
+                                ignore_cos = True
+                                final_playthrough = True
+                                break
+                            debug_log("COS active: stopping and will repeat")
+                            proc.terminate()
+                            time.sleep(0.1)
+                            if proc.poll() is None:
+                                proc.kill()
+                            was_interrupted = True
+                            interrupted = True
+                            break
+                        if playback_interrupt.is_set():
+                            proc.terminate()
+                            was_interrupted = True
+                            interrupted = True
+                            break
+                    else:
+                        # In ignore_cos mode, only allow true global interrupts
+                        if playback_token is not None and playback_token != current_playback_token:
+                            proc.terminate()
+                            was_interrupted = True
+                            interrupted = True
+                            break
+                        if playback_interrupt.is_set():
+                            proc.terminate()
+                            was_interrupted = True
+                            interrupted = True
+                            break
                     time.sleep(0.05)
                 if was_interrupted and proc.poll() is None:
                     proc.kill()
@@ -1426,22 +1359,25 @@ def play_sound(
                             debug_log(f"aplay error: {err.decode(errors='replace')}")
                         else:
                             debug_log(f"aplay info: {err.decode(errors='replace')}")
+                # Only clear REMOTE_BUSY after final playthrough, not after each repeat
                 if ignore_cos:
                     debug_log("WAV played all the way through (final allowed play), ending repeat mode.")
+                    set_remote_busy(False)
                     success = True
                     break
                 if not was_interrupted:
                     debug_log("WAV played all the way through, ending repeat mode.")
+                    set_remote_busy(False)
                     success = True
                     break
                 if playback_interrupt.is_set() or (playback_token is not None and playback_token != current_playback_token):
+                    set_remote_busy(False)
                     break
 
         elif pausing:
             status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
             debug_log("PAUSE MODE ACTIVE")
             from contextlib import closing
-            import wave
             # True pause/resume: keep track of how much played, restart at correct offset
             try:
                 # Get total duration of file
@@ -1637,7 +1573,7 @@ def play_sound(
     finally:
         status_manager.set_idle()
         debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
-        set_remote_busy(False)
+        #set_remote_busy(False)
         if playback_interrupt.is_set():
             playback_interrupt.clear()
         play_mode = (
@@ -1664,7 +1600,6 @@ def play_single_wav(
     reset_status_on_end=True,
     set_status_on_play=True
 ):
-    import os
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
     global ctone_override_expire
 
@@ -1672,7 +1607,6 @@ def play_single_wav(
     ctone = config.get('WX', 'ctone', fallback='').strip()
     now = time.time()
     code_str = code
-    import re
     if isinstance(code, str) and not code.lower().endswith('.wav') and not os.path.isfile(code):
         if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
             m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code, re.IGNORECASE)
@@ -1888,7 +1822,6 @@ def play_rotating_section(
     wait_for_cos=False
 ):
     try:
-        import os
         global ctone_override_expire
         current_time = time.time()
         last_played = last_played_dict.get(base, 0)
@@ -1940,7 +1873,6 @@ def play_rotating_section(
         now = time.time()
         debug_log(f"[CTONE PATCH] ROTATING WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
         if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
-            import re
             m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
             if m:
                 suffix = m.group(2)
@@ -2003,7 +1935,6 @@ def play_randomized_section(
         else:
             new_track = current_track
 
-        import os
         filebase = os.path.splitext(os.path.basename(new_track))[0]
 
         # --- CTONE OVERRIDE CHECK ---
@@ -2012,7 +1943,6 @@ def play_randomized_section(
         now = time.time()
         debug_log(f"[CTONE PATCH] RANDOM WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
         if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
-            import re
             m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
             if m:
                 suffix = m.group(2)
@@ -2083,7 +2013,6 @@ def play_sudo_random_section(
     played_in_cycle_dict[base] = played_in_cycle
     sudo_random_last_file[base] = file_to_play
 
-    import os
     filebase = os.path.splitext(os.path.basename(file_to_play))[0]
 
     # --- CTONE OVERRIDE CHECK ---
@@ -2092,7 +2021,6 @@ def play_sudo_random_section(
     now = time.time()
     debug_log(f"[CTONE PATCH] SUDORANDOM WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
     if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
-        import re
         m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
         if m:
             suffix = m.group(2)
@@ -2133,19 +2061,18 @@ def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False
     wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
     ctone = config.get('WX', 'ctone', fallback='').strip()
     now = time.time()
-    import re
     debug_log(f"[CTONE PATCH] DIRECT WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
     if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
         m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code_str, re.IGNORECASE)
         if m:
             suffix = m.group(2)
             new_code_str = ctone + suffix
+            filebase = code_str  # Add this line
             log_recent(f"CT Override {filebase} -> {new_code_str}.")
-            debug_log(f"[CTONE PATCH] play_direct_track: OVERRIDE {code_str} -> {new_code_str}")
+            debug_log(f"[CTONE PATCH] play_direct_track: OVERRIDE {filebase} -> {new_code_str}")
             code_str = new_code_str
 
     # Now resolve the code_str to a filename and play it
-    import os
     matches = [
         f for f in os.listdir(SOUND_DIRECTORY)
         if match_code_file(f, code_str, SOUND_FILE_EXTENSION)
@@ -2171,7 +2098,6 @@ def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False
     return True     
 
 def play_interrupt_to_another(base_filename, code2, playback_token=None):
-    import os
     global currently_playing, currently_playing_info, currently_playing_info_timestamp
     global playback_status, playback_interrupt, current_playback_token
     debug_log(f"play_interrupt_to_another: base_filename={base_filename}, code2={code2}")
@@ -2231,7 +2157,6 @@ def parse_echo_command(command):
     Parses an echo test command in the format Re9999
     Returns the track number or None if not a valid echo command
     """
-    import re
     command = command.strip().upper()
     match = re.match(r'^RE(\d{4})$', command)
     if match:
@@ -2247,9 +2172,6 @@ def echo_test(track_num, playback_token=None):
         track_num (int): The track number to create (e.g., 9999)
         playback_token: Token for playback interruption tracking
     """
-    import os
-    import time
-    import subprocess
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     global echo_test_active, echo_test_track
     
@@ -2852,9 +2774,6 @@ def run_script(script_num, playback_token=None):
         script_num (str): The script number/name to execute
         playback_token: Token for playback interruption tracking (not used but required)
     """
-    import os
-    import subprocess
-    import time
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     
     # Get the base DRX directory (one level up from SOUND_DIRECTORY)
@@ -3080,7 +2999,6 @@ def write_state():
     cos_today_minutes = int(round(cos_today_seconds / 60)) if 'cos_today_seconds' in globals() else 0
 
     # --- Ensure cos_today_date is set before writing ---
-    from datetime import datetime
     global cos_today_date
     if not ('cos_today_date' in globals()) or not cos_today_date:
         cos_today_date = datetime.now().strftime("%Y-%m-%d")
@@ -3453,13 +3371,10 @@ alternate_sequences = {}
 # If you have more code (such as DTMF or web handlers), continue adding here.
 
 def launch_status_screen():
-    import curses
     curses.wrapper(status_screen)
-
 
 def get_previous_day():
     return (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-
 
 def parse_minutes_from_activity_log(date_str):
     if not os.path.exists(ACTIVITY_FILE):
@@ -4061,7 +3976,6 @@ def synthesize_and_play_with_piper(text, debug_log=None):
         debug_log and debug_log(f"Piper synthesize: '{text}'")
         env = os.environ.copy()
         env["LD_LIBRARY_PATH"] = f"{PIPER_DIR}:{env.get('LD_LIBRARY_PATH','')}"
-        import subprocess
         proc = subprocess.Popen(
             [
                 PIPER_BINARY,
@@ -4098,7 +4012,6 @@ def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
     Given a description (string), return a list of wavs/tts in order,
     using the longest matching WAVs in extra_dir.
     """
-    import os
     words = description.lower().split()
     n = len(words)
     sequence = []
@@ -4572,7 +4485,6 @@ def find_best_wav_for_words(words, extra_dir):
     - Then try all files that contain all words (in order) in their name.
     - If not found, return None.
     """
-    import os
     candidates = []
     joined = "_".join(words) + ".wav"
     joined_nospace = "".join(words) + ".wav"
@@ -4647,7 +4559,6 @@ def ctone_override_check(code_str):
     now = time.time()
     if not (wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire):
         return code_str
-    import re
     # Match: four digits, optional suffix, then -CT (e.g., 5050I-CT, 5050-CT)
     m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code_str, re.IGNORECASE)
     if m:

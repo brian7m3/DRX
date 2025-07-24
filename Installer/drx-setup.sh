@@ -7,7 +7,7 @@ set -e
 #############################
 
 echo "==== DRX Pre-Install Script ===="
-echo "Current Date/Time (UTC): 2025-07-11 21:28:27"
+echo "Current Date/Time (UTC): $(date -u +"%Y-%m-%d %H:%M:%S")"
 
 # Require the script to be run as root (sudo)
 if [[ $EUID -ne 0 ]]; then
@@ -52,15 +52,14 @@ echo
 echo "This script will:"
 echo "- Install DRX in the directory /home/drx/DRX/"
 echo "- Create the necessary directory structure with permissions 0777"
-echo "- Copy config.ini, drx_main.py, drx_web.py, drx-control.conf, and readme.txt to the DRX root if present"
-echo "- Copy xpander.png to DRX/static/ if present"
-echo "- Copy wx_config.ini and wx_gen.py to DRX/wx/ if present"
-echo "- Copy 0000-Welcome.wav to DRX/sounds/ if present"
+echo "- Copy config.ini, drx_main.py, drx_web.py, cos-active, cos-inactive, change_log.txt to the DRX root if present"
+echo "- Copy all files and subdirectories from sounds/ and wx/ recursively"
+echo "- Copy top-level files from scripts/ and static/ (not subfolders)"
+echo "- Remove /home/drx/DRX/wx/wx_gen.py if present before copying"
 echo "- Copy drx-control to /usr/local/bin/ with 0755 permissions if present"
-echo "- Copy drx_main.service and drx_web.service to /etc/systemd/system/ with 0644 permissions if present"
-echo "- Set all service files to use /home/drx/DRX/ path"
-echo "- Add necessary cron jobs to root's crontab for log rotation and weather updates"
-echo "- Reload systemd, enable and start drx_main.service and drx_web.service if service files are present"
+echo "- Copy drx_main.service, drx_web.service, drx_wx.service to /etc/systemd/system/ with 0644 permissions if present, patching WorkingDirectory"
+echo "- Comment out old DRX cron jobs in root's crontab for log rotation and weather updates"
+echo "- Reload systemd, enable and start drx_main.service, drx_web.service, drx_wx.service if service files are present"
 read -p "Proceed? (yes/no): " CONFIRM
 
 if [[ "$CONFIRM" != "yes" ]]; then
@@ -95,56 +94,49 @@ chmod -R 0777 "$DRX_BASE"
 SOURCE_DIR="$(pwd)"
 echo "Using source directory: $SOURCE_DIR"
 
+# --- MODIFICATION: Remove wx_gen.py if present before copying wx directory ---
+if [ -f "$DRX_BASE/wx/wx_gen.py" ]; then
+  rm -f "$DRX_BASE/wx/wx_gen.py"
+  echo "Removed old $DRX_BASE/wx/wx_gen.py"
+fi
+
 # Copy main files to DRX root
 echo "Copying main files to $DRX_BASE..."
-# Use explicit file names from the directory listing
-if [ -f "$SOURCE_DIR/config.ini" ]; then
-  cp -v "$SOURCE_DIR/config.ini" "$DRX_BASE/"
-  echo "Copied config.ini"
-fi
+for f in config.ini drx_main.py drx_web.py cos-active cos-inactive change_log.txt; do
+  if [ -f "$SOURCE_DIR/$f" ]; then
+    cp -v "$SOURCE_DIR/$f" "$DRX_BASE/"
+    echo "Copied $f"
+  fi
+done
 
-if [ -f "$SOURCE_DIR/drx_main.py" ]; then
-  cp -v "$SOURCE_DIR/drx_main.py" "$DRX_BASE/"
-  echo "Copied drx_main.py"
-fi
-
-if [ -f "$SOURCE_DIR/drx_web.py" ]; then
-  cp -v "$SOURCE_DIR/drx_web.py" "$DRX_BASE/"
-  echo "Copied drx_web.py"
-fi
-
-if [ -f "$SOURCE_DIR/cos-active" ]; then
-  cp -v "$SOURCE_DIR/cos-active" "$DRX_BASE/"
-  echo "Copied cos-active"
-fi
-
-if [ -f "$SOURCE_DIR/cos-inactive" ]; then
-  cp -v "$SOURCE_DIR/cos-inactive" "$DRX_BASE/"
-  echo "Copied cos-inactive"
-fi
-
-# Copy 0000-Welcome.wav to sounds directory
+# Copy 0000-Welcome.wav to sounds directory (optional legacy behavior)
 if [ -f "$SOURCE_DIR/0000-Welcome.wav" ]; then
   cp -v "$SOURCE_DIR/0000-Welcome.wav" "$DRX_BASE/sounds/"
   echo "Copied 0000-Welcome.wav to sounds directory"
 fi
 
-# Copy any files from the scripts directory
+# Recursively copy provided sounds/ directory to DRX/sounds/
+if [ -d "$SOURCE_DIR/sounds" ]; then
+  rsync -av --delete "$SOURCE_DIR/sounds/" "$DRX_BASE/sounds/"
+  echo "Copied all sounds directory contents recursively"
+fi
+
+# Copy only top-level files from the scripts directory
 if [ -d "$SOURCE_DIR/scripts" ]; then
-  cp -rv "$SOURCE_DIR/scripts/"* "$DRX_BASE/scripts/" 2>/dev/null || :
-  echo "Copied scripts directory contents"
+  find "$SOURCE_DIR/scripts" -maxdepth 1 -type f -exec cp -v {} "$DRX_BASE/scripts/" \;
+  echo "Copied scripts directory top-level files"
 fi
 
-# Copy any files from the static directory
+# Copy only top-level files from the static directory
 if [ -d "$SOURCE_DIR/static" ]; then
-  cp -rv "$SOURCE_DIR/static/"* "$DRX_BASE/static/" 2>/dev/null || :
-  echo "Copied static directory contents"
+  find "$SOURCE_DIR/static" -maxdepth 1 -type f -exec cp -v {} "$DRX_BASE/static/" \;
+  echo "Copied static directory top-level files"
 fi
 
-# Copy any files from the wx directory
+# Recursively copy wx directory contents
 if [ -d "$SOURCE_DIR/wx" ]; then
-  cp -rv "$SOURCE_DIR/wx/"* "$DRX_BASE/wx/" 2>/dev/null || :
-  echo "Copied wx directory contents"
+  rsync -av --delete "$SOURCE_DIR/wx/" "$DRX_BASE/wx/"
+  echo "Copied wx directory contents recursively"
 fi
 
 # Copy drx-control to /usr/local/bin/ with 0755 permissions
@@ -154,9 +146,9 @@ if [ -f "$SOURCE_DIR/drx-control" ]; then
   echo "Copied drx-control to /usr/local/bin/"
 fi
 
-# Copy and patch service files
+# Copy and patch service files (drx_main.service, drx_web.service, drx_wx.service)
 services_enabled=0
-for svc in drx_main.service drx_web.service; do
+for svc in drx_main.service drx_web.service drx_wx.service; do
   if [ -f "$SOURCE_DIR/$svc" ]; then
     # Only modify the WorkingDirectory line, not paths inside ExecStart
     sed -e "s|^WorkingDirectory=.*$|WorkingDirectory=/home/drx/DRX|g" \
@@ -169,23 +161,46 @@ for svc in drx_main.service drx_web.service; do
   fi
 done
 
-# Add crontab entries for log rotation and weather updates to root's crontab
-echo "Adding cron jobs to root's crontab for log rotation and weather updates..."
-# Use a more reliable method for updating crontab - write directly to the file
-cat > /tmp/root-crontab << EOF
-# Added by DRX installer
-0 12 * * * /usr/local/bin/drx-control rotate main
-0 12 * * * /usr/local/bin/drx-control rotate web
-*/15 * * * * python3 /home/drx/DRX/wx/wx_gen.py
-59 * * * * python3 /home/drx/DRX/wx/wx_gen.py
-EOF
+# --- Comment out old DRX cron jobs in root's crontab (do not add new ones) ---
+echo "Commenting out old DRX cron jobs in root's crontab (if present)..."
+CRON_TEMP_OLD=$(mktemp)
+CRON_TEMP_NEW=$(mktemp)
+crontab -l 2>/dev/null > "$CRON_TEMP_OLD" || true
 
-# Install the new crontab
-crontab /tmp/root-crontab
-echo "Crontab entries added successfully."
+PATTERNS=(
+    "/usr/local/bin/drx-control rotate main"
+    "/usr/local/bin/drx-control rotate web"
+    "wx_gen.py"
+)
+COMMENTED_LINES=()
 
-# Remove temporary file
-rm /tmp/root-crontab
+cp "$CRON_TEMP_OLD" "$CRON_TEMP_NEW"
+for pattern in "${PATTERNS[@]}"; do
+    if grep -q "$pattern" "$CRON_TEMP_NEW"; then
+        while IFS= read -r line; do
+            if [[ "$line" == *"$pattern"* ]] && [[ "$line" != \#* ]]; then
+                COMMENTED_LINES+=("$line")
+                sed -i "s|^\(.*$pattern.*\)|# [DRX-REMOVED] \1|" "$CRON_TEMP_NEW"
+            fi
+        done < <(grep "$pattern" "$CRON_TEMP_OLD")
+    fi
+done
+
+crontab "$CRON_TEMP_NEW"
+
+if [ ${#COMMENTED_LINES[@]} -gt 0 ]; then
+    echo
+    echo "The following old DRX cron entries in root's crontab have been commented out as they are no longer necessary:"
+    for line in "${COMMENTED_LINES[@]}"; do
+        echo "  $line"
+    done
+    echo
+    echo "These lines have been marked with '# [DRX-REMOVED]' in the crontab."
+else
+    echo "No old DRX cron entries were found in root's crontab."
+fi
+
+rm -f "$CRON_TEMP_OLD" "$CRON_TEMP_NEW"
 
 # Ensure correct ownership
 chown -R drx:drx "$DRX_BASE"
@@ -195,7 +210,7 @@ echo "Set ownership of $DRX_BASE to drx:drx"
 if [[ $services_enabled -eq 1 ]]; then
   echo "Reloading systemd daemon..."
   systemctl daemon-reload
-  for svc in drx_main.service drx_web.service; do
+  for svc in drx_main.service drx_web.service drx_wx.service; do
     if [[ -f "/etc/systemd/system/$svc" ]]; then
       echo "Enabling $svc to start on boot..."
       systemctl enable "$svc"
@@ -215,7 +230,7 @@ find "$DRX_BASE" -type f | sort
 echo
 echo "Thank you for installing DRX 2.0!  To control your system, "
 echo "enter: sudo drx-control"
-echo "Check sudo crontab -e to modify entries made by DRX installer."
+echo "Check sudo crontab -e to review or clean up any remaining entries."
 echo
 echo "A system reboot is required for all group changes and services to work properly."
 read -p "Would you like to reboot now? (yes/no): " REBOOT_CONFIRM

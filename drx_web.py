@@ -563,6 +563,10 @@ pre.stateblock {
   background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
   animation: popupIn 0.33s;
 }
+#help-modal .modal-content {
+  max-width: 900px; /* Or set to your preferred width */
+  width: 90vw;      /* Responsive: 90% of viewport width */
+}
 @keyframes popupIn {
   from { transform: scale(0.95); opacity: 0;}
   to   { transform: scale(1); opacity: 1;}
@@ -2302,9 +2306,11 @@ STATE_BLOCKS_TEMPLATE = '''
 <h2>SudoRandom Bases State</h2>
 <pre class="stateblock stateblock-3">{% for l in state.get('sudo_bases_lines', []) %}{{ l }}
 {% endfor %}</pre>
+<!--
 <h2>Alternate-Series State</h2>
 <pre class="stateblock stateblock-4">{% for l in state.get('alt_bases_lines', []) %}{{ l }}
-{% endfor %}</pre>
+{% endfor %}</pre> */
+-->
 '''
 
 LOGIN_TEMPLATE = '''

@@ -311,6 +311,7 @@ active_alerts = []
 last_active_alerts = []
 announced_alerts = set()  # set of effective datetime strings (or hashes)
 announced_alert_ids = set()
+in_join_series = False
 
 # --- In-Memory State for REST API ---
 current_state_memory = {}
@@ -835,15 +836,16 @@ def parse_join_series(cmd):
 def handle_join_series(bases, suffixes, overall_m):
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
     global message_timer_last_played, message_timer_value
+    global in_join_series
 
     played_any_m = False
 
     try:
+        in_join_series = True  # <--- Set global flag
         cancel_rate_limited_timer()
         set_remote_busy(True)
         status_manager.set_join_series(bases)
 
-        # <-- Your main segment loop goes here!
         for i, base in enumerate(bases):
             suf = suffixes[i].upper() if i < len(suffixes) and suffixes[i] else ""
             cmd = f"P{base:04d}{suf}"
@@ -858,13 +860,21 @@ def handle_join_series(bases, suffixes, overall_m):
                     set_message_rate_limited()
                     continue  # Skip this segment
                 played_any_m = True
-            process_command(cmd, defer_message_timer_update=True)
+
+            # Only suppress clear for all segments except the last
+            suppress_clear = (i != len(bases) - 1)
+            process_command(
+                cmd,
+                defer_message_timer_update=True,
+                suppress_remote_busy_clear=suppress_clear
+            )
 
         # Handle message timer update only if a segment with M played, or overall_m is set
         if played_any_m or overall_m:
             message_timer_last_played = time.time()
 
     finally:
+        in_join_series = False  # <--- Unset global flag at the end
         set_remote_busy(False)
 
 def get_duration_wav(filename):
@@ -877,7 +887,7 @@ def get_duration_wav(filename):
     except Exception:
         return 0
 
-def process_command(command, defer_message_timer_update=False):
+def process_command(command, defer_message_timer_update=False, suppress_remote_busy_clear=False):
     global playback_interrupt, currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     global message_timer_last_played, message_timer_value
     global cos_today_seconds, cos_today_date
@@ -897,7 +907,6 @@ def process_command(command, defer_message_timer_update=False):
             handle_top_command()
             return
 
-        #cmd = command.strip().upper()
         cmd = command.strip()
 
         # --- Repeater Activity A1 Command: Speak previous day's activity minutes ---
@@ -916,7 +925,6 @@ def process_command(command, defer_message_timer_update=False):
         # --- Speak WX Conditions W1 Command ---
         if cmd == "W1":
             cancel_rate_limited_timer()
-            # Check if COS was active in the last 10 seconds
             if last_cos_active_time is not None and (time.time() - last_cos_active_time) <= 10:
                 debug_log("COS was active within the last 10 seconds. Jumping to W2 command instead.")
                 speak_temperature()
@@ -960,8 +968,6 @@ def process_command(command, defer_message_timer_update=False):
                 track_num = int(command[2:].strip())
                 debug_log(f"Echo Test command detected with track number: {track_num}")
                 echo_test(track_num)
-
-                # Add to history
                 serial_history.insert(0, {
                     "cmd": f"Echo Test: {track_num:04d}",
                     "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -978,10 +984,7 @@ def process_command(command, defer_message_timer_update=False):
                 cancel_rate_limited_timer()
                 script_num = command[1:].strip()
                 debug_log(f"Script command detected: {script_num}")
-                # Run script directly
                 run_script(script_num)
-
-                # Add to history
                 serial_history.insert(0, {
                     "cmd": f"Script: {script_num}",
                     "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -998,7 +1001,7 @@ def process_command(command, defer_message_timer_update=False):
             cancel_rate_limited_timer()
             filename = os.path.join(SOUND_DIRECTORY, command)
             if os.path.isfile(filename):
-                play_sound(filename=filename)
+                play_sound(filename=filename, suppress_remote_busy_clear=suppress_remote_busy_clear)
             else:
                 status_manager.set_idle()
             return
@@ -1023,7 +1026,6 @@ def process_command(command, defer_message_timer_update=False):
             status_manager.set_idle()
             return
 
-        # DO NOT uppercase the suffix here!
         interruptible = "I" in suffix if suffix else False
         repeat = "R" in suffix if suffix else False
         pausing = "P" in suffix if suffix else False
@@ -1063,12 +1065,13 @@ def process_command(command, defer_message_timer_update=False):
                 cancel_rate_limited_timer()
                 play_randomized_section(
                     b, e, t * 60, random_last_played, random_current_track,
-                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos
+                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos,
+                    suppress_remote_busy_clear=suppress_remote_busy_clear
                 )
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
-                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
                 return
 
         # Rotating Section
@@ -1079,14 +1082,15 @@ def process_command(command, defer_message_timer_update=False):
                     rotation_active[b] = True
                     play_rotating_section(
                         b, e, t * 60, rotation_last_played, rotation_current_track,
-                        interruptible, pausing, repeat, wait_for_cos=wait_for_cos
+                        interruptible, pausing, repeat, wait_for_cos=wait_for_cos,
+                        suppress_remote_busy_clear=suppress_remote_busy_clear
                     )
                 else:
                     debug_log(f"Rotation for base {b} is already active, ignoring repeat trigger.")
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
-                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
                 return
 
         # SudoRandom Section
@@ -1098,18 +1102,19 @@ def process_command(command, defer_message_timer_update=False):
                     sudo_random_last_interval,
                     sudo_random_interval_track,
                     sudo_random_played_in_cycle,
-                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos
+                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos,
+                    suppress_remote_busy_clear=suppress_remote_busy_clear
                 )
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
-                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
                 return
 
         # Direct section (default)
         if DIRECT_ENABLED:
             cancel_rate_limited_timer()
-            play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+            play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
         else:
             cancel_rate_limited_timer()
             status_manager.set_idle()
@@ -1157,7 +1162,8 @@ def play_sound(
     repeating=False,
     wait_for_cos=False,
     playback_token=None,
-    display_name=None
+    display_name=None,
+    suppress_remote_busy_clear=False
 ):
     """
     Enhanced play_sound with true pause/resume for pausing mode using sox+aplay.
@@ -1269,24 +1275,22 @@ def play_sound(
                                 debug_log(f"aplay error: {err.decode(errors='replace')}")
                             else:
                                 debug_log(f"aplay info: {err.decode(errors='replace')}")
+                                
         elif repeating:
             status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
-            ignore_cos = False
-            # Flag to indicate we are in final playthrough (after MAX_COS_INTERRUPTIONS)
-            final_playthrough = False
             while True:
-                if not ignore_cos:
-                    while is_cos_active() and not playback_interrupt.is_set():
-                        status_manager.set_restarting(playing_name)
-                        debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
-                        set_remote_busy(True)
-                        time.sleep(0.05)
-                        if playback_token is not None and playback_token != current_playback_token:
-                            interrupted = True
-                            return
-                    status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
+                # Wait for COS to clear (repeat mode only)
+                while is_cos_active() and not playback_interrupt.is_set():
+                    status_manager.set_restarting(playing_name)
+                    debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
+                    set_remote_busy(True)
+                    time.sleep(0.05)
+                    if playback_token is not None and playback_token != current_playback_token:
+                        interrupted = True
+                        return
+                status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
                 set_remote_busy(True)
                 try:
@@ -1302,45 +1306,43 @@ def play_sound(
 
                 was_interrupted = False
                 while proc.poll() is None:
-                    if not ignore_cos:
-                        if playback_token is not None and playback_token != current_playback_token:
-                            proc.terminate()
-                            was_interrupted = True
-                            interrupted = True
-                            break
-                        if is_cos_active():
-                            cos_interruptions += 1
-                            debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
-                            if cos_interruptions >= MAX_COS_INTERRUPTIONS:
-                                debug_log("Repeat mode: max_cos_interruptions reached, will ignore COS from now on. Letting current playback continue.")
-                                ignore_cos = True
-                                final_playthrough = True
-                                break
-                            debug_log("COS active: stopping and will repeat")
-                            proc.terminate()
-                            time.sleep(0.1)
-                            if proc.poll() is None:
-                                proc.kill()
-                            was_interrupted = True
-                            interrupted = True
-                            break
-                        if playback_interrupt.is_set():
-                            proc.terminate()
-                            was_interrupted = True
-                            interrupted = True
-                            break
-                    else:
-                        # In ignore_cos mode, only allow true global interrupts
-                        if playback_token is not None and playback_token != current_playback_token:
-                            proc.terminate()
-                            was_interrupted = True
-                            interrupted = True
-                            break
-                        if playback_interrupt.is_set():
-                            proc.terminate()
-                            was_interrupted = True
-                            interrupted = True
-                            break
+                    if playback_token is not None and playback_token != current_playback_token:
+                        proc.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    if is_cos_active():
+                        cos_interruptions += 1
+                        debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
+                        if cos_interruptions >= MAX_COS_INTERRUPTIONS:
+                            debug_log("Repeat mode: max_cos_interruptions reached, will do one FINAL play in NORMAL mode.")
+                            set_remote_busy(False)
+                            subprocess.run(["killall", "-q", "aplay"])
+                            time.sleep(0.2)
+                            # Do the final play in *normal* mode, immune to COS
+                            play_sound(
+                                filename,
+                                interruptible=False,
+                                pausing=False,
+                                repeating=False,
+                                wait_for_cos=False,
+                                playback_token=playback_token,
+                                display_name=display_name
+                            )
+                            return
+                        debug_log("COS active: stopping and will repeat")
+                        proc.terminate()
+                        time.sleep(0.1)
+                        if proc.poll() is None:
+                            proc.kill()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    if playback_interrupt.is_set():
+                        proc.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
                     time.sleep(0.05)
                 if was_interrupted and proc.poll() is None:
                     proc.kill()
@@ -1359,12 +1361,6 @@ def play_sound(
                             debug_log(f"aplay error: {err.decode(errors='replace')}")
                         else:
                             debug_log(f"aplay info: {err.decode(errors='replace')}")
-                # Only clear REMOTE_BUSY after final playthrough, not after each repeat
-                if ignore_cos:
-                    debug_log("WAV played all the way through (final allowed play), ending repeat mode.")
-                    set_remote_busy(False)
-                    success = True
-                    break
                 if not was_interrupted:
                     debug_log("WAV played all the way through, ending repeat mode.")
                     set_remote_busy(False)
@@ -1572,7 +1568,11 @@ def play_sound(
                                 debug_log(f"aplay info: {err.decode(errors='replace')}")
     finally:
         status_manager.set_idle()
-        debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
+        if not suppress_remote_busy_clear:
+            debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
+            set_remote_busy(False)
+        else:
+            debug_log("Suppressed REMOTE_BUSY clear (join-series or multi-segment mode)")
         if playback_interrupt.is_set():
             playback_interrupt.clear()
         play_mode = (
@@ -1818,7 +1818,8 @@ def play_rotating_section(
     interruptible=False,
     pausing=False,
     repeat=False,
-    wait_for_cos=False
+    wait_for_cos=False,
+    suppress_remote_busy_clear=False
 ):
     try:
         global ctone_override_expire
@@ -1900,7 +1901,8 @@ def play_rotating_section(
             pausing=pausing,
             repeating=repeat,
             wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
+            display_name=currently_playing_str,
+            suppress_remote_busy_clear=suppress_remote_busy_clear
         )
         rotation_active[base] = False
     except Exception:
@@ -1917,7 +1919,8 @@ def play_randomized_section(
     interruptible=False,
     pausing=False,
     repeating=False,
-    wait_for_cos=False
+    wait_for_cos=False,
+    suppress_remote_busy_clear=False
 ):
     try:
         global ctone_override_expire
@@ -1969,7 +1972,8 @@ def play_randomized_section(
             pausing=pausing,
             repeating=repeating,
             wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
+            display_name=currently_playing_str,
+            suppress_remote_busy_clear=suppress_remote_busy_clear
         )
     except Exception:
         log_exception("play_randomized_section")
@@ -1984,7 +1988,8 @@ def play_sudo_random_section(
     interruptible=False,
     pausing=False,
     repeat=False,
-    wait_for_cos=False
+    wait_for_cos=False,
+    suppress_remote_busy_clear=False
 ):
     global sudo_random_last_file
     global ctone_override_expire
@@ -2046,10 +2051,11 @@ def play_sudo_random_section(
         pausing=pausing,
         repeating=repeat,
         wait_for_cos=wait_for_cos,
-        display_name=currently_playing_str
+        display_name=currently_playing_str,
+        suppress_remote_busy_clear=suppress_remote_busy_clear
     )
 
-def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False, wait_for_cos=False):
+def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False, wait_for_cos=False, suppress_remote_busy_clear=False):
     """
     Play a track directly by its code string, optionally applying C-tone WX alert override.
     """
@@ -2092,9 +2098,10 @@ def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False
         pausing=pausing,
         repeating=repeat,
         wait_for_cos=wait_for_cos,
-        display_name=os.path.splitext(os.path.basename(filename))[0]
+        display_name=os.path.splitext(os.path.basename(filename))[0],
+        suppress_remote_busy_clear=suppress_remote_busy_clear
     )
-    return True     
+    return True    
 
 def play_interrupt_to_another(base_filename, code2, playback_token=None):
     global currently_playing, currently_playing_info, currently_playing_info_timestamp
@@ -3070,7 +3077,13 @@ def maybe_run_webcmd():
     if os.path.exists(WEBCMD_FILE):
         try:
             with open(WEBCMD_FILE, 'r') as f:
-                cmd = json.load(f)
+                try:
+                    cmd = json.load(f)
+                except json.JSONDecodeError:
+                    # File is empty or not valid JSON
+                    debug_log("maybe_run_webcmd: WEBCMD_FILE is empty or invalid JSON, ignoring and deleting")
+                    os.remove(WEBCMD_FILE)
+                    return
 
             # Add Echo Test command support
             if cmd.get("type") == "echo_test" and "track" in cmd:

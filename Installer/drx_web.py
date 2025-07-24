@@ -20,6 +20,7 @@ WEB_PORT = int(config.get("Web", "port", fallback="8080"))
 WEB_USER = config.get("WebAuth", "username", fallback="admin")
 WEB_PASS = config.get("WebAuth", "password", fallback="drxpass")
 DTMF_LOG_FILE = os.path.join(script_dir, "logs", "dtmf.log")
+WX_CONFIG_PATH = os.path.join(script_dir, 'wx', 'wx_config.ini')
 
 STATE_FILE = os.path.join(script_dir, 'drx_state.json')  # NOTE: No longer used - kept for debug endpoint only
 WEBCMD_FILE = '/tmp/drx_webcmd.json'
@@ -54,6 +55,35 @@ DASHBOARD_TEMPLATE = '''
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 <style>
+.weather-alert {
+    color: #fff !important;
+    background: #ff2222;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+    animation: flash-red 1s infinite;
+}
+.weather-normal {
+    color: #388e3c !important;
+    background: #e3ffe3;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+}
+.weather-inactive {
+    color: #fff !important;
+    background: #d32f2f;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+}
+.weather-warn, .weather-notinstalled {
+    color: #fff !important;
+    background: #888;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 0.2em 0.7em;
+}
 /* Flashing COS LED for TOT */
 @keyframes flash-red {
     0%, 50% { 
@@ -123,95 +153,99 @@ DASHBOARD_TEMPLATE = '''
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-    #play-local-modal .modal-content {
-        background: #272b38;
-        color: #eee;
-        border-color: #555;
-    }
-    
-    /* Dark mode error styles - add these new styles */
-    .base-error {
-        border: 2px solid #ff7777 !important;
-        background-color: rgba(255, 119, 119, 0.25) !important;
-    }
-    
-    .validation-error {
-        color: #ff7777;
-        background-color: rgba(255, 119, 119, 0.15);
-        border: 1px solid #ff7777;
-    }
-    
-    #base-configurator-validation-summary {
-        background-color: rgba(255, 119, 119, 0.15);
-        border: 1px solid #ff7777;
-        color: #ff7777;
-    }
-    
-    /* Improve select element visibility */
-    select {
-        background-color: #2d333b; /* Dark background */
-        color: #e6edf3; /* Light text */
-        border: 1px solid #444c56;
-    }
-    
-    /* Improve dropdown options visibility */
-    select option {
-        background-color: #2d333b; /* Dark background */
-        color: #e6edf3; /* Light text */
-    }
-    
-    /* Ensure the selected option is visible */
-    select option:checked {
-        background-color: #347d39; /* GitHub-style green */
-        color: white;
-    }
-.status-last-played {
-  font-size: .75em !important;
-  /* Optional extras: */
-  font-weight: bold;
-  /* color: #1976d2 !important; /* optional blue color for visibility */ 
-}
-#playback-status {
-  font-size: .75em !important;
-  /* Optional extras: */
-  font-weight: bold;
-  /* color: #1976d2 !important; optional blue color for visibility */ */
-}
-/* Set the width of the GPIO Settings box */
-.config-section.gpio-settings {
-  width: 300px;          /* Change to your desired width, e.g., 500px or 60% */
-  max-width: 100%;       /* Optional: prevents overflow on small screens */
-  margin: 0 auto;        /* Optional: center the box horizontally */
+  /* Modal overlay */
+  #url-modal {
+    background: rgba(0,0,0,0.75) !important;
+  }
+  #url-modal > div {
+    background: #23272b !important;
+    color: #eee !important;
+    border: 1.5px solid #444 !important;
+    box-shadow: 0 2px 24px #000c !important;
+  }
+  #url-modal label {
+    color: #90a4ff !important;
+  }
+  #url-modal input[type="text"],
+  #url-modal input[type="text"].form-control {
+    background: #1a1d22 !important;
+    color: #fff !important;
+    border: 1.5px solid #444 !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  #url-modal input[type="text"]:focus,
+  #url-modal input[type="text"].form-control:focus {
+    border: 1.5px solid #90a4ff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px #335 !important;
+  }
+  .base-error {
+    border: 2px solid #ff7777 !important;
+    background-color: rgba(255, 119, 119, 0.25) !important;
+  }
+  .validation-error {
+    color: #ff7777;
+    background-color: rgba(255, 119, 119, 0.15);
+    border: 1px solid #ff7777;
+  }
+  #base-configurator-validation-summary {
+    background-color: rgba(255, 119, 119, 0.15);
+    border: 1px solid #ff7777;
+    color: #ff7777;
+  }
+  select {
+    background-color: #2d333b;
+    color: #e6edf3;
+    border: 1px solid #444c56;
+  }
+  select option {
+    background-color: #2d333b;
+    color: #e6edf3;
+  }
+  select option:checked {
+    background-color: #347d39;
+    color: white;
+  }
+  .status-last-played {
+    font-size: .75em !important;
+    font-weight: bold;
+  }
+  #playback-status {
+    font-size: .75em !important;
+    font-weight: bold;
+  }
 }
 
-/* Optional: Make sure the grid auto-rows are tall enough */
+/* === CONFIG SECTION WIDTH PATCH === */
 .config-sections {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
     gap: 20px;
     margin-bottom: 20px;
-    grid-auto-rows: minmax(150px, auto); /* adjust as needed */
+    grid-auto-rows: minmax(150px, auto); /* consistent height */
 }
-
-/* Responsive: Stack full-width on small screens */
+.config-section {
+    background: var(--primary-light);
+    border-radius: 10px;
+    padding: 9px 8px 8px 8px;
+    margin-bottom: 7px;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.02);
+    box-sizing: border-box;
+    width: 100%;
+}
 @media (max-width: 1100px) {
     .config-sections {
         grid-template-columns: repeat(2, 1fr);
-    }
-    .config-section.gpio-settings {
-        grid-column: 1 / -1;
-        grid-row: auto / span 2;
     }
 }
 @media (max-width: 700px) {
     .config-sections {
         grid-template-columns: 1fr;
     }
-    .config-section.gpio-settings {
-        grid-column: 1 / -1;
-        grid-row: auto / span 2;
-    }
 }
+/* === END PATCH === */
+
 .split-vertical {
   display: flex;
   flex-direction: column;
@@ -221,7 +255,6 @@ DASHBOARD_TEMPLATE = '''
 
 .split-half {
   flex: 1 1 0;
-  /* Optional: Add a border or divider for clarity */
   padding-bottom: 8px;
   border-bottom: 1px solid #ddd;
 }
@@ -230,15 +263,6 @@ DASHBOARD_TEMPLATE = '''
   border-bottom: none;
   padding-bottom: 0;
 }
-/* Condense Configuration Settings area */
-.config-section {
-    background: var(--primary-light);
-    border-radius: 10px;
-    padding: 9px 8px 8px 8px;
-    margin-bottom: 7px;
-    box-shadow: 0 2px 7px rgba(0,0,0,0.02);
-}
-
 .config-section h3 {
     color: var(--primary);
     margin-top: 0;
@@ -248,13 +272,31 @@ DASHBOARD_TEMPLATE = '''
     padding-bottom: 3px;
 }
 
+/* --- HELP TEXT LAYOUT FIX --- */
 .form-group {
     margin-bottom: 7px;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+.form-group.checkbox {
     flex-direction: row;
     align-items: center;
+    margin-bottom: 4px;
     gap: 8px;
 }
+.help-text {
+    font-size: 0.78em;
+    color: #666;
+    margin-top: 2px;
+    margin-left: 0;
+    font-style: italic;
+    max-width: 100%;
+    line-height: 1.25;
+    display: block;
+}
+/* --- END HELP TEXT LAYOUT FIX --- */
 
 .form-group label {
     margin-bottom: 0;
@@ -271,7 +313,7 @@ DASHBOARD_TEMPLATE = '''
     font-size: 0.97em;
     border-radius: 4px;
     border: 1px solid #bbb;
-    width: 50px;
+    width: 100px;
     min-width: 40px;
     max-width: 150px;
     box-sizing: border-box;
@@ -286,25 +328,22 @@ DASHBOARD_TEMPLATE = '''
 #serial_timeout, #serial_line_timeout, #cos_debounce_time {
     width: 55px;
 }
-#web_username {
-    width: 110px;
+#wx_ctone, #wx_ctone_time, #web_port, #weather_polling_time, #message_timer, #same_alerts_polling_time {
+    width: 70px;
 }
-
-.form-group.checkbox {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 4px;
-    gap: 6px;
+#web_username, #web_password, #same_alerts_zip_code {
+    width: 150px;
 }
 
 .help-text {
     font-size: 0.78em;
     color: #666;
-    margin-top: 0;
-    margin-left: 4px;
+    margin-top: 2px;
+    margin-left: 0;
     font-style: italic;
-    max-width: 160px;
+    max-width: 100%;
     line-height: 1.25;
+    display: block;
 }
 #base-configurator-table input[type="text"] {
     box-sizing: border-box;
@@ -369,8 +408,6 @@ DASHBOARD_TEMPLATE = '''
     max-width: 90px;
     box-sizing: border-box;
 }
-</style>
-<style>
 :root {
   --primary: #3949ab;
   --primary-light: #e3e6f0;
@@ -420,7 +457,7 @@ h2 {
   box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
   margin: 24px auto;
   padding: 1.3em 1.6em;
-  max-width: 950px;   /* Or whatever width you like */
+  max-width: 950px;
   min-width: 280px;
   width: 100%;
   box-sizing: border-box;
@@ -465,15 +502,15 @@ button:hover, button:focus {
 .status-warn { color: var(--warning); font-weight: bold; }
 .status-bad { color: var(--danger); font-weight: bold; }
 .logs, .serials {
-  background: #212121; 
-  color: #ececec; 
+  background: #212121;
+  color: #ececec;
   font-family: 'Roboto Mono', monospace;
   font-size: 1em;
-  padding: 1.1em; 
-  border-radius: 9px; 
-  margin-top: 0.7em; 
-  margin-bottom: 1.2em; 
-  overflow-x: auto; 
+  padding: 1.1em;
+  border-radius: 9px;
+  margin-top: 0.7em;
+  margin-bottom: 1.2em;
+  overflow-x: auto;
   max-height: 220px;
 }
 pre.stateblock {
@@ -518,7 +555,6 @@ pre.stateblock {
   border-color: var(--danger);
   background: #ffeaea;
 }
-/* Modal styling */
 .modal {
   display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
   overflow: auto; background-color: rgba(0,0,0,0.33);
@@ -526,6 +562,10 @@ pre.stateblock {
 .modal-content {
   background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 540px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
   animation: popupIn 0.33s;
+}
+#help-modal .modal-content {
+  max-width: 900px; /* Or set to your preferred width */
+  width: 90vw;      /* Responsive: 90% of viewport width */
 }
 @keyframes popupIn {
   from { transform: scale(0.95); opacity: 0;}
@@ -561,82 +601,12 @@ pre.stateblock {
   white-space: pre-line;
   box-shadow: 0 1px 4px 0 rgba(31,38,135,0.03);
 }
-.modal {
-  display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100vw; height: 100vh;
-  overflow: auto; background-color: rgba(0,0,0,0.33);
-}
-.modal-content {
-  background: #fefefe; margin: 7% auto; padding: 2em; border: 1px solid #888; width: 96%; max-width: 1000px; border-radius: 14px; box-shadow: 0 4px 20px #3333;
-  animation: popupIn 0.33s;
-}
-@keyframes popupIn {
-  from { transform: scale(0.95); opacity: 0;}
-  to   { transform: scale(1); opacity: 1;}
-}
-.close {
-  color: #3949ab; float: right; font-size: 2em; font-weight: bold; cursor: pointer;
-}
-.close:hover { color: #d32f2f; }
-.config-section {
-    background: var(--primary-light);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.config-section h3 {
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 8px;
-}
-.form-group {
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-}
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    font-size: 0.95em;
-}
-.form-group input[type="text"], 
-.form-group input[type="password"],
-.form-group input[type="number"],
-.form-group select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-.form-group.checkbox {
-    flex-direction: row;
-    align-items: center;
-}
-.form-group.checkbox input[type="checkbox"] {
-    margin-right: 8px;
-}
-.form-group.checkbox label {
-    margin-bottom: 0;
-}
-@media (max-width: 700px) {
-    .config-sections {
-        grid-template-columns: 1fr;
-    }
-}
-/* Config form styling */
-.config-sections {
+.your-card { margin-bottom: 0.8em; }
+.card-section.center-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-}
-.help-text {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 3px;
-    font-style: italic;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 0;
 }
 .button-row {
     display: flex;
@@ -657,9 +627,9 @@ pre.stateblock {
         width: 100%;
     }
 }
-.logs {
-  overflow-y: auto;
-  max-height: 220px;
+select[name="track_dropdown"] {
+    min-width: 100px;
+    max-width: 100%;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -691,8 +661,8 @@ pre.stateblock {
     color: #eee;
   }
   .stateblock {
-    background: #939393 !important; /* Change this to your preferred dark background color */
-    color: #000000 !important;      /* Optional: ensures text is readable in dark mode */
+    background: #939393 !important;
+    color: #000000 !important;
   }
   input, select, textarea {
     background: #23272b;
@@ -704,45 +674,32 @@ pre.stateblock {
     color: #eee;
   }
   #message-timer {
-    background: #23272b;         /* or var(--card) or a dark color */
-    color: var(--primary);       /* or #90a4ff for blue accent */
+    background: #23272b;
+    color: var(--primary);
     border: 2px solid var(--primary);
   }
   #message-timer.ready {
-    color: var(--success);       /* you can keep this or lighten it */
+    color: var(--success);
     border-color: var(--success);
-    background: #163021;         /* a dark green shade, or use var(--card) */
+    background: #163021;
   }
   #message-timer.running {
     color: var(--danger);
     border-color: var(--danger);
-    background: #3a2121;         /* a dark red shade, or var(--card) */
-  }  
+    background: #3a2121;
+  }
   #base-configurator-table th {
-    background: #2a2e3a !important;   /* A dark blue/gray */
-    color: #fff;           /* White text */  
+    background: #2a2e3a !important;
+    color: #fff;
   }
   .config-sections .config-section {
-    background: #011f4b; /* Warm dark brown/orange for dark mode, adjust as desired */
+    background: #011f4b;
   }
   #base-configurator-validation-summary {
     background-color: #3a2121;
     border: 1px solid #ff867f;
     color: #ff867f;
-  } 
-}
-.your-card { margin-bottom: 0.8em; }
-.card-section.center-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5em 0;    /* ensures enough space for vertical centering */
-  /* or use height: 100px; if you want a fixed height */
-  /* or use padding for flexible height */
-}
-select[name="track_dropdown"] {
-    min-width: 100px;
-    max-width: 100%;
+  }
 }
 </style>
 <script>
@@ -1136,7 +1093,8 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="subcard-row">
             <div class="subcard-label">Weather System:</div>
             <div class="subcard-value">
-                <span class="{{ weather_class }}" style="color: {{ weather_color }};">{{ weather_status }}</span>
+                <span id="ctone-timer" style="display:none; font-size:0.7em; color:#ff2222; margin-right:0.5em;"></span>
+                <span id="weather-badge" class="{{ weather_class }}">{{ weather_status }}</span>
             </div>
         </div>
     </div>
@@ -1366,18 +1324,32 @@ document.addEventListener("DOMContentLoaded", function() {
               All tracks must start with an R and end with &#92;n).
               <br>
               <br>
-                  <li><b>Re</b> Brings up an "Echo Test" to record and playback user - Re9999 (where 9999 is the track to record).  The recorded track does not get overwritten until called again, so you can have multiple commands to store different tracks.  Track recording stops automatically after 1 minute if COS doesn't become inactive prior.  If recording doesn't start within 5 seconds, Echo Test aborts (echo-to.wav). Required files are "echo-start.wav", "echo-to.wav", and optional "echo-end.wav".  Place them in the "sounds" directory.  Set COS debounce time in config for fluttering signals. *</li>
+                  <li><b>Re</b> Brings up an "Echo Test" to record and playback user - Re9999 (where 9999 is the track to record).  The recorded track does not get overwritten until called again, 
+                  so you can have multiple commands to store different tracks.  Track recording stops automatically after 1 minute if COS doesn't become inactive prior.  
+                  If recording doesn't start within 5 seconds, Echo Test aborts (echo-to.wav). Required files are "echo-start.wav", "echo-to.wav", and optional "echo-end.wav".  
+                  Place them in the "sounds" directory.  Set COS debounce time in config for fluttering signals. *</li>
               <h3>Special Functions:</h3>
                   <li><b>S:</b> Scripts - Can call a 4 digit script number in the DRX/scripts folder -> S1001 &#92;n.</li>
                   <li><b>W1:</b> Weather Conditions, if cos was active in the last 10 seconds, jumps to W2 -> W1 &#92;n. **</li>
                   <li><b>W1F:</b> Weather Conditions Forced, same as W1 but doesn't have the cos rule -> W1F &#92;n. **</li>
                   <li><b>W2:</b> Temperature -> W2 &#92;n. **</li>
+                  <li><b>W3:</b> WX Alerts -> W3 &#92;n to manually call up any active alert.. If you do not check Enable Alerts, you will not get automatic WX Alerts and your tone will not change.  
+                  If you enter a track in the Override CTone section, your current courtesy tone will be overriden by the alert one (CW letter W or WX for example).  
+                  For this to work, your tones must be in the following format nnnn-CT description, 5601-CT.wav or 5601-CT doorbell.wav. 
+                  If you leave this blank, your tone will not change upon receiving an automated wx alert.  Enter the amount of time your would like the alert to be valid for in the C-Tone Time section.  
+                  To cancel an alert in progress, uncheck save and recheck and save the Enable Alert box. Setting the ctone time for less than the remaining time will set the alert timer to the new value.  
+                  Active alerts will generate a 9995-WX Alert.wav file in your sounds directory.  This will continuously update as multiple alerts are received or expire.
+                  DRX keeps track of all active alerts.  When all alerts expire, the wav will be deleted.  The wav is meant to be used possibility in a tail message.  
+                  You could have "P9995RMJ5170IM" which would play alerts first in repeat mode, if they exist, and then your regular tail message base interruptable - 5170.  **</li>
+                  <li><b>W3x:</b> User function to see if Wx Alerts or play before Wx Conditions.  Gives brief alert descriptions or says no active wx alerts. </li>
                   <li><b>A1:</b> Activity Announcement "A1 &#92;n" - When called, announces the repeater activity for yesterday.  Need announce.wav, minute.wav, minutes.wav, and number files (1.wav,100.wav, etc. **)
                   <li><b>TOT:</b> Time Out Timer - Command starts recording seconds in RAM for playback. </li>
                   <li><b>TOP:</b> Time Out Play - Plays to1.wav -number of seconds- seconds.wav to2.wav. </li>
-                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
+                  <li><b>xDy:</b> DTMF logging - Sent from controller DTMF detected macro.  x is the port number (1,2,3) D is the DRX command and y is the serial variable from the controller that gives the 
+                  DTMF entered value - 1D4 would show as Port 1 DTMF digit 4. </li>
               <h3>Bases:</h3> 
-                  A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  This will continue and loop back to 4201.
+                  A base type is called by sending P&lt;base #&gt;.  <br>Example: config.ini defines rotating base as base=4200,end=4210,interval=5, P4200, will play 4201.wav and cycle to 4202.wav after 5 minutes.  
+                  This will continue and loop back to 4201.
                   <br>
                   Enter in controller as P<base> &#92;n - P5300&#92;n
                   <br>
@@ -1556,18 +1528,152 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 </div>
             </div>
-            <!-- GPIO Settings: spans 4 columns and 2 rows -->
+            <!-- Weather Alert Settings -->
+            <div class="config-section">
+                <h3>WX Alert Settings</h3>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="wx_alerts" name="wx_alerts" {% if config.get('WX', 'alerts', fallback='false').lower() == 'true' %}checked{% endif %}>
+                    <label for="wx_alerts">Enable Alerts</label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="same_alerts_polling_time">Alerts Polling (secs):</label>
+                    <input type="number" id="same_alerts_polling_time" name="same_alerts_polling_time" min="60" max="3600" value="{{ same_alerts_polling_time }}">
+                </div>
+                <div class="form-group">
+                    <label for="same_alerts_zip_code">
+                        <a href="https://www.weather.gov/pimar/PubZone" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+                            NWS Zones
+                        </a> or
+                        <a href="https://tools.usps.com/zip-code-lookup.htm" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">
+                            Zip Codes
+                        </a>:
+                    </label>
+                    <input
+                        type="text"
+                        id="same_alerts_zip_code"
+                        name="same_alerts_zip_code"
+                        class="modal-url-trigger"
+                        data-label="NWS Zones or Zip Codes.  Comma separated values."
+                        value="{{ same_alerts_zip_code|default('') }}"
+                        placeholder="02673,MAZ017"
+                        readonly
+                    >
+                </div>             
+                <div class="form-group">
+                    <label for="wx_ctone">Override C-Tone:</label>
+                    <input type="number" id="wx_ctone" name="wx_ctone"
+                            min="0" max="9999" value="{{ config.get('WX', 'ctone', fallback='') }}"
+                            placeholder="0000" pattern="\d{0,4}">
+                    <small class="help-text">Leave blank for none, or enter 4-digit track</small>
+                </div>
+                <div class="form-group">
+                    <label for="wx_ctone_time">C-Tone Time (minutes):</label>
+                    <input
+                            type="number"
+                            id="wx_ctone_time"
+                            name="wx_ctone_time"
+                            min="1"
+                            max="1440"
+                            value="{{ config.get('WX', 'ctone_time', fallback='120') }}"
+                            {% if config.get('WX', 'use_expired_time', fallback='true').lower() == 'true' %}disabled{% endif %}
+                    >
+                </div>
+                <div class="form-group checkbox">
+                    <input
+                            type="checkbox"
+                            id="use_expired_time"
+                            name="use_expired_time"
+                            {% if config.get('WX', 'use_expired_time', fallback='true').lower() == 'true' %}checked{% endif %}
+                            onchange="toggleCtoneTime()"
+                    >
+                    <label for="use_expired_time">Use Alert Time Instead</label>
+                </div>
+                <script>
+                function toggleCtoneTime() {
+                    var useExp = document.getElementById('use_expired_time').checked;
+                    document.getElementById('wx_ctone_time').disabled = useExp;
+                }
+                window.onload = function() {
+                    toggleCtoneTime();
+                };
+                </script>
+            </div>
+            <!-- WX Condition Settings (NEW CARD) -->
+            <div class="config-section">
+                <h3>WX Conds. Settings</h3>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="use_nws_only" name="use_nws_only" {% if use_nws_only|lower == 'true' %}checked{% endif %}>
+                    <label for="use_nws_only">Use NWS Only</label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="weather_polling_time">Weather Polling (mins):</label>
+                    <input type="number" id="weather_polling_time" name="weather_polling_time" min="5" max="1440" value="{{ weather_polling_time }}">
+                </div>
+                <div class="form-group">
+                    <label for="wx_data_url">WU Data URL:</label>
+                    <input
+                        type="text"
+                        id="wx_data_url"
+                        name="wx_data_url"
+                        class="modal-url-trigger"
+                        data-label="Wunderground Data URL"
+                        value="{{ wx_data_url|default('') }}"
+                        readonly
+                    >
+                    <small class="help-text">WX Underground data source URL</small>
+                </div>
+                <div class="form-group">
+                    <label for="wx_day_url">WU Day URL:</label>
+                    <input
+                        type="text"
+                        id="wx_day_url"
+                        name="wx_day_url"
+                        class="modal-url-trigger"
+                        data-label="Wunderground Day URL"
+                        value="{{ wx_day_url|default('') }}"
+                        readonly
+                    >
+                    <small class="help-text">WX Underground day source URL</small>
+                </div>
+                <div class="form-group">
+                    <label for="nws_url">NWS URL:</label>
+                    <input
+                        type="text"
+                        id="nws_url"
+                        name="nws_url"
+                        class="modal-url-trigger"
+                        data-label="NWS URL"
+                        value="{{ nws_url|default('') }}"
+                        readonly
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="nws_url_fallback">NWS URL Fallback:</label>
+                    <input
+                        type="text"
+                        id="nws_url_fallback"
+                        name="nws_url_fallback"
+                        class="modal-url-trigger"
+                        data-label="NWS URL Fallback"
+                        value="{{ nws_url_fallback|default('') }}"
+                        readonly
+                    >
+                </div>
+            </div>            
+            <!-- GPIO Settings -->
             <div class="config-section gpio-settings">
                 <h3>GPIO Settings</h3>
                 <div class="form-group">
-                    <label for="remote_busy_pin">Remote Busy Pin:</label>
+                    <label for="remote_busy_pin">Remote Device Busy Pin:</label>
                     <input type="number" id="remote_busy_pin" name="remote_busy_pin" min="0" value="{{ config.get('GPIO', 'remote_busy_pin', fallback='20') }}">
                 </div>
                 <div class="form-group checkbox">
                     <input type="checkbox" id="remote_busy_activate_level" name="remote_busy_activate_level" {% if config.get('GPIO', 'remote_busy_activate_level', fallback='False').lower() == 'true' %}checked{% endif %}>
-                    <label for="remote_busy_activate_level">Remote Device Busy Active High</label>
+                    <label for="remote_busy_activate_level">RDB Active High</label>
                 </div>
-                <hr style="background-color: blue;">
+                <br>
                 <div class="form-group">
                     <label for="cos_pin">COS Pin:</label>
                     <input type="number" id="cos_pin" name="cos_pin" min="0" value="{{ config.get('GPIO', 'cos_pin', fallback='16') }}">
@@ -1578,7 +1684,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
                 <br>
                 <div class="form-group">
-                    <label for="cos_debounce_time">COS Debounce Time (seconds):</label>
+                    <label for="cos_debounce_time">COS Debounce (secs):</label>
                     <input type="number" id="cos_debounce_time" name="cos_debounce_time" min="0" step="0.1" value="{{ config.get('GPIO', 'cos_debounce_time', fallback='1.0') }}">
                 </div>
                 <div class="form-group">
@@ -1592,6 +1698,18 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </form>
 </div>
+<script>
+function expandTextarea(el) {
+    el.rows = 6;
+    el.style.minHeight = "6em";
+}
+function shrinkTextarea(el) {
+    if (!el.value || el.value.length < 120) {
+        el.rows = 1;
+        el.style.minHeight = "2em";
+    }
+}
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var select = document.querySelector('select[name="track_dropdown"]');
@@ -1715,7 +1833,6 @@ function validateRanges() {
         
         const baseNo = parseNumber(baseInput.value);
         const endNo = parseNumber(endInput.value);
-        const type = typeSelect.value;
         
         // 1. Validate that base and end numbers are 4 digits and not negative
         if (baseInput.value.trim() !== "") {
@@ -1739,7 +1856,9 @@ function validateRanges() {
         }
         
         // 2. Validate that type is selected
-        if (type === "") {
+        const type = (typeSelect.value || "").trim();
+        console.log('Validating type:', typeSelect.value, 'trimmed:', type);
+        if (type === "" || !["Rotating", "Random", "SudoRandom"].includes(type)) {
             typeSelect.classList.add('base-error');
             validationErrors.push(`Row ${index + 1}: Type must be selected`);
         }
@@ -1867,9 +1986,13 @@ function validateRanges() {
         ["", "Rotating", "Random", "SudoRandom"].forEach(optVal => {
             const opt = document.createElement("option");
             opt.value = optVal;
-            opt.textContent = optVal;
-            if (rowData.type === optVal) opt.selected = true;
+            opt.textContent = optVal === "" ? "--" : optVal;
+            if ((rowData.type || "").trim() === optVal) opt.selected = true;
             selectType.appendChild(opt);
+        });
+        // Critical: revalidate when user picks a type
+        selectType.addEventListener('change', function() {
+            setTimeout(validateRanges, 100);
         });
         tdType.appendChild(selectType);
 
@@ -2066,6 +2189,109 @@ function validateRanges() {
         <button id="play-local-close-btn" type="button">Close</button>
     </div>
 </div>
+<script>
+function refreshWeatherBadge() {
+    fetch("/api/status", {credentials: 'same-origin'})
+    .then(response => {
+        if (!response.ok) throw new Error("API error");
+        return response.json();
+    })
+    .then(state => {
+        let badge = document.getElementById('weather-badge');
+        let timer = document.getElementById('ctone-timer');
+        if (!badge || !timer) return;
+
+        // Update badge status/class/text/color if needed
+        if (state.weather_status !== undefined) {
+            badge.textContent = state.weather_status;
+        }
+        if (state.weather_class !== undefined) {
+            badge.className = state.weather_class;
+        }
+        if (state.weather_color !== undefined) {
+            badge.style.color = state.weather_color;
+        }
+
+        // Timer logic
+        if (state.ctone_time_remaining != null && state.ctone_time_remaining > 0) {
+            let secs = state.ctone_time_remaining;
+            let min = Math.floor(secs / 60);
+            let s = secs % 60;
+            timer.textContent = `${min}:${s.toString().padStart(2, "0")}`;
+            timer.style.display = "inline";
+        } else {
+            timer.style.display = "none";
+            timer.textContent = "";
+        }
+    })
+    .catch(err => {
+        console.error("Weather badge refresh error:", err);
+    });
+}
+setInterval(refreshWeatherBadge, 1000);
+document.addEventListener('DOMContentLoaded', refreshWeatherBadge);
+</script>
+<!-- Place this at the end of your DASHBOARD_TEMPLATE, before </body> -->
+<div id="url-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:32px 24px; border-radius:14px; box-shadow:0 2px 14px #3338; max-width:900px; width:80vw; min-width:400px; display:flex; flex-direction:column; align-items:stretch;">
+    <label id="url-modal-label" style="font-weight:bold; margin-bottom:8px;"></label>
+    <input type="text" id="url-modal-input" style="font-size:1.2em; padding:10px; border-radius:6px; border:1.5px solid #888; width:100%;" />
+  </div>
+</div>
+<script>
+// Modal logic for URL/Zone fields
+document.addEventListener("DOMContentLoaded", function() {
+  let currentTarget = null;
+  const modal = document.getElementById('url-modal');
+  const modalInput = document.getElementById('url-modal-input');
+  const modalLabel = document.getElementById('url-modal-label');
+
+  // Click triggers for all relevant fields
+  document.querySelectorAll('.modal-url-trigger').forEach(function(field) {
+    field.addEventListener('click', function() {
+      currentTarget = this;
+      modalInput.value = this.value;
+      modalLabel.textContent = this.getAttribute('data-label') || '';
+      modal.style.display = 'flex';
+      setTimeout(() => modalInput.focus(), 50);
+    });
+  });
+
+  // On modal input change, update field value
+  modalInput.addEventListener('input', function() {
+    if (currentTarget) {
+      currentTarget.value = this.value;
+    }
+  });
+
+  // On blur (but not due to clicking on modal input itself), close
+  modalInput.addEventListener('blur', function() {
+    modal.style.display = 'none';
+    currentTarget = null;
+  });
+
+  // On Escape, close modal
+  modalInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      modal.style.display = 'none';
+      if (currentTarget) currentTarget.blur();
+      currentTarget = null;
+    }
+  });
+
+  // Prevent modal close if clicking inside modal content
+  modal.querySelector('div').addEventListener('mousedown', function(e) {
+    e.stopPropagation();
+  });
+
+  // Click outside modal closes it
+  modal.addEventListener('mousedown', function() {
+    if (modalInput === document.activeElement) modalInput.blur();
+    modal.style.display = 'none';
+    currentTarget = null;
+  });
+});
+</script>
 </body>
 </html>
 '''
@@ -2080,9 +2306,11 @@ STATE_BLOCKS_TEMPLATE = '''
 <h2>SudoRandom Bases State</h2>
 <pre class="stateblock stateblock-3">{% for l in state.get('sudo_bases_lines', []) %}{{ l }}
 {% endfor %}</pre>
+<!--
 <h2>Alternate-Series State</h2>
 <pre class="stateblock stateblock-4">{% for l in state.get('alt_bases_lines', []) %}{{ l }}
-{% endfor %}</pre>
+{% endfor %}</pre> */
+-->
 '''
 
 LOGIN_TEMPLATE = '''
@@ -2238,10 +2466,22 @@ def dashboard():
     config.read(config_file_path)
     
     state = read_state()
+    wx_alert_active = state.get("wx_alert_active", False)
     state_blocks_html = render_template_string(STATE_BLOCKS_TEMPLATE, state=state)
-    
+    wx_config = read_wx_config()
+    same_alerts_polling_time = wx_config.get('SAME Alerts', 'polling_time', fallback='300')
+    same_alerts_zip_code = wx_config.get('SAME Alerts', 'zip_code', fallback='06492')
+    weather_polling_time = wx_config.get('weather', 'polling_time', fallback='15')
+
+    # WX Condition Settings fields
+    use_nws_only = wx_config.get('weather', 'use_nws_only', fallback='false')
+    wx_data_url = wx_config.get('weather', 'wx_data_url', fallback='')
+    wx_day_url = wx_config.get('weather', 'wx_day_url', fallback='')
+    nws_url = wx_config.get('weather', 'nws_url', fallback='')
+    nws_url_fallback = wx_config.get('weather', 'nws_url_fallback', fallback='')
+
     # --- Weather System Status ---
-    weather_status, weather_class, weather_color = get_weather_system_status()
+    weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
     
     return render_template_string(DASHBOARD_TEMPLATE,
         currently_playing=state.get("currently_playing"),
@@ -2254,16 +2494,25 @@ def dashboard():
         state=state,
         web_log=load_recent_web_log(10)[::-1],
         all_files=get_all_sound_files(),
-        config=config,  # This will now be the freshly loaded config
+        config=config,
         session=session,
         state_blocks_html=state_blocks_html,
         drx_uptime=get_drx_uptime(),
         weather_status=weather_status,
         weather_class=weather_class,
         weather_color=weather_color,
-        version=VERSION,
-        web_version="2.00"
+        version=state.get("version", "Unknown"),
+        web_version="2.01.00",
+        same_alerts_polling_time=same_alerts_polling_time,
+        same_alerts_zip_code=same_alerts_zip_code,
+        weather_polling_time=weather_polling_time,
+        use_nws_only=use_nws_only,
+        wx_data_url=wx_data_url,
+        wx_day_url=wx_day_url,
+        nws_url=nws_url,
+        nws_url_fallback=nws_url_fallback
     )
+    
 def is_cos_active():
     try:
         state = read_state()
@@ -2491,6 +2740,15 @@ def edit_config_structured():
         existing_config['Web'] = {}
     existing_config['Web']['port'] = form_data.get('web_port', '505')
     
+    # Update WX section
+    if 'WX' not in existing_config:
+        existing_config['WX'] = {}
+    existing_config['WX']['alerts'] = 'true' if form_data.get('wx_alerts') else 'false'
+    existing_config['WX']['interval'] = form_data.get('wx_interval', '30')
+    existing_config['WX']['ctone'] = form_data.get('wx_ctone', '5095')
+    existing_config['WX']['ctone_time'] = form_data.get('wx_ctone_time', '120')
+    existing_config['WX']['use_expired_time'] = 'true' if form_data.get('use_expired_time') else 'false'
+    
     # Update Debug section
     if 'Debug' not in existing_config:
         existing_config['Debug'] = {}
@@ -2500,6 +2758,30 @@ def edit_config_structured():
     # Write to file
     with open(config_file_path, 'w') as configfile:
         existing_config.write(configfile)
+
+    # --- Update /DRX/wx/wx_config.ini with new fields ---
+    wx_config_path = os.path.join(script_dir, "wx", "wx_config.ini")
+    wx_config = configparser.ConfigParser()
+    wx_config.read(wx_config_path)
+
+    # SAME Alerts: polling_time (seconds) and zip_code
+    if 'SAME Alerts' not in wx_config:
+        wx_config['SAME Alerts'] = {}
+    wx_config['SAME Alerts']['polling_time'] = form_data.get('same_alerts_polling_time', '300')
+    wx_config['SAME Alerts']['zip_code'] = form_data.get('same_alerts_zip_code', '')
+
+    # --- WX Condition Settings ---
+    if 'weather' not in wx_config:
+        wx_config['weather'] = {}
+    wx_config['weather']['polling_time'] = form_data.get('weather_polling_time', '15')
+    wx_config['weather']['use_nws_only'] = 'true' if form_data.get('use_nws_only') else 'false'
+    wx_config['weather']['wx_data_url'] = form_data.get('wx_data_url', '')
+    wx_config['weather']['wx_day_url'] = form_data.get('wx_day_url', '')
+    wx_config['weather']['nws_url'] = form_data.get('nws_url', '')
+    wx_config['weather']['nws_url_fallback'] = form_data.get('nws_url_fallback', '')
+
+    with open(wx_config_path, 'w') as wx_file:
+        wx_config.write(wx_file)
     
     # Use the simpler approach for telling DRX to reload
     write_webcmd({"type": "reload_config"})
@@ -2519,30 +2801,51 @@ def status_api():
     # Check if connection to drx_main.py is lost
     connection_lost = False
     updated_at = state.get('updated_at')
-    if not updated_at or time.time() - float(updated_at) > 2.5:  # No update in 2.5 seconds
+    if not updated_at or time.time() - float(updated_at) > 2.5:
         connection_lost = True
-        # Simulate receipt of TOP command when connection is lost
-        # This will reset TOT to "completed" state rather than just inactive
         handle_top_command_on_disconnect()
     
     # Check recent serial commands for TOT/TOP
-    if not connection_lost:  # Only process commands if connection is active
+    if not connection_lost:
         serial_history = state.get("serial_history", [])
-        for entry in serial_history[-10:]:  # Check last 10 commands
+        for entry in serial_history[-10:]:
             cmd = entry.get("cmd", "").upper().strip()
             if process_serial_command_for_tot(cmd):
-                break  # Stop after first relevant command found
+                break
+
+    # --- Weather System Unified Status (ALERT overrides all) ---
+    wx_alert_active = state.get("wx_alert_active", False)
+    weather_status, weather_class, weather_color = get_weather_system_status(wx_alert_active)
     
+    # --- C-Tone Countdown Logic (from in-memory state) ---
+    ctone_override_expire = state.get("ctone_override_expire")
+    now = time.time()
+    ctone_time_remaining = None
+    if ctone_override_expire:
+        try:
+            ctone_override_expire = float(ctone_override_expire)
+            if now < ctone_override_expire:
+                ctone_time_remaining = int(ctone_override_expire - now)
+        except Exception:
+            ctone_time_remaining = None
+
     data = {
         "currently_playing": state.get("currently_playing"),
         "last_played": state.get("last_played"),
         "playback_status": state.get("playback_status"),
-        "cos_state": False if connection_lost else is_cos_active(),  # COS inactive if disconnected
+        "cos_state": False if connection_lost else is_cos_active(),
         "serial_port_missing": state.get("serial_port_missing", False),
         "sound_card_missing": state.get("sound_card_missing", False),
         "remote_device_active": state.get("remote_device_active", False),
-        "tot_active": TOT_STATE['active'],  # This will now reflect the "TOP processed" state
-        "tot_completed": TOT_STATE.get('completed', False)  # Include completed state if it exists
+        "tot_active": TOT_STATE['active'],
+        "tot_completed": TOT_STATE.get('completed', False),
+        # --- Weather Badge fields for AJAX/JS ---
+        "wx_alert_active": wx_alert_active,
+        "weather_status": weather_status,
+        "weather_class": weather_class,
+        "weather_color": weather_color,
+        # --- C-Tone countdown field ---
+        "ctone_time_remaining": ctone_time_remaining,
     }
     return jsonify(data)
 
@@ -2646,7 +2949,6 @@ def api_dtmf_log():
         {% endfor %}
     ''', dtmf_log=lines)
 
-# ... all your existing code above ...
 
 @app.route("/download_dtmf_log")
 @require_login
@@ -2660,18 +2962,20 @@ def download_dtmf_log():
         as_attachment=True
     )
 
-def get_weather_system_status():
+def get_weather_system_status(wx_alert_active=False):
     wx_dir = os.path.join(os.path.dirname(__file__), "wx")
-    wx_gen = os.path.join(wx_dir, "wx_gen.py")
+    drx_wx = os.path.join(wx_dir, "drx_wx.py")
     wx_data = os.path.join(wx_dir, "wx_data")
-    if not os.path.exists(wx_gen):
-        return ("Not Installed", "status-warn", "#888")
+    if wx_alert_active:
+        return ("Alert", "weather-alert", "#ff2222")
+    if not os.path.exists(drx_wx):
+        return ("Not Installed", "weather-warn", "#888")
     if not os.path.exists(wx_data):
-        return ("Inactive", "status-bad", "#d32f2f")
+        return ("Inactive", "weather-inactive", "#d32f2f")
     mtime = os.path.getmtime(wx_data)
     if time.time() - mtime > 7200:
-        return ("Inactive", "status-bad", "#d32f2f")
-    return ("Active", "status-good", "#388e3c")
+        return ("Inactive", "weather-inactive", "#d32f2f")
+    return ("Active", "weather-normal", "#388e3c")
 
 @app.route("/download_drx_log")
 @require_login
@@ -2809,6 +3113,15 @@ def process_serial_command_for_tot(command):
         return True  # State changed
     
     return False  # No state change
+
+def read_wx_config():
+    wx_config = configparser.ConfigParser()
+    wx_config.read(WX_CONFIG_PATH)
+    return wx_config
+
+def write_wx_config(wx_config):
+    with open(WX_CONFIG_PATH, 'w') as f:
+        wx_config.write(f)
 
 @app.route("/api/base_configurator", methods=["GET"])
 def api_base_configurator():

@@ -1,5 +1,7 @@
 *** drx_main ***
-2.01.00	Added support for the WX_Alert function, W3 features.
+2.01.00	Added support for the WX_Alert function, W3 features.  
+		Fixed bug with repeat mode on last try with cos active, wav would stop playing.
+		Fixed bug when in join mode RDB would drop between tracks.
 2.00.01	Changed Rotating Logic to base off of track number, not file name
 		Fixed DRX_Main Version number not updating on web page
 2.00.00	Initial Release

@@ -1,0 +1,29 @@
+*** drx_main ***
+2.01.00	Added support for the WX_Alert function, W3 features.  
+		Fixed bug with repeat mode on last try with cos active, wav would stop playing.
+		Fixed bug when in join mode RDB would drop between tracks.
+2.00.01	Changed Rotating Logic to base off of track number, not file name
+		Fixed DRX_Main Version number not updating on web page
+2.00.00	Initial Release
+
+
+*** drx_web ***
+2.01.00	Added support for WX_Alert badge, timer, config section
+		Removed Alt-Series State from Bases Section - no longer needed
+		Redesigned Config Section
+2.00.01	Fixed DRX_Main Version number not updating on web page
+2.00.00	Initial Release
+
+*** wx_gen.py ***   ========
+                            ====== >  Combined in one file and run as a service -> drx_wx.py
+*** wx_same.py ***  ======== 
+ -includes same.csv
+ allows zip code or NWS Zone for alerts, multiple comma separated
+ https://www.weather.gov/pimar/PubZone
+ 
+ *** drx_wx ***
+ 2.0.0	Initial Release as a combined file with support for piper if wav files are not present
+ 
+ *** drx-control ***
+ 2.1.0	Fixed log rotation issue and add wx service
+ 2.0.0	Initial Release

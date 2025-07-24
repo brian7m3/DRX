@@ -24,6 +24,9 @@ import uuid
 from datetime import datetime, timedelta
 from flask import Flask, jsonify
 from typing import Optional, Callable, Dict, Any
+import pytz
+import tempfile
+import getpass
 
 
 class PlaybackStatusManager:
@@ -196,7 +199,6 @@ class PlaybackStatusManager:
     def set_playing(self, filename: str, info: Optional[str] = None, 
                    section_context: Optional[str] = None):
         """Convenience method for setting playing status."""
-        import os
         playing_name = os.path.splitext(os.path.basename(filename))[0]
         self.set_status("Playing", playing_name, info or f"Playing {filename}", section_context)
     
@@ -254,7 +256,7 @@ class PlaybackStatusManager:
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEBUG_LOG_PATH = os.path.join(SCRIPT_DIR, "debug.log")
 SCRIPT_NAME = "DRX"
-VERSION = "2.00"
+VERSION = "2.01.00"
 
 serial_buffer = ""
 serial_history = []
@@ -300,6 +302,16 @@ tot_start_time = None
 tot_last_seconds = 0
 tot_lock = threading.Lock()
 tot_remote_active = False
+last_alert_time = None
+ctone_override_expire = 0
+PIPER_DIR = "/home/drx/DRX/sounds/extra/piper"
+PIPER_BINARY = os.path.join(PIPER_DIR, "piper")
+PIPER_MODEL = os.path.join(PIPER_DIR, "en_US-amy-medium.onnx")
+active_alerts = []
+last_active_alerts = []
+announced_alerts = set()  # set of effective datetime strings (or hashes)
+announced_alert_ids = set()
+in_join_series = False
 
 # --- In-Memory State for REST API ---
 current_state_memory = {}
@@ -318,6 +330,7 @@ DIRECT_ENABLED = True
 currently_playing_info_timestamp = 0
 rate_limited_set_time = None
 rate_limited_timer = None
+
 
 # --- Status Manager ---
 status_manager = None  # Will be initialized in main()
@@ -624,19 +637,6 @@ def log_recent(entry):
     try:
         with open(LOG_WEB_FILE, "a", encoding='utf-8') as f:
             f.write(f"{ts}: {entry}\n")
-        max_size = 500 * 1024
-        try:
-            if os.path.getsize(LOG_WEB_FILE) > max_size:
-                with open(LOG_WEB_FILE, "rb") as f:
-                    f.seek(-max_size, os.SEEK_END)
-                    data = f.read()
-                first_nl = data.find(b'\n')
-                if first_nl != -1:
-                    data = data[first_nl+1:]
-                with open(LOG_WEB_FILE, "wb") as f:
-                    f.write(data)
-        except Exception:
-            pass
     except Exception as e:
         log_error(f"log_recent failed: {e}")
 
@@ -792,87 +792,89 @@ def handle_alternate_series_new(command):
 
 def parse_join_series(cmd):
     """
-    Parse a Join-series command, e.g. P1001JR2002IM or P1001J2002J3003M
+    Parse a Join-series command, e.g. P1001JR2002IM or P1001J2002J3003M or P1001JM2002
     Returns:
         bases:     list of int base codes (e.g., [1001, 2002])
         suffixes:  list of str suffixes per base (e.g., ['R', 'IM'])
-        overall_m: bool, True if trailing M after last code (removed from suffix)
+        overall_m: bool, True if trailing M after last code (not attached to a code)
         is_join:   True if detected
-    Rules:
-        - J (uppercase) is the separator
-        - Only M can be an overall suffix (after the last code/suffix)
-        - All other suffixes (R, I, P, W, etc) after a code apply only to that code
     """
     cmd = cmd.strip()
-    # Only process Join if uppercase J present
     if not re.search(r'J', cmd):
         return [], [], False, False
 
-    # Remove leading P if present
     if cmd.startswith('P'):
         cmd = cmd[1:]
 
-    # Split by uppercase J
+    # Check for overall trailing M (not attached to a code)
+    overall_m = False
+    if cmd.endswith('M'):
+        # If there is only one trailing M not attached to code
+        parts = re.split(r'J', cmd)
+        last_part = parts[-1]
+        m = re.match(r'^(\d{4})([A-Z]*)$', last_part, re.IGNORECASE)
+        if m and m.group(2) == '':
+            # Last code had no suffix, so the M is overall
+            overall_m = True
+            cmd = cmd[:-1]  # Remove trailing M
+
+    # Split again after removing possible overall M
     parts = re.split(r'J', cmd)
     bases = []
     suffixes = []
 
-    # For each part: digits then suffixes
     for part in parts:
         m = re.match(r'^(\d{4})([A-Z]*)$', part, re.IGNORECASE)
         if m:
             bases.append(int(m.group(1)))
             suffixes.append(m.group(2) or "")
         else:
-            # malformed, not a J series
             return [], [], False, False
-
-    # Check for trailing M after the last suffix
-    last_suffix = suffixes[-1]
-    overall_m = False
-    if last_suffix.upper().endswith('M'):
-        overall_m = True
-        suffixes[-1] = last_suffix[:-1]  # Remove the M from last code's suffix
 
     return bases, suffixes, overall_m, True
 
 def handle_join_series(bases, suffixes, overall_m):
-    """
-    Sequentially play a list of wavs/sections with per-base suffixes, holding REMOTE_BUSY active.
-    If overall_m is True, treat as one message for timer logic.
-    Section bases (Random, Rotation, SudoRandom) are played using play_any_section_by_type.
-    Direct base codes use play_direct_track.
-
-    This version processes each base+suffix as an individual DRX command, ensuring
-    suffixes (R, P, I, M, etc.) are respected per segment, and message timer logic applies per-segment.
-    """
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
     global message_timer_last_played, message_timer_value
+    global in_join_series
 
-    # If overall_m is set (M at the end of the join), enforce message timer for the whole series
-    if overall_m:
-        should_play = should_allow_message_timer_play(True, message_timer_value, message_timer_last_played)
-        if not should_play:
-            set_message_rate_limited()
-            return
-        else:
-            # Set timer as used
-            message_timer_last_played = time.time()
+    played_any_m = False
 
     try:
+        in_join_series = True  # <--- Set global flag
         cancel_rate_limited_timer()
         set_remote_busy(True)
         status_manager.set_join_series(bases)
 
-        # For each base+suffix, build the DRX command and process individually
         for i, base in enumerate(bases):
             suf = suffixes[i].upper() if i < len(suffixes) and suffixes[i] else ""
             cmd = f"P{base:04d}{suf}"
-            process_command(cmd)
-            # Do not clear REMOTE_BUSY here; keep it active for the entire series
+            message_mode = "M" in suf
 
-        status_manager.set_idle()
+            if message_mode:
+                should_play_message = should_allow_message_timer_play(
+                    True, message_timer_value, message_timer_last_played
+                )
+                if not should_play_message:
+                    debug_log(f"handle_join_series: Skipping {cmd} due to message timer running")
+                    set_message_rate_limited()
+                    continue  # Skip this segment
+                played_any_m = True
+
+            # Only suppress clear for all segments except the last
+            suppress_clear = (i != len(bases) - 1)
+            process_command(
+                cmd,
+                defer_message_timer_update=True,
+                suppress_remote_busy_clear=suppress_clear
+            )
+
+        # Handle message timer update only if a segment with M played, or overall_m is set
+        if played_any_m or overall_m:
+            message_timer_last_played = time.time()
+
     finally:
+        in_join_series = False  # <--- Unset global flag at the end
         set_remote_busy(False)
 
 def get_duration_wav(filename):
@@ -885,7 +887,7 @@ def get_duration_wav(filename):
     except Exception:
         return 0
 
-def process_command(command):
+def process_command(command, defer_message_timer_update=False, suppress_remote_busy_clear=False):
     global playback_interrupt, currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     global message_timer_last_played, message_timer_value
     global cos_today_seconds, cos_today_date
@@ -905,7 +907,7 @@ def process_command(command):
             handle_top_command()
             return
 
-        cmd = command.strip().upper()
+        cmd = command.strip()
 
         # --- Repeater Activity A1 Command: Speak previous day's activity minutes ---
         if cmd == "A1":
@@ -923,7 +925,6 @@ def process_command(command):
         # --- Speak WX Conditions W1 Command ---
         if cmd == "W1":
             cancel_rate_limited_timer()
-            # Check if COS was active in the last 10 seconds
             if last_cos_active_time is not None and (time.time() - last_cos_active_time) <= 10:
                 debug_log("COS was active within the last 10 seconds. Jumping to W2 command instead.")
                 speak_temperature()
@@ -936,7 +937,21 @@ def process_command(command):
             cancel_rate_limited_timer()
             speak_temperature()
             return
-
+        
+        # --- WX Alerts W3 Command ---
+        if cmd == "W3":
+            cancel_rate_limited_timer()
+            debug_log("W3 command - Weather alerts")
+            speak_wx_alerts()
+            return
+            
+        # --- WX Alerts W3x Command ---  
+        if cmd == "W3x":
+            cancel_rate_limited_timer()
+            debug_log("W3x command - Weather alerts brief")
+            handle_w3x()
+            return
+         
         # --- Repeater Activity Reset Command: ARST (example) ---
         if command.strip().upper() == "ARST":
             cancel_rate_limited_timer()
@@ -953,8 +968,6 @@ def process_command(command):
                 track_num = int(command[2:].strip())
                 debug_log(f"Echo Test command detected with track number: {track_num}")
                 echo_test(track_num)
-
-                # Add to history
                 serial_history.insert(0, {
                     "cmd": f"Echo Test: {track_num:04d}",
                     "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -971,10 +984,7 @@ def process_command(command):
                 cancel_rate_limited_timer()
                 script_num = command[1:].strip()
                 debug_log(f"Script command detected: {script_num}")
-                # Run script directly
                 run_script(script_num)
-
-                # Add to history
                 serial_history.insert(0, {
                     "cmd": f"Script: {script_num}",
                     "ts": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -991,7 +1001,7 @@ def process_command(command):
             cancel_rate_limited_timer()
             filename = os.path.join(SOUND_DIRECTORY, command)
             if os.path.isfile(filename):
-                play_sound(filename=filename)
+                play_sound(filename=filename, suppress_remote_busy_clear=suppress_remote_busy_clear)
             else:
                 status_manager.set_idle()
             return
@@ -1016,7 +1026,6 @@ def process_command(command):
             status_manager.set_idle()
             return
 
-        # DO NOT uppercase the suffix here!
         interruptible = "I" in suffix if suffix else False
         repeat = "R" in suffix if suffix else False
         pausing = "P" in suffix if suffix else False
@@ -1035,7 +1044,8 @@ def process_command(command):
             set_message_rate_limited()
             return
 
-        if message_mode and should_play_message:
+        # PATCH: only update timer if not deferring (i.e. not in join/alternate series)
+        if message_mode and should_play_message and not defer_message_timer_update:
             message_timer_last_played = time.time()
 
         # COS-i logic (interrupt to another code)
@@ -1055,12 +1065,13 @@ def process_command(command):
                 cancel_rate_limited_timer()
                 play_randomized_section(
                     b, e, t * 60, random_last_played, random_current_track,
-                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos
+                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos,
+                    suppress_remote_busy_clear=suppress_remote_busy_clear
                 )
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
-                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
                 return
 
         # Rotating Section
@@ -1071,14 +1082,15 @@ def process_command(command):
                     rotation_active[b] = True
                     play_rotating_section(
                         b, e, t * 60, rotation_last_played, rotation_current_track,
-                        interruptible, pausing, repeat, wait_for_cos=wait_for_cos
+                        interruptible, pausing, repeat, wait_for_cos=wait_for_cos,
+                        suppress_remote_busy_clear=suppress_remote_busy_clear
                     )
                 else:
                     debug_log(f"Rotation for base {b} is already active, ignoring repeat trigger.")
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
-                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
                 return
 
         # SudoRandom Section
@@ -1090,18 +1102,19 @@ def process_command(command):
                     sudo_random_last_interval,
                     sudo_random_interval_track,
                     sudo_random_played_in_cycle,
-                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos
+                    interruptible, pausing, repeat, wait_for_cos=wait_for_cos,
+                    suppress_remote_busy_clear=suppress_remote_busy_clear
                 )
                 return
             elif b < code <= e:
                 cancel_rate_limited_timer()
-                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+                play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
                 return
 
         # Direct section (default)
         if DIRECT_ENABLED:
             cancel_rate_limited_timer()
-            play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
+            play_direct_track(code_str, interruptible, pausing, repeat, wait_for_cos=wait_for_cos, suppress_remote_busy_clear=suppress_remote_busy_clear)
         else:
             cancel_rate_limited_timer()
             status_manager.set_idle()
@@ -1113,8 +1126,6 @@ def detect_section_context(filename):
     Detect if a filename belongs to a configured section and return appropriate context.
     Returns a string like "from Rotating Base 5300" or None if not a base track.
     """
-    import os
-    import re
 
     # Extract base track number from filename (handles e.g. "5308-Title.wav", "P5300A5400-Title.wav")
     basename = os.path.basename(filename)
@@ -1144,81 +1155,6 @@ def detect_section_context(filename):
 
     return None
 
-def handle_alternate_series(command):
-    bases, suffixes, is_alt = parse_alternate_series(command)
-    debug_log(f"ALTERNATE DEBUG: command={command}, bases={bases}, suffixes={suffixes}, is_alt={is_alt}")
-    if not is_alt or not bases:
-        debug_log("ALTERNATE DEBUG: Not an alternate command or no bases")
-        return False
-
-    key = tuple(bases)
-    if key not in alternate_series_pointers:
-        alternate_series_pointers[key] = 0
-
-    pointer = alternate_series_pointers[key]
-    base_to_play = bases[pointer]
-    base_suffix = suffixes[pointer] if pointer < len(suffixes) else ""
-    debug_log(f"ALTERNATE DEBUG: pointer={pointer}, base_to_play={base_to_play}, base_suffix={base_suffix}")
-
-    repeat = 'R' in base_suffix
-    pausing = 'P' in base_suffix
-    interruptible = 'I' in base_suffix
-    wait_for_cos = 'W' in base_suffix
-
-    code_str = f"{base_to_play:04d}"
-    debug_log(f"ALTERNATE DEBUG: code_str={code_str}, repeat={repeat}, pausing={pausing}, interruptible={interruptible}, wait_for_cos={wait_for_cos}")
-
-    debug_log("About to call play_direct_track")
-    # PATCH: Always pass a display_name with context for alternating series!
-    # Find the file we will play, extract track_num and title for formatting.
-    base_filename = get_next_base_file(base_to_play)
-    if base_filename:
-        import os
-        track_filename = os.path.basename(base_filename)
-        # Extract track_num and title
-        # Handles "5308-Title.wav" or "P5300A5400-Title.wav"
-        m = re.match(r'P?(\d+)', track_filename)
-        track_num = m.group(1) if m else ""
-        title = ""
-        if "-" in track_filename:
-            title = track_filename.split("-", 1)[1].rsplit(".", 1)[0]
-        # Detect section type for more accurate context
-        section_context = detect_section_context(base_filename)
-        # Guess base_type for display
-        base_type = ""
-        if section_context:
-            if "Rotating" in section_context:
-                base_type = "Rotating Base"
-            elif "Random" in section_context:
-                base_type = "Random Base"
-            elif "SudoRandom" in section_context:
-                base_type = "SudoRandom Base"
-            else:
-                base_type = section_context
-        else:
-            base_type = "Base"
-        base_num = base_to_play
-        def format_currently_playing(track_num, title, base_type, base_num):
-            if title:
-                return f"{track_num}-{title} from {base_type} {base_num}"
-            else:
-                return f"{track_num} from {base_type} {base_num}"
-        currently_playing_str = format_currently_playing(track_num, title, base_type, base_num)
-        play_sound(
-            filename=base_filename,
-            interruptible=interruptible,
-            pausing=pausing,
-            repeating=repeat,
-            wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
-        )
-        alternate_series_pointers[key] = (pointer + 1) % len(bases)
-        debug_log(f"ALTERNATE DEBUG: next pointer will be {alternate_series_pointers[key]}")
-        return True
-    else:
-        debug_log(f"ALTERNATE DEBUG: No base file found for {base_to_play}")
-        return False
-
 def play_sound(
     filename,
     interruptible=False,
@@ -1226,16 +1162,14 @@ def play_sound(
     repeating=False,
     wait_for_cos=False,
     playback_token=None,
-    display_name=None
+    display_name=None,
+    suppress_remote_busy_clear=False
 ):
     """
     Enhanced play_sound with true pause/resume for pausing mode using sox+aplay.
     All status_manager, debug_log, and modern DRX features retained.
     """
     debug_log(f"[PLAY_SOUND DEBUG] filename={filename}, display_name={display_name}")
-    import os
-    import time
-    import subprocess
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playing_end_time
     global playback_interrupt, playback_status, sound_card_missing, current_playback_token, MAX_COS_INTERRUPTIONS
     global h
@@ -1334,26 +1268,29 @@ def play_sound(
                             proc.wait(timeout=2)
                         except Exception:
                             pass
-                if proc and proc.stderr:
-                    err = proc.stderr.read()
-                    if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                    if proc and proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            if proc.returncode and proc.returncode != 0:
+                                debug_log(f"aplay error: {err.decode(errors='replace')}")
+                            else:
+                                debug_log(f"aplay info: {err.decode(errors='replace')}")
+                                
         elif repeating:
             status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
-            ignore_cos = False
             while True:
-                if not ignore_cos:
-                    while is_cos_active() and not playback_interrupt.is_set():
-                        status_manager.set_restarting(playing_name)
-                        debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
-                        set_remote_busy(True)
-                        time.sleep(0.05)
-                        if playback_token is not None and playback_token != current_playback_token:
-                            interrupted = True
-                            return
-                    status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
+                # Wait for COS to clear (repeat mode only)
+                while is_cos_active() and not playback_interrupt.is_set():
+                    status_manager.set_restarting(playing_name)
+                    debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
+                    set_remote_busy(True)
+                    time.sleep(0.05)
+                    if playback_token is not None and playback_token != current_playback_token:
+                        interrupted = True
+                        return
+                status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
                 set_remote_busy(True)
                 try:
@@ -1364,7 +1301,6 @@ def play_sound(
                     )
                 except Exception as e:
                     debug_log("Exception in REPEAT mode (Popen):", e)
-                    import traceback
                     traceback.print_exc()
                     break
 
@@ -1375,13 +1311,25 @@ def play_sound(
                         was_interrupted = True
                         interrupted = True
                         break
-                    if not ignore_cos and is_cos_active():
+                    if is_cos_active():
                         cos_interruptions += 1
                         debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
                         if cos_interruptions >= MAX_COS_INTERRUPTIONS:
-                            debug_log("Repeat mode: max_cos_interruptions reached, will ignore COS from now on. Letting current playback continue.")
-                            ignore_cos = True
-                            break
+                            debug_log("Repeat mode: max_cos_interruptions reached, will do one FINAL play in NORMAL mode.")
+                            set_remote_busy(False)
+                            subprocess.run(["killall", "-q", "aplay"])
+                            time.sleep(0.2)
+                            # Do the final play in *normal* mode, immune to COS
+                            play_sound(
+                                filename,
+                                interruptible=False,
+                                pausing=False,
+                                repeating=False,
+                                wait_for_cos=False,
+                                playback_token=playback_token,
+                                display_name=display_name
+                            )
+                            return
                         debug_log("COS active: stopping and will repeat")
                         proc.terminate()
                         time.sleep(0.1)
@@ -1409,23 +1357,23 @@ def play_sound(
                 if proc.stderr:
                     err = proc.stderr.read()
                     if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
-                if ignore_cos:
-                    debug_log("WAV played all the way through (final allowed play), ending repeat mode.")
-                    success = True
-                    break
+                        if proc.returncode and proc.returncode != 0:
+                            debug_log(f"aplay error: {err.decode(errors='replace')}")
+                        else:
+                            debug_log(f"aplay info: {err.decode(errors='replace')}")
                 if not was_interrupted:
                     debug_log("WAV played all the way through, ending repeat mode.")
+                    set_remote_busy(False)
                     success = True
                     break
                 if playback_interrupt.is_set() or (playback_token is not None and playback_token != current_playback_token):
+                    set_remote_busy(False)
                     break
 
         elif pausing:
             status_manager.set_status("Playing (Pause Mode)", playing_name, None, section_context)
             debug_log("PAUSE MODE ACTIVE")
             from contextlib import closing
-            import wave
             # True pause/resume: keep track of how much played, restart at correct offset
             try:
                 # Get total duration of file
@@ -1560,10 +1508,13 @@ def play_sound(
                             proc.wait(timeout=2)
                         except Exception:
                             pass
-                if proc and proc.stderr:
-                    err = proc.stderr.read()
-                    if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                    if proc and proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            if proc.returncode and proc.returncode != 0:
+                                debug_log(f"aplay error: {err.decode(errors='replace')}")
+                            else:
+                                debug_log(f"aplay info: {err.decode(errors='replace')}")
         else:
             status_manager.set_status("Playing (Normal Mode)", playing_name, None, section_context)
             debug_log("NORMAL MODE ACTIVE")
@@ -1608,23 +1559,36 @@ def play_sound(
                             proc.wait(timeout=2)
                         except Exception:
                             pass
-                if proc and proc.stderr:
-                    err = proc.stderr.read()
-                    if err:
-                        debug_log(f"aplay error: {err.decode(errors='replace')}")
+                    if proc and proc.stderr:
+                        err = proc.stderr.read()
+                        if err:
+                            if proc.returncode and proc.returncode != 0:
+                                debug_log(f"aplay error: {err.decode(errors='replace')}")
+                            else:
+                                debug_log(f"aplay info: {err.decode(errors='replace')}")
     finally:
         status_manager.set_idle()
-        debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
-        set_remote_busy(False)
+        if not suppress_remote_busy_clear:
+            debug_log(f"Clearing REMOTE_BUSY to {int(not REMOTE_BUSY_ACTIVE_LEVEL)} (finally block)")
+            set_remote_busy(False)
+        else:
+            debug_log("Suppressed REMOTE_BUSY clear (join-series or multi-segment mode)")
         if playback_interrupt.is_set():
             playback_interrupt.clear()
-        play_mode = 'repeat' if repeating else 'pause' if pausing else 'wait_for_cos' if wait_for_cos else 'interruptible' if interruptible else 'normal'
+        play_mode = (
+            'repeat' if repeating else
+            'pause' if pausing else
+            'wait_for_cos' if wait_for_cos else
+            'interruptible' if interruptible else
+            'normal'
+        )
+        log_name = display_name or playing_name or os.path.basename(filename)
         if success:
-            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - successful")
+            log_recent(f"Play: {log_name} [{play_mode}] - successful")
         elif interrupted:
-            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - interrupted")
+            log_recent(f"Play: {log_name} [{play_mode}] - interrupted")
         else:
-            log_recent(f"Play: {os.path.basename(filename)} [{play_mode}] - playback error")
+            log_recent(f"Play: {log_name} [{play_mode}] - playback error")
 
 def play_single_wav(
     code,
@@ -1633,26 +1597,34 @@ def play_single_wav(
     playback_token=None,
     wait_for_cos=False,
     reset_status_on_end=True,
-    set_status_on_play=True  # <-- new parameter, default True to preserve current behavior
+    set_status_on_play=True
 ):
-    """
-    Play the wav for code or full filename; optionally interrupt if COS becomes active.
-    Optionally, if wait_for_cos is True, wait for COS to become inactive and stable before playback.
-    Returns True if interrupted by COS, False if played to completion or interrupted by user.
-    """
-    import os
-
     global playback_status, currently_playing, currently_playing_info, currently_playing_info_timestamp
+    global ctone_override_expire
 
-    if isinstance(code, str) and code.lower().endswith('.wav') and os.path.isfile(code):
-        filename = code
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    code_str = code
+    if isinstance(code, str) and not code.lower().endswith('.wav') and not os.path.isfile(code):
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+            m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code, re.IGNORECASE)
+            if m:
+                suffix = m.group(2)
+                new_code_str = ctone + suffix
+                log_recent(f"CT Override {filebase} -> {new_code_str}.")
+                debug_log(f"CTONE OVERRIDE: play_single_wav substituting {code} with {new_code_str} (active; expires at {ctone_override_expire})")
+                code_str = new_code_str
+
+    if isinstance(code_str, str) and code_str.lower().endswith('.wav') and os.path.isfile(code_str):
+        filename = code_str
     else:
         matches = [
             f for f in os.listdir(SOUND_DIRECTORY)
-            if match_code_file(f, code, SOUND_FILE_EXTENSION)
+            if match_code_file(f, code_str, SOUND_FILE_EXTENSION)
         ]
         if not matches:
-            debug_log(f"File {code}{SOUND_FILE_EXTENSION} not found.")
+            debug_log(f"File {code_str}{SOUND_FILE_EXTENSION} not found.")
             if reset_status_on_end:
                 status_manager.set_idle()
             return False
@@ -1754,23 +1726,6 @@ def get_base_type_and_info(base):
             return typ, end, interval
     return None, None, None
 
-def auto_alternate_series(command, interval_per_base=60):
-    # interval_per_base should match the config for [Rotation] time in seconds
-    bases, _, is_alt = parse_alternate_series(command)
-    if not is_alt or not bases:
-        debug_log("Not a valid alternate series command.")
-        return
-
-    key = tuple(sorted(bases))
-    pointer = 0
-
-    while True:
-        current_base = bases[pointer]
-        command_queue.put(command)
-        debug_log(f"Played base {current_base}, waiting {interval_per_base} seconds before next base...")
-        time.sleep(interval_per_base)
-        pointer = (pointer + 1) % len(bases)
-
 def get_next_base_file(base_code):
     typ, end, interval = get_base_type_and_info(base_code)
     if typ == "Rotation":
@@ -1863,48 +1818,71 @@ def play_rotating_section(
     interruptible=False,
     pausing=False,
     repeat=False,
-    wait_for_cos=False
+    wait_for_cos=False,
+    suppress_remote_busy_clear=False
 ):
     try:
-        import os
+        global ctone_override_expire
         current_time = time.time()
         last_played = last_played_dict.get(base, 0)
-        # Build a list of (track_num, filename) for all present files in the range
+
         available_tracks = []
         for track_num in range(base + 1, end + 1):
             for f in os.listdir(SOUND_DIRECTORY):
                 if match_code_file(f, f"{track_num:04d}", SOUND_FILE_EXTENSION):
                     available_tracks.append((track_num, f))
-                    break  # Only take the first matching file for each number
+                    break
 
         if not available_tracks:
-            # Reset status if nothing to play!
             status_manager.set_idle()
             return
 
-        # Use filenames for rotating logic, not just track numbers
-        available_files = [f for _, f in available_tracks]
-
-        # Determine current file
         current_file = current_track_dict.get(base)
-        if current_file not in available_files:
-            current_file = available_files[0]
+        current_track_num = None
+        if current_file:
+            try:
+                current_track_num = int(os.path.basename(current_file).split("-")[0].split(".")[0])
+            except:
+                current_track_num = None
 
-        # Rotation logic
+        current_idx = 0
+        if current_track_num:
+            for idx, (num, _) in enumerate(available_tracks):
+                if num == current_track_num:
+                    current_idx = idx
+                    break
+
         if last_played == 0:
-            next_file = current_file
+            next_idx = current_idx
             last_played_dict[base] = current_time
         elif current_time - last_played >= interval:
-            idx = available_files.index(current_file)
-            next_file = available_files[(idx + 1) % len(available_files)]
+            next_idx = (current_idx + 1) % len(available_tracks)
             last_played_dict[base] = current_time
         else:
-            next_file = current_file
+            next_idx = current_idx
 
+        next_track_num, next_file = available_tracks[next_idx]
         current_track_dict[base] = next_file
         next_track = os.path.join(SOUND_DIRECTORY, next_file)
 
-        # Format currently_playing string with context
+        filebase = os.path.splitext(os.path.basename(next_track))[0]
+
+        # --- CTONE OVERRIDE CHECK ---
+        wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+        ctone = config.get('WX', 'ctone', fallback='').strip()
+        now = time.time()
+        debug_log(f"[CTONE PATCH] ROTATING WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+            m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
+            if m:
+                suffix = m.group(2)
+                new_code_str = ctone + suffix
+                log_recent(f"CT Override {filebase} -> {new_code_str}.")
+                debug_log(f"[CTONE PATCH] play_rotating_section: OVERRIDE {filebase} -> {new_code_str}")
+                play_direct_track(new_code_str, interruptible, pausing, repeat, wait_for_cos)
+                rotation_active[base] = False
+                return  # <---- CRUCIAL
+
         track_filename = os.path.basename(next_file)
         track_num = track_filename.split("-")[0].split(".")[0]
         title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
@@ -1917,20 +1895,19 @@ def play_rotating_section(
 
         currently_playing_str = format_currently_playing(track_num, title, "Rotating Base", base)
 
-        # Call play_sound with correct keyword argument 'repeating'
         play_sound(
             next_track,
             interruptible=interruptible,
             pausing=pausing,
-            repeating=repeat,  # <-- IMPORTANT: use repeating, not repeat
+            repeating=repeat,
             wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
+            display_name=currently_playing_str,
+            suppress_remote_busy_clear=suppress_remote_busy_clear
         )
         rotation_active[base] = False
     except Exception:
         log_exception("play_rotating_section")
         rotation_active[base] = False
-        # Reset status on exception, too!
         status_manager.set_idle()
 
 def play_randomized_section(
@@ -1942,9 +1919,11 @@ def play_randomized_section(
     interruptible=False,
     pausing=False,
     repeating=False,
-    wait_for_cos=False
+    wait_for_cos=False,
+    suppress_remote_busy_clear=False
 ):
     try:
+        global ctone_override_expire
         current_time = time.time()
         last_played = last_played_dict.get(base, 0)
         current_track = current_track_dict.get(base, None)
@@ -1958,13 +1937,27 @@ def play_randomized_section(
         else:
             new_track = current_track
 
-        import os
-        # Parse the track number and title from filename (e.g. 5308-something.wav)
+        filebase = os.path.splitext(os.path.basename(new_track))[0]
+
+        # --- CTONE OVERRIDE CHECK ---
+        wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+        ctone = config.get('WX', 'ctone', fallback='').strip()
+        now = time.time()
+        debug_log(f"[CTONE PATCH] RANDOM WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+        if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+            m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
+            if m:
+                suffix = m.group(2)
+                new_code_str = ctone + suffix
+                log_recent(f"CT Override {filebase} -> {new_code_str}.")
+                debug_log(f"[CTONE PATCH] play_randomized_section: OVERRIDE {filebase} -> {new_code_str}")
+                play_direct_track(new_code_str, interruptible, pausing, repeating, wait_for_cos)
+                return  # <---- CRUCIAL
+
         track_filename = os.path.basename(new_track)
         track_num = track_filename.split("-")[0].split(".")[0]
         title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
-        
-        # Helper for display string
+
         def format_currently_playing(track_num, title, base_type, base_num):
             if title:
                 return f"{track_num}-{title} from {base_type} {base_num}"
@@ -1973,18 +1966,18 @@ def play_randomized_section(
 
         currently_playing_str = format_currently_playing(track_num, title, "Random Base", base)
 
-        # Pass display_name to play_sound so that web UI gets the full context
         play_sound(
             new_track,
             interruptible=interruptible,
             pausing=pausing,
             repeating=repeating,
             wait_for_cos=wait_for_cos,
-            display_name=currently_playing_str
+            display_name=currently_playing_str,
+            suppress_remote_busy_clear=suppress_remote_busy_clear
         )
     except Exception:
         log_exception("play_randomized_section")
-        
+
 def play_sudo_random_section(
     base,
     end,
@@ -1995,9 +1988,11 @@ def play_sudo_random_section(
     interruptible=False,
     pausing=False,
     repeat=False,
-    wait_for_cos=False
+    wait_for_cos=False,
+    suppress_remote_busy_clear=False
 ):
     global sudo_random_last_file
+    global ctone_override_expire
     current_time = time.time()
     matching_files = find_matching_files(base, end)
     if not matching_files:
@@ -2007,7 +2002,6 @@ def play_sudo_random_section(
     played_in_cycle = played_in_cycle_dict.get(base)
     if played_in_cycle is None:
         played_in_cycle = set()
-    # Only pick a new track if interval expired or current track missing
     if current_track is not None and (current_time - last_interval < interval) and current_track in matching_files:
         file_to_play = current_track
     else:
@@ -2020,13 +2014,26 @@ def play_sudo_random_section(
         interval_track_dict[base] = file_to_play
         last_interval_dict[base] = current_time
         played_in_cycle.add(file_to_play)
-    # Always store the updated set back
     played_in_cycle_dict[base] = played_in_cycle
     sudo_random_last_file[base] = file_to_play
 
-    # --------- NEW: Set currently_playing with context ---------
-    import os
-    # Parse the track number and title from filename (e.g. 5308-something.wav)
+    filebase = os.path.splitext(os.path.basename(file_to_play))[0]
+
+    # --- CTONE OVERRIDE CHECK ---
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    debug_log(f"[CTONE PATCH] SUDORANDOM WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+    if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+        m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', filebase, re.IGNORECASE)
+        if m:
+            suffix = m.group(2)
+            new_code_str = ctone + suffix
+            log_recent(f"CT Override {filebase} -> {new_code_str}.")
+            debug_log(f"[CTONE PATCH] play_sudo_random_section: OVERRIDE {filebase} -> {new_code_str}")
+            play_direct_track(new_code_str, interruptible, pausing, repeat, wait_for_cos)
+            return  # <---- CRUCIAL
+
     track_filename = os.path.basename(file_to_play)
     track_num = track_filename.split("-")[0].split(".")[0]
     title = track_filename.split("-", 1)[1].rsplit(".", 1)[0] if "-" in track_filename else ""
@@ -2038,43 +2045,65 @@ def play_sudo_random_section(
             return f"{track_num} from {base_type} {base_num}"
 
     currently_playing_str = format_currently_playing(track_num, title, "SudoRandom Base", base)
-    # ----------------------------------------------------------
-
     play_sound(
         file_to_play,
         interruptible=interruptible,
         pausing=pausing,
-        repeating=repeat,  # <-- FIXED: use repeating, not repeat
+        repeating=repeat,
         wait_for_cos=wait_for_cos,
-        display_name=currently_playing_str
+        display_name=currently_playing_str,
+        suppress_remote_busy_clear=suppress_remote_busy_clear
     )
 
-def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False, wait_for_cos=False):
-    debug_log(f"play_direct_track: code_str={code_str}")
-    
-    try:
-        files = os.listdir(SOUND_DIRECTORY)
-        debug_log(f"Directory listing: {files}")
-        
-        # Filter files that match our code
-        matches = [f for f in files if match_code_file(f, code_str, SOUND_FILE_EXTENSION)]
-        debug_log(f"Matching files for code_str={code_str}: {matches}")
-        
-        if matches:
-            filename = os.path.join(SOUND_DIRECTORY, matches[0])
-            debug_log(f"Playing file: {filename}")
-            # Play directly (NO thread)
-            play_sound(filename, interruptible, pausing, repeat, wait_for_cos=wait_for_cos)
-        else:
-            debug_log(f"Play (serial/auto): {code_str} - failed -> file not found")
-            log_recent(f"Play (serial/auto): {code_str} - failed -> file not found")
-    except Exception as e:
-        debug_log(f"Exception in play_direct_track: {str(e)}")
-        import traceback
-        debug_log(traceback.format_exc())     
+def play_direct_track(code_str, interruptible=False, pausing=False, repeat=False, wait_for_cos=False, suppress_remote_busy_clear=False):
+    """
+    Play a track directly by its code string, optionally applying C-tone WX alert override.
+    """
+    debug_log(f"play_direct_track: code_str={code_str}, interruptible={interruptible}, pausing={pausing}, repeat={repeat}, wait_for_cos={wait_for_cos}")
+    global ctone_override_expire
+
+    # --- C-tone WX Alert Override Logic ---
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    debug_log(f"[CTONE PATCH] DIRECT WX_ALERTS: {wx_alerts}, CTONE: '{ctone}', OVERRIDE_EXPIRE: {ctone_override_expire}, NOW: {now}")
+    if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire:
+        m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code_str, re.IGNORECASE)
+        if m:
+            suffix = m.group(2)
+            new_code_str = ctone + suffix
+            filebase = code_str  # Add this line
+            log_recent(f"CT Override {filebase} -> {new_code_str}.")
+            debug_log(f"[CTONE PATCH] play_direct_track: OVERRIDE {filebase} -> {new_code_str}")
+            code_str = new_code_str
+
+    # Now resolve the code_str to a filename and play it
+    matches = [
+        f for f in os.listdir(SOUND_DIRECTORY)
+        if match_code_file(f, code_str, SOUND_FILE_EXTENSION)
+    ]
+    if not matches:
+        debug_log(f"File {code_str}{SOUND_FILE_EXTENSION} not found in play_direct_track.")
+        status_manager.set_idle()
+        return False
+    filename = os.path.join(SOUND_DIRECTORY, matches[0])
+
+    debug_log(
+        f"play_direct_track: resolved filename={filename}, interruptible={interruptible}, pausing={pausing}, repeat={repeat}, wait_for_cos={wait_for_cos}"
+    )
+    # Pass through to play_sound or play_single_wav or your preferred playback mechanism
+    play_sound(
+        filename,
+        interruptible=interruptible,
+        pausing=pausing,
+        repeating=repeat,
+        wait_for_cos=wait_for_cos,
+        display_name=os.path.splitext(os.path.basename(filename))[0],
+        suppress_remote_busy_clear=suppress_remote_busy_clear
+    )
+    return True    
 
 def play_interrupt_to_another(base_filename, code2, playback_token=None):
-    import os
     global currently_playing, currently_playing_info, currently_playing_info_timestamp
     global playback_status, playback_interrupt, current_playback_token
     debug_log(f"play_interrupt_to_another: base_filename={base_filename}, code2={code2}")
@@ -2134,7 +2163,6 @@ def parse_echo_command(command):
     Parses an echo test command in the format Re9999
     Returns the track number or None if not a valid echo command
     """
-    import re
     command = command.strip().upper()
     match = re.match(r'^RE(\d{4})$', command)
     if match:
@@ -2150,9 +2178,6 @@ def echo_test(track_num, playback_token=None):
         track_num (int): The track number to create (e.g., 9999)
         playback_token: Token for playback interruption tracking
     """
-    import os
-    import time
-    import subprocess
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     global echo_test_active, echo_test_track
     
@@ -2596,6 +2621,18 @@ def process_serial_commands():
                     serial_buffer = serial_buffer[:index] + serial_buffer[index+2:]
                 serial_buffer = serial_buffer.lstrip()
                 continue
+            
+            # Standalone W3 command (case-insensitive, surrounded by non-word chars or start/end)
+            match_w3 = re.search(r'\bW3\b', serial_buffer.upper())
+            if match_w3:
+                debug_log(f"Processing W3 command")
+                command_queue.put("W3")
+                # Remove W3 from buffer
+                index = serial_buffer.upper().find("W3")
+                if index != -1:
+                    serial_buffer = serial_buffer[:index] + serial_buffer[index+2:]
+            serial_buffer = serial_buffer.lstrip()
+            continue
 
             # --- Join series (J) and alternate series (A) pattern matching ---
             # Join series: e.g. P1001JR2002IM or P1001J2002J3003M
@@ -2743,9 +2780,6 @@ def run_script(script_num, playback_token=None):
         script_num (str): The script number/name to execute
         playback_token: Token for playback interruption tracking (not used but required)
     """
-    import os
-    import subprocess
-    import time
     global currently_playing, currently_playing_info, currently_playing_info_timestamp, playback_status
     
     # Get the base DRX directory (one level up from SOUND_DIRECTORY)
@@ -2971,7 +3005,6 @@ def write_state():
     cos_today_minutes = int(round(cos_today_seconds / 60)) if 'cos_today_seconds' in globals() else 0
 
     # --- Ensure cos_today_date is set before writing ---
-    from datetime import datetime
     global cos_today_date
     if not ('cos_today_date' in globals()) or not cos_today_date:
         cos_today_date = datetime.now().strftime("%Y-%m-%d")
@@ -2988,6 +3021,7 @@ def write_state():
         "cos_active": is_cos_active(),
         "remote_device_active": is_remote_busy_active(),
         "uptime": get_drx_uptime(),
+        "version": VERSION,
 
         "random_last_played": {b: random_last_played.get(b, 0) for b in random_bases},
         "random_current_track": {b: os.path.basename(random_current_track.get(b, "")) if random_current_track.get(b, "") else "N/A" for b in random_bases},
@@ -3019,6 +3053,15 @@ def write_state():
         "cos_today_date": cos_today_date,
     }
     
+    # --- WX ALERT STATE ---
+    try:
+        wx_alert_active = (ctone_override_expire and time.time() < ctone_override_expire)
+    except Exception:
+        wx_alert_active = False
+
+    state["wx_alert_active"] = wx_alert_active
+    state["ctone_override_expire"] = ctone_override_expire  # <--- ADD THIS LINE
+
     # Store state in memory for API access
     with state_lock:
         current_state_memory = state
@@ -3034,7 +3077,13 @@ def maybe_run_webcmd():
     if os.path.exists(WEBCMD_FILE):
         try:
             with open(WEBCMD_FILE, 'r') as f:
-                cmd = json.load(f)
+                try:
+                    cmd = json.load(f)
+                except json.JSONDecodeError:
+                    # File is empty or not valid JSON
+                    debug_log("maybe_run_webcmd: WEBCMD_FILE is empty or invalid JSON, ignoring and deleting")
+                    os.remove(WEBCMD_FILE)
+                    return
 
             # Add Echo Test command support
             if cmd.get("type") == "echo_test" and "track" in cmd:
@@ -3096,10 +3145,6 @@ def maybe_run_webcmd():
             os.remove(WEBCMD_FILE)
         except Exception:
             log_exception("maybe_run_webcmd")
-
-def is_terminal():
-    # Implementation here...
-    return sys.stdin.isatty()
 
 def status_screen(stdscr):
     global serial_buffer, serial_history, currently_playing, currently_playing_info
@@ -3338,7 +3383,6 @@ alternate_sequences = {}
 # If you have more code (such as DTMF or web handlers), continue adding here.
 
 def launch_status_screen():
-    import curses
     curses.wrapper(status_screen)
 
 def get_previous_day():
@@ -3645,10 +3689,7 @@ def speak_wx_conditions():
         wx_data = parse_wx_conditions_from_wx_data()
         log_recent(f"WX Report: {wx_data}")
 
-        # Build a summary for the status if you want (optional)
         summary = "Playing weather conditions"
-
-        # Set status ONCE at start of sequence
         status_manager.set_weather_report("WX Conditions Report", summary)
 
         wavs = []
@@ -3698,7 +3739,7 @@ def speak_wx_conditions():
                 else:
                     temp_num = int(float(temp_str))
                     wavs += get_wav_sequence_for_number(temp_num)
-                wavs.append("degrees.wav")  # Always add this after the number sequence
+                wavs.append("degrees.wav")
             except Exception:
                 pass
 
@@ -3721,11 +3762,9 @@ def speak_wx_conditions():
                 wind_speed = None
 
         if wind_speed == 0:
-            # Say "wind_is.wav calm.wav" and skip wind direction and speed
             wavs.append("wind_is.wav")
             wavs.append("Calm.wav")
         else:
-            # Only say wind direction and wind speed if wind is not calm/zero
             if wx_data.get("winddir"):
                 wavs.append("wind_is.wav")
                 wind_dir_wav = (
@@ -3743,7 +3782,7 @@ def speak_wx_conditions():
                 wavs += get_wav_sequence_for_number(wind_speed)
                 wavs.append("mph.wav")
 
-        # 7. Wind gust (play guststo.wav before wind_gust, mph.wav after, skip if 0)
+        # 7. Wind gust
         if wx_data.get("wind_gust"):
             try:
                 gust_num = int(float(wx_data["wind_gust"].split()[0]))
@@ -3754,7 +3793,7 @@ def speak_wx_conditions():
             except Exception:
                 pass
 
-        # 8. Pressure (play pressure_is.wav before pressure, say decimals, play inches.wav after)
+        # 8. Pressure
         if wx_data.get("pressure"):
             wavs.append("pressure_is.wav")
             try:
@@ -3772,7 +3811,6 @@ def speak_wx_conditions():
 
         # 9. Pressure status
         if wx_data.get("pressure_status"):
-            wavs.append("call_pressurestatus.wav")
             pres_status_wav = (
                 wx_data["pressure_status"]
                 .replace(" ", "")
@@ -3784,7 +3822,7 @@ def speak_wx_conditions():
             )
             wavs.append(pres_status_wav)
 
-        # 10. Visibility (play visibility_is.wav before value)
+        # 10. Visibility
         if wx_data.get("visibility"):
             wavs.append("visibility_is.wav")
             try:
@@ -3795,25 +3833,908 @@ def speak_wx_conditions():
             except Exception:
                 pass
 
-        # Play wav files, but do NOT update status during playback, only at start and end.
+        # --- PLAY LOGIC WITH PIPER BACKUP ---
+        sequence = []
         for wav in wavs:
             wav_path = os.path.join(EXTRA_SOUND_DIR, wav)
             if os.path.exists(wav_path):
-                debug_log(f"W1 CONDITIONS: Playing {wav_path}")
-                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+                sequence.append({"wav": wav_path})
             else:
-                debug_log(f"W1 CONDITIONS: WAV file not found: {wav_path}")
+                # Synthesize fallback: base name, underscores become spaces
+                word = os.path.splitext(wav)[0].replace('_', ' ')
+                sequence.append({"synthesize": word})
 
+        play_sequence(sequence, debug_log)
         debug_log("W1 CONDITIONS: WX report completed")
 
     except Exception as e:
         debug_log(f"W1 CONDITIONS: Exception in speak_wx_conditions: {e}")
         log_exception("speak_wx_conditions")
     finally:
-        # Set status to idle at the end of the sequence
         status_manager.set_idle()
         debug_log("W1 CONDITIONS: Setting REMOTE_BUSY to inactive")
         set_remote_busy(False)
+
+# START OF WX ALERT SECTION
+
+def cleanup_wx_alert_wav():
+    wx_alert_wav = "/home/drx/DRX/sounds/9995-WX Alert.wav"
+    try:
+        debug_log(f"[CLEANUP] Entered cleanup_wx_alert_wav()")
+        if os.path.exists(wx_alert_wav):
+            debug_log(f"[CLEANUP] File exists, attempting to remove: {wx_alert_wav}")
+            os.remove(wx_alert_wav)
+            debug_log(f"[CLEANUP] Deleted {wx_alert_wav}")
+        else:
+            debug_log(f"[CLEANUP] File does not exist: {wx_alert_wav}")
+    except Exception as e:
+        debug_log(f"[CLEANUP] Exception: {e}")
+
+def speak_wx_alerts_single(alert, debug_log=None):
+    try:
+        set_remote_busy(True)
+        # Wait for COS to clear, debounce, as in speak_wx_alerts
+        if is_cos_active():
+            while True:
+                if is_cos_active():
+                    while is_cos_active():
+                        time.sleep(0.1)
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    break
+        status_manager.set_weather_report("WX Alert Report", f"Alert: {alert['description']}")
+        sequence = build_wx_alert_sequence_full_for_alert(alert, debug_log)
+        play_sequence(sequence, debug_log)
+    except Exception as e:
+        debug_log and debug_log(f"Exception in speak_wx_alerts_single: {e}")
+        log_exception("speak_wx_alerts_single")
+    finally:
+        status_manager.set_idle()
+        set_remote_busy(False)
+
+def wx_alert_monitor(config, debug_log=None):
+    global active_alerts, last_active_alerts, ctone_override_expire, announced_alert_ids
+    normal_interval_seconds = 5
+    idle_cleanup_seconds = 300  # 5 minutes
+
+    use_expired_time = config.getboolean('WX', 'use_expired_time', fallback=False)
+    ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+
+    last_cleanup_time = 0
+
+    while True:
+        current_alerts = parse_all_active_wx_alerts(debug_log)
+        def alert_id(a):
+            return f"{a['effective_time'].strftime('%Y-%m-%d %H:%M:%S')}|{a['description']}"
+        current_ids = set(alert_id(a) for a in current_alerts)
+        new_alerts = [a for a in current_alerts if alert_id(a) not in announced_alert_ids]
+
+        now = time.time()
+
+        if current_alerts != last_active_alerts:
+            if current_alerts:
+                build_multi_alert_combined_wav(current_alerts, debug_log)
+                if use_expired_time:
+                    max_expiry = max(a["expires_time"].timestamp() for a in current_alerts)
+                    ctone_override_expire = max_expiry
+                    if debug_log:
+                        debug_log(f"[MONITOR] ctone_override_expire set to Expires: {ctone_override_expire}")
+                else:
+                    ctone_override_expire = now + (ctone_time * 60)
+                    if debug_log:
+                        debug_log(f"[MONITOR] ctone_override_expire set to now+ctone_time: {ctone_override_expire}")
+                for alert in new_alerts:
+                    speak_wx_alerts_single(alert, debug_log=debug_log)
+                    announced_alert_ids.add(alert_id(alert))
+            else:
+                cleanup_wx_alert_wav()
+                last_cleanup_time = now
+                ctone_override_expire = 0
+            last_active_alerts = current_alerts
+            announced_alert_ids &= current_ids
+
+        # Always poll for alerts every 5 seconds
+        interval_seconds = normal_interval_seconds
+
+        # When idle (no active alerts), run cleanup every 5 minutes
+        if not current_alerts:
+            if now - last_cleanup_time >= idle_cleanup_seconds:
+                cleanup_wx_alert_wav()
+                last_cleanup_time = now
+
+        time.sleep(interval_seconds)
+
+def start_wx_alert_monitoring(config, debug_log=None):
+    """
+    Start the weather alert monitoring in a separate thread.
+    Call this function from your main program initialization.
+    
+    Args:
+        config: ConfigParser object containing the configuration
+        debug_log: Debug logging function (optional)
+    """
+    try:
+        # Only start monitoring if alerts are enabled
+        if config.has_section('WX') and config.getboolean('WX', 'alerts', fallback=False):
+            # Create and start the monitoring thread
+            monitor_thread = threading.Thread(
+                target=wx_alert_monitor,
+                args=(config, debug_log),
+                daemon=True,  # Thread will stop when main program exits
+                name="WXAlertMonitor"
+            )
+            monitor_thread.start()
+            debug_log("Weather alert monitoring thread started.")
+        else:
+            debug_log("Weather alerts are disabled in configuration.")
+            # Do not start monitoring if alerts = false
+            return
+            
+    except Exception as e:
+        debug_log(f"Error starting weather alert monitoring: {e}")
+ 
+def synthesize_and_play_with_piper(text, debug_log=None):
+    if not os.path.exists(PIPER_BINARY):
+        debug_log and debug_log(f"Piper binary not found: {PIPER_BINARY}")
+        return False
+    if not os.path.exists(PIPER_MODEL):
+        debug_log and debug_log(f"Piper model file not found: {PIPER_MODEL}")
+        return False
+    try:
+        debug_log and debug_log(f"Piper synthesize: '{text}'")
+        env = os.environ.copy()
+        env["LD_LIBRARY_PATH"] = f"{PIPER_DIR}:{env.get('LD_LIBRARY_PATH','')}"
+        proc = subprocess.Popen(
+            [
+                PIPER_BINARY,
+                "--model", PIPER_MODEL,
+                "--output_raw"
+            ],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env
+        )
+        aplay = subprocess.Popen(
+            ["aplay", "-f", "S16_LE", "-r", "22050"],
+            stdin=proc.stdout,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        proc.stdout.close()
+        proc.stdin.write(text.encode("utf-8"))
+        proc.stdin.close()
+        aplay.wait()
+        proc.wait()
+        if proc.returncode != 0:
+            err = proc.stderr.read().decode("utf-8")
+            debug_log and debug_log(f"Piper error: {err}")
+            return False
+        return True
+    except Exception as e:
+        debug_log and debug_log(f"Failed to synthesize '{text}' with piper: {e}")
+        return False
+
+def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
+    """
+    Given a description (string), return a list of wavs/tts in order,
+    using the longest matching WAVs in extra_dir.
+    """
+    words = description.lower().split()
+    n = len(words)
+    sequence = []
+    i = 0
+    while i < n:
+        # Try longest match first, down to single word
+        found = False
+        for j in range(n, i, -1):
+            phrase = words[i:j]
+            wav_name = "_".join(phrase) + ".wav"
+            wav_path = os.path.join(extra_dir, wav_name)
+            if os.path.exists(wav_path):
+                sequence.append({"wav": wav_path})
+                if debug_log:
+                    debug_log(f"Matched WAV: {wav_name}")
+                i = j  # skip all consumed words
+                found = True
+                break
+        if not found:
+            # Try single word
+            wav_name = words[i] + ".wav"
+            wav_path = os.path.join(extra_dir, wav_name)
+            if os.path.exists(wav_path):
+                sequence.append({"wav": wav_path})
+                if debug_log:
+                    debug_log(f"Matched single-word WAV: {wav_name}")
+            else:
+                # Fallback to TTS for this word
+                sequence.append({"synthesize": words[i]})
+                if debug_log:
+                    debug_log(f"Fallback to synthesis: {words[i]}")
+            i += 1
+    return sequence
+
+def build_wx_alert_sequence_full(debug_log=None):
+    """
+    Build the FULL WX alert sequence as used by speak_wx_alerts (the long/verbose version).
+    """
+    sequence = []
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+        if os.path.exists(wav_path):
+            sequence.append({"wav": wav_path})
+        else:
+            sequence.append({"synthesize": "No active weather alerts"})
+        return sequence
+
+    with open(wx_alerts_path, 'r') as f:
+        alert_content = f.read()
+
+    alert_blocks = re.split(r'-{10,}', alert_content)
+    same_code = None
+    effective_time = None
+    expires_time = None
+    block_with_alert = None
+
+    for block in reversed(alert_blocks):
+        if 'EAS Code:' in block and 'Effective:' in block:
+            code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
+            effective_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+            expires_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+            if code_match:
+                same_code = code_match.group(1).strip()
+            if effective_match:
+                effective_time = effective_match.group(1)
+            if expires_match:
+                expires_time = expires_match.group(1)
+            if same_code and effective_time and expires_time:
+                block_with_alert = block
+                break
+
+    same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+    description = None
+
+    # --- NWS special handling ---
+    if same_code and same_code.upper() == "NWS":
+        desc_match = re.search(r'Description:\s*(.+)', block_with_alert or "")
+        if desc_match:
+            description = desc_match.group(1).strip()
+        else:
+            description = "National Weather Service Message"
+    elif same_code:
+        description = get_same_description_from_code(same_code, same_csv_path)
+
+    if not description:
+        if same_code and same_code.upper() == "SVS":
+            description = "Special Weather Statement"
+        else:
+            description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
+
+    if not effective_time or not expires_time:
+        wav_path = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+        if os.path.exists(wav_path):
+            sequence.append({"wav": wav_path})
+        else:
+            sequence.append({"synthesize": "No valid weather alerts"})
+        return sequence
+
+    wx_alert_wav = os.path.join(EXTRA_SOUND_DIR, "wx_alert.wav")
+    if os.path.exists(wx_alert_wav):
+        sequence.append({"wav": wx_alert_wav})
+    else:
+        sequence.append({"synthesize": "weather alert"})
+
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
+    if os.path.exists(repeating_wav):
+        sequence.append({"wav": repeating_wav})
+    else:
+        sequence.append({"synthesize": "repeating"})
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
+    if os.path.exists(wx_effective_wav):
+        sequence.append({"wav": wx_effective_wav})
+    else:
+        sequence.append({"synthesize": "weather alert effective"})
+
+    effective_dt = datetime.strptime(effective_time, "%Y-%m-%d %H:%M:%S")
+    sequence = append_datetime_wavs(effective_dt, sequence)
+
+    wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
+    if os.path.exists(wx_expired_wav):
+        sequence.append({"wav": wx_expired_wav})
+    else:
+        sequence.append({"synthesize": "weather alert expires"})
+
+    expires_dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
+    sequence = append_datetime_wavs(expires_dt, sequence)
+
+    return sequence
+
+def build_wx_alert_sequence_minimal(debug_log=None):
+    """
+    Build the MINIMAL WX alert sequence for the combined WAV:
+    [spoken description] + [in_effect.wav]
+    """
+    sequence = []
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        return [{"synthesize": "No active weather alerts"}]
+
+    with open(wx_alerts_path, 'r') as f:
+        alert_content = f.read()
+
+    alert_blocks = re.split(r'-{10,}', alert_content)
+    same_code = None
+    block_with_alert = None
+
+    for block in reversed(alert_blocks):
+        if 'EAS Code:' in block and 'Effective:' in block:
+            code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
+            if code_match:
+                same_code = code_match.group(1).strip()
+            if same_code:
+                block_with_alert = block
+                break
+
+    same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+    description = None
+
+    # --- NWS special handling ---
+    if same_code and same_code.upper() == "NWS":
+        desc_match = re.search(r'Description:\s*(.+)', block_with_alert or "")
+        if desc_match:
+            description = desc_match.group(1).strip()
+        else:
+            description = "National Weather Service Message"
+    elif same_code:
+        description = get_same_description_from_code(same_code, same_csv_path)
+
+    if not description:
+        if same_code and same_code.upper() == "SVS":
+            description = "Special Weather Statement"
+        else:
+            description = f"Unknown alert ({same_code})" if same_code else "Unknown alert"
+
+    # --- Only description and in_effect.wav go in the sequence ---
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    return sequence
+
+def handle_w3x():
+    """
+    Handles the W3x command: plays 9995-WX Alert.wav if it exists,
+    otherwise plays no_wx_alerts.wav, otherwise synthesizes speech.
+    """
+    WX_ALERT_WAV = "/home/drx/DRX/sounds/9995-WX Alert.wav"
+    NO_WX_ALERTS_WAV = "/home/drx/DRX/sounds/extra/no_wx_alerts.wav"
+    debug_log("handle_w3x called")
+    set_remote_busy(True)
+    try:
+        # Wait for COS to clear before speaking (same as W3)
+        if is_cos_active():
+            status_manager.set_weather_report("Waiting for channel to clear", "")
+            while True:
+                if is_cos_active():
+                    debug_log("W3x: Waiting for COS to become inactive")
+                    while is_cos_active():
+                        time.sleep(0.1)
+                    debug_log("W3x: COS has become inactive, starting debounce timer")
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        debug_log("W3x: COS became active again during debounce period, restarting wait process")
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    debug_log(f"W3x: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
+                    break
+        status_manager.set_weather_report("WX Alert Brief", "Playing minimal alert")
+
+        # Try to play 9995-WX Alert.wav
+        if os.path.exists(WX_ALERT_WAV):
+            debug_log(f"W3x: Playing {WX_ALERT_WAV}")
+            play_single_wav(WX_ALERT_WAV, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            return
+
+        # Fallback: play no_wx_alerts.wav if present
+        if os.path.exists(NO_WX_ALERTS_WAV):
+            debug_log(f"W3x: Playing {NO_WX_ALERTS_WAV}")
+            play_single_wav(NO_WX_ALERTS_WAV, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            return
+
+        # Final fallback: synthesize
+        debug_log("W3x: Synthesizing 'No active weather alerts'")
+        synthesize_and_play_with_piper("No active weather alerts", debug_log)
+    except Exception as e:
+        debug_log(f"Exception in handle_w3x: {e}")
+        log_exception("handle_w3x")
+    finally:
+        status_manager.set_idle()
+        debug_log("W3x: Setting REMOTE_BUSY to inactive")
+        set_remote_busy(False)
+
+def build_multi_alert_combined_wav(alerts, debug_log=None):
+    """
+    Given a list of alert dicts (from parse_all_active_wx_alerts), build a combined minimal WAV.
+    Newest alert is first.
+    """
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+    sequence = []
+    for alert in alerts:
+        # Use your build_greedy_wav_sequence for description
+        desc_seq = build_greedy_wav_sequence(alert["description"], EXTRA_SOUND_DIR, debug_log)
+        sequence += desc_seq
+        in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+        if os.path.exists(in_effect_wav):
+            sequence.append({"wav": in_effect_wav})
+        else:
+            sequence.append({"synthesize": "in effect"})
+    combined_wav_path = "/home/drx/DRX/sounds/9995-WX Alert.wav"
+    create_combined_wav(sequence, combined_wav_path, debug_log)
+    debug_log and debug_log(f"[MONITOR] Combined WX Alert wav regenerated for {len(alerts)} alerts.")
+
+def speak_wx_alerts(*args, **kwargs):
+    debug_log = kwargs.get('debug_log', None)
+    try:
+        if debug_log:
+            debug_log("W3 ALERTS: Setting REMOTE_BUSY to active immediately")
+        set_remote_busy(True)
+
+        # Wait for COS to clear before speaking (as before)
+        if is_cos_active():
+            status_manager.set_weather_report("Waiting for channel to clear", "")
+            while True:
+                if is_cos_active():
+                    if debug_log:
+                        debug_log("W3 ALERTS: Waiting for COS to become inactive")
+                    while is_cos_active():
+                        time.sleep(0.1)
+                    if debug_log:
+                        debug_log("W3 ALERTS: COS has become inactive, starting debounce timer")
+                debounce_start = time.time()
+                while time.time() - debounce_start < COS_DEBOUNCE_TIME:
+                    if is_cos_active():
+                        if debug_log:
+                            debug_log("W3 ALERTS: COS became active again during debounce period, restarting wait process")
+                        break
+                    time.sleep(0.1)
+                if time.time() - debounce_start >= COS_DEBOUNCE_TIME:
+                    if debug_log:
+                        debug_log(f"W3 ALERTS: Successfully waited through full debounce period of {COS_DEBOUNCE_TIME} seconds")
+                    break
+        else:
+            status_manager.set_weather_report("WX Alert Report", "Playing Alert")
+
+        # --- Multi-alert: get all currently active alerts, newest first ---
+        active_alerts = parse_all_active_wx_alerts(debug_log)
+        if not active_alerts:
+            # No active alerts, play "no alerts" message
+            EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+            no_alert_wav = os.path.join(EXTRA_SOUND_DIR, "no_wx_alerts.wav")
+            if os.path.exists(no_alert_wav):
+                play_single_wav(no_alert_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            else:
+                synthesize_and_play_with_piper("No active weather alerts", debug_log)
+            status_manager.set_weather_report("WX Alert Report", "No active alerts")
+            status_manager.set_idle()
+            set_remote_busy(False)
+            return
+
+        # Announce each alert (full version), newest first
+        for alert in active_alerts:
+            # Build the full sequence for this alert only
+            sequence = build_wx_alert_sequence_full_for_alert(alert, debug_log)
+            # Optionally, set status to the description for user feedback
+            status_manager.set_weather_report("WX Alert Report", f"Alert: {alert['description']}")
+            play_sequence(sequence, debug_log)
+            # Optional: brief pause between alerts for clarity
+            time.sleep(0.3)
+
+        if debug_log:
+            debug_log("W3 ALERTS: All alert reports completed")
+
+    except Exception as e:
+        if debug_log:
+            debug_log(f"W3 ALERTS: Exception in speak_wx_alerts: {e}")
+        log_exception("speak_wx_alerts")
+    finally:
+        status_manager.set_idle()
+        if debug_log:
+            debug_log("W3 ALERTS: Setting REMOTE_BUSY to inactive")
+        set_remote_busy(False)
+
+# Helper: Build full sequence for a single alert block
+def build_wx_alert_sequence_full_for_alert(alert, debug_log=None):
+    """
+    Build the full sequence for a single alert (dict from parse_all_active_wx_alerts).
+    """
+    sequence = []
+    EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
+    # Use the same code as build_wx_alert_sequence_full, but for just this alert
+    same_code = alert.get("code") or ""
+    effective_time = alert.get("effective_time")
+    expires_time = alert.get("expires_time")
+    description = alert.get("description") or ""
+    block = alert.get("block") or ""
+
+    # Start with WX alert preamble
+    wx_alert_wav = os.path.join(EXTRA_SOUND_DIR, "wx_alert.wav")
+    if os.path.exists(wx_alert_wav):
+        sequence.append({"wav": wx_alert_wav})
+    else:
+        sequence.append({"synthesize": "weather alert"})
+
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
+    if os.path.exists(repeating_wav):
+        sequence.append({"wav": repeating_wav})
+    else:
+        sequence.append({"synthesize": "repeating"})
+    sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
+    in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
+    if os.path.exists(in_effect_wav):
+        sequence.append({"wav": in_effect_wav})
+    else:
+        sequence.append({"synthesize": "in effect"})
+
+    wx_effective_wav = os.path.join(EXTRA_SOUND_DIR, "wx_effective.wav")
+    if os.path.exists(wx_effective_wav):
+        sequence.append({"wav": wx_effective_wav})
+    else:
+        sequence.append({"synthesize": "weather alert effective"})
+
+    if effective_time:
+        sequence = append_datetime_wavs(effective_time, sequence)
+
+    wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
+    if os.path.exists(wx_expired_wav):
+        sequence.append({"wav": wx_expired_wav})
+    else:
+        sequence.append({"synthesize": "weather alert expires"})
+
+    if expires_time:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
+        sequence = append_datetime_wavs(expires_time, sequence)
+
+    return sequence
+
+def append_datetime_wavs(dt, sequence):
+    # Hour
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.hour)]
+    # Minutes and "hours"
+    if dt.minute == 0:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hundred.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+    else:
+        if dt.minute < 10:
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.minute)]
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "hours.wav")})
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "on.wav")})
+    # Month and Day
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.month)]
+    sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(dt.day)]
+    sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "20.wav")})
+    year_last_two = dt.year % 100
+    if year_last_two < 10:
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "oh.wav")})
+        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, f"{year_last_two}.wav")})
+    else:
+        sequence += [{"wav": os.path.join(EXTRA_SOUND_DIR, w)} for w in get_wav_sequence_for_number(year_last_two)]
+    return sequence
+
+def get_same_description_from_code(same_code, same_csv_path):
+    import csv
+    debug_log(f"Reading SAME CSV from: {same_csv_path}")
+    if not os.path.exists(same_csv_path):
+        debug_log(f"SAME CSV not found at {same_csv_path}")
+        return None
+    try:
+        with open(same_csv_path, "r", encoding="utf-8") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if len(row) < 2:
+                    continue  # skip header, empty, and partial rows
+                desc_raw, code_raw = row[0], row[1]
+                # Normalize ALL spaces, including non-breaking, and strip both code and desc
+                description = "".join((desc_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                code = "".join((code_raw or '').replace('\u00a0', ' ').replace(' ', ' ')).strip()
+                # Lowercase for header/section detection
+                desc_lower = description.lower()
+                code_lower = code.lower()
+                # Skip headers, footers, sections, and lines that aren't valid codes
+                if not code or "code" in code_lower or "event" in code_lower or "status" in code_lower:
+                    continue
+                if not description or "event" in desc_lower or "code" in desc_lower or "status" in desc_lower:
+                    continue
+                # Log what is being compared
+                debug_log(f"Comparing: '{code.upper()}' (desc: '{description}') <-> '{same_code.upper()}'")
+                if code.upper() == same_code.upper():
+                    debug_log(f"MATCH: '{code.upper()}' -> '{description}'")
+                    return description
+    except Exception as e:
+        debug_log(f"Failed to read SAME CSV: {e}")
+    debug_log(f"No match for code '{same_code}' in SAME CSV.")
+    return None
+
+def find_best_wav_for_words(words, extra_dir):
+    """
+    Try to find the best-matching WAV for a sequence of words.
+    - First, try all words as one phrase (underscored, no space).
+    - Then try all files that contain all words (in order) in their name.
+    - If not found, return None.
+    """
+    candidates = []
+    joined = "_".join(words) + ".wav"
+    joined_nospace = "".join(words) + ".wav"
+    for f in os.listdir(extra_dir):
+        base = os.path.splitext(f)[0].lower()
+        if base == "_".join(words):
+            return os.path.join(extra_dir, f)
+        if base == "".join(words):
+            return os.path.join(extra_dir, f)
+        if joined in f.lower() or joined_nospace in f.lower():
+            return os.path.join(extra_dir, f)
+        # all words as substring in order
+        idx = 0
+        for w in words:
+            idx = base.find(w, idx)
+            if idx == -1:
+                break
+        else:
+            candidates.append(os.path.join(extra_dir, f))
+    if candidates:
+        return candidates[0]
+    return None
+
+def play_sequence(sequence, debug_log=None):
+    # Play each item in sequence; synthesize if WAV is missing
+    for item in sequence:
+        if "wav" in item:
+            wav_path = item["wav"]
+            if os.path.exists(wav_path):
+                debug_log and debug_log(f"W3 ALERTS: Playing {wav_path}")
+                play_single_wav(wav_path, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            else:
+                # Synthesize the base name if WAV missing
+                word = os.path.splitext(os.path.basename(wav_path))[0].replace('_', ' ')
+                words = word.split()
+                found_wav = find_best_wav_for_words(words, EXTRA_SOUND_DIR)
+                if found_wav and os.path.exists(found_wav):
+                    debug_log and debug_log(f"Found best WAV: {found_wav} for '{word}'")
+                    play_single_wav(found_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+                else:
+                    debug_log and debug_log(f"W3 ALERTS: WAV file not found: {wav_path}, synthesizing '{word}' with piper")
+                    synthesize_and_play_with_piper(word, debug_log)
+        elif "synthesize" in item:
+            word = item["synthesize"]
+            words = word.split()
+            found_wav = find_best_wav_for_words(words, EXTRA_SOUND_DIR)
+            if found_wav and os.path.exists(found_wav):
+                debug_log and debug_log(f"Found best WAV: {found_wav} for '{word}'")
+                play_single_wav(found_wav, interrupt_on_cos=False, block_interrupt=True, reset_status_on_end=False)
+            else:
+                debug_log and debug_log(f"W3 ALERTS: Synthesizing '{word}' with piper")
+                synthesize_and_play_with_piper(word, debug_log)
+  
+def activate_ctone_override_from_alert(config):
+    """Call this from wx_alert_action or alert logic when alert triggers."""
+    global ctone_override_expire
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+    if wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and ctone_time > 0:
+        ctone_override_expire = time.time() + (ctone_time * 60)
+        debug_log(f"CTONE OVERRIDE: Activated for {ctone_time} minutes (until {ctone_override_expire})")
+    else:
+        ctone_override_expire = 0
+        debug_log("CTONE OVERRIDE: Not activated (no alert or ctone config)")
+
+def ctone_override_check(code_str):
+    """Returns overridden code_str if ctone override is active and pattern matches, else returns code_str unchanged."""
+    global ctone_override_expire
+    wx_alerts = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    now = time.time()
+    if not (wx_alerts and ctone and ctone.isdigit() and len(ctone) == 4 and now < ctone_override_expire):
+        return code_str
+    # Match: four digits, optional suffix, then -CT (e.g., 5050I-CT, 5050-CT)
+    m = re.match(r'^(\d{4})([A-Z]*)-CT\b.*', code_str, re.IGNORECASE)
+    if m:
+        suffix = m.group(2)
+        new_code_str = ctone + suffix
+        debug_log(f"CTONE OVERRIDE: Substituting {code_str} with {new_code_str} (active)")
+        return new_code_str
+    return code_str
+ 
+def get_last_expires_time_from_wx_alerts():
+    """
+    Returns the timestamp (epoch) of the last 'Expires:' line in the wx_alerts file,
+    or None if not found or parsing error.
+    """
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        return None
+    expires_time = None
+    with open(wx_alerts_path, 'r') as f:
+        for line in f:
+            if line.strip().startswith("Expires:"):
+                try:
+                    # e.g. Expires:     2025-07-13 19:00:00
+                    parts = line.split("Expires:", 1)[1].strip()
+                    expires_time = parts  # Always take the last one (closest to bottom)
+                except Exception:
+                    continue
+    if expires_time:
+        try:
+            # Parse with no timezone (assume localtime or UTC if your system is UTC)
+            dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
+            # If your system is not UTC and you want UTC, adjust here:
+            # dt = pytz.timezone('America/Chicago').localize(dt).astimezone(pytz.utc)
+            return dt.timestamp()
+        except Exception:
+            return None
+    return None
+    
+def create_combined_wav(sequence, outfile, debug_log=None):
+    """
+    Given a sequence of {"wav": path} and/or {"synthesize": text}, create a single .wav file.
+    Output: 16-bit, 22050 Hz, mono, signed PCM.
+    """
+    sox_cmd = [
+        "sox",  # Requires sox to be installed!
+        "-V1",  # Less verbose
+        "-M"
+    ]
+    tempfiles = []
+    try:
+        for i, item in enumerate(sequence):
+            if "wav" in item:
+                tempfiles.append(item["wav"])
+            elif "synthesize" in item:
+                # Synthesize to temp wav using Piper
+                tempfd, tempname = tempfile.mkstemp(suffix=".wav")
+                os.close(tempfd)
+                # Synthesize to raw, then convert to 22050Hz/mono wav using sox
+                tempraw = tempname.replace(".wav", ".raw")
+                synthesize_cmd = [
+                    PIPER_BINARY,
+                    "--model", PIPER_MODEL,
+                    "--output_raw"
+                ]
+                with open(tempraw, "wb") as rawf:
+                    proc = subprocess.Popen(
+                        synthesize_cmd,
+                        stdin=subprocess.PIPE,
+                        stdout=rawf,
+                        stderr=subprocess.PIPE,
+                        env={"LD_LIBRARY_PATH": f"{PIPER_DIR}:{os.environ.get('LD_LIBRARY_PATH', '')}"}
+                    )
+                    proc.stdin.write(item["synthesize"].encode("utf-8"))
+                    proc.stdin.close()
+                    proc.wait()
+                # Convert raw to 22050Hz/mono WAV
+                subprocess.run([
+                    "sox", "-t", "raw", "-r", "22050", "-e", "signed-integer", "-b", "16", "-c", "1", tempraw, tempname
+                ], check=True)
+                tempfiles.append(tempname)
+                os.remove(tempraw)
+        # Now combine all files into one
+        # sox -V1 file1.wav file2.wav ... output.wav rate 22050 channels 1
+        sox_combine = ["sox"] + tempfiles + [
+            "-r", "22050", "-c", "1", "-b", "16", outfile, "rate", "22050"
+        ]
+        subprocess.run(sox_combine, check=True)
+        os.chmod(outfile, 0o777)
+        try:
+            import pwd
+            shutil.chown(outfile, user="drx")
+        except Exception:
+            # If running unprivileged, chown may fail, ignore
+            pass
+        debug_log and debug_log(f"Combined WAV created at {outfile}")
+    except Exception as e:
+        debug_log and debug_log(f"create_combined_wav failed: {e}")
+    finally:
+        # Clean up temp files
+        for tf in tempfiles:
+            if tf.startswith(tempfile.gettempdir()):
+                try:
+                    os.remove(tf)
+                except Exception:
+                    pass    
+
+def parse_all_active_wx_alerts(debug_log=None):
+    """
+    Parse wx_alerts and return a list of dicts for all alerts that have not expired.
+    Each dict has: description, effective_time (datetime), expires_time (datetime), block
+    Alerts are sorted newest first (latest effective_time first).
+    """
+    wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
+    if not os.path.exists(wx_alerts_path):
+        return []
+
+    now = datetime.now()
+    with open(wx_alerts_path, 'r') as f:
+        content = f.read()
+
+    alert_blocks = re.split(r'-{10,}', content)
+    alerts = []
+    for block in alert_blocks:
+        code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
+        eff_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+        exp_match = re.search(r'Expires:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
+        if code_match and eff_match and exp_match:
+            try:
+                eff_dt = datetime.strptime(eff_match.group(1), "%Y-%m-%d %H:%M:%S")
+                exp_dt = datetime.strptime(exp_match.group(1), "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                continue
+            if exp_dt > now:
+                # Description extraction (reuse your build_wx_alert_sequence_minimal logic)
+                code = code_match.group(1).strip()
+                desc = None
+                if code.upper() == "NWS":
+                    desc_match = re.search(r'Description:\s*(.+)', block)
+                    if desc_match:
+                        desc = desc_match.group(1).strip()
+                    else:
+                        desc = "National Weather Service Message"
+                else:
+                    same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+                    desc = get_same_description_from_code(code, same_csv_path)
+                if not desc:
+                    if code.upper() == "SVS":
+                        desc = "Special Weather Statement"
+                    else:
+                        desc = f"Unknown alert ({code})"
+                alerts.append({
+                    "description": desc,
+                    "effective_time": eff_dt,
+                    "expires_time": exp_dt,
+                    "block": block,
+                    "code": code
+                })
+    # Sort newest first (latest effective_time first)
+    alerts.sort(key=lambda a: a["effective_time"], reverse=True)
+    if debug_log:
+        debug_log(f"parse_all_active_wx_alerts: found {len(alerts)} active alerts")
+    return alerts
+
+# END OF WX ALERT SECTION
 
 def handle_tot_start():
     global tot_active, tot_start_time
@@ -3941,6 +4862,26 @@ def reload_config():
     message_timer_value = parse_message_timer(get_config_value("General", "Message Timer", "N"))
     ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
 
+    # --- WX ALERT STATE PATCH: clear or update ctone_override_expire if WX alerts disabled/invalid ---
+    global ctone_override_expire
+    wx_alerts_enabled = config.getboolean('WX', 'alerts', fallback=False)
+    ctone = config.get('WX', 'ctone', fallback='').strip()
+    try:
+        ctone_time = config.getint('WX', 'ctone_time', fallback=0)
+    except Exception:
+        ctone_time = 0
+
+    now = time.time()
+    if not wx_alerts_enabled or not ctone or not ctone.isdigit() or len(ctone) != 4 or ctone_time == 0:
+        ctone_override_expire = 0  # Deactivate any active override immediately!
+        debug_log("[CTONE PATCH] WX override deactivated due to new config (alerts off, ctone blank, or ctone_time zero)")
+    elif ctone_override_expire and ctone_override_expire > 0:
+        # If ctone_time was reduced, update the expire time if needed
+        new_expire = now + (ctone_time * 60)
+        if new_expire < ctone_override_expire:
+            ctone_override_expire = new_expire
+            debug_log(f"[CTONE PATCH] WX override expire time reduced to {ctone_override_expire} due to ctone_time decrease in config")
+
 def is_terminal():
     return sys.stdin.isatty() and "TERM" in os.environ and os.environ["TERM"] != "unknown"
 
@@ -3967,6 +4908,10 @@ def main():
         global status_manager
         status_manager = PlaybackStatusManager(write_state)
         status_manager.register_status_callback(sync_legacy_status_variables)
+        
+        # Start weather alert monitoring if enabled
+        if config.has_section('WX') and config.getboolean('WX', 'alerts', fallback=False):
+            start_wx_alert_monitoring(config, debug_log)
         
         try:
             threading.Thread(target=serial_read_loop, daemon=True).start()
@@ -4004,4 +4949,4 @@ def main():
             log_exception("main (lgpio cleanup)")
 
 if __name__ == "__main__":
-    main()            
+    main()       

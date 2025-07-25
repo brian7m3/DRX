@@ -1280,18 +1280,16 @@ def play_sound(
             status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
             debug_log("REPEAT MODE ACTIVE")
             cos_interruptions = 0
-            ignore_cos = False  # flag for final playthrough
             while True:
-                # Wait for COS to clear before each repeat, but not on final immune play
-                if not ignore_cos:
-                    while is_cos_active() and not playback_interrupt.is_set():
-                        status_manager.set_restarting(playing_name)
-                        debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
-                        set_remote_busy(True)
-                        time.sleep(0.05)
-                        if playback_token is not None and playback_token != current_playback_token:
-                            interrupted = True
-                            return
+                # Wait for COS to clear (repeat mode only)
+                while is_cos_active() and not playback_interrupt.is_set():
+                    status_manager.set_restarting(playing_name)
+                    debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - pending)")
+                    set_remote_busy(True)
+                    time.sleep(0.05)
+                    if playback_token is not None and playback_token != current_playback_token:
+                        interrupted = True
+                        return
                 status_manager.set_status("Playing (Repeat Mode)", playing_name, None, section_context)
                 debug_log(f"Setting REMOTE_BUSY to {REMOTE_BUSY_ACTIVE_LEVEL} (repeat - play)")
                 set_remote_busy(True)
@@ -1313,35 +1311,38 @@ def play_sound(
                         was_interrupted = True
                         interrupted = True
                         break
-                    if not ignore_cos:
-                        if is_cos_active():
-                            cos_interruptions += 1
-                            debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
-                            if cos_interruptions >= MAX_COS_INTERRUPTIONS:
-                                debug_log("Repeat mode: max_cos_interruptions reached, switching to ignore COS for this and future plays.")
-                                ignore_cos = True  # From now on, ignore COS. Do NOT kill playback!
-                                # The current play will NOT be interrupted, will finish immune to COS.
-                                continue  # Do NOT terminate/kill, just finish the play
-                            debug_log("COS active: stopping and will repeat")
-                            proc.terminate()
-                            time.sleep(0.1)
-                            if proc.poll() is None:
-                                proc.kill()
-                            was_interrupted = True
-                            interrupted = True
-                            break
-                        if playback_interrupt.is_set():
-                            proc.terminate()
-                            was_interrupted = True
-                            interrupted = True
-                            break
-                    else:
-                        # On final playthrough, ignore COS
-                        if playback_interrupt.is_set():
-                            proc.terminate()
-                            was_interrupted = True
-                            interrupted = True
-                            break
+                    if is_cos_active():
+                        cos_interruptions += 1
+                        debug_log(f"Repeat mode: COS interruptions so far: {cos_interruptions}")
+                        if cos_interruptions >= MAX_COS_INTERRUPTIONS:
+                            debug_log("Repeat mode: max_cos_interruptions reached, will do one FINAL play in NORMAL mode.")
+                            set_remote_busy(False)
+                            subprocess.run(["killall", "-q", "aplay"])
+                            time.sleep(0.2)
+                            # Do the final play in *normal* mode, immune to COS
+                            play_sound(
+                                filename,
+                                interruptible=False,
+                                pausing=False,
+                                repeating=False,
+                                wait_for_cos=False,
+                                playback_token=playback_token,
+                                display_name=display_name
+                            )
+                            return
+                        debug_log("COS active: stopping and will repeat")
+                        proc.terminate()
+                        time.sleep(0.1)
+                        if proc.poll() is None:
+                            proc.kill()
+                        was_interrupted = True
+                        interrupted = True
+                        break
+                    if playback_interrupt.is_set():
+                        proc.terminate()
+                        was_interrupted = True
+                        interrupted = True
+                        break
                     time.sleep(0.05)
                 if was_interrupted and proc.poll() is None:
                     proc.kill()
@@ -1360,12 +1361,6 @@ def play_sound(
                             debug_log(f"aplay error: {err.decode(errors='replace')}")
                         else:
                             debug_log(f"aplay info: {err.decode(errors='replace')}")
-                # If ignore_cos is set, this was the final playthrough: exit
-                if ignore_cos:
-                    debug_log("WAV played all the way through (final allowed play), ending repeat mode.")
-                    set_remote_busy(False)
-                    success = True
-                    break
                 if not was_interrupted:
                     debug_log("WAV played all the way through, ending repeat mode.")
                     set_remote_busy(False)

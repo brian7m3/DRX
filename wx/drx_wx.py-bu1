@@ -23,20 +23,19 @@ SAME_CSV = os.path.join(SCRIPT_DIR, "same.csv")
 def load_config():
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE)
-    
-    # WEATHER SECTION
+
     wx_cfg = config['weather']
-    wx_polling_time = int(wx_cfg.get('polling_time', '15')) * 60 # minutes to seconds
+    wx_polling_time = int(wx_cfg.get('polling_time', '15')) * 60
     wx_data_url = wx_cfg.get('wx_data_url', '')
     wx_day_url = wx_cfg.get('wx_day_url', '')
     nws_url = wx_cfg.get('nws_url', '')
-    nws_url_fallback = wx_cfg.get('nws_url_fallback', '')  # <-- Ensure this is loaded!
+    nws_url_fallback = wx_cfg.get('nws_url_fallback', '')
     wx_directory = wx_cfg.get("directory", "/home/drx/DRX/wx/")
+    use_nws_only = wx_cfg.get('use_nws_only', 'false').lower() == 'true'
 
-    # SAME SECTION
     same_cfg = config['SAME Alerts']
-    same_zip = same_cfg.get('zip_code', '').strip()          # <-- Define same_zip here!
-    same_polling_time = int(same_cfg.get('polling_time', '300')) # seconds
+    same_zip = same_cfg.get('zip_code', '').strip()
+    same_polling_time = int(same_cfg.get('polling_time', '300'))
     same_user_agent = same_cfg.get('user_agent', 'WX-SAME-Script')
 
     return {
@@ -47,6 +46,7 @@ def load_config():
             "wx_day_url": wx_day_url,
             "nws_url": nws_url,
             "nws_url_fallback": nws_url_fallback,
+            "use_nws_only": use_nws_only,
         },
         "same": {
             "zip_code": same_zip,
@@ -56,83 +56,6 @@ def load_config():
     }
 
 # ---- WEATHER LOGIC ----
-
-def fetch_nws_conditions_and_visibility(primary_url, fallback_url):
-    """
-    Fetch observations and visibility from NWS obhistory table (primary).
-    Falls back to legacy MapClick parser (fallback_url) if table structure changes or is empty.
-
-    Returns: (weather, visibility)
-    """
-    try:
-        resp = requests.get(primary_url, timeout=15)
-        resp.raise_for_status()
-        html = resp.text
-        soup = BeautifulSoup(html, "html.parser")
-        table = soup.find("table")
-        if not table:
-            raise Exception("Could not find table in NWS obhistory page.")
-
-        rows = table.find_all("tr")
-        if len(rows) < 2:
-            raise Exception("Not enough rows in obhistory table.")
-
-        # Defensive parsing: Find the first row that has actual data cells
-        data_row = None
-        for row in rows[1:]:
-            cells = row.find_all("td")
-            if len(cells) > 0:
-                data_row = row
-                break
-        if not data_row:
-            raise Exception("No data rows found in obhistory table.")
-
-        header_cells = [cell.get_text(strip=True) for cell in rows[0].find_all(["th", "td"])]
-        col_map = {col.lower(): idx for idx, col in enumerate(header_cells)}
-        data_cells = [cell.get_text(strip=True) for cell in data_row.find_all("td")]
-
-        weather_idx = col_map.get("weather", -1)
-        vis_idx = col_map.get("vis. (mi.)", -1)
-        if weather_idx == -1 or vis_idx == -1 or weather_idx >= len(data_cells) or vis_idx >= len(data_cells):
-            raise Exception("Required columns missing or out of bounds in obhistory table.")
-
-        weather = data_cells[weather_idx]
-        visibility = data_cells[vis_idx]
-
-        return weather, visibility
-    except Exception as e:
-        print(f"[weather] Error fetching NWS obhistory (primary): {e}", file=sys.stderr)
-        print("[weather] Falling back to legacy MapClick parser...", file=sys.stderr)
-        # --- FALLBACK: Only if fallback_url is non-empty ---
-        if not fallback_url:
-            print("[weather] No fallback URL provided. Skipping fallback.", file=sys.stderr)
-            return "Unknown", "Unknown"
-        try:
-            resp = requests.get(fallback_url, timeout=15)
-            resp.raise_for_status()
-            html = resp.text
-            soup = BeautifulSoup(html, "html.parser")
-            text_lines = soup.get_text('\n').splitlines()
-            text_lines = [line.strip() for line in text_lines if line.strip()]
-            conditions = "Unknown"
-            visibility = "Unknown"
-            for i, line in enumerate(text_lines):
-                if "°F" in line or "&deg;F" in line:
-                    if i > 0:
-                        conditions = text_lines[i-1].strip()
-                    break
-            for i, line in enumerate(text_lines):
-                if "Visibility" in line:
-                    if i+1 < len(text_lines):
-                        vis_line = text_lines[i+1]
-                        match = re.search(r'([0-9.]+)\s*m', vis_line)
-                        if match:
-                            visibility = match.group(1)
-                    break
-            return conditions, visibility
-        except Exception as e2:
-            print(f"[weather] Fallback error fetching NWS conditions/visibility: {e2}", file=sys.stderr)
-            return "Unknown", "Unknown"
 
 def get_json(url):
     try:
@@ -184,13 +107,123 @@ def read_pressure_from_file(filepath):
                     return None
     return None
 
+def fetch_nws_obhistory_all_fields(obhistory_url, fallback_url):
+    import requests
+    import sys
+    import re
+    from bs4 import BeautifulSoup
+
+    result = {
+        "observations": "Unknown",
+        "temperature": "Unknown",
+        "humidity": "Unknown",
+        "winddir": "Unknown",
+        "wind_speed": "Unknown",
+        "wind_gust": "Unknown",
+        "pressure": "Unknown",
+        "pressure_status": "unknown",
+        "visibility": "Unknown",
+        "precipRate": "Unknown"
+    }
+
+    try:
+        resp = requests.get(obhistory_url, timeout=15)
+        resp.raise_for_status()
+        html = resp.text
+        soup = BeautifulSoup(html, "html.parser")
+        table = soup.find("table")
+        if not table:
+            raise Exception("Could not find table in NWS obhistory page.")
+        rows = table.find_all("tr")
+        if len(rows) < 2:
+            raise Exception("Not enough rows in obhistory table.")
+
+        header_cells = [cell.get_text(strip=True) for cell in rows[0].find_all(["th", "td"])]
+        print("[DEBUG] obhistory header:", header_cells)
+        data_row = None
+        for row in rows[1:]:
+            data_cells = [cell.get_text(strip=True) for cell in row.find_all("td")]
+            if data_cells and len(data_cells) >= 4:
+                while len(data_cells) < len(header_cells):
+                    data_cells.append("Unknown")
+                data_row = data_cells
+                break
+        print("[DEBUG] obhistory first data row:", data_row)
+        if not data_row:
+            raise Exception("No data rows found in obhistory table.")
+
+        # Map header to value using indexes
+        row_map = {header: val for header, val in zip(header_cells, data_row)}
+
+        # Wind parsing
+        wind_val = row_map.get("Wind (mph)", "Unknown")
+        winddir = "Unknown"
+        wind_speed = "Unknown"
+        if wind_val != "Unknown":
+            wind_match = re.match(r"([A-Za-z]+)?\s*(\d+)?", wind_val.replace('\n', ' ').strip())
+            if wind_match:
+                winddir = wind_match.group(1) if wind_match.group(1) else "Unknown"
+                wind_speed = wind_match.group(2) if wind_match.group(2) else "Unknown"
+            else:
+                winddir = wind_val
+                wind_speed = wind_val
+
+        # Humidity: look for percent in "Pressure" column
+        humidity = row_map.get("Pressure", "Unknown")
+        if "%" not in humidity:
+            for cell in data_row:
+                if "%" in cell:
+                    humidity = cell
+                    break
+
+        if humidity != "Unknown":
+            humidity = humidity.replace("%", "").strip() + " percent"
+
+        # Pressure: find first cell after "Precipitation (in)" that matches 29.xx or 30.xx
+        pressure = "Unknown"
+        try:
+            precip_idx = header_cells.index("Precipitation (in)")
+            for cell in data_row[precip_idx+1:]:
+                if re.match(r'^(2[8-9]|3[0-2])\.\d{2}$', cell.strip()):
+                    pressure = cell.strip()
+                    break
+        except Exception:
+            for cell in data_row:
+                if re.match(r'^(2[8-9]|3[0-2])\.\d{2}$', cell.strip()):
+                    pressure = cell.strip()
+                    break
+
+        result.update({
+            "observations": row_map.get("Weather", "Unknown"),
+            "temperature": row_map.get("Temperature (ºF)", "Unknown"),
+            "humidity": humidity,
+            "winddir": winddir,
+            "wind_speed": wind_speed,
+            "pressure": pressure,
+            "visibility": row_map.get("Vis. (mi.)", "Unknown"),
+            "precipRate": row_map.get("Precipitation (in)", "Unknown"),
+        })
+
+        return result
+    except Exception as e:
+        print(f"[weather] Error fetching NWS obhistory (table): {e}", file=sys.stderr)
+        print("[weather] Falling back to MapClick parser...", file=sys.stderr)
+        return result
+
 def weather_worker(wx_cfg):
+    import os
+    import sys
+    import time
+    import shutil
+    import requests
+
     directory = wx_cfg["directory"]
+    nws_url = wx_cfg["nws_url"]
+    nws_url_fallback = wx_cfg.get("nws_url_fallback", "")
     wx_data_url = wx_cfg["wx_data_url"]
     wx_day_url = wx_cfg["wx_day_url"]
-    nws_url = wx_cfg["nws_url"]
-    nws_url_fallback = wx_cfg.get("nws_url_fallback", "")  # Add fallback URL from config
     polling_time = wx_cfg["polling_time"]
+    use_nws_only = wx_cfg.get("use_nws_only", False)
     output_file = os.path.join(directory, "wx_data")
     backup_file = os.path.join(directory, "wx_data_previous")
     timestamp_file = os.path.join(directory, "wx_data_previous_time")
@@ -198,7 +231,6 @@ def weather_worker(wx_cfg):
     os.makedirs(directory, exist_ok=True)
 
     while True:
-        # Backup every 2 hrs
         current_time = time.time()
         backup_needed = True
         if os.path.exists(output_file):
@@ -218,56 +250,80 @@ def weather_worker(wx_cfg):
                 except Exception as e:
                     print(f"[weather] Backup error: {e}", file=sys.stderr)
 
-        # ---- NWS observation/visibility with fallback ----
-        nws_conditions, nws_visibility = fetch_nws_conditions_and_visibility(nws_url, nws_url_fallback)
-        wx_data_json = get_json(wx_data_url)
-        wx_day_json = get_json(wx_day_url)
-
-        observations = wx_day_json.get("observations", [])
-        last_obs = observations[-1] if observations else {}
-
-        temperature = get_nested(last_obs, ["imperial", "tempAvg"])
-        humidity = get_nested(last_obs, ["humidityAvg"])
-        winddir_deg = get_nested(last_obs, ["winddirAvg"])
-        wind_speed = get_nested(last_obs, ["imperial", "windspeedAvg"])
-        wind_gust = get_nested(last_obs, ["imperial", "windgustAvg"])
-        pressure = get_nested(last_obs, ["imperial", "pressureMax"])
-
-        precip_rate = None
-        if wx_data_json.get("observations"):
-            obs0 = wx_data_json["observations"][0]
-            precip_rate = obs0.get("imperial", {}).get("precipRate")
-
-        winddir = degrees_to_direction(winddir_deg)
-
-        previous_pressure = read_pressure_from_file(backup_file)
-        new_pressure = pressure
-        baro_status = "unknown"
-        if previous_pressure is not None and new_pressure is not None:
+        if use_nws_only:
+            obhistory_result = fetch_nws_obhistory_all_fields(nws_url, nws_url_fallback)
+            # Calculate pressure_status
+            previous_pressure = read_pressure_from_file(backup_file)
+            new_pressure = obhistory_result.get("pressure")
+            baro_status = "unknown"
             try:
-                previous_pressure = float(previous_pressure)
-                new_pressure = float(new_pressure)
-                if previous_pressure > new_pressure:
-                    baro_status = "falling"
-                elif previous_pressure < new_pressure:
-                    baro_status = "rising"
-                else:
-                    baro_status = "steady"
+                prev = float(previous_pressure) if previous_pressure is not None else None
+                new = float(new_pressure) if new_pressure not in (None, "Unknown") else None
+                if prev is not None and new is not None:
+                    if prev > new:
+                        baro_status = "falling"
+                    elif prev < new:
+                        baro_status = "rising"
+                    else:
+                        baro_status = "steady"
             except Exception:
                 baro_status = "unknown"
 
-        output_data = {
-            "observations": nws_conditions,
-            "temperature": f"{temperature} degrees" if temperature is not None else "Unknown",
-            "humidity": f"{humidity} percent" if humidity is not None else "Unknown",
-            "winddir": winddir,
-            "wind_speed": f"{wind_speed}" if wind_speed is not None else "Unknown",
-            "wind_gust": f"{wind_gust}" if wind_gust is not None else "Unknown",
-            "pressure": f"{pressure}" if pressure is not None else "Unknown",
-            "pressure_status": baro_status,
-            "visibility": f"{nws_visibility} miles" if nws_visibility != "Unknown" else "Unknown",
-            "precipRate": f"{precip_rate:.2f}" if precip_rate is not None else "Unknown"
-        }
+            output_data = {}
+            for key in [
+                "observations", "temperature", "humidity", "winddir", "wind_speed",
+                "wind_gust", "pressure", "visibility", "precipRate"
+            ]:
+                val = obhistory_result.get(key, "Unknown")
+                output_data[key] = val
+            output_data["pressure_status"] = baro_status
+        else:
+            obhistory_result = fetch_nws_obhistory_all_fields(nws_url, nws_url_fallback)
+            wx_data_json = get_json(wx_data_url)
+            wx_day_json = get_json(wx_day_url)
+            observations = wx_day_json.get("observations", [])
+            last_obs = observations[-1] if observations else {}
+
+            temperature = get_nested(last_obs, ["imperial", "tempAvg"])
+            humidity = get_nested(last_obs, ["humidityAvg"])
+            winddir_deg = get_nested(last_obs, ["winddirAvg"])
+            wind_speed = get_nested(last_obs, ["imperial", "windspeedAvg"])
+            wind_gust = get_nested(last_obs, ["imperial", "windgustAvg"])
+            pressure = get_nested(last_obs, ["imperial", "pressureMax"])
+
+            precip_rate = None
+            if wx_data_json.get("observations"):
+                obs0 = wx_data_json["observations"][0]
+                precip_rate = obs0.get("imperial", {}).get("precipRate")
+            winddir = degrees_to_direction(winddir_deg)
+            previous_pressure = read_pressure_from_file(backup_file)
+            new_pressure = pressure
+            baro_status = "unknown"
+            if previous_pressure is not None and new_pressure is not None:
+                try:
+                    previous_pressure = float(previous_pressure)
+                    new_pressure = float(new_pressure)
+                    if previous_pressure > new_pressure:
+                        baro_status = "falling"
+                    elif previous_pressure < new_pressure:
+                        baro_status = "rising"
+                    else:
+                        baro_status = "steady"
+                except Exception:
+                    baro_status = "unknown"
+
+            output_data = {
+                "observations": obhistory_result.get("observations", "Unknown"),
+                "temperature": f"{temperature} degrees" if temperature is not None else obhistory_result.get("temperature", "Unknown"),
+                "humidity": f"{humidity} percent" if humidity is not None else obhistory_result.get("humidity", "Unknown"),
+                "winddir": winddir if winddir != "Unknown" else obhistory_result.get("winddir", "Unknown"),
+                "wind_speed": f"{wind_speed}" if wind_speed is not None else obhistory_result.get("wind_speed", "Unknown"),
+                "wind_gust": f"{wind_gust}" if wind_gust is not None else obhistory_result.get("wind_gust", "Unknown"),
+                "pressure": f"{pressure}" if pressure is not None else obhistory_result.get("pressure", "Unknown"),
+                "pressure_status": baro_status,
+                "visibility": obhistory_result.get("visibility", "Unknown"),
+                "precipRate": f"{precip_rate:.2f}" if precip_rate is not None else obhistory_result.get("precipRate", "Unknown")
+            }
 
         try:
             with open(output_file, "w") as f:
@@ -382,15 +438,6 @@ def get_description_from_code(code, eas_descriptions, properties):
             description = properties.get('event', 'No description available.')
         return description
 
-def write_alerts_to_file(alert_text):
-    alerts_file = os.path.join(SCRIPT_DIR, 'wx_alerts')
-    try:
-        with open(alerts_file, 'a') as f:
-            f.write(alert_text)
-        os.chmod(alerts_file, 0o666)
-    except Exception as e:
-        print(f"Warning: Could not write to wx_alerts file: {e}")
-
 def handle_no_alerts():
     alerts_file = os.path.join(SCRIPT_DIR, 'wx_alerts')
     previous_file = os.path.join(SCRIPT_DIR, 'wx_alerts_previous')
@@ -433,87 +480,73 @@ def get_eas_only_option():
 EAS_ONLY = get_eas_only_option()
 SAME_CODES = load_same_codes() if EAS_ONLY else set()
 
-def same_worker_single(zone_or_zip, polling_time, eas_descriptions, user_agent):
-    # If 5 digits, treat as ZIP code, else if 6 chars, treat as zone id
-    zone = None
-    zip_code_display = zone_or_zip
-    # If 5 digits (ZIP code)
-    if zone_or_zip.isdigit() and len(zone_or_zip) == 5:
-        zone, error_msg = get_nws_zone_from_zip(zone_or_zip, user_agent)
-        if error_msg:
-            print(f"[SAME] Error: {error_msg}")
-            return
-        print(f"[SAME] Monitoring NWS Zone: {zone} for ZIP {zone_or_zip}...")
-    # If 6 characters (zone id), allow any 6-char code (e.g. CTC006, CTC009, etc.)
-    elif len(zone_or_zip) == 6 and re.match(r"^[A-Z]{2}[A-Z0-9]{4}$", zone_or_zip.upper()):
-        zone = zone_or_zip.upper()
-        print(f"[SAME] Monitoring NWS Zone: {zone} (direct) ...")
-    else:
-        print(f"[SAME] Invalid zone or ZIP code: {zone_or_zip}. Skipping SAME monitoring.")
-        return
-    while True:
-        check_for_active_alerts(zone, zip_code_display, user_agent, eas_descriptions)
-        time.sleep(polling_time)
-
 def same_worker(same_cfg):
     zip_code_field = same_cfg["zip_code"]
     polling_time = same_cfg["polling_time"]
     user_agent = same_cfg["user_agent"]
     eas_descriptions = load_eas_descriptions()
     zone_or_zips = [z.strip() for z in zip_code_field.split(",") if z.strip()]
-    threads = []
-    for zone_or_zip in zone_or_zips:
-        t = threading.Thread(target=same_worker_single, args=(zone_or_zip, polling_time, eas_descriptions, user_agent), daemon=True)
-        t.start()
-        threads.append(t)
-    for t in threads:
-        t.join()
-
-def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
-    alerts_url = f"https://api.weather.gov/alerts/active?zone={zone_id}"
-    headers = {'User-Agent': user_agent}
-    try:
-        with urlopen(Request(alerts_url, headers=headers), timeout=10) as response:
-            alerts_data = json.load(response)
-        active_alerts = alerts_data.get('features', [])
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        if not active_alerts:
-            print(f"[{current_time}] No active alerts for ZIP Code {zip_code} (Zone: {zone_id}).")
-            handle_no_alerts()
-        else:
-            output_lines = []
-            output_lines.append(f"\n--- Active Alerts for ZIP {zip_code} at {current_time} ---")
-            for alert in active_alerts:
-                properties = alert.get('properties', {})
-                eas_code = extract_same_code(properties)
-                event = properties.get('event', 'N/A')
-
-                # --- EAS_ONLY FILTER ---
-                # Use only the first code if there are multiple (split by comma)
-                first_eas_code = eas_code.split(',')[0].strip() if eas_code else ''
-                if EAS_ONLY and (not first_eas_code or first_eas_code not in SAME_CODES):
+    while True:
+        deduped_alerts = {}
+        all_output_lines = []
+        zones_display_labels = []
+        for zone_or_zip in zone_or_zips:
+            # --- Zone detection ---
+            if zone_or_zip.isdigit() and len(zone_or_zip) == 5:
+                zone, error_msg = get_nws_zone_from_zip(zone_or_zip, user_agent)
+                display_label = f"ZIP {zone_or_zip}"
+                if error_msg:
+                    print(f"[SAME] Error: {error_msg}")
                     continue
-
-                # --- SKIP SVS Severe Thunderstorm Warning updates/statements ---
-                if eas_code == 'SVS' and event == 'Severe Thunderstorm Warning':
+            elif len(zone_or_zip) == 6 and re.match(r"^[A-Z]{2}[A-Z0-9]{4}$", zone_or_zip.upper()):
+                zone = zone_or_zip.upper()
+                display_label = f"Zone {zone}"
+            else:
+                print(f"[SAME] Invalid zone or ZIP code: {zone_or_zip}. Skipping SAME monitoring.")
+                continue
+            zones_display_labels.append(display_label)
+            # --- Fetch alerts for this zone ---
+            alerts_url = f"https://api.weather.gov/alerts/active?zone={zone}"
+            headers = {'User-Agent': user_agent}
+            try:
+                with urlopen(Request(alerts_url, headers=headers), timeout=10) as response:
+                    alerts_data = json.load(response)
+                active_alerts = alerts_data.get('features', [])
+                current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+                if not active_alerts:
+                    print(f"[{current_time}] No active alerts for {display_label}.")
                     continue
-
-                description = get_description_from_code(eas_code, eas_descriptions, properties)
-                same = eas_code
-                headline = properties.get('headline', 'N/A')
-                status = properties.get('status', 'N/A')
-                severity = properties.get('severity', 'N/A')
-                message_type = properties.get('messageType', 'N/A')
-                nws_headline = properties.get('parameters', {}).get('NWSheadline', ['N/A'])
-                if isinstance(nws_headline, list):
-                    nws_headline = nws_headline[0]
-                onset = parse_nws_date(properties.get('onset'))
-                effective = parse_nws_date(properties.get('effective'))
-                ends = parse_nws_date(properties.get('ends'))
-                expires = parse_nws_date(properties.get('expires'))
-                location = properties.get('areaDesc', 'N/A')
-                nws_description = properties.get('description', 'N/A')
-                alert_text = f"""
+                for alert in active_alerts:
+                    # --- Dedupe by unique id (NWS id is globally unique) ---
+                    alert_id = alert.get('id') or alert.get('properties', {}).get('id')
+                    if not alert_id:
+                        continue
+                    properties = alert.get('properties', {})
+                    eas_code = extract_same_code(properties)
+                    event = properties.get('event', 'N/A')
+                    # --- EAS_ONLY FILTER ---
+                    first_eas_code = eas_code.split(',')[0].strip() if eas_code else ''
+                    if EAS_ONLY and (not first_eas_code or first_eas_code not in SAME_CODES):
+                        continue
+                    # --- SKIP SVS Severe Thunderstorm Warning updates/statements ---
+                    if eas_code == 'SVS' and event == 'Severe Thunderstorm Warning':
+                        continue
+                    description = get_description_from_code(eas_code, eas_descriptions, properties)
+                    same = eas_code
+                    headline = properties.get('headline', 'N/A')
+                    status = properties.get('status', 'N/A')
+                    severity = properties.get('severity', 'N/A')
+                    message_type = properties.get('messageType', 'N/A')
+                    nws_headline = properties.get('parameters', {}).get('NWSheadline', ['N/A'])
+                    if isinstance(nws_headline, list):
+                        nws_headline = nws_headline[0]
+                    onset = parse_nws_date(properties.get('onset'))
+                    effective = parse_nws_date(properties.get('effective'))
+                    ends = parse_nws_date(properties.get('ends'))
+                    expires = parse_nws_date(properties.get('expires'))
+                    location = properties.get('areaDesc', 'N/A')
+                    nws_description = properties.get('description', 'N/A')
+                    alert_text = f"""
   Event:          {event}
   SAME:           {same}
   EAS Code:       {same}
@@ -529,35 +562,47 @@ def check_for_active_alerts(zone_id, zip_code, user_agent, eas_descriptions):
   Location:       {location}
   Description:    {description}
 """
-
-                # Gather extra fields not in main list
-                shown_fields = {
-                    'event', 'same', 'eas code', 'headline', 'nwsheadline', 'status', 'severity',
-                    'messagetype', 'onset', 'effective', 'ends', 'expires', 'location', 'description'
-                }
-                mapped_fields = {'areaDesc', 'Event', 'Headline', 'NWSheadline', 'Status', 'Severity',
-                                 'MessageType', 'Onset', 'Effective', 'Ends', 'Expires', 'Location', 'Description'}
-                extra_lines = []
-                for key, value in properties.items():
-                    key_label = key
-                    if key == "areaDesc":
-                        key_label = "Location"
-                    if key_label.lower() in shown_fields or key in mapped_fields:
-                        continue
-                    if isinstance(value, list):
-                        value = "; ".join(str(v) for v in value)
-                    extra_lines.append(f"  {key_label}:       {value}")
-
-                if extra_lines:
-                    alert_text += "\n" + "\n".join(extra_lines)
-
+                    shown_fields = {
+                        'event', 'same', 'eas code', 'headline', 'nwsheadline', 'status', 'severity',
+                        'messagetype', 'onset', 'effective', 'ends', 'expires', 'location', 'description'
+                    }
+                    mapped_fields = {'areaDesc', 'Event', 'Headline', 'NWSheadline', 'Status', 'Severity',
+                                     'MessageType', 'Onset', 'Effective', 'Ends', 'Expires', 'Location', 'Description'}
+                    extra_lines = []
+                    for key, value in properties.items():
+                        key_label = key
+                        if key == "areaDesc":
+                            key_label = "Location"
+                        if key_label.lower() in shown_fields or key in mapped_fields:
+                            continue
+                        if isinstance(value, list):
+                            value = "; ".join(str(v) for v in value)
+                        extra_lines.append(f"  {key_label}:       {value}")
+                    if extra_lines:
+                        alert_text += "\n" + "\n".join(extra_lines)
+                    # Add zone/zip context to the block if you want, or dedupe by ID only
+                    deduped_alerts[alert_id] = alert_text
+            except (HTTPError, URLError) as e:
+                print(f"An error occurred while checking for alerts: {e}")
+        # Write all deduped alerts to wx_alerts file
+        alerts_file = os.path.join(SCRIPT_DIR, 'wx_alerts')
+        if deduped_alerts:
+            current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+            output_lines = []
+            output_lines.append(f"\n--- Active Alerts for {', '.join(zones_display_labels)} at {current_time} ---")
+            for alert_text in deduped_alerts.values():
                 output_lines.append(alert_text)
             output_lines.append("-" * 50)
-            full_output = '\n'.join(output_lines)
-            print(full_output)
-            write_alerts_to_file(full_output + '\n')
-    except (HTTPError, URLError) as e:
-        print(f"An error occurred while checking for alerts: {e}")
+            try:
+                with open(alerts_file, 'w') as f:
+                    f.write('\n'.join(output_lines) + '\n')
+                os.chmod(alerts_file, 0o666)
+                print(f"[SAME] Wrote {len(deduped_alerts)} deduped alert(s) to wx_alerts.")
+            except Exception as e:
+                print(f"Warning: Could not write to wx_alerts file: {e}")
+        else:
+            handle_no_alerts()
+        time.sleep(polling_time)
 
 # ---- MAIN ----
 

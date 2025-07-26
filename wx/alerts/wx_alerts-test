@@ -1,0 +1,80 @@
+
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+ 
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:59:32 ---
+
+  Event:          Severe Radio Silence
+  SAME:           NWS
+  EAS Code:       NWS
+  Headline:       Severe Radio Silence
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-21 11:40:00
+  Effective:      2025-07-21 11:40:00
+  Ends:           2025-07-21 21:45:00
+  Expires:        2025-08-21 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Radio Silence
+
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  @type:       wx:Alert
+  id:       urn:oid:2.49.0.1.840.0.b7d9cb39d5300f1bdb12f3a7ac91be6fb080b3b0.001.1
+  geocode:       {'SAME': ['009001', '009007', '009009', '009011'], 'UGC': ['CTC001', 'CTC007', 'CTC009', 'CTC011']}
+  affectedZones:       https://api.weather.gov/zones/county/CTC001; https://api.weather.gov/zones/county/CTC007; https://api.weather.gov/zones/county/CTC009; https://api.weather.gov/zones/county/CTC011
+  references:       {'@id': 'https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'identifier': 'urn:oid:2.49.0.1.840.0.191da50c902fbede4ef73eee8594e9f1748cee83.001.1', 'sender': 'w-nws.webmaster@noaa.gov', 'sent': '2025-07-20T16:11:00-04:00'}
+  sent:       2025-07-20T20:42:00-04:00
+  category:       Met
+  certainty:       Possible
+  urgency:       Future
+  sender:       w-nws.webmaster@noaa.gov
+  senderName:       NWS Upton NY
+  instruction:       None
+  response:       Monitor
+  parameters:       {'AWIPSidentifier': ['WCNOKX'], 'WMOidentifier': ['WWUS61 KOKX 210042'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'EAS-ORG': ['WXR'], 'VTEC': ['/O.EXP.KOKX.SV.A.0530.000000T0000Z-250721T0100Z/'], 'eventEndingTime': ['2025-07-20T21:00:00-04:00']}
+  scope:       Public
+  code:       IPAWSv1.0
+  language:       en-US
+  web:       http://www.weather.gov
+
+--------------------------------------------------
+
+--- Active Alerts for ZIP 06492 at 2025-07-20 20:59:32 ---
+
+  Event:          Severe Thunderstorm Watch
+  SAME:           HUW
+  EAS Code:       HUW
+  Headline:       Severe Thunderstorm Watch issued July 20 at 8:42PM EDT until July 20 at 9:00PM EDT by NWS Upton NY
+  NWSheadline:    N/A
+  Status:         Actual
+  Severity:       Severe
+  MessageType:    Update
+  Onset:          2025-07-21 11:40:00
+  Effective:      2025-07-21 11:40:00
+  Ends:           2025-07-21 21:45:00
+  Expires:        2025-08-21 21:45:00
+  Location:       Fairfield, CT; Middlesex, CT; New Haven, CT; New London, CT
+  Description:    Severe Thunderstorm Watch
+

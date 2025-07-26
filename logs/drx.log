@@ -1,227 +1,82 @@
-# Log rotated on Fri 25 Jul 00:00:12 EDT 2025
-2025-07-25 00:59:57.568: Play: 9980-cond_tone [normal] - successful
-2025-07-25 00:59:57.568: WX Report: {'observations': 'Fair', 'temperature': '71 degrees', 'humidity': '92 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.02', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 01:59:57.542: Play: 9980-cond_tone [normal] - successful
-2025-07-25 01:59:57.543: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '94 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.01', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 02:59:57.576: Play: 9980-cond_tone [normal] - successful
-2025-07-25 02:59:57.576: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 03:59:57.590: Play: 9980-cond_tone [normal] - successful
-2025-07-25 03:59:57.590: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '29.97', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 04:59:57.587: Play: 9980-cond_tone [normal] - successful
-2025-07-25 04:59:57.587: WX Report: {'observations': 'Fair', 'temperature': '69 degrees', 'humidity': '98 percent', 'winddir': 'SW', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 05:59:57.583: Play: 9980-cond_tone [normal] - successful
-2025-07-25 05:59:57.584: WX Report: {'observations': 'Fair', 'temperature': '69 degrees', 'humidity': '98 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.97', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 06:59:57.578: Play: 9980-cond_tone [normal] - successful
-2025-07-25 06:59:57.579: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '97 percent', 'winddir': 'SE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 07:23:14.635: Play: 5313-IID What an incredible view! from Rotating Base 5300 [normal] - successful
-2025-07-25 07:23:15.190: Play: 5619-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 07:23:26.545: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 07:59:57.566: Play: 9980-cond_tone [normal] - successful
-2025-07-25 07:59:57.566: WX Report: {'observations': 'Fair', 'temperature': '76 degrees', 'humidity': '86 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.97', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 08:59:57.584: Play: 9980-cond_tone [normal] - successful
-2025-07-25 08:59:57.584: WX Report: {'observations': 'Fair', 'temperature': '79 degrees', 'humidity': '80 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 09:59:57.608: Play: 9980-cond_tone [normal] - successful
-2025-07-25 09:59:57.608: WX Report: {'observations': 'Fair', 'temperature': '84 degrees', 'humidity': '74 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 10:59:57.571: Play: 9980-cond_tone [normal] - successful
-2025-07-25 10:59:57.571: WX Report: {'observations': 'Fair', 'temperature': '87 degrees', 'humidity': '70 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '29.95', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 11:59:57.577: Play: 9980-cond_tone [normal] - successful
-2025-07-25 11:59:57.578: WX Report: {'observations': 'Partly Cloudy', 'temperature': '90 degrees', 'humidity': '65 percent', 'winddir': 'SSE', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '29.93', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 12:59:57.572: Play: 9980-cond_tone [normal] - successful
-2025-07-25 12:59:57.572: WX Report: {'observations': 'Fair', 'temperature': '91 degrees', 'humidity': '64 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '8', 'pressure': '29.91', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 13:59:57.581: Play: 9980-cond_tone [normal] - successful
-2025-07-25 13:59:57.581: WX Report: {'observations': 'Fair', 'temperature': '93 degrees', 'humidity': '61 percent', 'winddir': 'SW', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.88', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 14:32:17.319: Play: 5314-IID We're on a mission from God from Rotating Base 5300 [normal] - successful
-2025-07-25 14:32:18.627: Play: 5661-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 14:32:29.221: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 14:58:31.459: Configuration reload requested from web
-2025-07-25 14:59:57.603: Play: 9980-cond_tone [normal] - successful
-2025-07-25 14:59:57.603: WX Report: {'observations': 'Thunderstorm Light Rain', 'temperature': '85 degrees', 'humidity': '79 percent', 'winddir': 'NNW', 'wind_speed': '5', 'wind_gust': '11', 'pressure': '29.91', 'pressure_status': 'rising', 'visibility': '7.00', 'precipRate': '0.33'}
-2025-07-25 15:02:26.947: Configuration reload requested from web
-2025-07-25 15:04:48.344: Configuration reload requested from web
-2025-07-25 15:20:11.352: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-25 15:20:12.350: CT Override 5664-CT -> 5095.
-2025-07-25 15:20:12.407: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 15:20:22.345: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 15:20:22.403: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 15:20:38.474: CT Override 5664-CT -> 5095.
-2025-07-25 15:20:38.529: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 15:36:55.355: CT Override 5649-CT -> 5095.
-2025-07-25 15:36:56.062: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 15:39:45.914: Play: 5199-AID Nicole [wait_for_cos] - successful
-2025-07-25 15:59:57.635: Play: 9980-cond_tone [normal] - successful
-2025-07-25 15:59:57.636: WX Report: {'observations': 'Thunderstorm Light Rain', 'temperature': '77 degrees', 'humidity': '97 percent', 'winddir': 'NNW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.9', 'pressure_status': 'rising', 'visibility': '7.00', 'precipRate': '0.00'}
-2025-07-25 16:51:00.830: Configuration reload requested from web
-2025-07-25 16:54:30.080: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-25 16:54:30.285: CT Override 5664-CT -> 5095.
-2025-07-25 16:54:30.992: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 16:55:17.507: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 16:55:19.219: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 16:59:57.636: Play: 9980-cond_tone [normal] - successful
-2025-07-25 16:59:57.637: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '78 degrees', 'humidity': '97 percent', 'winddir': 'NNW', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '29.88', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 17:05:03.490: Play: 5120-Msg Its 505 Yabba Dabba Do [wait_for_cos] - successful
-2025-07-25 17:27:16.373: Configuration reload requested from web
-2025-07-25 17:55:30.930: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-25 17:55:31.154: CT Override 5627-CT -> 5095.
-2025-07-25 17:55:31.884: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 17:55:43.428: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 17:55:45.206: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 17:59:56.766: Play: 9980-cond_tone [normal] - successful
-2025-07-25 17:59:56.773: WX Report: {'observations': None, 'temperature': None, 'humidity': None, 'winddir': None, 'wind_speed': None, 'wind_gust': None, 'pressure': None, 'pressure_status': None, 'visibility': None, 'precipRate': None}
-2025-07-25 18:00:03.644: CT Override 5607-CT -> 5095.
-2025-07-25 18:00:03.715: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:01:33.345: CT Override 5607-CT -> 5095.
-2025-07-25 18:01:34.032: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:05:43.849: Playback stopped from web
-2025-07-25 18:05:46.351: Playback stopped from web
-2025-07-25 18:07:04.276: CT Override 5642-CT -> 5095.
-2025-07-25 18:07:05.025: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:07:17.477: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 18:07:19.218: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:14:30.053: Play: 5411-PID There're Great! from Random Base 5400 [normal] - successful
-2025-07-25 18:15:04.097: CT Override 5633-CT -> 5095.
-2025-07-25 18:15:04.851: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:15:17.381: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 18:15:19.130: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:21:37.328: CT Override 5616-CT -> 5095.
-2025-07-25 18:21:38.477: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:21:47.626: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 18:21:47.880: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:22:52.616: CT Override 5624-CT -> 5095.
-2025-07-25 18:22:53.329: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:23:04.890: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 18:23:06.653: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:24:00.371: Play: 5425-PID Don't Leave Home Without Them from Random Base 5400 [normal] - successful
-2025-07-25 18:31:21.463: Play: 5638-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 18:31:31.295: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:33:26.074: Play: 5416-PID Andy Griffith whistle from Random Base 5400 [normal] - successful
-2025-07-25 18:37:41.422: CT Override 5614-CT -> 5095.
-2025-07-25 18:37:42.161: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:37:56.430: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 18:37:58.164: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:43:10.650: Play: 5419-PID Bigger Boat from Random Base 5400 [normal] - successful
-2025-07-25 18:50:26.169: CT Override 5612-CT -> 5095.
-2025-07-25 18:50:26.979: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 18:50:42.301: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 18:50:44.081: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 18:52:26.510: Play: 5401-PID Have It Your Way from Random Base 5400 [normal] - successful
-2025-07-25 18:59:57.629: Play: 9980-cond_tone [normal] - successful
-2025-07-25 18:59:57.638: WX Report: {'observations': 'A Few Clouds', 'temperature': '85 degrees', 'humidity': '82 percent', 'winddir': 'WSW', 'wind_speed': '2', 'wind_gust': '2', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 19:59:57.677: Play: 9980-cond_tone [normal] - successful
-2025-07-25 19:59:57.693: WX Report: {'observations': 'A Few Clouds', 'temperature': '85 degrees', 'humidity': '82 percent', 'winddir': 'WSW', 'wind_speed': '2', 'wind_gust': '2', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 20:32:07.372: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-25 20:32:08.945: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:32:19.271: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 20:33:29.147: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:34:04.565: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:34:31.970: Play requested: P5300 (web input box)
-2025-07-25 20:34:51.961: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
-2025-07-25 20:35:04.501: Play requested: P5300 (web input box)
-2025-07-25 20:35:04.752: Play requested: P5300 (web input box)
-2025-07-25 20:35:15.021: Play: 5303-IID Sense of Humor from Rotating Base 5300 [normal] - successful
-2025-07-25 20:35:25.649: Play: 5304-IID Speed of Light from Rotating Base 5300 [normal] - successful
-2025-07-25 20:37:10.370: Play requested: P5300RMJ5400PA5612IJ5300 (web input box)
-2025-07-25 20:37:20.930: Play: 5426-PID Greedy Ham Radio Operator from Random Base 5400 [pause] - playback error
-2025-07-25 20:37:22.381: Play requested: P5300RMJ5400PA5612IJ5300 (web input box)
-2025-07-25 20:37:23.388: Play: 5612-CT [interruptible] - successful
-2025-07-25 20:37:33.059: Play: 5305-IID Breaking New Ground from Rotating Base 5300 [normal] - successful
-2025-07-25 20:38:20.439: Play requested: P5300RMJ5400PA5612IJ5300 (web input box)
-2025-07-25 20:38:31.968: Play: 5412-PID Speed Racer from Random Base 5400 [pause] - playback error
-2025-07-25 20:39:10.244: Play requested: P5300RMJ5400PA5612IJ5300R (web input box)
-2025-07-25 20:39:25.434: Play: 5432-PID All the Right Buttons from Random Base 5400 [pause] - interrupted
-2025-07-25 20:39:27.021: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:39:28.608: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:40:05.044: Play requested: P5300RMJ5400PA5612IJ5300R (web input box)
-2025-07-25 20:40:06.055: Play: 5612-CT [interruptible] - successful
-2025-07-25 20:40:31.977: Play: 5306-IID 505 Zone from Rotating Base 5300 [repeat] - successful
-2025-07-25 20:40:33.477: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:41:45.924: Interrupt: 5505-PID(N) All Nite Long played without COS, did not switch to 6000
-2025-07-25 20:42:21.638: Play: 5662-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:42:24.174: Play requested: P5300RMJ5400PA5612IJ5300R (web input box)
-2025-07-25 20:42:43.818: Play: 5307-IID All New 505 from Rotating Base 5300 [repeat] - successful
-2025-07-25 20:42:55.855: Play: 5420-PID Flight 505 from Random Base 5400 [pause] - playback error
-2025-07-25 20:48:21.022: Configuration reload requested from web
-2025-07-25 20:48:22.275: Configuration reload requested from web
-2025-07-25 20:48:33.036: Configuration reload requested from web
-2025-07-25 20:49:14.228: Play: 5662-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:51:06.236: Interrupt: 5501-PID(N) Light Up Night interrupted by COS, switched to 6000
-2025-07-25 20:51:06.771: Play: 5662-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:52:58.081: Play: 5641-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:53:08.508: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 20:56:01.634: CT Override 5641-CT -> 5095.
-2025-07-25 20:56:02.373: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 20:56:21.026: Configuration reload requested from web
-2025-07-25 20:56:26.621: CT Override 5641-CT -> 5095.
-2025-07-25 20:56:27.365: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 20:56:42.808: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 20:56:44.549: Play: 5173-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 20:57:53.091: Play: 5641-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-25 20:58:03.793: Play: 5174-TM sparc.us from Rotating Base 5170 [interruptible] - successful
-2025-07-25 20:58:25.398: Configuration reload requested from web
-2025-07-25 21:00:02.198: Play: 5129-Msg 9 PM Don't Give a Damn [wait_for_cos] - successful
-2025-07-25 21:00:03.213: Play: 9980-cond_tone [normal] - successful
-2025-07-25 21:00:03.233: WX Report: {'observations': 'Partly Cloudy', 'temperature': '77 degrees', 'humidity': '99 percent', 'winddir': 'S', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.94', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 21:00:36.682: Play: 5199-AID Nicole [wait_for_cos] - successful
-2025-07-25 21:26:28.280: Play: 5308-IID We Have the Technology from Rotating Base 5300 [normal] - successful
-2025-07-25 21:26:28.471: CT Override 5640-CT -> 5095.
-2025-07-25 21:26:29.223: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:26:41.725: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 21:26:43.481: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 21:27:51.925: CT Override 5640-CT -> 5095.
-2025-07-25 21:27:52.690: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:28:09.080: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:28:10.785: Echo Test started for track 9999
-2025-07-25 21:28:10.993: CT Override 5640-CT -> 5095.
-2025-07-25 21:28:11.751: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:28:45.881: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:28:47.587: Echo Test started for track 9999
-2025-07-25 21:28:47.771: CT Override 5640-CT -> 5095.
-2025-07-25 21:28:48.540: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:29:23.707: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:29:25.412: Echo Test started for track 9999
-2025-07-25 21:29:25.666: CT Override 5640-CT -> 5095.
-2025-07-25 21:29:26.431: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:29:49.372: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:29:51.078: Echo Test started for track 9999
-2025-07-25 21:29:51.316: CT Override 5640-CT -> 5095.
-2025-07-25 21:29:52.085: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:29:58.259: CT Override 5640-CT -> 5095.
-2025-07-25 21:29:58.986: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:30:21.277: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:30:22.984: Echo Test started for track 9999
-2025-07-25 21:30:23.191: CT Override 5640-CT -> 5095.
-2025-07-25 21:30:23.909: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:32:07.265: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:32:08.963: Echo Test started for track 9999
-2025-07-25 21:32:09.158: CT Override 5640-CT -> 5095.
-2025-07-25 21:32:09.886: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:32:46.787: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:32:48.487: Echo Test started for track 9999
-2025-07-25 21:32:48.653: CT Override 5640-CT -> 5095.
-2025-07-25 21:32:49.381: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:34:31.739: CT Override 5640-CT -> 5095.
-2025-07-25 21:34:32.426: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:35:11.528: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:35:13.230: Echo Test started for track 9999
-2025-07-25 21:35:13.405: CT Override 5640-CT -> 5095.
-2025-07-25 21:35:14.136: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:35:48.266: Echo Test: Successfully recorded and played back track 9999
-2025-07-25 21:35:49.967: Echo Test started for track 9999
-2025-07-25 21:35:52.765: Play: 5199-AID Nicole [wait_for_cos] - successful
-2025-07-25 21:35:52.846: CT Override 5640-CT -> 5095.
-2025-07-25 21:35:53.586: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:37:11.408: CT Override 5663-CT -> 5095.
-2025-07-25 21:37:11.647: Play: 5095-CT(CW) W 500 [interruptible] - interrupted
-2025-07-25 21:37:16.511: CT Override 5663-CT -> 5095.
-2025-07-25 21:37:17.249: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:37:29.731: Play: 9995-WX Alert [repeat] - successful
-2025-07-25 21:37:31.463: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-25 21:38:23.727: Play requested: TOT (web input box)
-2025-07-25 21:38:49.255: Play requested: TOP (web input box)
-2025-07-25 21:38:49.263: Status: Time Out Seconds | Currently Playing: Timed 24 seconds | Info: Reporting time out duration
-2025-07-25 21:38:53.664: CT Override 5663-CT -> 5095.
-2025-07-25 21:38:54.400: Play: 5095-CT(CW) W 500 [interruptible] - successful
-2025-07-25 21:45:12.844: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
-2025-07-25 21:59:57.707: Play: 9980-cond_tone [normal] - successful
-2025-07-25 21:59:57.725: WX Report: {'observations': 'Partly Cloudy', 'temperature': '75 degrees', 'humidity': '99 percent', 'winddir': 'NW', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.96', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-25 22:59:57.769: Play: 9980-cond_tone [normal] - successful
-2025-07-25 22:59:57.787: WX Report: {'observations': 'Partly Cloudy', 'temperature': '74 degrees', 'humidity': '99 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.96', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+# Log rotated on Sat 26 Jul 00:00:12 EDT 2025
+2025-07-26 00:29:16.176: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-26 00:29:16.451: CT Override 5635-CT -> 5095.
+2025-07-26 00:29:17.280: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-26 00:29:29.661: Play: 9995-WX Alert [repeat] - successful
+2025-07-26 00:29:31.496: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-26 00:59:57.859: Play: 9980-cond_tone [normal] - successful
+2025-07-26 00:59:57.906: WX Report: {'observations': 'Fair', 'temperature': '72 degrees', 'humidity': '99 percent', 'winddir': 'SSW', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.0', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 01:59:57.896: Play: 9980-cond_tone [normal] - successful
+2025-07-26 01:59:57.946: WX Report: {'observations': 'Fair', 'temperature': '71 degrees', 'humidity': '94 percent', 'winddir': 'SW', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.02', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 02:59:57.853: Play: 9980-cond_tone [normal] - successful
+2025-07-26 02:59:57.908: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '97 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.03', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 03:59:57.900: Play: 9980-cond_tone [normal] - successful
+2025-07-26 03:59:57.952: WX Report: {'observations': 'Fair', 'temperature': '69 degrees', 'humidity': '98 percent', 'winddir': 'N', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.04', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 04:59:57.918: Play: 9980-cond_tone [normal] - successful
+2025-07-26 04:59:57.981: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '68 degrees', 'humidity': '96 percent', 'winddir': 'NNW', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '30.05', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.02'}
+2025-07-26 05:59:57.891: Play: 9980-cond_tone [normal] - successful
+2025-07-26 05:59:57.969: WX Report: {'observations': 'A Few Clouds', 'temperature': '69 degrees', 'humidity': '93 percent', 'winddir': 'W', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.08', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 06:59:57.948: Play: 9980-cond_tone [normal] - successful
+2025-07-26 06:59:58.016: WX Report: {'observations': 'A Few Clouds', 'temperature': '69 degrees', 'humidity': '92 percent', 'winddir': 'NNW', 'wind_speed': '1', 'wind_gust': '3', 'pressure': '30.1', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 07:59:57.903: Play: 9980-cond_tone [normal] - successful
+2025-07-26 07:59:57.966: WX Report: {'observations': 'Fair', 'temperature': '71 degrees', 'humidity': '86 percent', 'winddir': 'NNE', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.12', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 08:59:57.919: Play: 9980-cond_tone [normal] - successful
+2025-07-26 08:59:57.975: WX Report: {'observations': 'Partly Cloudy', 'temperature': '74 degrees', 'humidity': '74 percent', 'winddir': 'NW', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.14', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 09:59:57.976: Play: 9980-cond_tone [normal] - successful
+2025-07-26 09:59:58.038: WX Report: {'observations': 'A Few Clouds', 'temperature': '75 degrees', 'humidity': '71 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.15', 'pressure_status': 'rising', 'visibility': '8.00', 'precipRate': '0.00'}
+2025-07-26 10:59:57.901: Play: 9980-cond_tone [normal] - successful
+2025-07-26 10:59:57.964: WX Report: {'observations': 'Fair', 'temperature': '78 degrees', 'humidity': '58 percent', 'winddir': 'NNW', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '8.00', 'precipRate': '0.00'}
+2025-07-26 11:34:52.643: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
+2025-07-26 11:34:54.308: Play: 5643-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-26 11:35:04.835: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-26 11:59:57.955: Play: 9980-cond_tone [normal] - successful
+2025-07-26 11:59:58.017: WX Report: {'observations': 'Fair', 'temperature': '80 degrees', 'humidity': '50 percent', 'winddir': 'SW', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '8.00', 'precipRate': '0.00'}
+2025-07-26 12:29:05.367: Play: 5303-IID Sense of Humor from Rotating Base 5300 [normal] - successful
+2025-07-26 12:29:06.739: Play: 5652-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-26 12:29:17.581: Play: 5173-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-26 12:59:57.975: Play: 9980-cond_tone [normal] - successful
+2025-07-26 12:59:58.038: WX Report: {'observations': 'Fair', 'temperature': '82 degrees', 'humidity': '49 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '5', 'pressure': '30.14', 'pressure_status': 'steady', 'visibility': '8.00', 'precipRate': '0.00'}
+2025-07-26 13:59:57.986: Play: 9980-cond_tone [normal] - successful
+2025-07-26 13:59:58.052: WX Report: {'observations': 'Fair', 'temperature': '82 degrees', 'humidity': '48 percent', 'winddir': 'WNW', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.12', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 14:46:32.413: Play: 5304-IID Speed of Light from Rotating Base 5300 [normal] - successful
+2025-07-26 14:46:32.682: CT Override 5666-CT -> 5095.
+2025-07-26 14:46:33.573: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-26 14:46:45.065: Play: 9995-WX Alert [repeat] - successful
+2025-07-26 14:46:47.146: Play: 5174-TM sparc.us from Rotating Base 5170 [interruptible] - successful
+2025-07-26 14:59:57.096: Play: 9980-cond_tone [normal] - successful
+2025-07-26 14:59:57.163: WX Report: {'observations': 'Fair', 'temperature': '83 degrees', 'humidity': '44 percent', 'winddir': 'SW', 'wind_speed': '2', 'wind_gust': '3', 'pressure': '30.13', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 15:02:01.111: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-26 15:02:01.470: CT Override 5651-CT -> 5095.
+2025-07-26 15:02:02.390: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-26 15:02:13.858: Play: 9995-WX Alert [repeat] - successful
+2025-07-26 15:02:15.727: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-26 15:07:40.639: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=442
+2025-07-26 15:59:58.030: Play: 9980-cond_tone [normal] - successful
+2025-07-26 15:59:58.100: WX Report: {'observations': 'Fair', 'temperature': '83 degrees', 'humidity': '52 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.1', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 16:04:37.689: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=385 NWS_ID= NWS_Zones=
+2025-07-26 16:10:10.968: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=379 NWS_ID= NWS_Zones=?
+2025-07-26 16:12:12.963: DEBUG ALERT KEYS: ['description', 'effective_time', 'expires_time', 'block', 'code']
+2025-07-26 16:12:12.963: DEBUG RAW ALERT: {'description': 'Heat Advisory', 'effective_time': datetime.datetime(2025, 7, 26, 14, 23), 'expires_time': datetime.datetime(2025, 7, 26, 22, 30), 'block': "\n--- Active Alerts for Zone CTZ006, Zone CTZ010, Zone CTZ007, Zone CTZ005, Zone CTZ009 at 2025-07-26 16:11:37 ---\n\n  Event:          Heat Advisory\n  SAME:           NWS\n  EAS Code:       NWS\n  Headline:       Heat Advisory issued July 26 at 2:23PM EDT until July 29 at 8:00PM EDT by NWS Upton NY\n  NWSheadline:    HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY\n  Status:         Actual\n  Severity:       Moderate\n  MessageType:    Alert\n  Onset:          2025-07-28 11:00:00\n  Effective:      2025-07-26 14:23:00\n  Ends:           2025-07-29 20:00:00\n  Expires:        2025-07-26 22:30:00\n  Location:       Northern Fairfield; Northern New Haven; Northern Middlesex; Southern Fairfield; Western Passaic; Orange; Putnam; Rockland; Northern Westchester; Southern Westchester\n  Description:    Heat Advisory\n\n  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1\n  @type:       wx:Alert\n  id:       urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1\n  geocode:       {'SAME': ['009001', '009009', '009007', '034031', '036071', '036079', '036087', '036119'], 'UGC': ['CTZ005', 'CTZ006', 'CTZ007', 'CTZ009', 'NJZ002', 'NYZ067', 'NYZ068', 'NYZ069', 'NYZ070', 'NYZ071']}\n  affectedZones:       https://api.weather.gov/zones/forecast/CTZ005; https://api.weather.gov/zones/forecast/CTZ006; https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ009; https://api.weather.gov/zones/forecast/NJZ002; https://api.weather.gov/zones/forecast/NYZ067; https://api.weather.gov/zones/forecast/NYZ068; https://api.weather.gov/zones/forecast/NYZ069; https://api.weather.gov/zones/forecast/NYZ070; https://api.weather.gov/zones/forecast/NYZ071\n  references:       \n  sent:       2025-07-26T14:23:00-04:00\n  category:       Met\n  certainty:       Likely\n  urgency:       Expected\n  sender:       w-nws.webmaster@noaa.gov\n  senderName:       NWS Upton NY\n  instruction:       A Heat Advisory is issued when the combination of heat and humidity\nis expected to make it feel like it is 95 to 99 degrees for two or\nmore consecutive days, or 100 to 104 degrees for any length of time.\n\nSeniors and those with chronic health problems or mental health\nconditions are at an increased risk. Homes without air conditioning\ncan be much hotter than outdoor temperatures.\n\nUse air conditioning to stay cool at home or go to a place that has\nair conditioning. If you don't have home air conditioning, continue\nto seek out cool spaces each day as long as it remains hot, and for\na few days after if your home is still hot. Check on vulnerable\nfriends, family members and neighbors.\n\nTo reduce risk during outdoor work, the Occupational Safety and\nHealth Administration recommends scheduling frequent rest breaks in\nshaded or air conditioned environments. Anyone overcome by heat\nshould be moved to a cool and shaded location. Heat stroke is an\nemergency! In cases of heat stroke call 9 1 1.\n  response:       Execute\n  parameters:       {'AWIPSidentifier': ['NPWOKX'], 'WMOidentifier': ['WWUS71 KOKX 261823'], 'NWSheadline': ['HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'VTEC': ['/O.NEW.KOKX.HT.Y.0006.250728T1500Z-250730T0000Z/'], 'eventEndingTime': ['2025-07-29T20:00:00-04:00']}\n  scope:       Public\n  code:       IPAWSv1.0\n  language:       en-US\n  web:       http://www.weather.gov\n  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['HTY']}\n\n  Event:          Heat Advisory\n  SAME:           NWS\n  EAS Code:       NWS\n  Headline:       Heat Advisory issued July 26 at 2:23PM EDT until July 29 at 8:00PM EDT by NWS Upton NY\n  NWSheadline:    HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY\n  Status:         Actual\n  Severity:       Moderate\n  MessageType:    Alert\n  Onset:          2025-07-28 11:00:00\n  Effective:      2025-07-26 14:23:00\n  Ends:           2025-07-29 20:00:00\n  Expires:        2025-07-26 22:30:00\n  Location:       Northern New London; Southern New Haven; Southern Middlesex; Northwest Suffolk; Northeast Suffolk; Southwest Suffolk; Northern Nassau; Southern Nassau\n  Description:    Heat Advisory\n\n  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.002.1\n  @type:       wx:Alert\n  id:       urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.002.1\n  geocode:       {'SAME': ['009011', '009009', '009007', '036103', '036059'], 'UGC': ['CTZ008', 'CTZ010', 'CTZ011', 'NYZ078', 'NYZ079', 'NYZ080', 'NYZ177', 'NYZ179']}\n  affectedZones:       https://api.weather.gov/zones/forecast/CTZ008; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011; https://api.weather.gov/zones/forecast/NYZ078; https://api.weather.gov/zones/forecast/NYZ079; https://api.weather.gov/zones/forecast/NYZ080; https://api.weather.gov/zones/forecast/NYZ177; https://api.weather.gov/zones/forecast/NYZ179\n  references:       \n  sent:       2025-07-26T14:23:00-04:00\n  category:       Met\n  certainty:       Likely\n  urgency:       Expected\n  sender:       w-nws.webmaster@noaa.gov\n  senderName:       NWS Upton NY\n  instruction:       A Heat Advisory is issued when the combination of heat and humidity\nis expected to make it feel like it is 95 to 99 degrees for two or\nmore consecutive days, or 100 to 104 degrees for any length of time.\n\nSeniors and those with chronic health problems or mental health\nconditions are at an increased risk. Homes without air conditioning\ncan be much hotter than outdoor temperatures.\n\nUse air conditioning to stay cool at home or go to a place that has\nair conditioning. If you don't have home air conditioning, continue\nto seek out cool spaces each day as long as it remains hot, and for\na few days after if your home is still hot. Check on vulnerable\nfriends, family members and neighbors.\n\nTo reduce risk during outdoor work, the Occupational Safety and\nHealth Administration recommends scheduling frequent rest breaks in\nshaded or air conditioned environments. Anyone overcome by heat\nshould be moved to a cool and shaded location. Heat stroke is an\nemergency! In cases of heat stroke call 9 1 1.\n  response:       Execute\n  parameters:       {'AWIPSidentifier': ['NPWOKX'], 'WMOidentifier': ['WWUS71 KOKX 261823'], 'NWSheadline': ['HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'VTEC': ['/O.NEW.KOKX.HT.Y.0006.250728T1500Z-250730T0000Z/'], 'eventEndingTime': ['2025-07-29T20:00:00-04:00']}\n  scope:       Public\n  code:       IPAWSv1.0\n  language:       en-US\n  web:       http://www.weather.gov\n  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['HTY']}\n", 'code': 'NWS'}
+2025-07-26 16:12:12.963: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=377 NWS_ID= NWS_Zones=?
+2025-07-26 16:15:35.032: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=374 NWS_ID= NWS_Zones=CTZ005,CTZ006,CTZ007,CTZ009,NJZ002,NYZ067,NYZ068,NYZ069,NYZ070,NYZ071
+2025-07-26 16:20:15.533: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=369 NWS_ID= NWS_Zones=CTZ005,CTZ006,CTZ007,CTZ009,NJZ002,NYZ067,NYZ068,NYZ069,NYZ070,NYZ071
+2025-07-26 16:22:52.295: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=367 NWS_ID=urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1 NWS_Zones=CTZ005,CTZ006,CTZ007,CTZ009,NJZ002,NYZ067,NYZ068,NYZ069,NYZ070,NYZ071
+2025-07-26 16:36:17.405: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-26 16:36:17.723: CT Override 5634-CT -> 5095.
+2025-07-26 16:36:18.617: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-26 16:36:30.137: Play: 9995-WX Alert [repeat] - successful
+2025-07-26 16:36:32.041: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-26 16:59:58.061: Play: 9980-cond_tone [normal] - successful
+2025-07-26 16:59:58.143: WX Report: {'observations': 'Fair', 'temperature': '81 degrees', 'humidity': '56 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '7', 'pressure': '30.1', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-26 17:11:05.851: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=318 NWS_ID=urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1 NWS_Zones=CTZ005,CTZ006,CTZ007,CTZ009,NJZ002,NYZ067,NYZ068,NYZ069,NYZ070,NYZ071
+2025-07-26 17:11:59.314: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-26 17:11:59.551: CT Override 5652-CT -> 5095.
+2025-07-26 17:12:00.479: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-26 17:12:12.075: Play: 9995-WX Alert [repeat] - successful
+2025-07-26 17:12:13.983: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-26 17:21:28.372: WX Alert: SAME=NWS Desc='Heat Advisory' Expires=2025-07-26 22:30:00 MinutesUntilExpire=308 NWS_ID=urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1 NWS_Zones=CTZ005,CTZ006,CTZ007,CTZ009,NJZ002,NYZ067,NYZ068,NYZ069,NYZ070,NYZ071
+2025-07-26 17:22:37.957: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-26 17:22:38.266: CT Override 5640-CT -> 5095.
+2025-07-26 17:22:39.155: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-26 17:22:50.787: Play: 9995-WX Alert [repeat] - successful
+2025-07-26 17:22:52.707: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful

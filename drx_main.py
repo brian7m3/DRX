@@ -397,6 +397,14 @@ DEFAULTS = {
     "WebAuth": {
         "username": "",
         "password": ""
+    },
+    "WX": {
+        "alerts": True,
+        "ctone": 5095,
+        "ctone_time": 120,
+        "ctone_eas": False, 
+        "use_expired_time": True,
+        "interval": 30
     }
 }
 
@@ -437,7 +445,7 @@ def get_config_value(section, key, fallback=None, cast_func=None, warn=None):
         return cast_func(val) if cast_func else val
 
 ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
-
+CTONE_EAS_ONLY = get_config_value("WX", "ctone_eas", fallback=False, cast_func=str_to_bool)
 def debug_log(*args):
     # Check the value directly from config each time instead of using the global variable
     enable_debug = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
@@ -3862,6 +3870,10 @@ def speak_wx_conditions():
 
 # START OF WX ALERT SECTION
 
+def is_eas_alert(same_code, same_codes_set):
+    first_code = same_code.split(',')[0].strip().upper() if same_code else ''
+    return first_code in same_codes_set
+
 def cleanup_wx_alert_wav():
     wx_alert_wav = "/home/drx/DRX/sounds/9995-WX Alert.wav"
     try:
@@ -3901,7 +3913,15 @@ def speak_wx_alerts_single(alert, debug_log=None):
         status_manager.set_idle()
         set_remote_busy(False)
 
-def wx_alert_monitor(config, debug_log=None):
+def wx_alert_monitor(config, debug_log=None, same_codes=None, ctone_eas_only=False):
+    """
+    Monitor weather alerts and announce new ones, only checking same.csv codes on DRX startup.
+
+    :param config: ConfigParser object
+    :param debug_log: Optional debug logging function
+    :param same_codes: Set of valid SAME codes loaded at startup (required if ctone_eas_only is True)
+    :param ctone_eas_only: If True, ctone override only for EAS alerts (those in same_codes)
+    """
     global active_alerts, last_active_alerts, ctone_override_expire, announced_alert_ids
     normal_interval_seconds = 5
     idle_cleanup_seconds = 300  # 5 minutes
@@ -3911,6 +3931,14 @@ def wx_alert_monitor(config, debug_log=None):
 
     last_cleanup_time = 0
 
+    def alerts_fingerprint(alerts):
+        return tuple(
+            (a.get('code', ''), a.get('description', ''), a.get('expires_time').strftime('%Y-%m-%d %H:%M:%S'))
+            for a in alerts
+        )
+
+    last_alerts_fp = None
+
     while True:
         current_alerts = parse_all_active_wx_alerts(debug_log)
         def alert_id(a):
@@ -3919,28 +3947,63 @@ def wx_alert_monitor(config, debug_log=None):
         new_alerts = [a for a in current_alerts if alert_id(a) not in announced_alert_ids]
 
         now = time.time()
+        now_dt = datetime.now()
+        current_fp = alerts_fingerprint(current_alerts)
 
-        if current_alerts != last_active_alerts:
+        if current_fp != last_alerts_fp:
             if current_alerts:
                 build_multi_alert_combined_wav(current_alerts, debug_log)
-                if use_expired_time:
-                    max_expiry = max(a["expires_time"].timestamp() for a in current_alerts)
-                    ctone_override_expire = max_expiry
-                    if debug_log:
-                        debug_log(f"[MONITOR] ctone_override_expire set to Expires: {ctone_override_expire}")
-                else:
-                    ctone_override_expire = now + (ctone_time * 60)
-                    if debug_log:
-                        debug_log(f"[MONITOR] ctone_override_expire set to now+ctone_time: {ctone_override_expire}")
+
+                # --- LOG WX ALERTS ---
+                for a in current_alerts:
+                    code = a.get("code", "")
+                    desc = a.get("description", "")
+                    expires_time = a.get("expires_time")
+                    block = a.get("block", "")
+                    nws_id = ""
+                    ugc_zones = []
+
+                    if block:
+                        m = re.search(r"^\s*id:\s*(urn:oid:[^\s]+)", block, re.MULTILINE)
+                        if m:
+                            nws_id = m.group(1).strip()
+                        m2 = re.search(r"geocode:\s+\{[^\}]*'UGC':\s*\[([^\]]+)\]", block)
+                        if m2:
+                            ugc_zones = [z.strip().strip("'") for z in m2.group(1).split(",")]
+                        if not ugc_zones:
+                            m3 = re.search(r"affectedZones:\s+([^\n]+)", block)
+                            if m3:
+                                ugc_zones = [z.strip().split('/')[-1] for z in m3.group(1).split(';') if z.strip()]
+                    zones_str = ",".join(ugc_zones) if ugc_zones else "?"
+                    if isinstance(expires_time, datetime):
+                        expires_str = expires_time.strftime('%Y-%m-%d %H:%M:%S')
+                        minutes_left = int((expires_time - now_dt).total_seconds() // 60)
+                    else:
+                        expires_str = str(expires_time)
+                        minutes_left = "?"
+                    log_recent(
+                        f"WX Alert: SAME={code} Desc='{desc}' Expires={expires_str} MinutesUntilExpire={minutes_left} NWS_ID={nws_id} NWS_Zones={zones_str}"
+                    )
+                # --- END LOGGING ---
+
                 # PATCH: Limit number of alerts announced at once
                 MAX_ALERTS_TO_PLAY = 3
                 for alert in new_alerts[:MAX_ALERTS_TO_PLAY]:
+                    same_code = alert.get("code", "")
+                    # Only activate ctone override for EAS if ctone_eas_only is set
+                    if ctone_eas_only and same_codes is not None:
+                        first_eas_code = same_code.split(',')[0].strip().upper() if same_code else ''
+                        if first_eas_code and first_eas_code in same_codes:
+                            activate_ctone_override_from_alert(config)
+                    else:
+                        activate_ctone_override_from_alert(config)
                     speak_wx_alerts_single(alert, debug_log=debug_log)
                     announced_alert_ids.add(alert_id(alert))
             else:
                 cleanup_wx_alert_wav()
                 last_cleanup_time = now
                 ctone_override_expire = 0
+            last_alerts_fp = current_fp
             last_active_alerts = current_alerts
             announced_alert_ids &= current_ids
 
@@ -4717,7 +4780,7 @@ def parse_all_active_wx_alerts(debug_log=None):
     Parse wx_alerts and return a list of dicts for all alerts that have not expired.
     Each dict has: description, effective_time (datetime), expires_time (datetime), block, code
     Alerts are sorted newest first (latest effective_time first).
-    Only unique (code, description) alerts are returned.
+    Only unique alerts (by @id or id, or fallback code/desc) are returned.
     """
     wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
     if not os.path.exists(wx_alerts_path):
@@ -4757,11 +4820,16 @@ def parse_all_active_wx_alerts(debug_log=None):
                         desc = "Special Weather Statement"
                     else:
                         desc = f"Unknown alert ({code})"
-                # Only add if this (code, desc) combo hasn't been seen
-                key = (code, desc)
-                if key in seen:
+                # True dedupe: use NWS @id or id if present, else fallback to (code, desc)
+                id_match = re.search(r'@id:\s*(\S+)', block)
+                if id_match:
+                    unique_id = id_match.group(1).strip()
+                else:
+                    # Fallback: use (code, desc)
+                    unique_id = f"{code}|{desc}"
+                if unique_id in seen:
                     continue
-                seen.add(key)
+                seen.add(unique_id)
                 alerts.append({
                     "description": desc,
                     "effective_time": eff_dt,
@@ -4774,6 +4842,20 @@ def parse_all_active_wx_alerts(debug_log=None):
     if debug_log:
         debug_log(f"parse_all_active_wx_alerts: found {len(alerts)} unique active alerts")
     return alerts
+
+def load_same_codes(same_csv_path):
+    codes = set()
+    with open(same_csv_path, 'r') as f:
+        for line in f:
+            lstripped = line.lstrip().lower()
+            if not line.strip() or lstripped.startswith("eas event") or ',' not in line:
+                continue
+            parts = line.strip().split(',')
+            if len(parts) >= 2:
+                code = parts[1].strip().upper()
+                if len(code) == 3 and code.isalpha():
+                    codes.add(code)
+    return codes
 
 # END OF WX ALERT SECTION
 
@@ -4850,6 +4932,7 @@ def reload_config():
     global sudo_bases, sudo_ends, sudo_intervals
     global message_timer_value
     global ENABLE_DEBUG_LOGGING
+    global CTONE_EAS_ONLY  # <-- Add this for ctone_eas config
 
     config.read(config_file_path)
     SOUND_DIRECTORY = get_config_value("Sound", "directory", DEFAULTS["Sound"]["directory"])
@@ -4902,6 +4985,7 @@ def reload_config():
 
     message_timer_value = parse_message_timer(get_config_value("General", "Message Timer", "N"))
     ENABLE_DEBUG_LOGGING = get_config_value("Debug", "enable_debug_logging", fallback=False, cast_func=str_to_bool)
+    CTONE_EAS_ONLY = get_config_value("WX", "ctone_eas", fallback=False, cast_func=str_to_bool)  
 
     # --- WX ALERT STATE PATCH: clear or update ctone_override_expire if WX alerts disabled/invalid ---
     global ctone_override_expire
@@ -4928,6 +5012,13 @@ def is_terminal():
 
 def main():
     try:
+        # --- EAS ctone logic: load SAME codes and config at startup ---
+        global SAME_CODES, CTONE_EAS_ONLY
+        same_csv_path = os.path.join(os.path.dirname(__file__), "wx", "same.csv")
+        SAME_CODES = load_same_codes(same_csv_path)
+        CTONE_EAS_ONLY = get_config_value("WX", "ctone_eas", fallback=False, cast_func=str_to_bool)
+        # -------------------------------------------------------------
+
         gpio_setup()
         validate_config_pairs()
         global serial_port, serial_port_missing
@@ -4990,4 +5081,4 @@ def main():
             log_exception("main (lgpio cleanup)")
 
 if __name__ == "__main__":
-    main()       
+    main()    

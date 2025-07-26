@@ -1,78 +1,111 @@
 
---- Active Alerts for ZIP CTZ009 at 2025-07-25 23:14:30 ---
+--- Active Alerts for Zone CTZ006, Zone CTZ010, Zone CTZ007, Zone CTZ005, Zone CTZ009 at 2025-07-26 17:24:48 ---
 
-  Event:          Air Quality Alert
+  Event:          Heat Advisory
   SAME:           NWS
   EAS Code:       NWS
-  Headline:       Air Quality Alert issued July 25 at 2:22AM EDT by NWS Upton NY
-  NWSheadline:    AIR QUALITY ALERT IN EFFECT FROM 11 AM THIS MORNING TO 11 PM EDT THIS EVENING
+  Headline:       Heat Advisory issued July 26 at 2:23PM EDT until July 29 at 8:00PM EDT by NWS Upton NY
+  NWSheadline:    HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY
   Status:         Actual
-  Severity:       Unknown
+  Severity:       Moderate
   MessageType:    Alert
-  Onset:          2025-07-25 02:22:00
-  Effective:      2025-07-25 02:22:00
-  Ends:           N/A
-  Expires:        2025-07-26 02:30:00
-  Location:       Southern Fairfield; Southern New Haven; Southern Middlesex; Southern New London
-  Description:    Air Quality Alert
+  Onset:          2025-07-28 11:00:00
+  Effective:      2025-07-26 14:23:00
+  Ends:           2025-07-29 20:00:00
+  Expires:        2025-07-26 22:30:00
+  Location:       Northern Fairfield; Northern New Haven; Northern Middlesex; Southern Fairfield; Western Passaic; Orange; Putnam; Rockland; Northern Westchester; Southern Westchester
+  Description:    Heat Advisory
 
-  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.783f568a3073bc79d3d2550d71187c30df5c1b92.001.1
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1
   @type:       wx:Alert
-  id:       urn:oid:2.49.0.1.840.0.783f568a3073bc79d3d2550d71187c30df5c1b92.001.1
-  geocode:       {'SAME': ['009001', '009009', '009007', '009011'], 'UGC': ['CTZ009', 'CTZ010', 'CTZ011', 'CTZ012']}
-  affectedZones:       https://api.weather.gov/zones/forecast/CTZ009; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011; https://api.weather.gov/zones/forecast/CTZ012
+  id:       urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.001.1
+  geocode:       {'SAME': ['009001', '009009', '009007', '034031', '036071', '036079', '036087', '036119'], 'UGC': ['CTZ005', 'CTZ006', 'CTZ007', 'CTZ009', 'NJZ002', 'NYZ067', 'NYZ068', 'NYZ069', 'NYZ070', 'NYZ071']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ005; https://api.weather.gov/zones/forecast/CTZ006; https://api.weather.gov/zones/forecast/CTZ007; https://api.weather.gov/zones/forecast/CTZ009; https://api.weather.gov/zones/forecast/NJZ002; https://api.weather.gov/zones/forecast/NYZ067; https://api.weather.gov/zones/forecast/NYZ068; https://api.weather.gov/zones/forecast/NYZ069; https://api.weather.gov/zones/forecast/NYZ070; https://api.weather.gov/zones/forecast/NYZ071
   references:       
-  sent:       2025-07-25T02:22:00-04:00
+  sent:       2025-07-26T14:23:00-04:00
   category:       Met
-  certainty:       Unknown
-  urgency:       Unknown
+  certainty:       Likely
+  urgency:       Expected
   sender:       w-nws.webmaster@noaa.gov
   senderName:       NWS Upton NY
-  instruction:       None
-  response:       Monitor
-  parameters:       {'AWIPSidentifier': ['AQAOKX'], 'WMOidentifier': ['AEUS71 KOKX 250622'], 'NWSheadline': ['AIR QUALITY ALERT IN EFFECT FROM 11 AM THIS MORNING TO 11 PM EDT THIS EVENING'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS']}
+  instruction:       A Heat Advisory is issued when the combination of heat and humidity
+is expected to make it feel like it is 95 to 99 degrees for two or
+more consecutive days, or 100 to 104 degrees for any length of time.
+
+Seniors and those with chronic health problems or mental health
+conditions are at an increased risk. Homes without air conditioning
+can be much hotter than outdoor temperatures.
+
+Use air conditioning to stay cool at home or go to a place that has
+air conditioning. If you don't have home air conditioning, continue
+to seek out cool spaces each day as long as it remains hot, and for
+a few days after if your home is still hot. Check on vulnerable
+friends, family members and neighbors.
+
+To reduce risk during outdoor work, the Occupational Safety and
+Health Administration recommends scheduling frequent rest breaks in
+shaded or air conditioned environments. Anyone overcome by heat
+should be moved to a cool and shaded location. Heat stroke is an
+emergency! In cases of heat stroke call 9 1 1.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['NPWOKX'], 'WMOidentifier': ['WWUS71 KOKX 261823'], 'NWSheadline': ['HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'VTEC': ['/O.NEW.KOKX.HT.Y.0006.250728T1500Z-250730T0000Z/'], 'eventEndingTime': ['2025-07-29T20:00:00-04:00']}
   scope:       Public
   code:       IPAWSv1.0
   language:       en-US
   web:       http://www.weather.gov
-  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['AQA']}
---------------------------------------------------
+  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['HTY']}
 
---- Active Alerts for ZIP CTZ010 at 2025-07-25 23:14:30 ---
-
-  Event:          Air Quality Alert
+  Event:          Heat Advisory
   SAME:           NWS
   EAS Code:       NWS
-  Headline:       Air Quality Alert issued July 25 at 2:22AM EDT by NWS Upton NY
-  NWSheadline:    AIR QUALITY ALERT IN EFFECT FROM 11 AM THIS MORNING TO 11 PM EDT THIS EVENING
+  Headline:       Heat Advisory issued July 26 at 2:23PM EDT until July 29 at 8:00PM EDT by NWS Upton NY
+  NWSheadline:    HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY
   Status:         Actual
-  Severity:       Unknown
+  Severity:       Moderate
   MessageType:    Alert
-  Onset:          2025-07-25 02:22:00
-  Effective:      2025-07-25 02:22:00
-  Ends:           N/A
-  Expires:        2025-07-26 02:30:00
-  Location:       Southern Fairfield; Southern New Haven; Southern Middlesex; Southern New London
-  Description:    Air Quality Alert
+  Onset:          2025-07-28 11:00:00
+  Effective:      2025-07-26 14:23:00
+  Ends:           2025-07-29 20:00:00
+  Expires:        2025-07-26 22:30:00
+  Location:       Northern New London; Southern New Haven; Southern Middlesex; Northwest Suffolk; Northeast Suffolk; Southwest Suffolk; Northern Nassau; Southern Nassau
+  Description:    Heat Advisory
 
-  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.783f568a3073bc79d3d2550d71187c30df5c1b92.001.1
+  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.002.1
   @type:       wx:Alert
-  id:       urn:oid:2.49.0.1.840.0.783f568a3073bc79d3d2550d71187c30df5c1b92.001.1
-  geocode:       {'SAME': ['009001', '009009', '009007', '009011'], 'UGC': ['CTZ009', 'CTZ010', 'CTZ011', 'CTZ012']}
-  affectedZones:       https://api.weather.gov/zones/forecast/CTZ009; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011; https://api.weather.gov/zones/forecast/CTZ012
+  id:       urn:oid:2.49.0.1.840.0.350eb191cd3f83b3d2c348c2bfef8a03abf39124.002.1
+  geocode:       {'SAME': ['009011', '009009', '009007', '036103', '036059'], 'UGC': ['CTZ008', 'CTZ010', 'CTZ011', 'NYZ078', 'NYZ079', 'NYZ080', 'NYZ177', 'NYZ179']}
+  affectedZones:       https://api.weather.gov/zones/forecast/CTZ008; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011; https://api.weather.gov/zones/forecast/NYZ078; https://api.weather.gov/zones/forecast/NYZ079; https://api.weather.gov/zones/forecast/NYZ080; https://api.weather.gov/zones/forecast/NYZ177; https://api.weather.gov/zones/forecast/NYZ179
   references:       
-  sent:       2025-07-25T02:22:00-04:00
+  sent:       2025-07-26T14:23:00-04:00
   category:       Met
-  certainty:       Unknown
-  urgency:       Unknown
+  certainty:       Likely
+  urgency:       Expected
   sender:       w-nws.webmaster@noaa.gov
   senderName:       NWS Upton NY
-  instruction:       None
-  response:       Monitor
-  parameters:       {'AWIPSidentifier': ['AQAOKX'], 'WMOidentifier': ['AEUS71 KOKX 250622'], 'NWSheadline': ['AIR QUALITY ALERT IN EFFECT FROM 11 AM THIS MORNING TO 11 PM EDT THIS EVENING'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS']}
+  instruction:       A Heat Advisory is issued when the combination of heat and humidity
+is expected to make it feel like it is 95 to 99 degrees for two or
+more consecutive days, or 100 to 104 degrees for any length of time.
+
+Seniors and those with chronic health problems or mental health
+conditions are at an increased risk. Homes without air conditioning
+can be much hotter than outdoor temperatures.
+
+Use air conditioning to stay cool at home or go to a place that has
+air conditioning. If you don't have home air conditioning, continue
+to seek out cool spaces each day as long as it remains hot, and for
+a few days after if your home is still hot. Check on vulnerable
+friends, family members and neighbors.
+
+To reduce risk during outdoor work, the Occupational Safety and
+Health Administration recommends scheduling frequent rest breaks in
+shaded or air conditioned environments. Anyone overcome by heat
+should be moved to a cool and shaded location. Heat stroke is an
+emergency! In cases of heat stroke call 9 1 1.
+  response:       Execute
+  parameters:       {'AWIPSidentifier': ['NPWOKX'], 'WMOidentifier': ['WWUS71 KOKX 261823'], 'NWSheadline': ['HEAT ADVISORY IN EFFECT FROM 11 AM MONDAY TO 8 PM EDT TUESDAY'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS'], 'VTEC': ['/O.NEW.KOKX.HT.Y.0006.250728T1500Z-250730T0000Z/'], 'eventEndingTime': ['2025-07-29T20:00:00-04:00']}
   scope:       Public
   code:       IPAWSv1.0
   language:       en-US
   web:       http://www.weather.gov
-  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['AQA']}
+  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['HTY']}
 --------------------------------------------------

@@ -1,44 +1,5 @@
 
---- Active Alerts for ZIP CTZ009 at 2025-07-25 23:13:29 ---
-
-  Event:          Air Quality Alert
-  SAME:           NWS
-  EAS Code:       NWS
-  Headline:       Air Quality Alert issued July 25 at 2:22AM EDT by NWS Upton NY
-  NWSheadline:    AIR QUALITY ALERT IN EFFECT FROM 11 AM THIS MORNING TO 11 PM EDT THIS EVENING
-  Status:         Actual
-  Severity:       Unknown
-  MessageType:    Alert
-  Onset:          2025-07-25 02:22:00
-  Effective:      2025-07-25 02:22:00
-  Ends:           N/A
-  Expires:        2025-07-26 02:30:00
-  Location:       Southern Fairfield; Southern New Haven; Southern Middlesex; Southern New London
-  Description:    Air Quality Alert
-
-  @id:       https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.783f568a3073bc79d3d2550d71187c30df5c1b92.001.1
-  @type:       wx:Alert
-  id:       urn:oid:2.49.0.1.840.0.783f568a3073bc79d3d2550d71187c30df5c1b92.001.1
-  geocode:       {'SAME': ['009001', '009009', '009007', '009011'], 'UGC': ['CTZ009', 'CTZ010', 'CTZ011', 'CTZ012']}
-  affectedZones:       https://api.weather.gov/zones/forecast/CTZ009; https://api.weather.gov/zones/forecast/CTZ010; https://api.weather.gov/zones/forecast/CTZ011; https://api.weather.gov/zones/forecast/CTZ012
-  references:       
-  sent:       2025-07-25T02:22:00-04:00
-  category:       Met
-  certainty:       Unknown
-  urgency:       Unknown
-  sender:       w-nws.webmaster@noaa.gov
-  senderName:       NWS Upton NY
-  instruction:       None
-  response:       Monitor
-  parameters:       {'AWIPSidentifier': ['AQAOKX'], 'WMOidentifier': ['AEUS71 KOKX 250622'], 'NWSheadline': ['AIR QUALITY ALERT IN EFFECT FROM 11 AM THIS MORNING TO 11 PM EDT THIS EVENING'], 'BLOCKCHANNEL': ['EAS', 'NWEM', 'CMAS']}
-  scope:       Public
-  code:       IPAWSv1.0
-  language:       en-US
-  web:       http://www.weather.gov
-  eventCode:       {'SAME': ['NWS'], 'NationalWeatherService': ['AQA']}
---------------------------------------------------
-
---- Active Alerts for ZIP CTZ010 at 2025-07-25 23:13:29 ---
+--- Active Alerts for Zone CTZ006, Zone CTZ010, Zone CTZ007, Zone CTZ005, Zone CTZ009 at 2025-07-26 02:29:18 ---
 
   Event:          Air Quality Alert
   SAME:           NWS

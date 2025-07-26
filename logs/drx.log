@@ -1,404 +1,227 @@
-# Log rotated on Thu 24 Jul 00:00:11 EDT 2025
-2025-07-24 00:59:57.472: Play: 9980-cond_tone [normal] - successful
-2025-07-24 00:59:57.472: WX Report: {'observations': 'Fair', 'temperature': '67 degrees', 'humidity': '85 percent', 'winddir': 'ESE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.23', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 01:59:57.503: Play: 9980-cond_tone [normal] - successful
-2025-07-24 01:59:57.504: WX Report: {'observations': 'Fair', 'temperature': '65 degrees', 'humidity': '90 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.22', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 02:59:57.489: Play: 9980-cond_tone [normal] - successful
-2025-07-24 02:59:57.490: WX Report: {'observations': 'Fair', 'temperature': '63 degrees', 'humidity': '95 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.22', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 03:59:57.497: Play: 9980-cond_tone [normal] - successful
-2025-07-24 03:59:57.497: WX Report: {'observations': 'Fair', 'temperature': '62 degrees', 'humidity': '97 percent', 'winddir': 'NE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '30.2', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 04:59:57.471: Play: 9980-cond_tone [normal] - successful
-2025-07-24 04:59:57.472: WX Report: {'observations': 'Fair', 'temperature': '62 degrees', 'humidity': '98 percent', 'winddir': 'NE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.2', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 05:59:57.512: Play: 9980-cond_tone [normal] - successful
-2025-07-24 05:59:57.512: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '62 degrees', 'humidity': '99 percent', 'winddir': 'ESE', 'wind_speed': '1', 'wind_gust': '1', 'pressure': '30.21', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 06:59:57.473: Play: 9980-cond_tone [normal] - successful
-2025-07-24 06:59:57.473: WX Report: {'observations': 'A Few Clouds', 'temperature': '63 degrees', 'humidity': '99 percent', 'winddir': 'E', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.21', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 07:59:57.505: Play: 9980-cond_tone [normal] - successful
-2025-07-24 07:59:57.505: WX Report: {'observations': 'A Few Clouds', 'temperature': '71 degrees', 'humidity': '81 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.22', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 08:59:57.498: Play: 9980-cond_tone [normal] - successful
-2025-07-24 08:59:57.498: WX Report: {'observations': 'Fair', 'temperature': '74 degrees', 'humidity': '76 percent', 'winddir': 'SW', 'wind_speed': '4', 'wind_gust': '6', 'pressure': '30.21', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 09:28:58.045: Configuration reload requested from web
-2025-07-24 09:29:07.053: Play requested: S2001 (web input box)
-2025-07-24 09:29:07.055: Script 2001 executed successfully
-2025-07-24 09:29:07.055: Script execution started: 2001
-2025-07-24 09:29:08.807: Play requested: S2001 (web input box)
-2025-07-24 09:29:08.809: Script 2001 executed successfully
-2025-07-24 09:29:08.809: Script execution started: 2001
-2025-07-24 09:29:16.816: Play requested: S2000 (web input box)
-2025-07-24 09:29:16.819: Script 2000 executed successfully
-2025-07-24 09:29:16.819: Script execution started: 2000
-2025-07-24 09:29:49.852: Play requested: P5308R (web input box)
-2025-07-24 09:29:57.361: Play requested: S2001 (web input box)
-2025-07-24 09:29:59.334: Play: 5308-IID We Have the Technology [repeat] - successful
-2025-07-24 09:29:59.336: Script 2001 executed successfully
-2025-07-24 09:29:59.336: Script execution started: 2001
-2025-07-24 09:30:09.623: Play requested: S2000 (web input box)
-2025-07-24 09:30:09.625: Script 2000 executed successfully
-2025-07-24 09:30:09.625: Script execution started: 2000
-2025-07-24 09:30:19.633: Play requested: P5308R (web input box)
-2025-07-24 09:30:24.638: Play requested: S2001 (web input box)
-2025-07-24 09:30:29.066: Play: 5308-IID We Have the Technology [repeat] - successful
-2025-07-24 09:30:29.068: Script 2001 executed successfully
-2025-07-24 09:30:29.068: Script execution started: 2001
-2025-07-24 09:30:35.149: Play requested: S2000 (web input box)
-2025-07-24 09:30:35.151: Script 2000 executed successfully
-2025-07-24 09:30:35.152: Script execution started: 2000
-2025-07-24 09:30:48.163: Configuration reload requested from web
-2025-07-24 09:33:39.365: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-24 09:33:40.361: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 09:33:41.835: Play requested: P5300R (web input box)
-2025-07-24 09:33:56.521: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [repeat] - successful
-2025-07-24 09:33:56.903: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 09:36:27.483: Play requested: P5421R (web input box)
-2025-07-24 09:37:09.675: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 09:37:10.657: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 09:37:21.515: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 09:38:14.843: Play requested: P5421R (web input box)
-2025-07-24 09:38:25.496: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 09:38:25.921: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 09:38:27.649: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 09:43:10.422: Play: 5403-PID Going Above and Beyond from Random Base 5400 [normal] - successful
-2025-07-24 09:59:57.461: Play: 9980-cond_tone [normal] - successful
-2025-07-24 09:59:57.461: WX Report: {'observations': 'Overcast', 'temperature': '77 degrees', 'humidity': '70 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '30.2', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 10:32:40.324: Play requested: P5421 (web input box)
-2025-07-24 10:32:46.580: Play requested: P5421R (web input box)
-2025-07-24 10:33:03.267: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 10:33:36.159: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:33:46.884: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-24 10:33:47.162: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:33:55.139: Play requested: P5421R (web input box)
-2025-07-24 10:34:14.151: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:34:14.544: Play: 5657-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:35:06.075: Play requested: P5421R (web input box)
-2025-07-24 10:35:20.263: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:35:20.677: Play: 5646-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:38:23.290: Play: 5190-TO Start Never Been So Humiliated [normal] - successful
-2025-07-24 10:38:23.710: Play: 5646-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:38:33.705: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - interrupted
-2025-07-24 10:43:00.477: Play: 5428-PID Shorting Out My Circuits from Random Base 5400 [normal] - successful
-2025-07-24 10:46:16.205: Play requested: P5421R (web input box)
-2025-07-24 10:46:55.323: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:46:55.323: Status: Time Out Seconds | Currently Playing: Timed 0 seconds | Info: Reporting time out duration
-2025-07-24 10:47:02.992: Play: 5191-TO End You Know Better [normal] - successful
-2025-07-24 10:47:03.906: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 10:47:04.806: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 10:47:11.248: Play requested: P5421R (web input box)
-2025-07-24 10:47:20.946: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:47:21.348: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:47:35.018: Play requested: P5421R (web input box)
-2025-07-24 10:47:35.268: Play requested: P5421R (web input box)
-2025-07-24 10:47:55.323: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:48:18.847: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:48:19.270: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:48:27.646: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 10:48:38.640: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 10:49:35.378: Configuration reload requested from web
-2025-07-24 10:49:43.634: Play requested: P5421R (web input box)
-2025-07-24 10:49:54.453: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:49:54.897: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:49:59.988: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 10:50:03.655: Play requested: P5421R (web input box)
-2025-07-24 10:50:12.711: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:50:13.163: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 10:50:14.958: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 10:50:17.919: Play requested: P5421R (web input box)
-2025-07-24 10:50:47.162: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 10:50:48.106: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 10:52:34.738: Play: 5430-PID It's Makes You Feel Bouncy from Random Base 5400 [normal] - successful
-2025-07-24 10:59:57.532: Play: 9980-cond_tone [normal] - successful
-2025-07-24 10:59:57.544: WX Report: {'observations': 'A Few Clouds', 'temperature': '79 degrees', 'humidity': '70 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '30.18', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 11:07:17.995: Play requested: P5421R (web input box)
-2025-07-24 11:07:18.246: Play requested: P5421R (web input box)
-2025-07-24 11:07:30.428: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 11:08:11.213: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 11:08:21.828: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-24 11:08:22.627: Play: 5629-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:08:24.386: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 11:08:26.560: Play requested: P5421R (web input box)
-2025-07-24 11:08:36.509: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 11:08:36.963: Play: 5629-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:11:39.303: Play: 5190-TO Start Never Been So Humiliated [normal] - successful
-2025-07-24 11:11:39.743: Play: 5629-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:17:03.888: Play: 5411-PID There're Great! from Random Base 5400 [normal] - successful
-2025-07-24 11:17:19.874: Status: Time Out Seconds | Currently Playing: Timed 335 seconds | Info: Reporting time out duration
-2025-07-24 11:17:29.666: Play: 5191-TO End You Know Better [normal] - successful
-2025-07-24 11:17:35.186: Play requested: P5421R (web input box)
-2025-07-24 11:17:43.607: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 11:17:51.764: Play: 5629-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:18:00.209: Play requested: P5421R (web input box)
-2025-07-24 11:18:08.532: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 11:18:16.122: Play: 5629-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:18:27.150: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 11:25:08.311: Play requested: P5421R (web input box)
-2025-07-24 11:25:17.562: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 11:25:18.034: Play: 5665-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:25:22.707: Play: 5665-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:26:33.260: Play: 5423-PID Calling All Stations from Random Base 5400 [normal] - successful
-2025-07-24 11:26:47.739: Play requested: P5421R (web input box)
-2025-07-24 11:27:01.293: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:27:01.303: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:27:01.771: Play: 5658-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:27:06.501: Play: 5658-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:27:16.403: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 11:32:01.771: Play requested: P5421P (web input box)
-2025-07-24 11:32:23.106: Play: 5421-PID Monsters from Outer Space [pause] - interrupted
-2025-07-24 11:32:23.992: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:32:24.905: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:32:29.296: Play requested: P5421P (web input box)
-2025-07-24 11:32:39.306: Playback stopped from web
-2025-07-24 11:32:39.341: Play: 5421-PID Monsters from Outer Space [pause] - interrupted
-2025-07-24 11:32:45.812: Play requested: P5421R (web input box)
-2025-07-24 11:33:04.254: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:33:04.258: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:33:04.562: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:34:06.134: Play requested: P5421R (web input box)
-2025-07-24 11:34:26.545: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:34:26.551: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:34:26.856: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:34:34.125: Play: 5650-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:34:44.176: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 11:36:02.686: Play: 5429-PID Ohms Away from Home from Random Base 5400 [normal] - successful
-2025-07-24 11:37:52.460: Play requested: P5421R (web input box)
-2025-07-24 11:38:04.607: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:38:04.615: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:38:05.051: Play: 5618-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:38:09.063: Play: 5618-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:38:19.202: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 11:40:01.664: Play requested: P5421R (web input box)
-2025-07-24 11:40:32.192: Playback stopped from web
-2025-07-24 11:40:32.219: Play: 5421-PID Monsters from Outer Space [normal] - interrupted
-2025-07-24 11:40:32.227: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:40:32.559: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - interrupted
-2025-07-24 11:40:38.409: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:40:46.454: Play requested: P5421R (web input box)
-2025-07-24 11:41:20.766: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:41:20.770: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:41:22.519: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 11:41:23.179: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:41:23.809: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:41:32.995: Play requested: P5421R (web input box)
-2025-07-24 11:42:32.390: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:42:32.395: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:42:33.068: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:42:33.704: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:42:36.802: Play requested: P5421R (web input box)
-2025-07-24 11:43:06.915: Play: 5421-PID Monsters from Outer Space [normal] - successful
-2025-07-24 11:43:06.922: Play: 5421-PID Monsters from Outer Space [repeat] - interrupted
-2025-07-24 11:43:07.594: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:43:08.237: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:44:24.903: Play requested: P5421I (web input box)
-2025-07-24 11:44:28.216: Play: 5421-PID Monsters from Outer Space [interruptible] - interrupted
-2025-07-24 11:44:31.880: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:44:41.169: Play requested: P5421P (web input box)
-2025-07-24 11:45:06.186: Play: 5421-PID Monsters from Outer Space [pause] - interrupted
-2025-07-24 11:45:07.005: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:45:09.825: Play: 5199-AID Nicole [wait_for_cos] - successful
-2025-07-24 11:45:10.501: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:45:23.206: Play requested: P5421P (web input box)
-2025-07-24 11:45:35.720: Play: 5421-PID Monsters from Outer Space [pause] - interrupted
-2025-07-24 11:45:36.530: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:45:37.398: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:46:23.760: Play requested: P5421W (web input box)
-2025-07-24 11:46:51.765: Play: 5421-PID Monsters from Outer Space [wait_for_cos] - successful
-2025-07-24 11:46:52.562: Play: 5611-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 11:54:43.141: Play: 5432-PID All the Right Buttons from Random Base 5400 [normal] - successful
-2025-07-24 11:59:57.575: Play: 9980-cond_tone [normal] - successful
-2025-07-24 11:59:57.597: WX Report: {'observations': 'Fair', 'temperature': '81 degrees', 'humidity': '67 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '7', 'pressure': '30.17', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 12:04:06.001: Play requested: P5421RMJ5600RA5300P (web input box)
-2025-07-24 12:04:37.323: Play: 5421-PID Monsters from Outer Space [repeat] - successful
-2025-07-24 12:04:44.357: Play: 5617-CT from SudoRandom Base 5600 [repeat] - successful
-2025-07-24 12:04:54.979: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-24 12:04:56.434: Play: 5617-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 12:04:57.811: Play: 5617-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 12:05:43.091: Play requested: P5421RMJ5600RA5300P (web input box)
-2025-07-24 12:05:43.341: Play requested: P5421RMJ5600RA5300P (web input box)
-2025-07-24 12:06:07.545: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [pause] - playback error
-2025-07-24 12:06:09.024: Play: 5617-CT from SudoRandom Base 5600 [repeat] - successful
-2025-07-24 12:06:10.430: Play: 5617-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 12:07:01.412: Play requested: P5421RMJ5600RA5300P (web input box)
-2025-07-24 12:07:11.878: Play: 5303-IID Sense of Humor from Rotating Base 5300 [pause] - playback error
-2025-07-24 12:07:14.925: Play requested: P5421RMJ5600RA5300P (web input box)
-2025-07-24 12:07:16.390: Play: 5617-CT from SudoRandom Base 5600 [repeat] - successful
-2025-07-24 12:07:41.952: Play requested: P5421RMJ5600RA5300PJ5171 (web input box)
-2025-07-24 12:07:43.370: Play: 5617-CT from SudoRandom Base 5600 [repeat] - successful
-2025-07-24 12:07:45.955: Play requested: P5421RMJ5600RA5300PJ5171 (web input box)
-2025-07-24 12:07:56.585: Play: 5304-IID Speed of Light from Rotating Base 5300 [pause] - playback error
-2025-07-24 12:07:58.326: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:08:15.982: Play requested: P5421RMJ5600RA5300PJ5171A5309 (web input box)
-2025-07-24 12:08:17.414: Play: 5617-CT from SudoRandom Base 5600 [repeat] - successful
-2025-07-24 12:08:19.486: Play requested: P5421RMJ5600RA5300PJ5171A5309 (web input box)
-2025-07-24 12:08:29.125: Play: 5305-IID Breaking New Ground from Rotating Base 5300 [pause] - playback error
-2025-07-24 12:08:30.866: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:08:34.500: Play requested: P5421RMJ5600RA5300PJ5171A5309 (web input box)
-2025-07-24 12:08:40.108: Play: 5309-IID That's going to be Trouble [normal] - successful
-2025-07-24 12:09:37.560: Play requested: P5421RMJ5600RA5300PJ5171A5309 (web input box)
-2025-07-24 12:09:39.059: Play: 5617-CT from SudoRandom Base 5600 [repeat] - successful
-2025-07-24 12:09:52.073: Play requested: P5421RMJ5600RA5300PJ5171A5309 (web input box)
-2025-07-24 12:10:13.592: Play: 5306-IID 505 Zone from Rotating Base 5300 [pause] - playback error
-2025-07-24 12:10:15.346: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:10:28.612: Play requested: P5421RMJ5600RA5300PJ5171A5309 (web input box)
-2025-07-24 12:10:34.272: Play: 5309-IID That's going to be Trouble [normal] - successful
-2025-07-24 12:10:58.394: Play requested: P5300PJ5171 (web input box)
-2025-07-24 12:11:18.031: Play: 5307-IID All New 505 from Rotating Base 5300 [pause] - playback error
-2025-07-24 12:11:19.775: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:11:35.429: Play requested: P5600PJ5171 (web input box)
-2025-07-24 12:11:36.846: Play: 5617-CT from SudoRandom Base 5600 [pause] - playback error
-2025-07-24 12:11:38.596: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:11:43.437: Play requested: P5600J5171 (web input box)
-2025-07-24 12:11:44.906: Play: 5617-CT from SudoRandom Base 5600 [normal] - successful
-2025-07-24 12:11:46.657: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:13:55.530: Play: 5412-PID Speed Racer from Random Base 5400 [normal] - successful
-2025-07-24 12:14:01.817: Play requested: P5172J5171 (web input box)
-2025-07-24 12:14:03.570: Play: 5172-TM PL 77 [normal] - successful
-2025-07-24 12:14:05.293: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:14:06.322: Play requested: P5172J5171 (web input box)
-2025-07-24 12:14:08.048: Play: 5172-TM PL 77 [normal] - successful
-2025-07-24 12:14:09.769: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:14:10.576: Play requested: P5172J5171 (web input box)
-2025-07-24 12:14:12.306: Play: 5172-TM PL 77 [normal] - successful
-2025-07-24 12:14:14.031: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:14:16.332: Play requested: P5172J5171 (web input box)
-2025-07-24 12:14:18.071: Play: 5172-TM PL 77 [normal] - successful
-2025-07-24 12:14:19.798: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:37:13.102: Play requested: P5171J5172 (web input box)
-2025-07-24 12:37:14.853: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:37:16.595: Play: 5172-TM PL 77 [normal] - successful
-2025-07-24 12:37:19.108: Play requested: P5171J5172 (web input box)
-2025-07-24 12:37:20.853: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:37:22.598: Play: 5172-TM PL 77 [normal] - successful
-2025-07-24 12:37:31.620: Play requested: P5171J5300 (web input box)
-2025-07-24 12:37:33.368: Play: 5171-TM PL 77 [normal] - successful
-2025-07-24 12:37:43.989: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-24 12:37:46.633: Play requested: P5200J5300 (web input box)
-2025-07-24 12:38:06.648: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
-2025-07-24 12:38:15.907: Play requested: P5400J5300 (web input box)
-2025-07-24 12:38:22.444: Play: 5409-PID The Real Thing from Random Base 5400 [normal] - successful
-2025-07-24 12:38:32.967: Play: 5303-IID Sense of Humor from Rotating Base 5300 [normal] - successful
-2025-07-24 12:41:16.538: Configuration reload requested from web
-2025-07-24 12:59:57.500: Play: 9980-cond_tone [normal] - successful
-2025-07-24 12:59:57.501: WX Report: {'observations': 'Fair', 'temperature': '83 degrees', 'humidity': '63 percent', 'winddir': 'S', 'wind_speed': '5', 'wind_gust': '9', 'pressure': '30.15', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 13:59:57.511: Play: 9980-cond_tone [normal] - successful
-2025-07-24 13:59:57.512: WX Report: {'observations': 'Partly Cloudy', 'temperature': '83 degrees', 'humidity': '61 percent', 'winddir': 'S', 'wind_speed': '4', 'wind_gust': '10', 'pressure': '30.13', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 14:59:57.497: Play: 9980-cond_tone [normal] - successful
-2025-07-24 14:59:57.497: WX Report: {'observations': 'Overcast', 'temperature': '85 degrees', 'humidity': '59 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '10', 'pressure': '30.12', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 15:59:57.529: Play: 9980-cond_tone [normal] - successful
-2025-07-24 15:59:57.530: WX Report: {'observations': 'A Few Clouds', 'temperature': '84 degrees', 'humidity': '58 percent', 'winddir': 'SSW', 'wind_speed': '6', 'wind_gust': '11', 'pressure': '30.09', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 16:15:50.537: Play requested: P5300A5400 (web input box)
-2025-07-24 16:16:01.134: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
-2025-07-24 16:16:21.072: Play requested: P5300A5400 (web input box)
-2025-07-24 16:16:33.484: Play: 5403-PID Going Above and Beyond from Random Base 5400 [normal] - successful
-2025-07-24 16:17:27.386: Play requested: P5600A5409 (web input box)
-2025-07-24 16:17:28.814: Play: 5642-CT from SudoRandom Base 5600 [normal] - successful
-2025-07-24 16:17:49.406: Play requested: P5600A5409 (web input box)
-2025-07-24 16:17:55.874: Play: 5409-PID The Real Thing [normal] - successful
-2025-07-24 16:18:13.181: Play requested: P5600A5049 (web input box)
-2025-07-24 16:18:14.610: Play: 5642-CT from SudoRandom Base 5600 [normal] - successful
-2025-07-24 16:18:32.447: Play requested: P5600A5049 (web input box)
-2025-07-24 16:18:32.925: Play: 5051-CT Star Trek from Random Base 5049 [normal] - successful
-2025-07-24 16:59:57.492: Play: 9980-cond_tone [normal] - successful
-2025-07-24 16:59:57.493: WX Report: {'observations': 'A Few Clouds', 'temperature': '83 degrees', 'humidity': '63 percent', 'winddir': 'S', 'wind_speed': '5', 'wind_gust': '12', 'pressure': '30.08', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 17:05:03.389: Play: 5120-Msg Its 505 Yabba Dabba Do [wait_for_cos] - successful
-2025-07-24 17:33:33.653: Play requested: P5120J5121J5122 (web input box)
-2025-07-24 17:33:40.472: Play: 5120-Msg Its 505 Yabba Dabba Do [normal] - successful
-2025-07-24 17:33:45.688: Play: 5121-Msg Its 1 AM [normal] - successful
-2025-07-24 17:33:48.398: Play: 5122-Msg Its 2 AM [normal] - successful
-2025-07-24 17:34:20.448: Play requested: P5120RI (web input box)
-2025-07-24 17:34:27.319: Play: 5120-Msg Its 505 Yabba Dabba Do [repeat] - successful
-2025-07-24 17:34:33.211: Play requested: P5120IR (web input box)
-2025-07-24 17:34:40.084: Play: 5120-Msg Its 505 Yabba Dabba Do [repeat] - successful
-2025-07-24 17:34:42.720: Play requested: P5120PR (web input box)
-2025-07-24 17:34:49.592: Play: 5120-Msg Its 505 Yabba Dabba Do [pause] - playback error
-2025-07-24 17:34:50.728: Play requested: P5120RP (web input box)
-2025-07-24 17:34:57.549: Play: 5120-Msg Its 505 Yabba Dabba Do [pause] - playback error
-2025-07-24 17:35:01.238: Play requested: P5120WRP (web input box)
-2025-07-24 17:35:08.854: Play: 5120-Msg Its 505 Yabba Dabba Do [pause] - successful
-2025-07-24 17:36:39.335: Play requested: P5120JS2001 (web input box)
-2025-07-24 17:36:48.594: Play requested: P5120AS2001 (web input box)
-2025-07-24 17:36:55.411: Play: 5120-Msg Its 505 Yabba Dabba Do [normal] - successful
-2025-07-24 17:36:57.102: Play requested: P5120AS2001 (web input box)
-2025-07-24 17:36:57.353: Play requested: P5120AS2001 (web input box)
-2025-07-24 17:37:04.221: Play: 5120-Msg Its 505 Yabba Dabba Do [normal] - successful
-2025-07-24 17:37:05.111: Play requested: P5120AS2001 (web input box)
-2025-07-24 17:49:49.743: Play requested: P5300A5400 (web input box)
-2025-07-24 17:50:09.753: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
-2025-07-24 17:50:11.513: Play requested: P5300A5400 (web input box)
-2025-07-24 17:50:21.969: Play: 5426-PID Greedy Ham Radio Operator from Random Base 5400 [normal] - successful
-2025-07-24 17:59:57.508: Play: 9980-cond_tone [normal] - successful
-2025-07-24 17:59:57.509: WX Report: {'observations': 'A Few Clouds', 'temperature': '82 degrees', 'humidity': '64 percent', 'winddir': 'SSW', 'wind_speed': '7', 'wind_gust': '16', 'pressure': '30.06', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 18:02:17.101: Play requested: P5049A5600 (web input box)
-2025-07-24 18:02:18.580: Play: 5067-CT Star Trek from Random Base 5049 [normal] - successful
-2025-07-24 18:02:45.379: Play requested: P5049A5600 (web input box)
-2025-07-24 18:02:47.257: Play: 5638-CT from SudoRandom Base 5600 [normal] - successful
-2025-07-24 18:59:57.537: Play: 9980-cond_tone [normal] - successful
-2025-07-24 18:59:57.538: WX Report: {'observations': 'Fair', 'temperature': '80 degrees', 'humidity': '69 percent', 'winddir': 'S', 'wind_speed': '5', 'wind_gust': '11', 'pressure': '30.06', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 19:29:45.816: Play: 5303-IID Sense of Humor from Rotating Base 5300 [normal] - successful
-2025-07-24 19:29:47.436: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:29:57.678: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 19:30:01.685: Play requested: P5400R (web input box)
-2025-07-24 19:30:19.631: Play: 5402-PID Press Your PTT from Random Base 5400 [normal] - successful
-2025-07-24 19:30:19.631: Play: 5402-PID Press Your PTT from Random Base 5400 [repeat] - interrupted
-2025-07-24 19:30:21.299: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:30:44.479: Play requested: P5400R (web input box)
-2025-07-24 19:31:04.249: Playback stopped from web
-2025-07-24 19:31:04.348: Play: 5431-PID Meyer - It Walks, It Talks from Random Base 5400 [normal] - interrupted
-2025-07-24 19:31:04.348: Play: 5431-PID Meyer - It Walks, It Talks from Random Base 5400 [repeat] - interrupted
-2025-07-24 19:31:05.878: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:31:07.384: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:31:15.759: Play requested: P5400 (web input box)
-2025-07-24 19:31:21.015: Playback stopped from web
-2025-07-24 19:31:21.121: Play: 5430-PID It's Makes You Feel Bouncy from Random Base 5400 [normal] - interrupted
-2025-07-24 19:31:22.761: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:31:30.023: Play requested: P5400R (web input box)
-2025-07-24 19:31:53.300: Play: 5410-PID Taking CT by Storm from Random Base 5400 [normal] - successful
-2025-07-24 19:31:53.300: Play: 5410-PID Taking CT by Storm from Random Base 5400 [repeat] - interrupted
-2025-07-24 19:31:54.830: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:31:56.359: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:32:00.799: Play requested: P5400R (web input box)
-2025-07-24 19:32:21.651: Play: 5403-PID Going Above and Beyond from Random Base 5400 [normal] - successful
-2025-07-24 19:32:21.651: Play: 5403-PID Going Above and Beyond from Random Base 5400 [repeat] - interrupted
-2025-07-24 19:32:23.188: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:32:24.693: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:32:27.577: Play requested: P5400R (web input box)
-2025-07-24 19:32:55.443: Play: 5408-PID Quicker Keyer Uppers from Random Base 5400 [normal] - successful
-2025-07-24 19:32:55.443: Play: 5408-PID Quicker Keyer Uppers from Random Base 5400 [repeat] - interrupted
-2025-07-24 19:32:56.973: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:32:58.478: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:32:59.607: Play requested: P5400R (web input box)
-2025-07-24 19:33:19.639: Play: 5402-PID Press Your PTT from Random Base 5400 [normal] - successful
-2025-07-24 19:33:19.639: Play: 5402-PID Press Your PTT from Random Base 5400 [repeat] - interrupted
-2025-07-24 19:33:21.175: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:33:22.679: Play: 5655-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 19:39:12.795: Interrupt: 5501-PID(N) Light Up Night played without COS, did not switch to 6000
-2025-07-24 19:59:57.552: Play: 9980-cond_tone [normal] - successful
-2025-07-24 19:59:57.552: WX Report: {'observations': 'Fair', 'temperature': '77 degrees', 'humidity': '75 percent', 'winddir': 'SSE', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '30.05', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
-2025-07-24 20:05:20.500: Play requested: P5300R (web input box)
-2025-07-24 20:05:37.426: Play: 5304-IID Speed of Light from Rotating Base 5300 [repeat] - successful
-2025-07-24 20:05:47.173: Play: 5305-IID Breaking New Ground from Rotating Base 5300 [normal] - successful
-2025-07-24 20:05:48.954: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:05:50.815: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
-2025-07-24 20:06:50.090: Play requested: P5300R (web input box)
-2025-07-24 20:07:19.099: Play: 5306-IID 505 Zone from Rotating Base 5300 [normal] - successful
-2025-07-24 20:07:19.099: Play: 5306-IID 505 Zone from Rotating Base 5300 [repeat] - interrupted
-2025-07-24 20:07:20.887: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:07:21.373: Play requested: P5300R (web input box)
-2025-07-24 20:07:22.645: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:07:50.440: Play: 5307-IID All New 505 from Rotating Base 5300 [normal] - successful
-2025-07-24 20:07:50.440: Play: 5307-IID All New 505 from Rotating Base 5300 [repeat] - interrupted
-2025-07-24 20:07:52.221: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:07:53.977: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:07:55.412: Play requested: P5300R (web input box)
-2025-07-24 20:08:05.175: Playback stopped from web
-2025-07-24 20:08:05.287: Play: 5308-IID We Have the Technology from Rotating Base 5300 [normal] - interrupted
-2025-07-24 20:08:05.287: Play: 5308-IID We Have the Technology from Rotating Base 5300 [repeat] - interrupted
-2025-07-24 20:08:07.069: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:08:08.824: Play: 5635-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:17:19.201: Play requested: P5400R (web input box)
-2025-07-24 20:17:36.232: Play: 5412-PID Speed Racer from Random Base 5400 [repeat] - successful
-2025-07-24 20:17:37.882: Play: 5615-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:17:40.222: Play requested: P5400R (web input box)
-2025-07-24 20:17:55.986: Play requested: P5400R (web input box)
-2025-07-24 20:17:59.813: Play: 5412-PID Speed Racer from Random Base 5400 [repeat] - successful
-2025-07-24 20:18:17.955: Play: 5413-PID More than 25 Years from Random Base 5400 [repeat] - successful
-2025-07-24 20:18:19.490: Play: 5615-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:18:20.994: Play: 5615-CT from SudoRandom Base 5600 [interruptible] - successful
-2025-07-24 20:18:29.826: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+# Log rotated on Fri 25 Jul 00:00:12 EDT 2025
+2025-07-25 00:59:57.568: Play: 9980-cond_tone [normal] - successful
+2025-07-25 00:59:57.568: WX Report: {'observations': 'Fair', 'temperature': '71 degrees', 'humidity': '92 percent', 'winddir': 'SSE', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '30.02', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 01:59:57.542: Play: 9980-cond_tone [normal] - successful
+2025-07-25 01:59:57.543: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '94 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '30.01', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 02:59:57.576: Play: 9980-cond_tone [normal] - successful
+2025-07-25 02:59:57.576: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.98', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 03:59:57.590: Play: 9980-cond_tone [normal] - successful
+2025-07-25 03:59:57.590: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '95 percent', 'winddir': 'SSE', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '29.97', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 04:59:57.587: Play: 9980-cond_tone [normal] - successful
+2025-07-25 04:59:57.587: WX Report: {'observations': 'Fair', 'temperature': '69 degrees', 'humidity': '98 percent', 'winddir': 'SW', 'wind_speed': '0', 'wind_gust': '2', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 05:59:57.583: Play: 9980-cond_tone [normal] - successful
+2025-07-25 05:59:57.584: WX Report: {'observations': 'Fair', 'temperature': '69 degrees', 'humidity': '98 percent', 'winddir': 'SE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.97', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 06:59:57.578: Play: 9980-cond_tone [normal] - successful
+2025-07-25 06:59:57.579: WX Report: {'observations': 'Fair', 'temperature': '70 degrees', 'humidity': '97 percent', 'winddir': 'SE', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 07:23:14.635: Play: 5313-IID What an incredible view! from Rotating Base 5300 [normal] - successful
+2025-07-25 07:23:15.190: Play: 5619-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 07:23:26.545: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 07:59:57.566: Play: 9980-cond_tone [normal] - successful
+2025-07-25 07:59:57.566: WX Report: {'observations': 'Fair', 'temperature': '76 degrees', 'humidity': '86 percent', 'winddir': 'S', 'wind_speed': '2', 'wind_gust': '4', 'pressure': '29.97', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 08:59:57.584: Play: 9980-cond_tone [normal] - successful
+2025-07-25 08:59:57.584: WX Report: {'observations': 'Fair', 'temperature': '79 degrees', 'humidity': '80 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 09:59:57.608: Play: 9980-cond_tone [normal] - successful
+2025-07-25 09:59:57.608: WX Report: {'observations': 'Fair', 'temperature': '84 degrees', 'humidity': '74 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.96', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 10:59:57.571: Play: 9980-cond_tone [normal] - successful
+2025-07-25 10:59:57.571: WX Report: {'observations': 'Fair', 'temperature': '87 degrees', 'humidity': '70 percent', 'winddir': 'S', 'wind_speed': '3', 'wind_gust': '5', 'pressure': '29.95', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 11:59:57.577: Play: 9980-cond_tone [normal] - successful
+2025-07-25 11:59:57.578: WX Report: {'observations': 'Partly Cloudy', 'temperature': '90 degrees', 'humidity': '65 percent', 'winddir': 'SSE', 'wind_speed': '4', 'wind_gust': '9', 'pressure': '29.93', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 12:59:57.572: Play: 9980-cond_tone [normal] - successful
+2025-07-25 12:59:57.572: WX Report: {'observations': 'Fair', 'temperature': '91 degrees', 'humidity': '64 percent', 'winddir': 'SSW', 'wind_speed': '4', 'wind_gust': '8', 'pressure': '29.91', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 13:59:57.581: Play: 9980-cond_tone [normal] - successful
+2025-07-25 13:59:57.581: WX Report: {'observations': 'Fair', 'temperature': '93 degrees', 'humidity': '61 percent', 'winddir': 'SW', 'wind_speed': '3', 'wind_gust': '6', 'pressure': '29.88', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 14:32:17.319: Play: 5314-IID We're on a mission from God from Rotating Base 5300 [normal] - successful
+2025-07-25 14:32:18.627: Play: 5661-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 14:32:29.221: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 14:58:31.459: Configuration reload requested from web
+2025-07-25 14:59:57.603: Play: 9980-cond_tone [normal] - successful
+2025-07-25 14:59:57.603: WX Report: {'observations': 'Thunderstorm Light Rain', 'temperature': '85 degrees', 'humidity': '79 percent', 'winddir': 'NNW', 'wind_speed': '5', 'wind_gust': '11', 'pressure': '29.91', 'pressure_status': 'rising', 'visibility': '7.00', 'precipRate': '0.33'}
+2025-07-25 15:02:26.947: Configuration reload requested from web
+2025-07-25 15:04:48.344: Configuration reload requested from web
+2025-07-25 15:20:11.352: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-25 15:20:12.350: CT Override 5664-CT -> 5095.
+2025-07-25 15:20:12.407: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 15:20:22.345: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 15:20:22.403: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 15:20:38.474: CT Override 5664-CT -> 5095.
+2025-07-25 15:20:38.529: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 15:36:55.355: CT Override 5649-CT -> 5095.
+2025-07-25 15:36:56.062: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 15:39:45.914: Play: 5199-AID Nicole [wait_for_cos] - successful
+2025-07-25 15:59:57.635: Play: 9980-cond_tone [normal] - successful
+2025-07-25 15:59:57.636: WX Report: {'observations': 'Thunderstorm Light Rain', 'temperature': '77 degrees', 'humidity': '97 percent', 'winddir': 'NNW', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.9', 'pressure_status': 'rising', 'visibility': '7.00', 'precipRate': '0.00'}
+2025-07-25 16:51:00.830: Configuration reload requested from web
+2025-07-25 16:54:30.080: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-25 16:54:30.285: CT Override 5664-CT -> 5095.
+2025-07-25 16:54:30.992: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 16:55:17.507: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 16:55:19.219: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 16:59:57.636: Play: 9980-cond_tone [normal] - successful
+2025-07-25 16:59:57.637: WX Report: {'observations': 'Mostly Cloudy', 'temperature': '78 degrees', 'humidity': '97 percent', 'winddir': 'NNW', 'wind_speed': '0', 'wind_gust': '1', 'pressure': '29.88', 'pressure_status': 'falling', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 17:05:03.490: Play: 5120-Msg Its 505 Yabba Dabba Do [wait_for_cos] - successful
+2025-07-25 17:27:16.373: Configuration reload requested from web
+2025-07-25 17:55:30.930: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-25 17:55:31.154: CT Override 5627-CT -> 5095.
+2025-07-25 17:55:31.884: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 17:55:43.428: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 17:55:45.206: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 17:59:56.766: Play: 9980-cond_tone [normal] - successful
+2025-07-25 17:59:56.773: WX Report: {'observations': None, 'temperature': None, 'humidity': None, 'winddir': None, 'wind_speed': None, 'wind_gust': None, 'pressure': None, 'pressure_status': None, 'visibility': None, 'precipRate': None}
+2025-07-25 18:00:03.644: CT Override 5607-CT -> 5095.
+2025-07-25 18:00:03.715: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:01:33.345: CT Override 5607-CT -> 5095.
+2025-07-25 18:01:34.032: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:05:43.849: Playback stopped from web
+2025-07-25 18:05:46.351: Playback stopped from web
+2025-07-25 18:07:04.276: CT Override 5642-CT -> 5095.
+2025-07-25 18:07:05.025: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:07:17.477: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 18:07:19.218: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:14:30.053: Play: 5411-PID There're Great! from Random Base 5400 [normal] - successful
+2025-07-25 18:15:04.097: CT Override 5633-CT -> 5095.
+2025-07-25 18:15:04.851: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:15:17.381: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 18:15:19.130: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:21:37.328: CT Override 5616-CT -> 5095.
+2025-07-25 18:21:38.477: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:21:47.626: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 18:21:47.880: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:22:52.616: CT Override 5624-CT -> 5095.
+2025-07-25 18:22:53.329: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:23:04.890: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 18:23:06.653: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:24:00.371: Play: 5425-PID Don't Leave Home Without Them from Random Base 5400 [normal] - successful
+2025-07-25 18:31:21.463: Play: 5638-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 18:31:31.295: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:33:26.074: Play: 5416-PID Andy Griffith whistle from Random Base 5400 [normal] - successful
+2025-07-25 18:37:41.422: CT Override 5614-CT -> 5095.
+2025-07-25 18:37:42.161: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:37:56.430: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 18:37:58.164: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:43:10.650: Play: 5419-PID Bigger Boat from Random Base 5400 [normal] - successful
+2025-07-25 18:50:26.169: CT Override 5612-CT -> 5095.
+2025-07-25 18:50:26.979: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 18:50:42.301: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 18:50:44.081: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 18:52:26.510: Play: 5401-PID Have It Your Way from Random Base 5400 [normal] - successful
+2025-07-25 18:59:57.629: Play: 9980-cond_tone [normal] - successful
+2025-07-25 18:59:57.638: WX Report: {'observations': 'A Few Clouds', 'temperature': '85 degrees', 'humidity': '82 percent', 'winddir': 'WSW', 'wind_speed': '2', 'wind_gust': '2', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 19:59:57.677: Play: 9980-cond_tone [normal] - successful
+2025-07-25 19:59:57.693: WX Report: {'observations': 'A Few Clouds', 'temperature': '85 degrees', 'humidity': '82 percent', 'winddir': 'WSW', 'wind_speed': '2', 'wind_gust': '2', 'pressure': '29.9', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 20:32:07.372: Play: 5301-IID Welcome to the Machine from Rotating Base 5300 [normal] - successful
+2025-07-25 20:32:08.945: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:32:19.271: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 20:33:29.147: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:34:04.565: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:34:31.970: Play requested: P5300 (web input box)
+2025-07-25 20:34:51.961: Play: 5302-IID Number You Have Reached from Rotating Base 5300 [normal] - successful
+2025-07-25 20:35:04.501: Play requested: P5300 (web input box)
+2025-07-25 20:35:04.752: Play requested: P5300 (web input box)
+2025-07-25 20:35:15.021: Play: 5303-IID Sense of Humor from Rotating Base 5300 [normal] - successful
+2025-07-25 20:35:25.649: Play: 5304-IID Speed of Light from Rotating Base 5300 [normal] - successful
+2025-07-25 20:37:10.370: Play requested: P5300RMJ5400PA5612IJ5300 (web input box)
+2025-07-25 20:37:20.930: Play: 5426-PID Greedy Ham Radio Operator from Random Base 5400 [pause] - playback error
+2025-07-25 20:37:22.381: Play requested: P5300RMJ5400PA5612IJ5300 (web input box)
+2025-07-25 20:37:23.388: Play: 5612-CT [interruptible] - successful
+2025-07-25 20:37:33.059: Play: 5305-IID Breaking New Ground from Rotating Base 5300 [normal] - successful
+2025-07-25 20:38:20.439: Play requested: P5300RMJ5400PA5612IJ5300 (web input box)
+2025-07-25 20:38:31.968: Play: 5412-PID Speed Racer from Random Base 5400 [pause] - playback error
+2025-07-25 20:39:10.244: Play requested: P5300RMJ5400PA5612IJ5300R (web input box)
+2025-07-25 20:39:25.434: Play: 5432-PID All the Right Buttons from Random Base 5400 [pause] - interrupted
+2025-07-25 20:39:27.021: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:39:28.608: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:40:05.044: Play requested: P5300RMJ5400PA5612IJ5300R (web input box)
+2025-07-25 20:40:06.055: Play: 5612-CT [interruptible] - successful
+2025-07-25 20:40:31.977: Play: 5306-IID 505 Zone from Rotating Base 5300 [repeat] - successful
+2025-07-25 20:40:33.477: Play: 5642-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:41:45.924: Interrupt: 5505-PID(N) All Nite Long played without COS, did not switch to 6000
+2025-07-25 20:42:21.638: Play: 5662-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:42:24.174: Play requested: P5300RMJ5400PA5612IJ5300R (web input box)
+2025-07-25 20:42:43.818: Play: 5307-IID All New 505 from Rotating Base 5300 [repeat] - successful
+2025-07-25 20:42:55.855: Play: 5420-PID Flight 505 from Random Base 5400 [pause] - playback error
+2025-07-25 20:48:21.022: Configuration reload requested from web
+2025-07-25 20:48:22.275: Configuration reload requested from web
+2025-07-25 20:48:33.036: Configuration reload requested from web
+2025-07-25 20:49:14.228: Play: 5662-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:51:06.236: Interrupt: 5501-PID(N) Light Up Night interrupted by COS, switched to 6000
+2025-07-25 20:51:06.771: Play: 5662-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:52:58.081: Play: 5641-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:53:08.508: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 20:56:01.634: CT Override 5641-CT -> 5095.
+2025-07-25 20:56:02.373: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 20:56:21.026: Configuration reload requested from web
+2025-07-25 20:56:26.621: CT Override 5641-CT -> 5095.
+2025-07-25 20:56:27.365: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 20:56:42.808: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 20:56:44.549: Play: 5173-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 20:57:53.091: Play: 5641-CT from SudoRandom Base 5600 [interruptible] - successful
+2025-07-25 20:58:03.793: Play: 5174-TM sparc.us from Rotating Base 5170 [interruptible] - successful
+2025-07-25 20:58:25.398: Configuration reload requested from web
+2025-07-25 21:00:02.198: Play: 5129-Msg 9 PM Don't Give a Damn [wait_for_cos] - successful
+2025-07-25 21:00:03.213: Play: 9980-cond_tone [normal] - successful
+2025-07-25 21:00:03.233: WX Report: {'observations': 'Partly Cloudy', 'temperature': '77 degrees', 'humidity': '99 percent', 'winddir': 'S', 'wind_speed': '1', 'wind_gust': '2', 'pressure': '29.94', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 21:00:36.682: Play: 5199-AID Nicole [wait_for_cos] - successful
+2025-07-25 21:26:28.280: Play: 5308-IID We Have the Technology from Rotating Base 5300 [normal] - successful
+2025-07-25 21:26:28.471: CT Override 5640-CT -> 5095.
+2025-07-25 21:26:29.223: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:26:41.725: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 21:26:43.481: Play: 5171-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 21:27:51.925: CT Override 5640-CT -> 5095.
+2025-07-25 21:27:52.690: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:28:09.080: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:28:10.785: Echo Test started for track 9999
+2025-07-25 21:28:10.993: CT Override 5640-CT -> 5095.
+2025-07-25 21:28:11.751: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:28:45.881: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:28:47.587: Echo Test started for track 9999
+2025-07-25 21:28:47.771: CT Override 5640-CT -> 5095.
+2025-07-25 21:28:48.540: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:29:23.707: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:29:25.412: Echo Test started for track 9999
+2025-07-25 21:29:25.666: CT Override 5640-CT -> 5095.
+2025-07-25 21:29:26.431: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:29:49.372: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:29:51.078: Echo Test started for track 9999
+2025-07-25 21:29:51.316: CT Override 5640-CT -> 5095.
+2025-07-25 21:29:52.085: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:29:58.259: CT Override 5640-CT -> 5095.
+2025-07-25 21:29:58.986: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:30:21.277: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:30:22.984: Echo Test started for track 9999
+2025-07-25 21:30:23.191: CT Override 5640-CT -> 5095.
+2025-07-25 21:30:23.909: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:32:07.265: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:32:08.963: Echo Test started for track 9999
+2025-07-25 21:32:09.158: CT Override 5640-CT -> 5095.
+2025-07-25 21:32:09.886: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:32:46.787: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:32:48.487: Echo Test started for track 9999
+2025-07-25 21:32:48.653: CT Override 5640-CT -> 5095.
+2025-07-25 21:32:49.381: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:34:31.739: CT Override 5640-CT -> 5095.
+2025-07-25 21:34:32.426: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:35:11.528: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:35:13.230: Echo Test started for track 9999
+2025-07-25 21:35:13.405: CT Override 5640-CT -> 5095.
+2025-07-25 21:35:14.136: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:35:48.266: Echo Test: Successfully recorded and played back track 9999
+2025-07-25 21:35:49.967: Echo Test started for track 9999
+2025-07-25 21:35:52.765: Play: 5199-AID Nicole [wait_for_cos] - successful
+2025-07-25 21:35:52.846: CT Override 5640-CT -> 5095.
+2025-07-25 21:35:53.586: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:37:11.408: CT Override 5663-CT -> 5095.
+2025-07-25 21:37:11.647: Play: 5095-CT(CW) W 500 [interruptible] - interrupted
+2025-07-25 21:37:16.511: CT Override 5663-CT -> 5095.
+2025-07-25 21:37:17.249: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:37:29.731: Play: 9995-WX Alert [repeat] - successful
+2025-07-25 21:37:31.463: Play: 5172-TM PL 77 from Rotating Base 5170 [interruptible] - successful
+2025-07-25 21:38:23.727: Play requested: TOT (web input box)
+2025-07-25 21:38:49.255: Play requested: TOP (web input box)
+2025-07-25 21:38:49.263: Status: Time Out Seconds | Currently Playing: Timed 24 seconds | Info: Reporting time out duration
+2025-07-25 21:38:53.664: CT Override 5663-CT -> 5095.
+2025-07-25 21:38:54.400: Play: 5095-CT(CW) W 500 [interruptible] - successful
+2025-07-25 21:45:12.844: Interrupt: 5503-PID(N) Not Father's Repeater played without COS, did not switch to 6000
+2025-07-25 21:59:57.707: Play: 9980-cond_tone [normal] - successful
+2025-07-25 21:59:57.725: WX Report: {'observations': 'Partly Cloudy', 'temperature': '75 degrees', 'humidity': '99 percent', 'winddir': 'NW', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.96', 'pressure_status': 'rising', 'visibility': '10.00', 'precipRate': '0.00'}
+2025-07-25 22:59:57.769: Play: 9980-cond_tone [normal] - successful
+2025-07-25 22:59:57.787: WX Report: {'observations': 'Partly Cloudy', 'temperature': '74 degrees', 'humidity': '99 percent', 'winddir': 'NNE', 'wind_speed': '0', 'wind_gust': '0', 'pressure': '29.96', 'pressure_status': 'steady', 'visibility': '10.00', 'precipRate': '0.00'}

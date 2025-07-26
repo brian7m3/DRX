@@ -1032,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div style="display: flex; flex-direction: column; gap: 0;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <label for="track_input" style="white-space: nowrap;">Track:</label>
-                    <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
+                    <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="30">
                     <button type="submit" style="margin: 0;">&#9654;</button>
                     <small class="help-text">For Normal (DRX) Play, enter serial data to test (e.g., P5308i6000).  For Local (Web Page) play, enter EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
                 </div>

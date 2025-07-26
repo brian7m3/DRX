@@ -3932,7 +3932,9 @@ def wx_alert_monitor(config, debug_log=None):
                     ctone_override_expire = now + (ctone_time * 60)
                     if debug_log:
                         debug_log(f"[MONITOR] ctone_override_expire set to now+ctone_time: {ctone_override_expire}")
-                for alert in new_alerts:
+                # PATCH: Limit number of alerts announced at once
+                MAX_ALERTS_TO_PLAY = 3
+                for alert in new_alerts[:MAX_ALERTS_TO_PLAY]:
                     speak_wx_alerts_single(alert, debug_log=debug_log)
                     announced_alert_ids.add(alert_id(alert))
             else:
@@ -4024,42 +4026,34 @@ def synthesize_and_play_with_piper(text, debug_log=None):
         debug_log and debug_log(f"Failed to synthesize '{text}' with piper: {e}")
         return False
 
-def build_greedy_wav_sequence(description, extra_dir, debug_log=None):
+def build_greedy_wav_sequence(text, wav_dir, debug_log=None):
     """
-    Given a description (string), return a list of wavs/tts in order,
-    using the longest matching WAVs in extra_dir.
+    Breaks text into phrases/words and matches the longest possible exact phrase to a wav file.
+    Only matches on whole words/phrases, not substrings.
     """
-    words = description.lower().split()
-    n = len(words)
+    # Build set of available wavs (without extension)
+    wav_basenames = set(os.path.splitext(f)[0].lower().replace('_', ' ')
+                        for f in os.listdir(wav_dir) if f.endswith('.wav'))
+    # Tokenize the text into words (preserve order)
+    words = re.findall(r"\b\w+\b|[^\w\s]", text)
     sequence = []
     i = 0
-    while i < n:
-        # Try longest match first, down to single word
-        found = False
-        for j in range(n, i, -1):
-            phrase = words[i:j]
-            wav_name = "_".join(phrase) + ".wav"
-            wav_path = os.path.join(extra_dir, wav_name)
-            if os.path.exists(wav_path):
-                sequence.append({"wav": wav_path})
-                if debug_log:
-                    debug_log(f"Matched WAV: {wav_name}")
-                i = j  # skip all consumed words
-                found = True
+    while i < len(words):
+        match = None
+        # Try the longest possible phrase first
+        for j in range(len(words), i, -1):
+            phrase = ' '.join(words[i:j]).lower()
+            if phrase in wav_basenames:
+                match = phrase
+                end = j
                 break
-        if not found:
-            # Try single word
-            wav_name = words[i] + ".wav"
-            wav_path = os.path.join(extra_dir, wav_name)
-            if os.path.exists(wav_path):
-                sequence.append({"wav": wav_path})
-                if debug_log:
-                    debug_log(f"Matched single-word WAV: {wav_name}")
-            else:
-                # Fallback to TTS for this word
-                sequence.append({"synthesize": words[i]})
-                if debug_log:
-                    debug_log(f"Fallback to synthesis: {words[i]}")
+        if match:
+            wav_path = os.path.join(wav_dir, match.replace(' ', '_') + '.wav')
+            sequence.append({'wav': wav_path})
+            i = end
+        else:
+            # No phrase match, synthesize this word
+            sequence.append({'synthesize': words[i]})
             i += 1
     return sequence
 
@@ -4379,11 +4373,13 @@ def speak_wx_alerts(*args, **kwargs):
 def build_wx_alert_sequence_full_for_alert(alert, debug_log=None):
     """
     Build the full sequence for a single alert (dict from parse_all_active_wx_alerts).
+    This PATCH inserts the NWSheadline immediately after the description and before "repeating"
+    if the SAME/EAS code is SPS or SVS.
     """
+    import os
     sequence = []
     EXTRA_SOUND_DIR = os.path.join("/home/drx/DRX/sounds", "extra")
-    # Use the same code as build_wx_alert_sequence_full, but for just this alert
-    same_code = alert.get("code") or ""
+    same_code = alert.get("code", "").upper() if alert.get("code") else ""
     effective_time = alert.get("effective_time")
     expires_time = alert.get("expires_time")
     description = alert.get("description") or ""
@@ -4396,12 +4392,27 @@ def build_wx_alert_sequence_full_for_alert(alert, debug_log=None):
     else:
         sequence.append({"synthesize": "weather alert"})
 
+    # Description (greedy phrase matching)
     sequence += build_greedy_wav_sequence(description, EXTRA_SOUND_DIR, debug_log)
     in_effect_wav = os.path.join(EXTRA_SOUND_DIR, "in_effect.wav")
     if os.path.exists(in_effect_wav):
         sequence.append({"wav": in_effect_wav})
     else:
         sequence.append({"synthesize": "in effect"})
+
+    # --- PATCH: Insert NWSheadline if SPS or SVS ---
+    if same_code in ("SPS", "SVS"):
+        nws_headline = ""
+        if "nws_headline" in alert and alert["nws_headline"]:
+            nws_headline = alert["nws_headline"]
+        elif "NWSheadline:" in block:
+            import re
+            m = re.search(r"NWSheadline:\s*(.*)", block)
+            if m:
+                nws_headline = m.group(1).strip()
+        if nws_headline:
+            sequence += build_greedy_wav_sequence(nws_headline, EXTRA_SOUND_DIR, debug_log)
+    # --- END PATCH ---
 
     repeating_wav = os.path.join(EXTRA_SOUND_DIR, "repeating.wav")
     if os.path.exists(repeating_wav):
@@ -4421,8 +4432,18 @@ def build_wx_alert_sequence_full_for_alert(alert, debug_log=None):
     else:
         sequence.append({"synthesize": "weather alert effective"})
 
+    # For new-style alert, effective_time/expires_time can be datetime or string
     if effective_time:
-        sequence = append_datetime_wavs(effective_time, sequence)
+        if isinstance(effective_time, str):
+            try:
+                from datetime import datetime
+                effective_time_dt = datetime.strptime(effective_time, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                effective_time_dt = None
+        else:
+            effective_time_dt = effective_time
+        if effective_time_dt:
+            sequence = append_datetime_wavs(effective_time_dt, sequence)
 
     wx_expired_wav = os.path.join(EXTRA_SOUND_DIR, "wx_expired.wav")
     if os.path.exists(wx_expired_wav):
@@ -4431,8 +4452,17 @@ def build_wx_alert_sequence_full_for_alert(alert, debug_log=None):
         sequence.append({"synthesize": "weather alert expires"})
 
     if expires_time:
-        sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
-        sequence = append_datetime_wavs(expires_time, sequence)
+        if isinstance(expires_time, str):
+            try:
+                from datetime import datetime
+                expires_time_dt = datetime.strptime(expires_time, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                expires_time_dt = None
+        else:
+            expires_time_dt = expires_time
+        if expires_time_dt:
+            sequence.append({"wav": os.path.join(EXTRA_SOUND_DIR, "at.wav")})
+            sequence = append_datetime_wavs(expires_time_dt, sequence)
 
     return sequence
 
@@ -4685,8 +4715,9 @@ def create_combined_wav(sequence, outfile, debug_log=None):
 def parse_all_active_wx_alerts(debug_log=None):
     """
     Parse wx_alerts and return a list of dicts for all alerts that have not expired.
-    Each dict has: description, effective_time (datetime), expires_time (datetime), block
+    Each dict has: description, effective_time (datetime), expires_time (datetime), block, code
     Alerts are sorted newest first (latest effective_time first).
+    Only unique (code, description) alerts are returned.
     """
     wx_alerts_path = os.path.join(os.path.dirname(__file__), 'wx', 'wx_alerts')
     if not os.path.exists(wx_alerts_path):
@@ -4698,6 +4729,7 @@ def parse_all_active_wx_alerts(debug_log=None):
 
     alert_blocks = re.split(r'-{10,}', content)
     alerts = []
+    seen = set()
     for block in alert_blocks:
         code_match = re.search(r'EAS Code:\s*([A-Z0-9]+)', block)
         eff_match = re.search(r'Effective:\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})', block)
@@ -4709,7 +4741,6 @@ def parse_all_active_wx_alerts(debug_log=None):
             except Exception:
                 continue
             if exp_dt > now:
-                # Description extraction (reuse your build_wx_alert_sequence_minimal logic)
                 code = code_match.group(1).strip()
                 desc = None
                 if code.upper() == "NWS":
@@ -4726,6 +4757,11 @@ def parse_all_active_wx_alerts(debug_log=None):
                         desc = "Special Weather Statement"
                     else:
                         desc = f"Unknown alert ({code})"
+                # Only add if this (code, desc) combo hasn't been seen
+                key = (code, desc)
+                if key in seen:
+                    continue
+                seen.add(key)
                 alerts.append({
                     "description": desc,
                     "effective_time": eff_dt,
@@ -4736,7 +4772,7 @@ def parse_all_active_wx_alerts(debug_log=None):
     # Sort newest first (latest effective_time first)
     alerts.sort(key=lambda a: a["effective_time"], reverse=True)
     if debug_log:
-        debug_log(f"parse_all_active_wx_alerts: found {len(alerts)} active alerts")
+        debug_log(f"parse_all_active_wx_alerts: found {len(alerts)} unique active alerts")
     return alerts
 
 # END OF WX ALERT SECTION

@@ -1,4 +1,4 @@
-# Log rotated on Thu 24 Jul 00:00:11 EDT 2025
+# Log rotated on Fri 25 Jul 00:00:12 EDT 2025
 No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
 No terminal detected. Running in headless mode.
@@ -19,120 +19,38 @@ No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
 No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
-  File "/home/drx/DRX/drx_main.py", line 1279
-    elif repeating:
-    ^^^^
-SyntaxError: expected 'except' or 'finally' block
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
+No terminal detected. Running in headless mode.
+No interactive terminal detected. Skipping command prompt loop.
 No terminal detected. Running in headless mode.
 No interactive terminal detected. Skipping command prompt loop.
 No terminal detected. Running in headless mode.

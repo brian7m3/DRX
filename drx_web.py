@@ -1032,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div style="display: flex; flex-direction: column; gap: 0;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <label for="track_input" style="white-space: nowrap;">Track:</label>
-                    <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="20">
+                    <input name="track_input" id="track_input" type="text" placeholder="Input Serial Data if DRX" size="30">
                     <button type="submit" style="margin: 0;">&#9654;</button>
                     <small class="help-text">For Normal (DRX) Play, enter serial data to test (e.g., P5308i6000).  For Local (Web Page) play, enter EXACT full wav file name (e.g., 5308-test.wav, 2021.WAV, 3022.wav</small>
                 </div>
@@ -1588,6 +1588,15 @@ document.addEventListener("DOMContentLoaded", function() {
                             onchange="toggleCtoneTime()"
                     >
                     <label for="use_expired_time">Use Alert Time Instead</label>
+                </div>
+                <div class="form-group checkbox">
+                    <input
+                        type="checkbox"
+                        id="eas_only"
+                        name="eas_only"
+                        {% if wx_config.get('SAME Alerts', 'eas_only', fallback='false').lower() == 'true' %}checked{% endif %}
+                    >
+                    <label for="eas_only">Decode EAS Alerts Only</label>
                 </div>
                 <script>
                 function toggleCtoneTime() {
@@ -2496,6 +2505,7 @@ def dashboard():
         all_files=get_all_sound_files(),
         config=config,
         session=session,
+        wx_config=wx_config,
         state_blocks_html=state_blocks_html,
         drx_uptime=get_drx_uptime(),
         weather_status=weather_status,
@@ -2697,7 +2707,7 @@ def edit_config_structured():
     
     # Get form data
     form_data = request.form.to_dict()
-    
+
     # Update Serial section
     if 'Serial' not in existing_config:
         existing_config['Serial'] = {}
@@ -2769,6 +2779,8 @@ def edit_config_structured():
         wx_config['SAME Alerts'] = {}
     wx_config['SAME Alerts']['polling_time'] = form_data.get('same_alerts_polling_time', '300')
     wx_config['SAME Alerts']['zip_code'] = form_data.get('same_alerts_zip_code', '')
+    # New: EAS Only
+    wx_config['SAME Alerts']['eas_only'] = 'true' if form_data.get('eas_only') else 'false'
 
     # --- WX Condition Settings ---
     if 'weather' not in wx_config:
